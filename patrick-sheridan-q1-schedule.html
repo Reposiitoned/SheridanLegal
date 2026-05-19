@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patrick Sheridan · Q1 Coaching Schedule · Jul–Sep 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:       #0F2540;
+    --navy-mid:   #1a3a5c;
+    --navy-light: #2a4f7a;
+    --cyan:       #29ABE2;
+    --cyan-light: #5fc5ed;
+    --cyan-faint: #e8f7fd;
+    --gold:       #c9a84c;
+    --white:      #ffffff;
+    --off-white:  #f8f9fb;
+    --grey-light: #eef0f4;
+    --grey-mid:   #c8cdd8;
+    --grey-text:  #6b7385;
+    --body-text:  #2d3748;
+
+    --s-strategy:   #EEEDFE; --s-strategy-b: #AFA9EC; --s-strategy-t: #3C3489; --s-strategy-l: #534AB7; --s-strategy-n: #7F77DD;
+    --s-finance:    #E1F5EE; --s-finance-b:  #5DCAA5; --s-finance-t:  #085041; --s-finance-l:  #0F6E56; --s-finance-n:  #1D9E75;
+    --s-marketing:  #E6F1FB; --s-marketing-b:#85B7EB; --s-marketing-t:#0C447C; --s-marketing-l:#185FA5; --s-marketing-n:#378ADD;
+    --s-practice:   #FAEEDA; --s-practice-b: #EF9F27; --s-practice-t: #633806; --s-practice-l: #854F0B; --s-practice-n: #BA7517;
+    --s-leadership: #FAECE7; --s-leadership-b:#F0997B;--s-leadership-t:#712B13;--s-leadership-l:#993C1D;--s-leadership-n:#D85A30;
+
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body:    'DM Sans', sans-serif;
+    --font-mono:    'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--off-white);
+    color: var(--body-text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    padding: 44px 56px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan) 0%, var(--navy-light) 100%);
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(41,171,226,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 14px;
+  }
+  .header-name {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .header-subtitle {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--cyan-light);
+    margin-bottom: 28px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .h-stat {
+    padding: 12px 24px 12px 0;
+    margin-right: 24px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .h-stat:last-child { border-right: none; margin-right: 0; }
+  .h-stat-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 3px;
+  }
+  .h-stat-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1;
+  }
+  .h-stat-value small {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 400;
+    font-family: var(--font-body);
+    margin-left: 4px;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-bottom: 36px;
+    padding: 16px 20px;
+    background: var(--white);
+    border-radius: 10px;
+    border: 1px solid var(--grey-light);
+  }
+  .leg-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--grey-text); }
+  .leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .leg-note { font-size: 10px; color: var(--grey-mid); margin-left: 2px; }
+
+  /* ── MONTH ── */
+  .month-block { margin-bottom: 32px; }
+  .month-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey-text);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--grey-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .month-count {
+    background: var(--grey-light);
+    color: var(--grey-text);
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: none;
+  }
+  .month-note {
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    font-family: var(--font-body);
+  }
+
+  /* ── WEEK ROW ── */
+  .week-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .week-meta {
+    width: 78px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2px 0;
+  }
+  .wk-num  { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--grey-mid); text-transform: uppercase; }
+  .wk-date { font-size: 14px; font-weight: 600; color: var(--navy); margin-top: 2px; line-height: 1.2; }
+  .wk-day  { font-size: 10px; color: var(--grey-text); margin-top: 1px; }
+
+  /* ── SESSION CARD ── */
+  .session-card {
+    flex: 1;
+    border-radius: 8px;
+    padding: 11px 16px;
+    border-width: 0.5px;
+    border-style: solid;
+    transition: box-shadow 0.15s;
+  }
+  .session-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+
+  .s-label {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .s-title { font-size: 13.5px; font-weight: 500; line-height: 1.35; }
+  .s-note  { font-size: 11.5px; margin-top: 3px; }
+
+  .pill {
+    display: inline-block;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  /* Stream colours */
+  .c-strategy   { background: var(--s-strategy);   border-color: var(--s-strategy-b);  }
+  .c-strategy   .s-label { color: var(--s-strategy-l);  } .c-strategy   .s-title { color: var(--s-strategy-t);  } .c-strategy   .s-note { color: var(--s-strategy-n);  }
+  .c-strategy   .pill    { background: var(--s-strategy-b);  color: #26215C; }
+
+  .c-finance    { background: var(--s-finance);    border-color: var(--s-finance-b);   }
+  .c-finance    .s-label { color: var(--s-finance-l);   } .c-finance    .s-title { color: var(--s-finance-t);   } .c-finance    .s-note { color: var(--s-finance-n);   }
+  .c-finance    .pill    { background: var(--s-finance-b);   color: #04342C; }
+
+  .c-marketing  { background: var(--s-marketing);  border-color: var(--s-marketing-b); }
+  .c-marketing  .s-label { color: var(--s-marketing-l); } .c-marketing  .s-title { color: var(--s-marketing-t); } .c-marketing  .s-note { color: var(--s-marketing-n); }
+
+  .c-practice   { background: var(--s-practice);   border-color: var(--s-practice-b);  }
+  .c-practice   .s-label { color: var(--s-practice-l);  } .c-practice   .s-title { color: var(--s-practice-t);  } .c-practice   .s-note { color: var(--s-practice-n);  }
+
+  .c-leadership { background: var(--s-leadership); border-color: var(--s-leadership-b);}
+  .c-leadership .s-label { color: var(--s-leadership-l);} .c-leadership .s-title { color: var(--s-leadership-t);} .c-leadership .s-note { color: var(--s-leadership-n);}
+
+  /* ── Q2 HANDOFF ── */
+  .handoff {
+    margin-top: 8px;
+    padding: 16px 20px;
+    background: var(--navy);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .handoff-arrow {
+    font-size: 22px;
+    color: var(--cyan);
+    flex-shrink: 0;
+    font-family: var(--font-display);
+  }
+  .handoff-date {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+  .handoff-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+  .handoff-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+    background: rgba(41,171,226,0.15);
+    border: 1px solid rgba(41,171,226,0.3);
+    color: var(--cyan-light);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* ── STREAM TAGS FOOTER ── */
+  .streams-footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .streams-footer-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+    margin-right: 4px;
+  }
+  .stream-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 0.5px solid;
+  }
+
+  .footer-note {
+    margin-top: 16px;
+    font-size: 11px;
+    color: var(--grey-mid);
+    line-height: 1.6;
+  }
+  .footer-note strong { color: var(--grey-text); }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; }
+    .site-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .session-card, .handoff { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .week-row { break-inside: avoid; }
+    .month-block { break-inside: avoid; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .site-header { padding: 28px 20px 24px; }
+    .header-name { font-size: 30px; }
+    .main { padding: 24px 16px 60px; }
+    .header-stats { gap: 0; }
+    .h-stat { padding: 8px 16px 8px 0; margin-right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-meta">repositioned.business · practice smarts · coaching schedule</div>
+  <div class="header-name">Patrick Sheridan</div>
+  <div class="header-subtitle">Sheridan Legal · Q1 Coaching Programme</div>
+  <div class="header-stats">
+    <div class="h-stat">
+      <div class="h-stat-label">Programme period</div>
+      <div class="h-stat-value">Jul – Sep 2026</div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-label">Sessions</div>
+      <div class="h-stat-value">13 <small>consecutive Wednesdays</small></div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-label">Streams</div>
+      <div class="h-stat-value">5 <small>active each quarter</small></div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-label">Q2 kickoff</div>
+      <div class="h-stat-value">30 Sep 2026</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#7F77DD"></div> Plan &amp; strategy <span class="leg-note">— once per quarter, week 1</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1D9E75"></div> Financial numbers <span class="leg-note">— week 2 each month</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#378ADD"></div> Marketing &amp; content</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#EF9F27"></div> Practice smarts · Deanne</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#D85A30"></div> The 60|40 lawyer</div>
+  </div>
+
+  <!-- ── JULY ── -->
+  <div class="month-block">
+    <div class="month-label">July 2026 <span class="month-count">5 sessions</span></div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 1</div><div class="wk-date">1 Jul</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-strategy">
+        <div class="s-label"><span class="pill">Quarterly</span> Plan &amp; strategy</div>
+        <div class="s-title">Q1 planning session</div>
+        <div class="s-note">90-day goals, pipeline review, focus areas agreed for the quarter</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 2</div><div class="wk-date">8 Jul</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-finance">
+        <div class="s-label"><span class="pill">Week 2</span> Financial numbers</div>
+        <div class="s-title">Numbers review — July</div>
+        <div class="s-note">Revenue, WIP, collections, write-offs, fee-earner performance</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 3</div><div class="wk-date">15 Jul</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-marketing">
+        <div class="s-label">Marketing &amp; content</div>
+        <div class="s-title">Content &amp; marketing review — July</div>
+        <div class="s-note">Enquiry volume, referral sources, content output, campaign activity</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 4</div><div class="wk-date">22 Jul</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-practice">
+        <div class="s-label">Practice smarts · Deanne</div>
+        <div class="s-title">Team productivity — July</div>
+        <div class="s-note">Workflows, file turnaround, capacity, team issues &amp; process wins</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 5</div><div class="wk-date">29 Jul</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-leadership">
+        <div class="s-label">The 60|40 lawyer</div>
+        <div class="s-title">Leadership &amp; management — July</div>
+        <div class="s-note">Patrick as leader: delegation, culture, decisions, personal productivity</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AUGUST ── -->
+  <div class="month-block">
+    <div class="month-label">August 2026 <span class="month-count">4 sessions</span> <span class="month-note">Financial numbers anchored to true week 2 — 12 Aug</span></div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 6</div><div class="wk-date">5 Aug</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-marketing">
+        <div class="s-label">Marketing &amp; content</div>
+        <div class="s-title">Content &amp; marketing review — August</div>
+        <div class="s-note">Leads, referrals, content calendar progress, visibility metrics</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 7</div><div class="wk-date">12 Aug</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-finance">
+        <div class="s-label"><span class="pill">Week 2</span> Financial numbers</div>
+        <div class="s-title">Numbers review — August</div>
+        <div class="s-note">Trend vs July, fee-earner snapshot, billing rhythm check</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 8</div><div class="wk-date">19 Aug</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-practice">
+        <div class="s-label">Practice smarts · Deanne</div>
+        <div class="s-title">Team productivity — August</div>
+        <div class="s-note">Bottlenecks, SOP adherence, staff development, capacity planning</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 9</div><div class="wk-date">26 Aug</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-leadership">
+        <div class="s-label">The 60|40 lawyer</div>
+        <div class="s-title">Leadership &amp; management — August</div>
+        <div class="s-note">Decision-making patterns, team coaching, removing blockers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEPTEMBER ── -->
+  <div class="month-block">
+    <div class="month-label">September 2026 <span class="month-count">4 sessions</span></div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 10</div><div class="wk-date">2 Sep</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-marketing">
+        <div class="s-label">Marketing &amp; content</div>
+        <div class="s-title">Content &amp; marketing review — September</div>
+        <div class="s-note">Quarter content output, referral growth, pipeline review</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 11</div><div class="wk-date">9 Sep</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-finance">
+        <div class="s-label"><span class="pill">Week 2</span> Financial numbers</div>
+        <div class="s-title">Numbers review — September</div>
+        <div class="s-note">Quarter-to-date position, quarter-end forecast, fee-earner review</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 12</div><div class="wk-date">16 Sep</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-practice">
+        <div class="s-label">Practice smarts · Deanne</div>
+        <div class="s-title">Team productivity — September</div>
+        <div class="s-note">Quarter team review, SOP updates, staff development check-in</div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-meta"><div class="wk-num">Wk 13</div><div class="wk-date">23 Sep</div><div class="wk-day">Wednesday</div></div>
+      <div class="session-card c-leadership">
+        <div class="s-label">The 60|40 lawyer</div>
+        <div class="s-title">Leadership &amp; management — September</div>
+        <div class="s-note">Q1 reflection as a leader — what worked, what shifts in Q2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 HANDOFF -->
+  <div class="handoff">
+    <div class="handoff-arrow">→</div>
+    <div>
+      <div class="handoff-date">30 September 2026 · Wednesday</div>
+      <div class="handoff-desc">Q2 kickoff · Plan &amp; strategy session — Q1 debrief, reset 90-day goals, agree Q2 focus areas. The cycle continues.</div>
+    </div>
+    <div class="handoff-badge">Q2 begins</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="streams-footer">
+    <span class="streams-footer-label">Streams</span>
+    <span class="stream-tag" style="background:var(--s-strategy);border-color:var(--s-strategy-b);color:var(--s-strategy-l)">● Plan &amp; strategy</span>
+    <span class="stream-tag" style="background:var(--s-finance);border-color:var(--s-finance-b);color:var(--s-finance-l)">● Financial numbers</span>
+    <span class="stream-tag" style="background:var(--s-marketing);border-color:var(--s-marketing-b);color:var(--s-marketing-l)">● Marketing &amp; content</span>
+    <span class="stream-tag" style="background:var(--s-practice);border-color:var(--s-practice-b);color:var(--s-practice-l)">● Practice smarts</span>
+    <span class="stream-tag" style="background:var(--s-leadership);border-color:var(--s-leadership-b);color:var(--s-leadership-l)">● 60|40 lawyer</span>
+  </div>
+  <p class="footer-note">
+    <strong>Financial numbers</strong> are anchored to week 2 of each calendar month: 8 Jul · 12 Aug · 9 Sep. August session order is adjusted accordingly — Marketing &amp; Content leads on 5 Aug so Financial Numbers falls on the true second Wednesday. All other months run in natural stream order.
+    <br><br>
+    repositioned.business · prepared for Patrick Sheridan · Sheridan Legal · Q1 2026–27
+  </p>
+
+</main>
+
+</body>
+</html>
