@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trust vs Office Checker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #555;
+    --ink-faint: #999;
+    --surface: #ffffff;
+    --bg: #f5f5f3;
+    --rule: #e5e5e3;
+    --trust-bg: #e8f5f0;
+    --trust-border: #5DCAA5;
+    --trust-text: #085041;
+    --trust-tag: #9FE1CB;
+    --trust-tag-text: #04342C;
+    --office-bg: #e8f0fb;
+    --office-border: #85B7EB;
+    --office-text: #0C447C;
+    --office-tag: #B5D4F4;
+    --office-tag-text: #042C53;
+    --unclear-bg: #fef3e2;
+    --unclear-border: #EF9F27;
+    --unclear-text: #633806;
+    --unclear-tag: #FAC775;
+    --unclear-tag-text: #412402;
+    --font: 'DM Sans', system-ui, sans-serif;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .shell {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .header-left {}
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .firm-name-display {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+  .header-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    background: #e8f0fb;
+    color: #185FA5;
+    border-radius: 20px;
+    border: 1px solid #85B7EB;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .tab {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 18px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--ink-faint);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s;
+  }
+  .tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+  .tab:hover:not(.active) { color: var(--ink-soft); }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Form */
+  .field { margin-bottom: 1rem; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .field label .hint {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink-faint);
+  }
+  .field input,
+  .field textarea {
+    width: 100%;
+    font-family: var(--font);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.75rem;
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+  }
+  .field input:focus,
+  .field textarea:focus {
+    border-color: #888;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+  }
+  .field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 480px) { .row2 { grid-template-columns: 1fr; } }
+
+  /* Button */
+  .btn {
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+    width: 100%;
+  }
+  .btn-primary:hover { background: #333; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ghost {
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+  .btn-ghost:hover { background: var(--bg); }
+
+  /* Loading */
+  .loading-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 1rem 0;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--rule);
+    border-top-color: var(--ink-soft);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Verdict */
+  .verdict {
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 1rem;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .verdict.trust   { background: var(--trust-bg);   border: 1px solid var(--trust-border); }
+  .verdict.office  { background: var(--office-bg);  border: 1px solid var(--office-border); }
+  .verdict.unclear { background: var(--unclear-bg); border: 1px solid var(--unclear-border); }
+
+  .verdict-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .verdict.trust   .verdict-eyebrow { color: var(--trust-text); }
+  .verdict.office  .verdict-eyebrow { color: var(--office-text); }
+  .verdict.unclear .verdict-eyebrow { color: var(--unclear-text); }
+
+  .verdict-heading { font-size: 1.5rem; font-weight: 500; margin-bottom: 10px; line-height: 1.2; }
+  .verdict.trust   .verdict-heading { color: var(--trust-text); }
+  .verdict.office  .verdict-heading { color: var(--office-text); }
+  .verdict.unclear .verdict-heading { color: var(--unclear-text); }
+
+  .verdict-reason { font-size: 14px; line-height: 1.65; margin-bottom: 12px; }
+  .verdict.trust   .verdict-reason { color: var(--trust-text); }
+  .verdict.office  .verdict-reason { color: var(--office-text); }
+  .verdict.unclear .verdict-reason { color: var(--unclear-text); }
+
+  .verdict-rule {
+    font-size: 12.5px;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .verdict.trust   .verdict-rule { background: var(--trust-tag);   color: var(--trust-tag-text); }
+  .verdict.office  .verdict-rule { background: var(--office-tag);  color: var(--office-tag-text); }
+  .verdict.unclear .verdict-rule { background: var(--unclear-tag); color: var(--unclear-tag-text); }
+
+  .verdict-meta { font-size: 11.5px; color: var(--ink-faint); }
+
+  /* Rules list */
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+  }
+  .rules-group { margin-bottom: 1.5rem; }
+  .rule-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .rule-item:last-child { border-bottom: none; }
+  .rule-badge {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .rule-badge.trust  { background: var(--trust-bg);  color: #0F6E56; border: 1px solid var(--trust-border); }
+  .rule-badge.office { background: var(--office-bg); color: #185FA5; border: 1px solid var(--office-border); }
+  .rule-text { font-size: 13px; color: var(--ink); line-height: 1.5; flex: 1; }
+  .rule-del {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-faint);
+    font-size: 18px;
+    padding: 0 4px;
+    line-height: 1;
+    flex-shrink: 0;
+    font-family: var(--font);
+    transition: color 0.15s;
+  }
+  .rule-del:hover { color: #c0392b; }
+
+  .add-rule-row { display: flex; gap: 8px; margin-top: 1rem; align-items: flex-end; }
+  .add-rule-row select {
+    font-family: var(--font);
+    font-size: 13px;
+    flex-shrink: 0;
+    width: 90px;
+    padding: 0.55rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+  }
+  .add-rule-row input {
+    flex: 1;
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+    outline: none;
+  }
+  .add-rule-row input:focus { border-color: #888; }
+  .add-rule-row button {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 0.55rem 1rem;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .add-rule-row button:hover { background: #333; }
+
+  /* Firm settings */
+  .setting-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .setting-row label { font-size: 13px; color: var(--ink-soft); min-width: 100px; flex-shrink: 0; }
+  .setting-row input { flex: 1; font-family: var(--font); font-size: 14px; padding: 0.55rem 0.75rem; border: 1px solid var(--rule); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); outline: none; }
+  .setting-row input:focus { border-color: #888; }
+
+  /* Log */
+  .log-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+  }
+  .log-item:last-child { border-bottom: none; }
+  .log-badge {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .log-badge.trust   { background: var(--trust-bg);   color: #0F6E56; }
+  .log-badge.office  { background: var(--office-bg);  color: #185FA5; }
+  .log-badge.unclear { background: var(--unclear-bg); color: #854F0B; }
+  .log-desc { color: var(--ink-soft); flex: 1; line-height: 1.4; }
+  .log-time { color: var(--ink-faint); font-size: 11.5px; white-space: nowrap; flex-shrink: 0; }
+
+  .empty { font-size: 13px; color: var(--ink-faint); padding: 0.5rem 0; }
+  .info-note { font-size: 12px; color: var(--ink-faint); line-height: 1.6; margin-top: 0.75rem; }
+  .divider { border: none; border-top: 1px solid var(--rule); margin: 1.25rem 0; }
+  .log-clear-row { display: flex; justify-content: flex-end; margin-top: 0.75rem; }
+
+  @media print {
+    body { background: #fff; }
+    .tabs, .btn, .add-rule-row, .rule-del, .log-clear-row { display: none; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="header-eyebrow">Legal accounting</div>
+      <h1>Trust vs Office Checker</h1>
+      <div class="firm-name-display" id="firm-name-display"></div>
+    </div>
+    <span class="header-badge">LPUL compliant rules</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('check')">Check a payment</button>
+    <button class="tab" onclick="showTab('rules')">Rules</button>
+    <button class="tab" onclick="showTab('log')">History</button>
+    <button class="tab" onclick="showTab('settings')">Settings</button>
+  </div>
+
+  <!-- CHECK TAB -->
+  <div id="tab-check">
+    <div class="card">
+      <div class="row2">
+        <div class="field">
+          <label>Payer name</label>
+          <input type="text" id="payer" placeholder="e.g. John Smith" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Amount <span class="hint">(optional)</span></label>
+          <input type="text" id="amount" placeholder="e.g. $5,000" autocomplete="off">
+        </div>
+      </div>
+      <div class="field">
+        <label>What is this payment for? <span class="hint">— describe in plain language</span></label>
+        <textarea id="description" placeholder="e.g. Client paid a deposit before we've started work. They're purchasing a property and we are acting for them in the conveyance."></textarea>
+      </div>
+      <button class="btn btn-primary" id="check-btn" onclick="checkPayment()">Check this payment</button>
+    </div>
+
+    <div id="loading-row" style="display:none">
+      <div class="loading-row">
+        <div class="spinner"></div>
+        <span>Applying firm rules...</span>
+      </div>
+    </div>
+
+    <div id="verdict-output"></div>
+  </div>
+
+  <!-- RULES TAB -->
+  <div id="tab-rules" style="display:none">
+    <div class="card">
+      <div class="rules-group">
+        <div class="section-label">Trust account rules</div>
+        <div id="trust-rules-list"></div>
+      </div>
+      <hr class="divider">
+      <div class="rules-group" style="margin-bottom:0">
+        <div class="section-label">Office account rules</div>
+        <div id="office-rules-list"></div>
+      </div>
+      <div class="add-rule-row">
+        <select id="new-rule-type">
+          <option value="trust">Trust</option>
+          <option value="office">Office</option>
+        </select>
+        <input type="text" id="new-rule-text" placeholder="Add a custom rule in plain language..." onkeydown="if(event.key==='Enter')addRule()">
+        <button onclick="addRule()">Add rule</button>
+      </div>
+    </div>
+    <p class="info-note">These rules are applied by the AI when classifying payments. The defaults reflect standard LPUL obligations. Add firm-specific rules to handle scenarios unique to your practice. Rules are saved in your browser on this device.</p>
+    <div style="margin-top:0.75rem">
+      <button class="btn btn-ghost" onclick="resetRules()">Reset to LPUL defaults</button>
+    </div>
+  </div>
+
+  <!-- LOG TAB -->
+  <div id="tab-log" style="display:none">
+    <div class="card">
+      <div id="log-list"></div>
+    </div>
+    <div class="log-clear-row">
+      <button class="btn btn-ghost" onclick="clearLog()">Clear history</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div id="tab-settings" style="display:none">
+    <div class="card">
+      <div class="section-label">Firm details</div>
+      <div class="setting-row">
+        <label>Firm name</label>
+        <input type="text" id="setting-firm" placeholder="e.g. Morrison Legal" oninput="saveSetting('firm', this.value)">
+      </div>
+      <div class="setting-row">
+        <label>Principal</label>
+        <input type="text" id="setting-principal" placeholder="e.g. Sarah Morrison" oninput="saveSetting('principal', this.value)">
+      </div>
+      <hr class="divider">
+      <div class="section-label">About this tool</div>
+      <p style="font-size:13px;color:var(--ink-soft);line-height:1.65">This tool uses AI to apply your firm's trust accounting rules to incoming payments. It is a decision-support tool only — it does not replace the judgment of a qualified practitioner or the requirements of the Legal Profession Uniform Law (LPUL). When in doubt, always refer to your principal or your state's trust accounting guidelines.</p>
+      <p style="font-size:13px;color:var(--ink-soft);line-height:1.65;margin-top:0.75rem">Rules and history are stored locally in this browser. Each device maintains its own copy.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DEFAULT_RULES = [
+  { type: 'trust', text: 'Money received before any work has been performed — advance payments, retainers, or deposits for future legal services' },
+  { type: 'trust', text: 'Conveyancing deposits, purchase price funds, settlement monies, or completion funds held on behalf of a buyer or seller' },
+  { type: 'trust', text: 'Court-ordered funds, damages, settlements, or judgment monies received pending distribution to the client' },
+  { type: 'trust', text: 'Probate or estate funds received and held on behalf of beneficiaries or the estate' },
+  { type: 'trust', text: 'Any money that belongs to a client or third party and has not yet been earned by the firm' },
+  { type: 'trust', text: 'Security deposits, performance bonds, or bail monies held on behalf of a client' },
+  { type: 'trust', text: 'Family law property settlement funds held pending finalisation or court orders' },
+  { type: 'office', text: 'Payment of a rendered tax invoice for work already completed and billed to the client' },
+  { type: 'office', text: 'Reimbursement for disbursements the firm has already paid on behalf of the client (e.g. court filing fees, searches, counsel fees already paid)' },
+  { type: 'office', text: 'Fixed fee received after the legal service has been fully delivered and no refund is possible' },
+  { type: 'office', text: 'Interest earned on office account funds belonging to the firm' },
+  { type: 'office', text: 'Cost contributions or party-party costs received where the firm has already incurred and paid those costs' },
+];
+
+function loadRules() {
+  try { return JSON.parse(localStorage.getItem('tc_rules')) || [...DEFAULT_RULES]; }
+  catch(e) { return [...DEFAULT_RULES]; }
+}
+function saveRules(r) { try { localStorage.setItem('tc_rules', JSON.stringify(r)); } catch(e) {} }
+function loadLog() { try { return JSON.parse(localStorage.getItem('tc_log')) || []; } catch(e) { return []; } }
+function saveLog(l) { try { localStorage.setItem('tc_log', JSON.stringify(l.slice(0, 100))); } catch(e) {} }
+function loadSettings() { try { return JSON.parse(localStorage.getItem('tc_settings')) || {}; } catch(e) { return {}; } }
+function saveSettings(s) { try { localStorage.setItem('tc_settings', JSON.stringify(s)); } catch(e) {} }
+function saveSetting(key, val) { const s = loadSettings(); s[key] = val; saveSettings(s); updateFirmDisplay(); }
+
+let rules = loadRules();
+let log = loadLog();
+
+function updateFirmDisplay() {
+  const s = loadSettings();
+  const el = document.getElementById('firm-name-display');
+  if (el) el.textContent = s.firm || '';
+}
+
+function showTab(t) {
+  ['check','rules','log','settings'].forEach(id => {
+    document.getElementById('tab-'+id).style.display = id === t ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', ['check','rules','log','settings'][i] === t);
+  });
+  if (t === 'rules') renderRules();
+  if (t === 'log') renderLog();
+  if (t === 'settings') loadSettingsUI();
+}
+
+function renderRules() {
+  ['trust','office'].forEach(type => {
+    const el = document.getElementById(type+'-rules-list');
+    const filtered = rules.map((r,i) => ({...r, i})).filter(r => r.type === type);
+    if (!filtered.length) { el.innerHTML = '<p class="empty">No ' + type + ' rules added yet.</p>'; return; }
+    el.innerHTML = filtered.map(r =>
+      '<div class="rule-item">' +
+      '<span class="rule-badge '+r.type+'">'+r.type+'</span>' +
+      '<span class="rule-text">'+escHtml(r.text)+'</span>' +
+      '<button class="rule-del" onclick="deleteRule('+r.i+')" title="Remove this rule">\xd7</button>' +
+      '</div>'
+    ).join('');
+  });
+}
+
+function deleteRule(i) {
+  rules.splice(i, 1);
+  saveRules(rules);
+  renderRules();
+}
+
+function addRule() {
+  const type = document.getElementById('new-rule-type').value;
+  const text = document.getElementById('new-rule-text').value.trim();
+  if (!text) { document.getElementById('new-rule-text').focus(); return; }
+  rules.push({ type, text });
+  saveRules(rules);
+  document.getElementById('new-rule-text').value = '';
+  renderRules();
+}
+
+function resetRules() {
+  if (!confirm('Reset all rules to the LPUL defaults? Your custom rules will be removed.')) return;
+  rules = [...DEFAULT_RULES];
+  saveRules(rules);
+  renderRules();
+}
+
+function renderLog() {
+  const el = document.getElementById('log-list');
+  if (!log.length) { el.innerHTML = '<p class="empty">No checks recorded yet.</p>'; return; }
+  el.innerHTML = log.slice().reverse().map(l =>
+    '<div class="log-item">' +
+    '<span class="log-badge '+l.verdict+'">'+l.verdict+'</span>' +
+    '<span class="log-desc">' +
+      (l.payer ? '<strong>'+escHtml(l.payer)+'</strong>' : 'Unknown payer') +
+      (l.amount ? ' &middot; '+escHtml(l.amount) : '') +
+      (l.desc ? ' &mdash; '+escHtml(l.desc.substring(0,80))+(l.desc.length>80?'\u2026':'') : '') +
+    '</span>' +
+    '<span class="log-time">'+l.time+'</span>' +
+    '</div>'
+  ).join('');
+}
+
+function clearLog() {
+  if (!confirm('Clear all history?')) return;
+  log = [];
+  saveLog(log);
+  renderLog();
+}
+
+function loadSettingsUI() {
+  const s = loadSettings();
+  document.getElementById('setting-firm').value = s.firm || '';
+  document.getElementById('setting-principal').value = s.principal || '';
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function checkPayment() {
+  const payer = document.getElementById('payer').value.trim();
+  const amount = document.getElementById('amount').value.trim();
+  const description = document.getElementById('description').value.trim();
+
+  if (!description) {
+    document.getElementById('description').focus();
+    document.getElementById('description').style.borderColor = '#e74c3c';
+    setTimeout(() => { document.getElementById('description').style.borderColor = ''; }, 2000);
+    return;
+  }
+
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('loading-row').style.display = 'block';
+  document.getElementById('verdict-output').innerHTML = '';
+
+  const settings = loadSettings();
+  const rulesText = rules.map((r,i) => (i+1)+'. ['+r.type.toUpperCase()+'] '+r.text).join('\n');
+
+  const systemPrompt = `You are a legal trust accounting compliance assistant for an Australian law firm${settings.firm ? ' called ' + settings.firm : ''}. Your job is to classify incoming payments as either TRUST account or OFFICE account money, based strictly on the firm's rules and standard LPUL obligations.
+
+FIRM RULES:
+${rulesText}
+
+Respond ONLY with a valid JSON object — no markdown, no backticks, no explanation outside the JSON. Use this exact format:
+{
+  "verdict": "trust" or "office" or "unclear",
+  "heading": "Trust account" or "Office account" or "Seek advice from your principal",
+  "reason": "2-3 plain sentences explaining the determination, written for a junior staff member who may not know the rules. Start with the conclusion.",
+  "rule": "The specific rule (quoted or paraphrased from the firm rules above) that most directly applies."
+}
+
+If genuinely unclear or the description is ambiguous, use verdict "unclear" and explain what additional information is needed.`;
+
+  const userMessage = [
+    payer ? 'Payer: ' + payer : null,
+    amount ? 'Amount: ' + amount : null,
+    'Description: ' + description
+  ].filter(Boolean).join('\n');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMessage }]
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error?.message || 'API error');
+
+    const raw = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) + ', ' +
+      now.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    const checkedBy = settings.principal ? ' \u00b7 Checked by ' + settings.principal : '';
+
+    document.getElementById('verdict-output').innerHTML =
+      '<div class="verdict ' + result.verdict + '">' +
+        '<div class="verdict-eyebrow">Determination</div>' +
+        '<div class="verdict-heading">' + escHtml(result.heading) + '</div>' +
+        '<div class="verdict-reason">' + escHtml(result.reason) + '</div>' +
+        '<div class="verdict-rule">Rule applied: ' + escHtml(result.rule) + '</div>' +
+        '<div class="verdict-meta">' + timeStr + (payer ? ' \u00b7 ' + escHtml(payer) : '') + (amount ? ' \u00b7 ' + escHtml(amount) : '') + checkedBy + '</div>' +
+      '</div>';
+
+    log.push({
+      verdict: result.verdict,
+      payer: payer || '',
+      amount: amount || '',
+      desc: description,
+      time: timeStr
+    });
+    saveLog(log);
+
+  } catch(err) {
+    document.getElementById('verdict-output').innerHTML =
+      '<div class="verdict unclear">' +
+        '<div class="verdict-eyebrow">Error</div>' +
+        '<div class="verdict-heading">Could not determine</div>' +
+        '<div class="verdict-reason">There was a problem processing this request. Check your internet connection and try again. If the problem persists, consult your principal directly.</div>' +
+        '<div class="verdict-rule">Technical detail: ' + escHtml(err.message || 'Unknown error') + '</div>' +
+      '</div>';
+  }
+
+  document.getElementById('loading-row').style.display = 'none';
+  document.getElementById('check-btn').disabled = false;
+}
+
+updateFirmDisplay();
+</script>
+</body>
+</html>
