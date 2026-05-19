@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will Instructions – Client Questionnaire</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #555;
+    --ink-faint: #999;
+    --surface: #fff;
+    --bg: #f7f4ef;
+    --rule: #e2ddd6;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0eb;
+    --accent-mid: #4a7c5f;
+    --warn: #8b4513;
+    --warn-bg: #fdf3ec;
+    --radius: 10px;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  body { font-family: var(--font-body); background: var(--bg); color: var(--ink); min-height: 100vh; padding: 0; }
+
+  .shell { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  .header { text-align: center; padding: 2.5rem 0 2rem; border-bottom: 1px solid var(--rule); margin-bottom: 2rem; }
+  .header-eyebrow { font-family: var(--font-body); font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 0.5rem; }
+  .header h1 { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: var(--ink); line-height: 1.2; }
+  .header-sub { font-size: 14px; color: var(--ink-soft); margin-top: 0.5rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+  .progress-wrap { margin-bottom: 2rem; }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .progress-bar-bg { height: 3px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s ease; }
+  .step-tabs { display: flex; gap: 4px; margin-top: 0.75rem; flex-wrap: wrap; }
+  .step-pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1px solid var(--rule); color: var(--ink-faint); background: var(--surface); cursor: default; transition: all 0.2s; }
+  .step-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+  .step-pill.done { background: var(--accent-light); border-color: var(--accent-mid); color: var(--accent); }
+
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); margin-bottom: 1.25rem; }
+  .card-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 400; color: var(--ink); margin-bottom: 0.25rem; }
+  .card-desc { font-size: 13px; color: var(--ink-soft); margin-bottom: 1.5rem; line-height: 1.6; }
+
+  .field-row { display: grid; gap: 1rem; margin-bottom: 1rem; }
+  .field-row.two { grid-template-columns: 1fr 1fr; }
+  .field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row.one { grid-template-columns: 1fr; }
+  @media (max-width: 520px) { .field-row.two, .field-row.three { grid-template-columns: 1fr; } }
+
+  .field label { display: block; font-size: 12px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 0.35rem; }
+  .field label .req { color: var(--accent-mid); }
+  .field input, .field select, .field textarea { width: 100%; font-family: var(--font-body); font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 0.6rem 0.75rem; outline: none; transition: border-color 0.15s; appearance: none; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent-mid); box-shadow: 0 0 0 3px rgba(45,90,61,0.08); }
+  .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+  .field-hint { font-size: 11.5px; color: var(--ink-faint); margin-top: 0.3rem; line-height: 1.5; }
+
+  .radio-group, .check-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .radio-opt, .check-opt { display: flex; align-items: center; gap: 0.4rem; font-size: 14px; cursor: pointer; padding: 0.4rem 0.75rem; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); transition: all 0.15s; user-select: none; }
+  .radio-opt input, .check-opt input { display: none; }
+  .radio-opt.selected, .check-opt.selected { background: var(--accent-light); border-color: var(--accent-mid); color: var(--accent); font-weight: 500; }
+  .radio-dot { width: 12px; height: 12px; border: 1.5px solid var(--ink-faint); border-radius: 50%; flex-shrink: 0; transition: all 0.15s; }
+  .radio-opt.selected .radio-dot { background: var(--accent); border-color: var(--accent); }
+
+  .section-divider { border: none; border-top: 1px solid var(--rule); margin: 1.5rem 0; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 0.75rem; }
+
+  .repeat-row { background: #f9f7f4; border: 1px solid var(--rule); border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; position: relative; }
+  .repeat-row .remove-btn { position: absolute; top: 0.75rem; right: 0.75rem; font-size: 12px; color: var(--ink-faint); background: none; border: none; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background 0.15s; font-family: var(--font-body); }
+  .repeat-row .remove-btn:hover { background: var(--rule); color: var(--ink); }
+
+  .add-btn { font-family: var(--font-body); font-size: 13px; color: var(--accent); background: var(--accent-light); border: 1px dashed var(--accent-mid); border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; width: 100%; text-align: center; transition: all 0.15s; margin-top: 0.25rem; }
+  .add-btn:hover { background: #d6e8db; }
+
+  .notice { background: var(--warn-bg); border-left: 3px solid var(--warn); border-radius: 0 6px 6px 0; padding: 0.75rem 1rem; font-size: 13px; color: var(--warn); line-height: 1.5; margin-bottom: 1rem; }
+  .notice strong { font-weight: 500; }
+  .info-box { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 0.75rem 1rem; font-size: 13px; color: var(--accent); line-height: 1.5; margin-bottom: 1rem; }
+
+  .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0 0; border-top: 1px solid var(--rule); margin-top: 1rem; }
+  .btn { font-family: var(--font-body); font-size: 14px; font-weight: 500; padding: 0.65rem 1.5rem; border-radius: 6px; border: 1px solid var(--rule); cursor: pointer; transition: all 0.15s; }
+  .btn-ghost { background: var(--surface); color: var(--ink-soft); }
+  .btn-ghost:hover { background: var(--bg); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: var(--accent-mid); }
+  .btn-word { background: #1F5C99; color: #fff; border-color: #1F5C99; font-size: 13px; padding: 0.6rem 1.25rem; display: flex; align-items: center; gap: 0.4rem; }
+  .btn-word:hover { background: #174a7a; }
+  .btn-print { background: var(--ink); color: #fff; border-color: var(--ink); font-size: 13px; padding: 0.6rem 1.25rem; }
+  .btn-print:hover { background: #333; }
+
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .review-section { margin-bottom: 1.5rem; }
+  .review-section h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; border-bottom: 1px solid var(--rule); padding-bottom: 0.4rem; margin-bottom: 0.75rem; }
+  .review-row { display: flex; gap: 1rem; font-size: 13.5px; padding: 0.35rem 0; border-bottom: 1px solid #f0ede8; }
+  .review-label { color: var(--ink-soft); min-width: 160px; flex-shrink: 0; }
+  .review-value { color: var(--ink); }
+
+  .complete-hero { text-align: center; padding: 2rem 1rem; }
+  .complete-icon { width: 56px; height: 56px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 24px; }
+  .complete-hero h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .complete-hero p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+  .action-row { margin-top: 1.25rem; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+  #docx-status { font-size: 12px; color: var(--ink-faint); margin-top: 0.5rem; }
+
+  @media print {
+    body { background: #fff; }
+    .shell { padding: 1rem; max-width: 100%; }
+    .nav-bar, .progress-wrap, .step-tabs { display: none; }
+    .step { display: block !important; }
+    .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 0.5rem; page-break-inside: avoid; }
+    .btn-print, .btn, .add-btn { display: none; }
+    .header { padding: 1rem 0; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header">
+    <div class="header-eyebrow">Wills &amp; Estates</div>
+    <h1>Your Will Instructions</h1>
+    <p class="header-sub">This questionnaire helps your lawyer prepare your will accurately. Take your time — you can save and return at any point. Nothing is submitted until you choose.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="step-label">Step 1 of 8</span>
+      <span id="step-pct">12%</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:12%"></div></div>
+    <div class="step-tabs" id="step-tabs"></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step active" data-step="1">
+    <div class="card">
+      <div class="card-title">Your personal details</div>
+      <div class="card-desc">This information identifies you as the testator — the person making the will.</div>
+      <div class="field-row two">
+        <div class="field"><label>Given names <span class="req">*</span></label><input type="text" id="firstName" placeholder="e.g. Jane Elizabeth"></div>
+        <div class="field"><label>Family name <span class="req">*</span></label><input type="text" id="lastName" placeholder="e.g. Morrison"></div>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label>Date of birth <span class="req">*</span></label><input type="date" id="dob"></div>
+        <div class="field"><label>Place of birth</label><input type="text" id="pob" placeholder="City, State/Country"></div>
+      </div>
+      <div class="field-row one">
+        <div class="field"><label>Residential address <span class="req">*</span></label><input type="text" id="address" placeholder="Street address, Suburb, State, Postcode"></div>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label>Phone number</label><input type="tel" id="phone" placeholder="04XX XXX XXX"></div>
+        <div class="field"><label>Email address</label><input type="email" id="email" placeholder="jane@example.com"></div>
+      </div>
+      <hr class="section-divider">
+      <div class="section-label">Relationship status</div>
+      <div class="field-row one">
+        <div class="field">
+          <div class="radio-group" id="rg-relationship">
+            <label class="radio-opt" onclick="selectRadio('rg-relationship',this,'rel')"><input type="radio" name="rel" value="Single"><div class="radio-dot"></div>Single</label>
+            <label class="radio-opt" onclick="selectRadio('rg-relationship',this,'rel')"><input type="radio" name="rel" value="De facto"><div class="radio-dot"></div>De facto</label>
+            <label class="radio-opt" onclick="selectRadio('rg-relationship',this,'rel')"><input type="radio" name="rel" value="Married"><div class="radio-dot"></div>Married</label>
+            <label class="radio-opt" onclick="selectRadio('rg-relationship',this,'rel')"><input type="radio" name="rel" value="Separated"><div class="radio-dot"></div>Separated</label>
+            <label class="radio-opt" onclick="selectRadio('rg-relationship',this,'rel')"><input type="radio" name="rel" value="Divorced"><div class="radio-dot"></div>Divorced</label>
+            <label class="radio-opt" onclick="selectRadio('rg-relationship',this,'rel')"><input type="radio" name="rel" value="Widowed"><div class="radio-dot"></div>Widowed</label>
+          </div>
+        </div>
+      </div>
+      <div id="partner-block" style="display:none; margin-top:1rem;">
+        <div class="section-label">Partner / spouse details</div>
+        <div class="field-row two">
+          <div class="field"><label>Partner's full name</label><input type="text" id="partnerName" placeholder="Full legal name"></div>
+          <div class="field"><label>Partner's date of birth</label><input type="date" id="partnerDob"></div>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:1.25rem;"><strong>Note:</strong> Marriage revokes an existing will in most Australian states. If you've recently married, your previous will may no longer be valid.</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" data-step="2">
+    <div class="card">
+      <div class="card-title">Your children &amp; dependants</div>
+      <div class="card-desc">List all children — biological, adopted, or stepchildren you wish to include — and any other dependants.</div>
+      <div class="section-label">Do you have children?</div>
+      <div class="radio-group" id="rg-hasChildren" style="margin-bottom:1.25rem;">
+        <label class="radio-opt" onclick="selectRadio('rg-hasChildren',this,'hasChildren'); toggleChildren('yes')"><input type="radio" name="hasChildren" value="yes"><div class="radio-dot"></div>Yes</label>
+        <label class="radio-opt" onclick="selectRadio('rg-hasChildren',this,'hasChildren'); toggleChildren('no')"><input type="radio" name="hasChildren" value="no"><div class="radio-dot"></div>No</label>
+      </div>
+      <div id="children-block" style="display:none;">
+        <div id="children-list"></div>
+        <button class="add-btn" onclick="addChild()">+ Add a child</button>
+        <hr class="section-divider">
+        <div class="section-label">Are any of these children under 18?</div>
+        <div class="radio-group" id="rg-minors" style="margin-bottom:1rem;">
+          <label class="radio-opt" onclick="selectRadio('rg-minors',this,'minors')"><input type="radio" name="minors" value="yes"><div class="radio-dot"></div>Yes — some are under 18</label>
+          <label class="radio-opt" onclick="selectRadio('rg-minors',this,'minors')"><input type="radio" name="minors" value="no"><div class="radio-dot"></div>No — all are adults</label>
+        </div>
+      </div>
+      <hr class="section-divider">
+      <div class="section-label">Other dependants</div>
+      <div class="field-row one">
+        <div class="field"><label>Anyone else financially dependent on you?</label><textarea id="otherDependants" placeholder="e.g. elderly parent, sibling with disability — name and relationship"></textarea><div class="field-hint">Leave blank if not applicable.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" data-step="3">
+    <div class="card">
+      <div class="card-title">Your executor/s</div>
+      <div class="card-desc">An executor is the person who will administer your estate after your death — collecting assets, paying debts, and distributing the estate according to your wishes.</div>
+      <div class="info-box">Your executor doesn't need to be a lawyer, but they should be someone you trust completely, who is organised, and ideally younger or the same age as you.</div>
+      <div class="section-label">Primary executor</div>
+      <div class="field-row two">
+        <div class="field"><label>Full name <span class="req">*</span></label><input type="text" id="exec1Name"></div>
+        <div class="field"><label>Relationship to you <span class="req">*</span></label><input type="text" id="exec1Rel" placeholder="e.g. spouse, daughter, friend"></div>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label>Phone / email</label><input type="text" id="exec1Contact"></div>
+        <div class="field"><label>Address (suburb, state)</label><input type="text" id="exec1Address"></div>
+      </div>
+      <hr class="section-divider">
+      <div class="section-label">Substitute / backup executor</div>
+      <div class="radio-group" id="rg-hasExec2" style="margin-bottom:0.75rem;">
+        <label class="radio-opt" onclick="selectRadio('rg-hasExec2',this,'hasExec2'); document.getElementById('exec2-block').style.display='block'"><input type="radio" name="hasExec2" value="yes"><div class="radio-dot"></div>Yes — appoint a substitute</label>
+        <label class="radio-opt" onclick="selectRadio('rg-hasExec2',this,'hasExec2'); document.getElementById('exec2-block').style.display='none'"><input type="radio" name="hasExec2" value="no"><div class="radio-dot"></div>No</label>
+      </div>
+      <div id="exec2-block" style="display:none;">
+        <div class="field-row two">
+          <div class="field"><label>Full name</label><input type="text" id="exec2Name"></div>
+          <div class="field"><label>Relationship to you</label><input type="text" id="exec2Rel"></div>
+        </div>
+        <div class="field-row one"><div class="field"><label>Phone / email</label><input type="text" id="exec2Contact"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" data-step="4">
+    <div class="card">
+      <div class="card-title">Guardianship of minor children</div>
+      <div class="card-desc">If you have children under 18, you can nominate a guardian who would be responsible for their care if both parents were to die.</div>
+      <div id="no-minors-msg" style="display:none;"><div class="info-box">You indicated you have no children under 18, so this section doesn't apply. Click Next to continue.</div></div>
+      <div id="guardian-form">
+        <div class="info-box">Discuss this with your proposed guardian before finalising — they need to be willing and able to take on this responsibility.</div>
+        <div class="section-label">Proposed guardian</div>
+        <div class="field-row two">
+          <div class="field"><label>Full name</label><input type="text" id="guardian1Name"></div>
+          <div class="field"><label>Relationship to you</label><input type="text" id="guardian1Rel"></div>
+        </div>
+        <div class="field-row two">
+          <div class="field"><label>Contact details</label><input type="text" id="guardian1Contact"></div>
+          <div class="field"><label>Address (suburb, state)</label><input type="text" id="guardian1Address"></div>
+        </div>
+        <hr class="section-divider">
+        <div class="section-label">Substitute / backup guardian</div>
+        <div class="radio-group" id="rg-hasGuard2" style="margin-bottom:0.75rem;">
+          <label class="radio-opt" onclick="selectRadio('rg-hasGuard2',this,'hasGuard2'); document.getElementById('guard2-block').style.display='block'"><input type="radio" name="hasGuard2" value="yes"><div class="radio-dot"></div>Yes</label>
+          <label class="radio-opt" onclick="selectRadio('rg-hasGuard2',this,'hasGuard2'); document.getElementById('guard2-block').style.display='none'"><input type="radio" name="hasGuard2" value="no"><div class="radio-dot"></div>No</label>
+        </div>
+        <div id="guard2-block" style="display:none;">
+          <div class="field-row two">
+            <div class="field"><label>Full name</label><input type="text" id="guardian2Name"></div>
+            <div class="field"><label>Relationship</label><input type="text" id="guardian2Rel"></div>
+          </div>
+        </div>
+        <hr class="section-divider">
+        <div class="field-row one"><div class="field"><label>Any specific wishes regarding your children's care?</label><textarea id="childCareWishes" placeholder="e.g. schooling preferences, religious upbringing, pets, cultural wishes"></textarea></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" data-step="5">
+    <div class="card">
+      <div class="card-title">Your assets</div>
+      <div class="card-desc">Provide an overview of your estate. You don't need account numbers — just enough for your lawyer to understand what you own and how it's held.</div>
+      <div class="notice"><strong>Important:</strong> Superannuation does not automatically form part of your estate. Your super fund distributes it according to binding nominations. Ask your lawyer about this separately.</div>
+      <div class="section-label">Real property</div>
+      <div id="property-list"></div>
+      <button class="add-btn" onclick="addProperty()">+ Add a property</button>
+      <hr class="section-divider">
+      <div class="section-label">Bank accounts &amp; investments</div>
+      <div class="field-row one"><div class="field"><label>Banks / institutions (no account numbers needed)</label><textarea id="bankAccounts" placeholder="e.g. CBA savings account, ANZ joint account with partner, CommSec shares portfolio"></textarea></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Superannuation</div>
+      <div class="field-row one"><div class="field"><label>Super fund/s</label><textarea id="superFunds" placeholder="e.g. Australian Retirement Trust — approximate balance if known"></textarea><div class="field-hint">Your lawyer will advise on Binding Death Benefit Nominations separately.</div></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Vehicles</div>
+      <div class="field-row one"><div class="field"><label>Vehicles owned</label><input type="text" id="vehicles" placeholder="e.g. 2021 Toyota Camry"></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Business interests</div>
+      <div class="field-row one"><div class="field"><label>Do you own a business or shares in a private company?</label><textarea id="businessInterests" placeholder="e.g. 50% shareholder in XYZ Pty Ltd, sole trader"></textarea></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Other significant assets</div>
+      <div class="field-row one"><div class="field"><label>Anything else of significant value?</label><textarea id="otherAssets" placeholder="e.g. artworks, jewellery, cryptocurrency, loans owed to you"></textarea></div></div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step" data-step="6">
+    <div class="card">
+      <div class="card-title">Specific gifts &amp; bequests</div>
+      <div class="card-desc">A specific gift is a particular item or sum of money you want to leave to a specific person or organisation, distributed before the remainder of the estate.</div>
+      <div class="section-label">Would you like to make specific gifts?</div>
+      <div class="radio-group" id="rg-hasGifts" style="margin-bottom:1.25rem;">
+        <label class="radio-opt" onclick="selectRadio('rg-hasGifts',this,'hasGifts'); document.getElementById('gifts-block').style.display='block'"><input type="radio" name="hasGifts" value="yes"><div class="radio-dot"></div>Yes</label>
+        <label class="radio-opt" onclick="selectRadio('rg-hasGifts',this,'hasGifts'); document.getElementById('gifts-block').style.display='none'"><input type="radio" name="hasGifts" value="no"><div class="radio-dot"></div>No — distribute everything as the residuary estate</label>
+      </div>
+      <div id="gifts-block" style="display:none;">
+        <div id="gifts-list"></div>
+        <button class="add-btn" onclick="addGift()">+ Add a specific gift</button>
+        <hr class="section-divider">
+        <div class="field-row one"><div class="field"><label>Charitable donations</label><textarea id="charities" placeholder="e.g. $5,000 to the Heart Foundation, 5% of residuary estate to Cancer Council NSW"></textarea></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step" data-step="7">
+    <div class="card">
+      <div class="card-title">Residuary estate</div>
+      <div class="card-desc">After specific gifts are distributed and debts paid, the remainder of your estate is the residuary estate.</div>
+      <div class="info-box">Most people leave the residuary estate to their partner absolutely, or if the partner predeceases them, equally to their children.</div>
+      <div class="field-row one"><div class="field"><label>Primary beneficiary/ies <span class="req">*</span></label><textarea id="residuaryPrimary" placeholder="e.g. My spouse John Smith absolutely. If John does not survive me, equally between my children Sarah and Tom."></textarea></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Substitute / backup beneficiary</div>
+      <div class="field-row one"><div class="field"><label>If your primary beneficiary predeceases you, who should receive the estate?</label><textarea id="residuarySubstitute" placeholder="e.g. Equally between my children. If a child has died, their share passes to their children."></textarea></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Conditions or trusts</div>
+      <div class="field-row one"><div class="field"><label>Any conditions on how gifts are made?</label><textarea id="trustConditions" placeholder="e.g. I want my children's shares held in trust until they reach 25."></textarea><div class="field-hint">Your lawyer will advise on the most appropriate trust structure.</div></div></div>
+    </div>
+  </div>
+
+  <!-- STEP 8 -->
+  <div class="step" data-step="8">
+    <div class="card">
+      <div class="card-title">Funeral &amp; final wishes</div>
+      <div class="card-desc">While not legally binding, noting your preferences helps your executor and family make decisions that honour your wishes.</div>
+      <div class="notice"><strong>Note:</strong> Funerals often happen before wills are read. Tell your family your wishes directly too, or write a separate letter of wishes.</div>
+      <div class="section-label">Funeral preferences</div>
+      <div class="radio-group" id="rg-burial" style="margin-bottom:1rem;">
+        <label class="radio-opt" onclick="selectRadio('rg-burial',this,'burial')"><input type="radio" name="burial" value="Burial"><div class="radio-dot"></div>Burial</label>
+        <label class="radio-opt" onclick="selectRadio('rg-burial',this,'burial')"><input type="radio" name="burial" value="Cremation"><div class="radio-dot"></div>Cremation</label>
+        <label class="radio-opt" onclick="selectRadio('rg-burial',this,'burial')"><input type="radio" name="burial" value="No preference"><div class="radio-dot"></div>No preference</label>
+        <label class="radio-opt" onclick="selectRadio('rg-burial',this,'burial')"><input type="radio" name="burial" value="Other"><div class="radio-dot"></div>Other</label>
+      </div>
+      <div class="field-row one"><div class="field"><label>Specific wishes about your funeral or memorial?</label><textarea id="funeralWishes" placeholder="e.g. religious/cultural service, preferred location, favourite readings or music"></textarea></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Pets</div>
+      <div class="field-row one"><div class="field"><label>Pets you'd like to make provision for?</label><textarea id="petWishes" placeholder="e.g. My Labrador Rex should go to my sister Clare."></textarea></div></div>
+      <hr class="section-divider">
+      <div class="section-label">Digital assets</div>
+      <div class="field-row one"><div class="field"><label>Digital accounts or assets to address?</label><textarea id="digitalAssets" placeholder="e.g. Facebook — memorialise, PayPal — close and transfer balance"></textarea><div class="field-hint">Do not include passwords here — provide these to your executor separately in a secure location.</div></div></div>
+      <hr class="section-divider">
+      <div class="field-row one"><div class="field"><label>Anything else for your lawyer?</label><textarea id="otherNotes" placeholder="e.g. family heirlooms, estranged family members, prior wills, overseas assets"></textarea></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Review your answers</div>
+      <div class="card-desc">Check the summary below, then download your completed instructions as a Word document to send to your lawyer.</div>
+      <div id="review-output"></div>
+    </div>
+
+    <div class="complete-hero" id="complete-hero" style="display:none;">
+      <div class="complete-icon">✓</div>
+      <h2>Instructions complete</h2>
+      <p>Download your instructions as a Word document and email it to your lawyer, or print this page as a PDF.</p>
+      <div class="action-row">
+        <button class="btn btn-word" onclick="generateDocx()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Download Word Document
+        </button>
+        <button class="btn btn-print" onclick="window.print()">Print / Save PDF</button>
+        <button class="btn btn-ghost" onclick="goTo(1)">Start over</button>
+      </div>
+      <div id="docx-status"></div>
+    </div>
+  </div>
+
+  <div class="nav-bar" id="nav-bar">
+    <button class="btn btn-ghost" id="btn-back" onclick="goBack()" style="visibility:hidden">← Back</button>
+    <button class="btn btn-primary" id="btn-next" onclick="goNext()">Next →</button>
+  </div>
+
+</div>
+
+<script>
+const STEPS = ['Personal details','Family','Executors','Guardianship','Assets','Specific gifts','Residuary estate','Final wishes'];
+const TOTAL = STEPS.length;
+let current = 1;
+
+function buildTabs() {
+  const wrap = document.getElementById('step-tabs');
+  wrap.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    const n = i + 1;
+    const pill = document.createElement('div');
+    pill.className = 'step-pill' + (n === current ? ' active' : n < current ? ' done' : '');
+    pill.textContent = n + '. ' + s;
+    wrap.appendChild(pill);
+  });
+}
+
+function updateProgress() {
+  const pct = Math.round((current / TOTAL) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('step-label').textContent = 'Step ' + current + ' of ' + TOTAL;
+  document.getElementById('step-pct').textContent = pct + '%';
+  buildTabs();
+  document.getElementById('btn-back').style.visibility = current > 1 ? 'visible' : 'hidden';
+  const nextBtn = document.getElementById('btn-next');
+  if (current === TOTAL) { nextBtn.textContent = 'Complete ✓'; nextBtn.onclick = submitForm; }
+  else { nextBtn.textContent = 'Next →'; nextBtn.onclick = goNext; }
+}
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.querySelector('[data-step="' + n + '"]').classList.add('active');
+  current = n;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goTo(n) { showStep(n); }
+function goNext() { if (current < TOTAL) { if (current === 7) buildReview(); showStep(current + 1); } }
+function goBack() { if (current > 1) showStep(current - 1); }
+function submitForm() {
+  buildReview();
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('btn-back').style.display = 'none';
+  document.getElementById('complete-hero').style.display = 'block';
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+function selectRadio(groupId, el, name) {
+  document.querySelectorAll('#' + groupId + ' .radio-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  if (name === 'rel') {
+    const val = el.querySelector('input').value;
+    document.getElementById('partner-block').style.display = (val === 'Married' || val === 'De facto') ? 'block' : 'none';
+  }
+}
+
+let childCount = 0;
+function toggleChildren(val) {
+  document.getElementById('children-block').style.display = val === 'yes' ? 'block' : 'none';
+  if (val === 'yes' && childCount === 0) addChild();
+}
+function addChild() {
+  childCount++;
+  const id = 'child-' + childCount;
+  const div = document.createElement('div');
+  div.className = 'repeat-row'; div.id = id;
+  div.innerHTML = '<button class="remove-btn" onclick="removeRow(\''+id+'\')">Remove</button>' +
+    '<div class="field-row two"><div class="field"><label>Full name</label><input type="text" placeholder="Child\'s full name" class="child-name"></div><div class="field"><label>Date of birth</label><input type="date" class="child-dob"></div></div>' +
+    '<div class="field-row two"><div class="field"><label>Relationship</label><select class="child-rel"><option value="">Select...</option><option>Biological child</option><option>Adopted child</option><option>Stepchild</option><option>Foster child</option></select></div><div class="field"><label>Notes</label><input type="text" placeholder="e.g. lives overseas, has a disability" class="child-notes"></div></div>';
+  document.getElementById('children-list').appendChild(div);
+}
+
+let propCount = 0;
+function addProperty() {
+  propCount++;
+  const id = 'prop-' + propCount;
+  const div = document.createElement('div');
+  div.className = 'repeat-row'; div.id = id;
+  div.innerHTML = '<button class="remove-btn" onclick="removeRow(\''+id+'\')">Remove</button>' +
+    '<div class="field-row one"><div class="field"><label>Property address</label><input type="text" placeholder="Full address" class="prop-address"></div></div>' +
+    '<div class="field-row two"><div class="field"><label>How held</label><select class="prop-held"><option value="">Select...</option><option>Sole owner</option><option>Joint tenants</option><option>Tenants in common</option><option>Company/trust owned</option></select></div><div class="field"><label>Approx. value (optional)</label><input type="text" placeholder="e.g. $850,000" class="prop-value"></div></div>';
+  document.getElementById('property-list').appendChild(div);
+}
+
+let giftCount = 0;
+function addGift() {
+  giftCount++;
+  const id = 'gift-' + giftCount;
+  const div = document.createElement('div');
+  div.className = 'repeat-row'; div.id = id;
+  div.innerHTML = '<button class="remove-btn" onclick="removeRow(\''+id+'\')">Remove</button>' +
+    '<div class="field-row two"><div class="field"><label>What is the gift?</label><input type="text" placeholder="e.g. $10,000 cash, my diamond ring" class="gift-item"></div><div class="field"><label>Who receives it?</label><input type="text" placeholder="Full name of beneficiary" class="gift-to"></div></div>' +
+    '<div class="field-row two"><div class="field"><label>Relationship to you</label><input type="text" placeholder="e.g. niece, friend" class="gift-rel"></div><div class="field"><label>If beneficiary predeceases you</label><input type="text" placeholder="e.g. gift lapses" class="gift-alt"></div></div>';
+  document.getElementById('gifts-list').appendChild(div);
+}
+
+function removeRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+function v(id) { const el = document.getElementById(id); return el ? (el.value.trim() || '') : ''; }
+function rv(name) { const el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : ''; }
+
+function buildReview() {
+  const out = document.getElementById('review-output');
+  if (!out) return;
+  const sections = [
+    { title: 'Personal details', rows: [['Name', v('firstName') + ' ' + v('lastName')], ['Date of birth', v('dob')], ['Address', v('address')], ['Phone', v('phone')], ['Email', v('email')], ['Relationship status', rv('rel')], ['Partner', v('partnerName')]] },
+    { title: 'Executors', rows: [['Primary executor', v('exec1Name') + (v('exec1Rel') ? ' (' + v('exec1Rel') + ')' : '')], ['Substitute executor', v('exec2Name') || 'None nominated']] },
+    { title: 'Residuary estate', rows: [['Primary beneficiaries', v('residuaryPrimary')], ['Substitute beneficiaries', v('residuarySubstitute')], ['Trust conditions', v('trustConditions')]] },
+    { title: 'Final wishes', rows: [['Funeral preference', rv('burial')], ['Funeral wishes', v('funeralWishes')], ['Pets', v('petWishes')], ['Other notes', v('otherNotes')]] }
+  ];
+  out.innerHTML = sections.map(s =>
+    '<div class="review-section"><h3>' + s.title + '</h3>' +
+    s.rows.filter(r => r[1]).map(r => '<div class="review-row"><span class="review-label">' + r[0] + '</span><span class="review-value">' + (r[1]||'—') + '</span></div>').join('') +
+    '</div>'
+  ).join('');
+}
+
+// ─── Word Document Generator ────────────────────────────────────────────────
+
+async function generateDocx() {
+  const statusEl = document.getElementById('docx-status');
+  statusEl.textContent = 'Generating document…';
+
+  try {
+    const {
+      Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+      AlignmentType, HeadingLevel, BorderStyle, WidthType, ShadingType,
+      VerticalAlign, UnderlineType, PageNumber, Footer
+    } = docx;
+
+    const clientName = (v('firstName') + ' ' + v('lastName')).trim() || 'Client';
+    const today = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    // ── Style helpers ──────────────────────────────────────────────────────
+
+    const CELL_BORDER = { style: BorderStyle.SINGLE, size: 1, color: 'E2DDD6' };
+    const BORDERS = { top: CELL_BORDER, bottom: CELL_BORDER, left: CELL_BORDER, right: CELL_BORDER };
+    const TABLE_W = 9360;
+    const COL1 = 2800, COL2 = TABLE_W - COL1;
+
+    function spacer(pts) {
+      return new Paragraph({ spacing: { before: 0, after: pts * 20 }, children: [] });
+    }
+
+    function sectionHeading(text) {
+      return new Paragraph({
+        children: [new TextRun({ text, bold: true, size: 26, font: 'Arial', color: '2D5A3D' })],
+        spacing: { before: 400, after: 100 },
+        border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: '2D5A3D', space: 4 } }
+      });
+    }
+
+    function subHeading(text) {
+      return new Paragraph({
+        children: [new TextRun({ text: text.toUpperCase(), size: 18, font: 'Arial', color: '4A7C5F', bold: true })],
+        spacing: { before: 240, after: 60 }
+      });
+    }
+
+    function fieldRow(label, value) {
+      if (!value) value = '—';
+      return new Table({
+        width: { size: TABLE_W, type: WidthType.DXA },
+        columnWidths: [COL1, COL2],
+        borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE }, insideH: { style: BorderStyle.NONE }, insideV: { style: BorderStyle.NONE } },
+        rows: [new TableRow({
+          children: [
+            new TableCell({
+              width: { size: COL1, type: WidthType.DXA },
+              margins: { top: 40, bottom: 40, left: 0, right: 120 },
+              children: [new Paragraph({ children: [new TextRun({ text: label, size: 20, font: 'Arial', color: '777777' })] })]
+            }),
+            new TableCell({
+              width: { size: COL2, type: WidthType.DXA },
+              margins: { top: 40, bottom: 40, left: 0, right: 0 },
+              children: [new Paragraph({ children: [new TextRun({ text: value, size: 20, font: 'Arial', color: '1A1A1A' })] })]
+            })
+          ]
+        })]
+      });
+    }
+
+    function shadeTable(rows) {
+      // rows = [[label, value], ...]
+      const tableRows = rows.map((row, i) => new TableRow({
+        children: [
+          new TableCell({
+            width: { size: COL1, type: WidthType.DXA },
+            borders: BORDERS,
+            shading: { fill: i % 2 === 0 ? 'F7F4EF' : 'FFFFFF', type: ShadingType.CLEAR },
+            margins: { top: 80, bottom: 80, left: 120, right: 120 },
+            children: [new Paragraph({ children: [new TextRun({ text: row[0], size: 20, font: 'Arial', color: '555555', bold: true })] })]
+          }),
+          new TableCell({
+            width: { size: COL2, type: WidthType.DXA },
+            borders: BORDERS,
+            shading: { fill: i % 2 === 0 ? 'F7F4EF' : 'FFFFFF', type: ShadingType.CLEAR },
+            margins: { top: 80, bottom: 80, left: 120, right: 120 },
+            children: [new Paragraph({ children: [new TextRun({ text: row[1] || '—', size: 20, font: 'Arial', color: '1A1A1A' })] })]
+          })
+        ]
+      }));
+      return new Table({ width: { size: TABLE_W, type: WidthType.DXA }, columnWidths: [COL1, COL2], rows: tableRows });
+    }
+
+    function noteParagraph(text) {
+      return new Paragraph({
+        children: [new TextRun({ text: '⚠ ' + text, size: 18, font: 'Arial', color: '8B4513', italics: true })],
+        spacing: { before: 80, after: 80 },
+        indent: { left: 360 }
+      });
+    }
+
+    // ── Collect repeatable data ────────────────────────────────────────────
+
+    const childRows = [];
+    document.querySelectorAll('#children-list .repeat-row').forEach(row => {
+      const name = (row.querySelector('.child-name') || {}).value || '';
+      const dob = (row.querySelector('.child-dob') || {}).value || '';
+      const rel = (row.querySelector('.child-rel') || {}).value || '';
+      const notes = (row.querySelector('.child-notes') || {}).value || '';
+      if (name) childRows.push([name, [rel, dob, notes].filter(Boolean).join(' · ')]);
+    });
+
+    const propRows = [];
+    document.querySelectorAll('#property-list .repeat-row').forEach(row => {
+      const addr = (row.querySelector('.prop-address') || {}).value || '';
+      const held = (row.querySelector('.prop-held') || {}).value || '';
+      const val = (row.querySelector('.prop-value') || {}).value || '';
+      if (addr) propRows.push([addr, [held, val].filter(Boolean).join(' · ')]);
+    });
+
+    const giftRows = [];
+    document.querySelectorAll('#gifts-list .repeat-row').forEach(row => {
+      const item = (row.querySelector('.gift-item') || {}).value || '';
+      const to = (row.querySelector('.gift-to') || {}).value || '';
+      const rel = (row.querySelector('.gift-rel') || {}).value || '';
+      const alt = (row.querySelector('.gift-alt') || {}).value || '';
+      if (item) giftRows.push([item + (to ? ' → ' + to : ''), [rel, alt ? 'If predeceased: ' + alt : ''].filter(Boolean).join(' | ')]);
+    });
+
+    // ── Build document ─────────────────────────────────────────────────────
+
+    const children = [];
+
+    // Title block
+    children.push(
+      new Paragraph({ children: [new TextRun({ text: 'WILL INSTRUCTIONS', size: 40, bold: true, font: 'Arial', color: '2D5A3D' })], spacing: { after: 80 } }),
+      new Paragraph({ children: [new TextRun({ text: clientName, size: 32, font: 'Georgia', color: '1A1A1A' })], spacing: { after: 60 } }),
+      new Paragraph({ children: [new TextRun({ text: 'Prepared: ' + today, size: 18, font: 'Arial', color: '999999' })], spacing: { after: 0 } }),
+      new Paragraph({ children: [new TextRun({ text: 'Completed via client intake form. For use by legal practitioner only.', size: 18, font: 'Arial', color: '999999', italics: true })], spacing: { after: 480 }, border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: '2D5A3D', space: 8 } } })
+    );
+
+    // 1. Personal Details
+    children.push(sectionHeading('1. Personal Details'));
+    children.push(shadeTable([
+      ['Given names', v('firstName')],
+      ['Family name', v('lastName')],
+      ['Date of birth', v('dob')],
+      ['Place of birth', v('pob')],
+      ['Residential address', v('address')],
+      ['Phone', v('phone')],
+      ['Email', v('email')],
+      ['Relationship status', rv('rel')],
+      ['Partner / spouse name', v('partnerName')],
+      ['Partner date of birth', v('partnerDob')]
+    ]));
+
+    // 2. Family
+    children.push(sectionHeading('2. Children & Dependants'));
+    children.push(shadeTable([['Has children', rv('hasChildren') || '—'], ['Minor children (under 18)', rv('minors') || '—']]));
+    if (childRows.length > 0) {
+      children.push(spacer(6));
+      children.push(subHeading('Children listed'));
+      childRows.forEach(r => children.push(shadeTable([['Name', r[0]], ['Details', r[1]]])));
+    }
+    if (v('otherDependants')) {
+      children.push(spacer(6));
+      children.push(subHeading('Other dependants'));
+      children.push(new Paragraph({ children: [new TextRun({ text: v('otherDependants'), size: 20, font: 'Arial' })], spacing: { before: 60, after: 60 } }));
+    }
+
+    // 3. Executors
+    children.push(sectionHeading('3. Executors'));
+    children.push(subHeading('Primary executor'));
+    children.push(shadeTable([
+      ['Full name', v('exec1Name')],
+      ['Relationship', v('exec1Rel')],
+      ['Contact', v('exec1Contact')],
+      ['Address', v('exec1Address')]
+    ]));
+    if (v('exec2Name')) {
+      children.push(spacer(6));
+      children.push(subHeading('Substitute executor'));
+      children.push(shadeTable([
+        ['Full name', v('exec2Name')],
+        ['Relationship', v('exec2Rel')],
+        ['Contact', v('exec2Contact')]
+      ]));
+    } else {
+      children.push(spacer(4));
+      children.push(new Paragraph({ children: [new TextRun({ text: 'No substitute executor nominated.', size: 20, font: 'Arial', color: '999999', italics: true })], spacing: { before: 60 } }));
+    }
+
+    // 4. Guardianship
+    children.push(sectionHeading('4. Guardianship of Minor Children'));
+    if (rv('minors') === 'yes' || v('guardian1Name')) {
+      children.push(subHeading('Proposed guardian'));
+      children.push(shadeTable([
+        ['Full name', v('guardian1Name')],
+        ['Relationship', v('guardian1Rel')],
+        ['Contact', v('guardian1Contact')],
+        ['Address', v('guardian1Address')]
+      ]));
+      if (v('guardian2Name')) {
+        children.push(spacer(6));
+        children.push(subHeading('Substitute guardian'));
+        children.push(shadeTable([['Full name', v('guardian2Name')], ['Relationship', v('guardian2Rel')]]));
+      }
+      if (v('childCareWishes')) {
+        children.push(spacer(6));
+        children.push(subHeading('Care wishes'));
+        children.push(new Paragraph({ children: [new TextRun({ text: v('childCareWishes'), size: 20, font: 'Arial' })], spacing: { before: 60, after: 60 } }));
+      }
+    } else {
+      children.push(new Paragraph({ children: [new TextRun({ text: 'No minor children — guardianship not applicable.', size: 20, font: 'Arial', color: '999999', italics: true })], spacing: { before: 80 } }));
+    }
+
+    // 5. Assets
+    children.push(sectionHeading('5. Assets Overview'));
+    children.push(noteParagraph('Superannuation passes outside the estate — requires separate Binding Death Benefit Nomination.'));
+    if (propRows.length > 0) {
+      children.push(subHeading('Real property'));
+      propRows.forEach(r => children.push(shadeTable([['Address', r[0]], ['Ownership', r[1]]])));
+    }
+    children.push(spacer(4));
+    children.push(shadeTable([
+      ['Bank accounts / investments', v('bankAccounts')],
+      ['Superannuation', v('superFunds')],
+      ['Vehicles', v('vehicles')],
+      ['Business interests', v('businessInterests')],
+      ['Other significant assets', v('otherAssets')]
+    ]));
+
+    // 6. Specific Gifts
+    children.push(sectionHeading('6. Specific Gifts & Bequests'));
+    if (rv('hasGifts') === 'yes' && giftRows.length > 0) {
+      children.push(subHeading('Bequests'));
+      giftRows.forEach((r, i) => {
+        children.push(new Paragraph({ children: [new TextRun({ text: (i + 1) + '. ' + r[0], size: 20, font: 'Arial', bold: true })], spacing: { before: 80, after: 20 } }));
+        if (r[1]) children.push(new Paragraph({ children: [new TextRun({ text: r[1], size: 20, font: 'Arial', color: '555555' })], spacing: { before: 0, after: 60 }, indent: { left: 360 } }));
+      });
+      if (v('charities')) {
+        children.push(spacer(4));
+        children.push(subHeading('Charitable donations'));
+        children.push(new Paragraph({ children: [new TextRun({ text: v('charities'), size: 20, font: 'Arial' })], spacing: { before: 60, after: 60 } }));
+      }
+    } else {
+      children.push(new Paragraph({ children: [new TextRun({ text: 'No specific gifts nominated — full estate to pass as residuary estate.', size: 20, font: 'Arial', color: '999999', italics: true })], spacing: { before: 80 } }));
+    }
+
+    // 7. Residuary Estate
+    children.push(sectionHeading('7. Residuary Estate'));
+    children.push(shadeTable([
+      ['Primary beneficiaries', v('residuaryPrimary')],
+      ['Substitute beneficiaries', v('residuarySubstitute')],
+      ['Trust / conditions', v('trustConditions')]
+    ]));
+
+    // 8. Final Wishes
+    children.push(sectionHeading('8. Funeral & Final Wishes'));
+    children.push(shadeTable([
+      ['Funeral preference', rv('burial')],
+      ['Funeral wishes', v('funeralWishes')],
+      ['Pets', v('petWishes')],
+      ['Digital assets', v('digitalAssets')],
+      ['Additional notes', v('otherNotes')]
+    ]));
+
+    // Signature block
+    children.push(spacer(24));
+    children.push(new Paragraph({
+      children: [new TextRun({ text: 'Lawyer use only', size: 18, font: 'Arial', color: '999999', bold: true })],
+      spacing: { before: 0, after: 40 },
+      border: { top: { style: BorderStyle.SINGLE, size: 4, color: 'CCCCCC', space: 8 } }
+    }));
+    children.push(shadeTable([
+      ['File reference', ''],
+      ['Instruction date', ''],
+      ['Lawyer', ''],
+      ['Notes', '']
+    ]));
+
+    // ── Build and download ─────────────────────────────────────────────────
+
+    const doc = new Document({
+      styles: {
+        default: { document: { run: { font: 'Arial', size: 20 } } }
+      },
+      sections: [{
+        properties: {
+          page: {
+            size: { width: 11906, height: 16838 },
+            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+          }
+        },
+        footers: {
+          default: new Footer({
+            children: [new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: clientName + ' — Will Instructions — ' + today + ' — Page ', size: 16, font: 'Arial', color: '999999' }), new TextRun({ children: [PageNumber.CURRENT], size: 16, font: 'Arial', color: '999999' })]
+            })]
+          })
+        },
+        children
+      }]
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = clientName.replace(/\s+/g, '_') + '_Will_Instructions.docx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    statusEl.textContent = 'Downloaded successfully.';
+
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = 'Error generating document. Please try printing to PDF instead.';
+  }
+}
+
+updateProgress();
+</script>
+</body>
+</html>
