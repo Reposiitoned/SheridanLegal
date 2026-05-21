@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheridan Legal - Home</title>
+</head>
+<body>
+    <h1>Sheridan Legal Tools</h1>
+    <p>Welcome. Click the link below to access the tool:</p>
+    
+    <a href="process-mapping-form.html">Go to Process Mapping Form</a>
+</body>
+</html>
