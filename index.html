@@ -1,55 +1,352 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    body {background-color: #efeadf}
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 17.0px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px 'Helvetica Neue'; color: #2e5464; -webkit-text-stroke: #2e5464}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #a15519; -webkit-text-stroke: #a15519}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px 'Helvetica Neue'; color: #2c3745; -webkit-text-stroke: #2c3745}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 28.0px 'Helvetica Neue'; color: #111722; -webkit-text-stroke: #111722}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'; color: #657588; -webkit-text-stroke: #657588}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #0f3b32; -webkit-text-stroke: #0f3b32; background-color: #ddf0ec}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 32.0px 'Apple Color Emoji'; color: #111722; -webkit-text-stroke: #111722}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 16.0px 'Helvetica Neue'; color: #111722; -webkit-text-stroke: #111722}
-    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 13.5px 'Helvetica Neue'; color: #2c3745; -webkit-text-stroke: #2c3745}
-    p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 14.0px 'Helvetica Neue'; color: #111722; -webkit-text-stroke: #111722; background-color: #ffffff; min-height: 16.0px}
-    p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 14.0px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; background-color: #0f3b32}
-    p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #361864; -webkit-text-stroke: #361864; background-color: #ece5ff}
-    p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 14.0px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; background-color: #361864}
-    span.s1 {font-kerning: none; background-color: #111722}
-    span.s2 {font-kerning: none}
-    span.s3 {font: 11.0px 'Apple Color Emoji'; font-kerning: none}
-    span.s4 {font-kerning: none; background-color: #ffffff}
-    span.s5 {font: 14.0px 'Lucida Grande'; font-kerning: none}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sheridan Legal — Knowledge Base</title>
+<style>
+  :root {
+    --cream:#f5f1ea;--navy:#1b2a3b;--navy-soft:#2e3f52;
+    --ink:#1b2a3b;--ink-soft:#4a5a6a;--ink-faint:#8a9aaa;
+    --amber:#c17c2a;--amber-bg:#f5ede0;--amber-rule:#ddb882;
+    --teal:#0c5c52;--teal-light:#e8f5f3;--teal-mid:#1a7a6e;
+    --purple:#5a3a8a;--purple-bg:#f3f0ff;--purple-light:#e0d8f5;
+    --rule:#ddd8cf;--surface:#ffffff;
+    --red:#b93a3a;--red-bg:#fdf0f0;
+    --green:#2e7d5c;--green-bg:#edf7f2;
+    --radius:10px;--shadow:0 2px 14px rgba(27,42,59,0.08);
+    --font: Georgia, 'Times New Roman', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-mono: 'Courier New', monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-sans);background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh;}
+
+  /* BANNER */
+  .banner{background:var(--navy);height:50px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .banner-brand{font-family:var(--font);font-size:18px;color:#ffffff;letter-spacing:-.01em;}
+  .banner-meta{font-size:10px;color:#4a7a8a;letter-spacing:.08em;font-family:var(--font-mono);}
+
+  /* PAGE HEADER */
+  .page-header{max-width:940px;margin:0 auto;padding:52px 32px 28px;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;}
+  .page-title{font-family:var(--font);font-size:46px;color:var(--navy);line-height:1.1;margin-bottom:12px;}
+  .page-subtitle{font-size:14px;color:var(--ink-soft);max-width:560px;line-height:1.6;}
+
+  /* MAIN */
+  .main{max-width:940px;margin:0 auto;padding:36px 32px 80px;}
+
+  /* SECTION BLOCK */
+  .section-block{margin-bottom:48px;}
+  .section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--rule);flex-wrap:wrap;gap:12px;}
+  .section-hd.ops-hd{border-color:var(--teal);}
+  .section-hd.pat-hd{border-color:var(--purple);}
+  .section-title{font-family:var(--font);font-size:28px;color:var(--navy);}
+  .section-desc{font-size:13px;color:var(--ink-faint);margin-top:2px;}
+  .lock-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:6px;cursor:pointer;border:none;font-family:var(--font-sans);transition:all .15s;}
+  .lock-badge.ops{background:var(--teal-light);color:var(--teal);}
+  .lock-badge.ops:hover{background:var(--teal);color:#fff;}
+  .lock-badge.pat{background:var(--purple-bg);color:var(--purple);}
+  .lock-badge.pat:hover{background:var(--purple);color:#fff;}
+  .lock-badge.unlocked{background:var(--green-bg);color:var(--green);cursor:default;}
+
+  /* GATE */
+  .section-gate{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:48px 32px;text-align:center;box-shadow:var(--shadow);}
+  .gate-icon{font-size:36px;margin-bottom:14px;}
+  .gate-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;font-family:var(--font-sans);}
+  .gate-desc{font-size:14px;color:var(--ink-soft);margin-bottom:24px;}
+  .gate-row{display:flex;align-items:center;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .gate-input{
+    border:2px solid #c0c0c0;
+    border-radius:8px;
+    padding:11px 18px;
+    font-family:var(--font-sans);
+    font-size:15px;
+    color:#1b2a3b;
+    background:#ffffff;
+    outline:none;
+    width:240px;
+    text-align:center;
+    letter-spacing:.1em;
+    display:block;
+  }
+  .gate-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(12,92,82,0.12);}
+  .gate-input.pat-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(90,58,138,0.12);}
+  .gate-input.error{border-color:var(--red);animation:shake .3s;}
+  .gate-btn{border:none;border-radius:8px;padding:11px 26px;font-family:var(--font-sans);font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;}
+  .gate-btn.ops{background:var(--teal);color:#fff;}
+  .gate-btn.ops:hover{background:var(--teal-mid);}
+  .gate-btn.pat{background:var(--purple);color:#fff;}
+  .gate-btn.pat:hover{background:#4a2a7a;}
+  .gate-error{font-size:13px;color:var(--red);margin-top:10px;display:none;font-weight:600;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  /* CONTENT */
+  .section-content{display:none;}
+  .section-content.visible{display:block;}
+
+  /* SUB-SECTIONS */
+  .sub-section{margin-bottom:32px;}
+  .sub-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .sub-label::after{content:'';flex:1;height:1px;background:var(--rule);}
+
+  /* CARD GRID */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+
+  /* INDEX CARD */
+  .index-card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:20px 20px 16px;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:8px;transition:all .2s;position:relative;overflow:hidden;}
+  .index-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .2s;}
+  .index-card.ops-card::before{background:var(--teal);}
+  .index-card.pat-card::before{background:var(--purple);}
+  .index-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(27,42,59,0.13);}
+  .index-card:hover::before{opacity:1;}
+  .index-card:hover.ops-card{border-color:var(--teal);}
+  .index-card:hover.pat-card{border-color:var(--purple);}
+  .card-icon{font-size:22px;line-height:1;}
+  .card-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);}
+  .card-title{font-size:15px;font-weight:700;color:var(--navy);line-height:1.3;}
+  .card-desc{font-size:13px;color:var(--ink-soft);line-height:1.5;flex:1;}
+  .card-arrow{font-size:14px;color:var(--ink-faint);margin-top:4px;}
+  .index-card:hover .card-arrow{color:var(--teal);}
+  .index-card.pat-card:hover .card-arrow{color:var(--purple);}
+
+  @media(max-width:600px){
+    .page-header,.main{padding-left:18px;padding-right:18px;}
+    .banner{padding:0 18px;}
+    .page-title{font-size:34px;}
+    .card-grid{grid-template-columns:1fr;}
+    .gate-row{flex-direction:column;}
+    .gate-input{width:100%;max-width:300px;}
+  }
+</style>
 </head>
 <body>
-<p class="p1"><span class="s1">Sheridan Legal</span></p>
-<p class="p2"><span class="s1">Knowledge Base · Internal</span></p>
-<p class="p3"><span class="s2">SHERIDAN LEGAL</span></p>
-<h1 style="margin: 0.0px 0.0px 12.0px 0.0px; font: 46.0px 'Helvetica Neue'; color: #111722; -webkit-text-stroke: #111722"><span class="s2">Knowledge Base</span></h1>
-<p class="p5"><span class="s2">Standard operating procedures, scripts, tools, and reference guides for the firm. Select a section and enter your access code to continue.<span class="Apple-converted-space"> </span></span></p>
-<p class="p6"><span class="s2">Operations</span></p>
-<p class="p7"><span class="s2">Day-to-day tools for the team — accounts, workflow, process, and marketing.</span></p>
-<p class="p8"><span class="s3">🔒</span><span class="s2"> ENTER ACCESS CODE</span></p>
-<p class="p9"><span class="s4">🔒</span></p>
-<p class="p10"><span class="s4">Operations — Access Required</span></p>
-<p class="p11"><span class="s4">Enter the team access code to view operations tools.</span></p>
-<p class="p12"><span class="s2"></span><br></p>
-<p class="p13"><span class="s2">Unlock </span><span class="s5">→</span></p>
-<p class="p6"><span class="s2">Patrick · Sheridan</span></p>
-<p class="p7"><span class="s2">Strategic planning, firm modelling, and principal-level reference documents.</span></p>
-<p class="p14"><span class="s3">🔒</span><span class="s2"> ENTER ACCESS CODE</span></p>
-<p class="p9"><span class="s4">🔒</span></p>
-<p class="p10"><span class="s4">Patrick · Sheridan — Access Required</span></p>
-<p class="p11"><span class="s4">This section contains strategic and commercially sensitive documents.</span></p>
-<p class="p12"><span class="s2"></span><br></p>
-<p class="p15"><span class="s2">Unlock </span><span class="s5">→</span></p>
+
+<div class="banner">
+  <div class="banner-brand">Sheridan Legal</div>
+  <div class="banner-meta">Knowledge Base · Internal</div>
+</div>
+
+<div class="page-header">
+  <div class="eyebrow">Sheridan Legal</div>
+  <h1 class="page-title">Knowledge Base</h1>
+  <p class="page-subtitle">Standard operating procedures, scripts, tools, and reference guides for the firm. Select a section and enter your access code to continue.</p>
+</div>
+
+<div class="main">
+
+  <!-- OPERATIONS -->
+  <div class="section-block" id="ops-block">
+    <div class="section-hd ops-hd">
+      <div>
+        <div class="section-title">Operations</div>
+        <div class="section-desc">Day-to-day tools for the team — accounts, workflow, process, and marketing.</div>
+      </div>
+      <button class="lock-badge ops" id="ops-lock-badge" onclick="focusGate('ops')">🔒 Enter access code</button>
+    </div>
+
+    <div class="section-gate" id="ops-gate">
+      <div class="gate-icon">🔒</div>
+      <div class="gate-title">Operations — Access Required</div>
+      <div class="gate-desc">Enter the team access code to view operations tools.</div>
+      <div class="gate-row">
+        <input class="gate-input" id="ops-input" type="password" placeholder="Access code" onkeydown="if(event.key==='Enter')unlock('ops')"/>
+        <button class="gate-btn ops" onclick="unlock('ops')">Unlock →</button>
+      </div>
+      <div class="gate-error" id="ops-error">Incorrect access code. Try again.</div>
+    </div>
+
+    <div class="section-content" id="ops-content">
+
+      <div class="sub-section">
+        <div class="sub-label">Accounts</div>
+        <div class="card-grid">
+          <a class="index-card ops-card" href="trust-office-checker.html">
+            <div class="card-icon">🏦</div>
+            <div class="card-eyebrow">Accounts</div>
+            <div class="card-title">Trust Office Checker</div>
+            <div class="card-desc">Trust account compliance checks and office reconciliation tool.</div>
+            <div class="card-arrow">→</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <div class="sub-label">Marketing</div>
+        <div class="card-grid">
+          <a class="index-card ops-card" href="sheridan-contact-manager.html">
+            <div class="card-icon">👥</div>
+            <div class="card-eyebrow">Marketing</div>
+            <div class="card-title">Contact Manager</div>
+            <div class="card-desc">Manage and segment contacts for marketing and referral tracking.</div>
+            <div class="card-arrow">→</div>
+          </a>
+          <a class="index-card ops-card" href="leap-to-crm-process.html">
+            <div class="card-icon">🔄</div>
+            <div class="card-eyebrow">Marketing</div>
+            <div class="card-title">LEAP to CRM Process</div>
+            <div class="card-desc">Process guide for moving client data from LEAP into the CRM.</div>
+            <div class="card-arrow">→</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <div class="sub-label">Workflow</div>
+        <div class="card-grid">
+          <a class="index-card ops-card" href="sheridan-legal-task-queue.html">
+            <div class="card-icon">📋</div>
+            <div class="card-eyebrow">Workflow</div>
+            <div class="card-title">Task Queue</div>
+            <div class="card-desc">Live team task queue — post, claim, reassign, and complete tasks.</div>
+            <div class="card-arrow">→</div>
+          </a>
+          <a class="index-card ops-card" href="sheridan-daily-planner.html">
+            <div class="card-icon">📅</div>
+            <div class="card-eyebrow">Workflow</div>
+            <div class="card-title">Daily Planner</div>
+            <div class="card-desc">Daily planning tool for structuring the team's priorities and time.</div>
+            <div class="card-arrow">→</div>
+          </a>
+          <a class="index-card ops-card" href="sheridan-legal-scripts.html">
+            <div class="card-icon">💬</div>
+            <div class="card-eyebrow">Workflow</div>
+            <div class="card-title">Scripts</div>
+            <div class="card-desc">Tested phone and client scripts for common interactions.</div>
+            <div class="card-arrow">→</div>
+          </a>
+          <a class="index-card ops-card" href="will-instructions-intake.html">
+            <div class="card-icon">📝</div>
+            <div class="card-eyebrow">Workflow</div>
+            <div class="card-title">Will Instructions Intake</div>
+            <div class="card-desc">Intake process and checklist for will instruction appointments.</div>
+            <div class="card-arrow">→</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <div class="sub-label">Process</div>
+        <div class="card-grid">
+          <a class="index-card ops-card" href="sheridan-process-mindmap-briefing.html">
+            <div class="card-icon">🗺️</div>
+            <div class="card-eyebrow">Process</div>
+            <div class="card-title">Process Mindmap Briefing</div>
+            <div class="card-desc">Process mapping briefing and mindmap reference for the firm.</div>
+            <div class="card-arrow">→</div>
+          </a>
+          <a class="index-card ops-card" href="process-mapping-form.html">
+            <div class="card-icon">📋</div>
+            <div class="card-eyebrow">Process</div>
+            <div class="card-title">Process Mapping Form</div>
+            <div class="card-desc">Structured form for capturing and documenting firm processes ready for SOP development.</div>
+            <div class="card-arrow">→</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PATRICK SHERIDAN -->
+  <div class="section-block" id="pat-block">
+    <div class="section-hd pat-hd">
+      <div>
+        <div class="section-title">Patrick · Sheridan</div>
+        <div class="section-desc">Strategic planning, firm modelling, and principal-level reference documents.</div>
+      </div>
+      <button class="lock-badge pat" id="pat-lock-badge" onclick="focusGate('pat')">🔒 Enter access code</button>
+    </div>
+
+    <div class="section-gate" id="pat-gate">
+      <div class="gate-icon">🔒</div>
+      <div class="gate-title">Patrick · Sheridan — Access Required</div>
+      <div class="gate-desc">This section contains strategic and commercially sensitive documents.</div>
+      <div class="gate-row">
+        <input class="gate-input pat-input" id="pat-input" type="password" placeholder="Access code" onkeydown="if(event.key==='Enter')unlock('pat')"/>
+        <button class="gate-btn pat" onclick="unlock('pat')">Unlock →</button>
+      </div>
+      <div class="gate-error" id="pat-error">Incorrect access code. Try again.</div>
+    </div>
+
+    <div class="section-content" id="pat-content">
+      <div class="card-grid">
+        <a class="index-card pat-card" href="patrick-sheridan-1year-plan.html">
+          <div class="card-icon">🎯</div>
+          <div class="card-eyebrow">Strategy</div>
+          <div class="card-title">1 Year Plan</div>
+          <div class="card-desc">Patrick and Sheridan Legal's 12-month strategic plan and milestones.</div>
+          <div class="card-arrow">→</div>
+        </a>
+        <a class="index-card pat-card" href="patrick-sheridan-q1-schedule.html">
+          <div class="card-icon">📆</div>
+          <div class="card-eyebrow">Planning</div>
+          <div class="card-title">Q1 Schedule</div>
+          <div class="card-desc">Quarterly schedule, deadlines, and priority actions for Q1.</div>
+          <div class="card-arrow">→</div>
+        </a>
+        <a class="index-card pat-card" href="sheridan-practice model.html">
+          <div class="card-icon">⚖️</div>
+          <div class="card-eyebrow">Firm Model</div>
+          <div class="card-title">Practice Model</div>
+          <div class="card-desc">Practice structure, fee-earner model, and capacity planning reference.</div>
+          <div class="card-arrow">→</div>
+        </a>
+        <a class="index-card pat-card" href="sheridan-firm-model.html">
+          <div class="card-icon">📊</div>
+          <div class="card-eyebrow">Firm Model</div>
+          <div class="card-title">Firm Model</div>
+          <div class="card-desc">Financial model for the firm — revenue, costs, and profitability projections.</div>
+          <div class="card-arrow">→</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var HASH = 'd5bb491bf03ce8c22c57f3f22c8ba49883bc82495c08479b3ba9979ef6882344';
+var SESSION_KEY_OPS = 'sl-idx-ops';
+var SESSION_KEY_PAT = 'sl-idx-pat';
+
+async function hashInput(str){
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+}
+
+async function unlock(section){
+  var inputEl = document.getElementById(section+'-input');
+  var errorEl = document.getElementById(section+'-error');
+  var val = inputEl.value.trim();
+  if(!val){ inputEl.classList.add('error'); setTimeout(function(){ inputEl.classList.remove('error'); },600); return; }
+  var h = await hashInput(val);
+  if(h === HASH){
+    showSection(section);
+    sessionStorage.setItem(section==='ops'?SESSION_KEY_OPS:SESSION_KEY_PAT,'1');
+  } else {
+    inputEl.value='';
+    inputEl.classList.add('error');
+    errorEl.style.display='block';
+    setTimeout(function(){ inputEl.classList.remove('error'); errorEl.style.display='none'; },2500);
+  }
+}
+
+function showSection(section){
+  document.getElementById(section+'-gate').style.display='none';
+  document.getElementById(section+'-content').classList.add('visible');
+  var badge=document.getElementById(section+'-lock-badge');
+  badge.textContent='✓ Unlocked';
+  badge.classList.add('unlocked');
+  badge.onclick=null;
+}
+
+function focusGate(section){
+  document.getElementById(section+'-input').focus();
+}
+
+if(sessionStorage.getItem(SESSION_KEY_OPS)==='1') showSection('ops');
+if(sessionStorage.getItem(SESSION_KEY_PAT)==='1') showSection('pat');
+</script>
 </body>
 </html>
