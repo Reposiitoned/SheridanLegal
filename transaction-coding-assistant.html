@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transaction Coding Assistant — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0f1117;
+  --bg-panel:  #161b27;
+  --bg-card:   #1c2333;
+  --bg-input:  #111827;
+  --navy:      #1a2844;
+  --gold:      #c49040;
+  --gold-dim:  rgba(196,144,64,0.25);
+  --gold-bg:   rgba(196,144,64,0.08);
+  --border:    rgba(255,255,255,0.07);
+  --text:      #e8eaf0;
+  --text-dim:  #8892a4;
+  --text-dimmer: #4a5568;
+  --red:       #e74c3c;
+  --red-bg:    rgba(231,76,60,0.1);
+  --amber:     #f39c12;
+  --amber-bg:  rgba(243,156,18,0.1);
+  --green:     #27ae60;
+  --green-bg:  rgba(39,174,96,0.1);
+  --blue:      #3498db;
+  --blue-bg:   rgba(52,152,219,0.1);
+  --mono:      'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── LAYOUT ── */
+.app { display: block; min-height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.sb-brand {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sb-logo {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.sb-title {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.sb-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.sb-nav { padding: 12px 0; flex: 1; }
+
+.sb-section {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dimmer);
+  padding: 12px 18px 6px;
+}
+
+.sb-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  font-size: 13px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+  user-select: none;
+}
+
+.sb-link:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.sb-link.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-bg); }
+
+.sb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-dimmer); flex-shrink: 0; }
+.sb-link.active .sb-dot { background: var(--gold); }
+
+.sb-footer {
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dimmer);
+  line-height: 1.5;
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: 240px;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.page-header {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 36px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  min-width: 0;
+}
+
+.ph-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 3px;
+  font-family: var(--mono);
+}
+
+.ph-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.content { padding: 28px 36px; max-width: 760px; width: 100%; }
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  background: none;
+  color: var(--text-dim);
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--bg-panel); color: var(--text); font-weight: 500; border: 1px solid var(--border); }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-dim);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.callout strong { color: var(--gold); }
+
+/* ── ASK PANEL ── */
+.field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.ask-textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ask-textarea:focus { border-color: var(--gold-dim); }
+.ask-textarea::placeholder { color: var(--text-dimmer); }
+
+.chips-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dimmer);
+  margin: 16px 0 8px;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+
+.chip {
+  padding: 5px 13px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.chip:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+.btn-row { display: flex; gap: 10px; margin-top: 4px; }
+
+.btn-primary {
+  padding: 11px 24px;
+  border: none;
+  border-radius: 5px;
+  background: var(--gold);
+  color: #0f1117;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover { opacity: 0.85; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-ghost {
+  padding: 11px 18px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: none;
+  color: var(--text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.btn-ghost:hover { border-color: var(--border); color: var(--text); }
+
+/* ── RESULT ── */
+.result-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.confident { background: var(--green); }
+.status-dot.uncertain { background: var(--amber); }
+.status-dot.query { background: var(--red); }
+
+.status-label { font-size: 12px; font-weight: 500; color: var(--text-dim); }
+
+.result-body { padding: 18px; }
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.rg-cell {
+  background: var(--bg-input);
+  border-radius: 5px;
+  padding: 10px 12px;
+}
+
+.rg-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dimmer);
+  margin-bottom: 4px;
+}
+
+.rg-val {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.rg-val.mono { font-family: var(--mono); font-size: 13px; color: var(--gold); }
+
+.gst-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 99px;
+}
+
+.gst-std { background: var(--green-bg); color: var(--green); }
+.gst-free { background: var(--blue-bg); color: var(--blue); }
+.gst-excl { background: rgba(255,255,255,0.05); color: var(--text-dim); }
+.gst-warn { background: var(--amber-bg); color: var(--amber); }
+
+.result-explanation {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.7;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  white-space: pre-wrap;
+}
+
+.split-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.split-row:last-child { border-bottom: none; }
+
+.split-code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 3px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+/* ── COA PANEL ── */
+.coa-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+
+.coa-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dimmer);
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+}
+
+.coa-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+.coa-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.code-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: rgba(196,144,64,0.12);
+  border: 1px solid rgba(196,144,64,0.2);
+  color: var(--gold);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.del-btn {
+  width: 24px; height: 24px;
+  border: none;
+  background: none;
+  color: var(--text-dimmer);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+
+.del-btn:hover { background: var(--red-bg); color: var(--red); }
+
+.add-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+.add-row input, .add-row select {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 13px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+}
+
+.add-row input:focus, .add-row select:focus { border-color: var(--gold-dim); }
+.add-row input { flex: 1; min-width: 80px; }
+
+.starter-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+/* ── HISTORY ── */
+.hist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.hist-item:hover { border-color: rgba(255,255,255,0.15); }
+
+.hist-q {
+  font-size: 13px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.hist-code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold);
+}
+
+/* ── API KEY PANEL ── */
+.api-notice {
+  background: var(--bg-card);
+  border: 1px solid var(--gold-dim);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.api-notice h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.api-notice p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.api-input-row { display: flex; gap: 8px; }
+
+.api-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 13px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: var(--mono);
+  outline: none;
+}
+
+.api-input:focus { border-color: var(--gold-dim); }
+
+.btn-sm {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  background: var(--gold);
+  color: #0f1117;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.btn-sm:hover { opacity: 0.85; }
+
+.key-saved {
+  display: none;
+  font-size: 12px;
+  color: var(--green);
+  margin-top: 6px;
+}
+
+/* ── UPLOAD ── */
+.input-mode-toggle {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 7px;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+  background: none;
+  color: var(--text-dim);
+  transition: all .15s;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active { background: var(--bg-panel); color: var(--text); font-weight: 500; border: 1px solid var(--border); }
+
+.upload-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  background: var(--bg-input);
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--gold-dim);
+  background: var(--gold-bg);
+}
+
+.upload-zone input[type=file] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.upload-icon { font-size: 28px; margin-bottom: 10px; }
+
+.upload-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.upload-sub {
+  font-size: 12px;
+  color: var(--text-dimmer);
+}
+
+.upload-sub span { color: var(--gold); }
+
+.preview-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  display: none;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.preview-filename {
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text-dim);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-type {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.preview-type.img { background: var(--blue-bg); color: var(--blue); }
+.preview-type.pdf { background: var(--red-bg); color: var(--red); }
+
+.preview-remove {
+  width: 22px; height: 22px;
+  border: none;
+  background: none;
+  color: var(--text-dimmer);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  padding: 0;
+  transition: all .15s;
+}
+
+.preview-remove:hover { background: var(--red-bg); color: var(--red); }
+
+.preview-img-wrap {
+  padding: 12px;
+  text-align: center;
+  background: #0a0e18;
+}
+
+.preview-img-wrap img {
+  max-width: 100%;
+  max-height: 280px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.preview-pdf-wrap {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.optional-note-label {
+  font-size: 11px;
+  color: var(--text-dimmer);
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* ── SPINNER ── */
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(15,17,23,0.3);
+  border-top-color: #0f1117;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── SECTION DIVIDER ── */
+.sdiv {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dimmer);
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .main { margin-left: 0; }
+  .result-grid { grid-template-columns: 1fr; }
+  .page-header { padding: 14px 18px; }
+  .content { padding: 18px; }
+  .ph-title { font-size: 16px; }
+  .add-row { flex-direction: column; }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .sidebar { width: 200px; }
+  .main { margin-left: 200px; }
+  .content { padding: 20px 24px; }
+}
+
+@media print {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .page-header { position: static; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">Knowledgebase.business</div>
+      <div class="sb-title">Coding Assistant</div>
+      <div class="sb-sub">MYOB &amp; Xero · Australia</div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section">Tool</div>
+      <div class="sb-link active" onclick="showTab('ask')" id="nav-ask">
+        <div class="sb-dot"></div> Code a receipt
+      </div>
+      <div class="sb-link" onclick="showTab('coa')" id="nav-coa">
+        <div class="sb-dot"></div> Chart of accounts
+      </div>
+      <div class="sb-link" onclick="showTab('history')" id="nav-history">
+        <div class="sb-dot"></div> History
+      </div>
+
+      <div class="sb-section">Settings</div>
+      <div class="sb-link" onclick="showTab('settings')" id="nav-settings">
+        <div class="sb-dot"></div> API key
+      </div>
+    </nav>
+
+    <div class="sb-footer">
+      Describe any receipt in plain English. The assistant applies Australian GST rules and your business's account codes.
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <div class="ph-label" id="ph-label">Receipt coding</div>
+        <div class="ph-title" id="ph-title">What is this receipt?</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── ASK TAB ── -->
+      <div class="panel active" id="tab-ask">
+        <div class="callout">
+          Describe the receipt, upload a photo, or attach a PDF invoice. The assistant reads what you provide and tells you exactly where to code it — and why.
+        </div>
+
+        <!-- Input mode toggle -->
+        <div class="input-mode-toggle">
+          <button class="mode-btn active" onclick="setMode('text')" id="mode-text">
+            ✏️ Type a description
+          </button>
+          <button class="mode-btn" onclick="setMode('image')" id="mode-image">
+            📷 Upload photo / image
+          </button>
+          <button class="mode-btn" onclick="setMode('pdf')" id="mode-pdf">
+            📄 Upload PDF invoice
+          </button>
+        </div>
+
+        <!-- TEXT MODE -->
+        <div id="input-text">
+          <label class="field-label">What is this receipt or transaction?</label>
+          <textarea class="ask-textarea" id="ask-input"
+            placeholder="e.g. Officeworks $147.80 — printer paper, pens, and a stapler for the office&#10;&#10;e.g. Client lunch at a restaurant, 3 people, $215&#10;&#10;e.g. Adobe Creative Cloud monthly subscription $89.99 AUD — charged from Ireland&#10;&#10;e.g. Repco $3,400 — replacement engine for the company delivery van"></textarea>
+
+          <div class="chips-label">Quick examples</div>
+          <div class="chips">
+            <button class="chip" onclick="setEx('Telstra phone bill $186 for the office mobile phones and internet')">Telstra phone bill</button>
+            <button class="chip" onclick="setEx('Client lunch $215 for 3 people at a restaurant, discussing a new project')">Client lunch</button>
+            <button class="chip" onclick="setEx('Adobe Creative Cloud annual subscription $950 charged in AUD from Adobe Ireland')">Adobe subscription</button>
+            <button class="chip" onclick="setEx('Bunnings $4,200 — pressure washer for the business, used daily on job sites')">Equipment purchase</button>
+            <button class="chip" onclick="setEx('Bank fees from NAB this month — $18.50 account keeping fee')">Bank fees</button>
+            <button class="chip" onclick="setEx('Morning tea for the office — milk, coffee, biscuits from Woolworths $43.60')">Staff welfare</button>
+            <button class="chip" onclick="setEx('Google Ads payment $1,200 charged in USD, no GST on the invoice')">Google Ads</button>
+            <button class="chip" onclick="setEx('Accountant invoice for end of year tax return $2,200 + GST')">Accountant fee</button>
+          </div>
+        </div>
+
+        <!-- IMAGE MODE -->
+        <div id="input-image" style="display:none;">
+          <div class="upload-zone" id="image-drop-zone">
+            <input type="file" id="image-file" accept="image/*" onchange="handleImageFile(this.files[0])" />
+            <div class="upload-icon">📷</div>
+            <div class="upload-title">Tap to take a photo or choose an image</div>
+            <div class="upload-sub">JPG, PNG, HEIC, WebP · <span>Drag and drop also works</span></div>
+          </div>
+          <div class="preview-box" id="image-preview">
+            <div class="preview-header">
+              <span class="preview-type img">Image</span>
+              <span class="preview-filename" id="image-filename"></span>
+              <button class="preview-remove" onclick="clearFile('image')" title="Remove">×</button>
+            </div>
+            <div class="preview-img-wrap">
+              <img id="image-preview-img" src="" alt="Receipt preview" />
+            </div>
+          </div>
+          <label class="optional-note-label">Optional — add a note (e.g. "this was for a client job" or "personal, not business")</label>
+          <textarea class="ask-textarea" id="image-note" rows="2" style="min-height:60px;" placeholder="Add context if helpful — otherwise leave blank and Claude will read the receipt directly…"></textarea>
+        </div>
+
+        <!-- PDF MODE -->
+        <div id="input-pdf" style="display:none;">
+          <div class="upload-zone" id="pdf-drop-zone">
+            <input type="file" id="pdf-file" accept="application/pdf" onchange="handlePDFFile(this.files[0])" />
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">Choose a PDF invoice or receipt</div>
+            <div class="upload-sub">PDF only · <span>Drag and drop also works</span></div>
+          </div>
+          <div class="preview-box" id="pdf-preview">
+            <div class="preview-header">
+              <span class="preview-type pdf">PDF</span>
+              <span class="preview-filename" id="pdf-filename"></span>
+              <button class="preview-remove" onclick="clearFile('pdf')" title="Remove">×</button>
+            </div>
+            <div class="preview-pdf-wrap" id="pdf-preview-body">
+              <div style="font-size:32px;margin-bottom:8px;">📄</div>
+              <div id="pdf-preview-name" style="font-family:var(--mono);font-size:12px;color:var(--gold);"></div>
+              <div style="font-size:12px;color:var(--text-dimmer);margin-top:4px;">Ready to analyse</div>
+            </div>
+          </div>
+          <label class="optional-note-label">Optional — add a note or context</label>
+          <textarea class="ask-textarea" id="pdf-note" rows="2" style="min-height:60px;" placeholder="Add context if helpful — otherwise leave blank and Claude will read the invoice directly…"></textarea>
+        </div>
+
+        <div class="btn-row" style="margin-top:14px;">
+          <button class="btn-primary" id="ask-btn" onclick="askAI()">
+            Get coding advice →
+          </button>
+          <button class="btn-ghost" onclick="clearAsk()">Clear</button>
+        </div>
+
+        <div id="result-area"></div>
+      </div>
+
+      <!-- ── COA TAB ── -->
+      <div class="panel" id="tab-coa">
+        <div class="callout">
+          Add your business's account codes below. The more specific your COA, the more accurate the advice. The assistant uses these exact codes in its responses.
+        </div>
+
+        <table class="coa-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Account name</th>
+              <th>GST treatment</th>
+              <th style="width:32px;"></th>
+            </tr>
+          </thead>
+          <tbody id="coa-body"></tbody>
+        </table>
+
+        <div class="add-row">
+          <input type="text" id="new-code" placeholder="Code  e.g. 6-1000" style="max-width:140px;" />
+          <input type="text" id="new-name" placeholder="Account name  e.g. Telephone & Internet" />
+          <select id="new-gst">
+            <option value="GST on Expenses">GST on Expenses</option>
+            <option value="GST Free">GST Free</option>
+            <option value="BAS Excluded">BAS Excluded</option>
+            <option value="Input Taxed">Input Taxed</option>
+            <option value="No GST / FBT">No GST / FBT</option>
+            <option value="GST on Capital">GST on Capital</option>
+          </select>
+          <button class="btn-sm" onclick="addRow()">+ Add</button>
+        </div>
+
+        <div class="sdiv" style="margin-top:24px;">Load a starter COA</div>
+        <div class="starter-chips">
+          <button class="chip" onclick="loadStarter('professional')">Professional services</button>
+          <button class="chip" onclick="loadStarter('trades')">Trades &amp; construction</button>
+          <button class="chip" onclick="loadStarter('retail')">Retail &amp; hospitality</button>
+          <button class="chip" onclick="loadStarter('allied')">Allied health</button>
+        </div>
+      </div>
+
+      <!-- ── HISTORY TAB ── -->
+      <div class="panel" id="tab-history">
+        <div class="callout">Recent coding queries this session. Click any item to reload it.</div>
+        <div id="history-list">
+          <p style="font-size:13px;color:var(--text-dim);">No queries yet — describe a receipt to get started.</p>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS TAB ── -->
+      <div class="panel" id="tab-settings">
+        <div class="api-notice">
+          <h3>Anthropic API Key</h3>
+          <p>
+            This tool uses Claude to analyse receipts and apply Australian GST rules to your chart of accounts.
+            You need an Anthropic API key to use it. Your key is stored only in your browser — it is never sent
+            anywhere except directly to the Anthropic API.
+          </p>
+          <div class="api-input-row">
+            <input class="api-input" type="password" id="api-key-input" placeholder="sk-ant-..." />
+            <button class="btn-sm" onclick="saveKey()">Save key</button>
+          </div>
+          <div class="key-saved" id="key-saved">✓ Key saved for this session</div>
+        </div>
+
+        <div class="callout">
+          <strong>Get an API key:</strong> Visit <a href="https://console.anthropic.com" target="_blank" style="color:var(--gold);">console.anthropic.com</a>,
+          create an account, and generate an API key under API Keys. The key starts with <code style="font-family:var(--mono);font-size:12px;">sk-ant-</code>.
+          Usage costs are minimal for this tool — a typical coding query costs less than $0.01.
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+// ── DATA ──
+const DEFAULT_COA = [
+  { code:'1-0000', name:'Cheque Account', gst:'BAS Excluded' },
+  { code:'6-0000', name:'Wages & Salaries', gst:'BAS Excluded' },
+  { code:'6-0100', name:'Superannuation', gst:'BAS Excluded' },
+  { code:'6-1000', name:'Telephone & Internet', gst:'GST on Expenses' },
+  { code:'6-1100', name:'Office Supplies & Stationery', gst:'GST on Expenses' },
+  { code:'6-1300', name:'Computer & Software Expenses', gst:'GST on Expenses' },
+  { code:'6-1400', name:'International Digital Subscriptions', gst:'GST Free' },
+  { code:'6-2000', name:'Bank Fees & Charges', gst:'GST Free' },
+  { code:'6-2100', name:'Loan Interest & Finance Charges', gst:'GST Free' },
+  { code:'6-3000', name:'Advertising & Marketing', gst:'GST on Expenses' },
+  { code:'6-3100', name:'International Digital Advertising', gst:'GST Free' },
+  { code:'6-4000', name:'Staff Welfare', gst:'GST on Expenses' },
+  { code:'6-4100', name:'Entertainment (Client)', gst:'No GST / FBT' },
+  { code:'6-5000', name:'Insurance', gst:'GST on Expenses' },
+  { code:'6-5100', name:'Rent & Occupancy', gst:'GST on Expenses' },
+  { code:'6-6000', name:'Motor Vehicle Expenses', gst:'GST on Expenses' },
+  { code:'6-7000', name:'Professional Fees', gst:'GST on Expenses' },
+  { code:'6-7100', name:'Repairs & Maintenance', gst:'GST on Expenses' },
+  { code:'6-8000', name:'Depreciation', gst:'BAS Excluded' },
+  { code:'1-5000', name:'Fixed Assets', gst:'GST on Capital' },
+  { code:'8-9999', name:'Owner Queries (Suspense)', gst:'BAS Excluded' },
+];
+
+const STARTERS = {
+  professional: [
+    { code:'6-1000', name:'Telephone & Internet', gst:'GST on Expenses' },
+    { code:'6-1100', name:'Office Supplies & Stationery', gst:'GST on Expenses' },
+    { code:'6-1300', name:'Software Subscriptions (Australian)', gst:'GST on Expenses' },
+    { code:'6-1400', name:'International Software (Adobe, Google etc)', gst:'GST Free' },
+    { code:'6-2000', name:'Bank Fees & Charges', gst:'GST Free' },
+    { code:'6-3000', name:'Advertising & Marketing', gst:'GST on Expenses' },
+    { code:'6-4000', name:'Staff Welfare', gst:'GST on Expenses' },
+    { code:'6-4100', name:'Client Entertainment', gst:'No GST / FBT' },
+    { code:'6-5000', name:'Professional Indemnity Insurance', gst:'GST on Expenses' },
+    { code:'6-5100', name:'Office Rent', gst:'GST on Expenses' },
+    { code:'6-7000', name:'Accounting & Legal Fees', gst:'GST on Expenses' },
+    { code:'6-7100', name:'CPD & Training', gst:'GST on Expenses' },
+    { code:'8-9999', name:'Owner Queries (Suspense)', gst:'BAS Excluded' },
+  ],
+  trades: [
+    { code:'5-0000', name:'Materials & Supplies', gst:'GST on Expenses' },
+    { code:'5-0100', name:'Subcontractor Costs (TPAR)', gst:'GST on Expenses' },
+    { code:'6-1000', name:'Telephone & Internet', gst:'GST on Expenses' },
+    { code:'6-2000', name:'Bank Fees & Charges', gst:'GST Free' },
+    { code:'6-6000', name:'Motor Vehicle Fuel', gst:'GST on Expenses' },
+    { code:'6-6100', name:'Vehicle Registration & Insurance', gst:'GST on Expenses' },
+    { code:'6-6200', name:'Tools & Equipment (under $20k)', gst:'GST on Expenses' },
+    { code:'6-6300', name:'WorkCover Insurance', gst:'GST on Expenses' },
+    { code:'6-7100', name:'Repairs & Maintenance', gst:'GST on Expenses' },
+    { code:'1-5100', name:'Plant & Equipment (over $20k)', gst:'GST on Capital' },
+    { code:'8-9999', name:'Owner Queries (Suspense)', gst:'BAS Excluded' },
+  ],
+  retail: [
+    { code:'5-0000', name:'Cost of Goods Sold', gst:'GST on Expenses' },
+    { code:'5-0100', name:'Packaging & Consumables', gst:'GST on Expenses' },
+    { code:'6-1000', name:'Telephone & Internet', gst:'GST on Expenses' },
+    { code:'6-2000', name:'Bank & Merchant Fees', gst:'GST Free' },
+    { code:'6-3000', name:'Advertising & Promotions', gst:'GST on Expenses' },
+    { code:'6-4000', name:'Staff Meals & Welfare', gst:'GST on Expenses' },
+    { code:'6-4100', name:'Customer Entertainment', gst:'No GST / FBT' },
+    { code:'6-5100', name:'Rent & Outgoings', gst:'GST on Expenses' },
+    { code:'6-5200', name:'Cleaning & Waste', gst:'GST on Expenses' },
+    { code:'8-9999', name:'Owner Queries (Suspense)', gst:'BAS Excluded' },
+  ],
+  allied: [
+    { code:'6-0000', name:'Wages & Salaries', gst:'BAS Excluded' },
+    { code:'6-0100', name:'Superannuation', gst:'BAS Excluded' },
+    { code:'6-1000', name:'Telephone & Internet', gst:'GST on Expenses' },
+    { code:'6-1100', name:'Medical Supplies & Equipment', gst:'GST on Expenses' },
+    { code:'6-1300', name:'Practice Management Software', gst:'GST on Expenses' },
+    { code:'6-2000', name:'Bank Fees & Charges', gst:'GST Free' },
+    { code:'6-5000', name:'Professional Indemnity Insurance', gst:'GST on Expenses' },
+    { code:'6-5100', name:'Clinic Rent', gst:'GST on Expenses' },
+    { code:'6-7000', name:'Registration & Licensing Fees', gst:'GST Free' },
+    { code:'6-7100', name:'CPD & Training', gst:'GST on Expenses' },
+    { code:'8-9999', name:'Owner Queries (Suspense)', gst:'BAS Excluded' },
+  ]
+};
+
+let coa = [...DEFAULT_COA];
+let history = [];
+let apiKey = '';
+
+// ── INIT ──
+renderCOA();
+const savedKey = sessionStorage.getItem('tca_api_key');
+if (savedKey) { apiKey = savedKey; document.getElementById('api-key-input').value = savedKey; document.getElementById('key-saved').style.display = 'block'; }
+
+// ── NAVIGATION ──
+const TABS = {
+  ask: { label: 'Receipt coding', title: 'What is this receipt?' },
+  coa: { label: 'Chart of accounts', title: 'Your account codes' },
+  history: { label: 'Query history', title: 'Recent queries' },
+  settings: { label: 'Settings', title: 'API key configuration' },
+};
+
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  document.getElementById('ph-label').textContent = TABS[name].label;
+  document.getElementById('ph-title').textContent = TABS[name].title;
+  if (name === 'history') renderHistory();
+}
+
+// ── COA ──
+function gstClass(gst) {
+  if (!gst) return 'gst-excl';
+  if (gst.includes('on Expenses') || gst.includes('on Capital')) return 'gst-std';
+  if (gst === 'GST Free') return 'gst-free';
+  if (gst.includes('FBT') || gst.includes('No GST')) return 'gst-warn';
+  return 'gst-excl';
+}
+
+function renderCOA() {
+  const tbody = document.getElementById('coa-body');
+  tbody.innerHTML = coa.map((r, i) => `
+    <tr>
+      <td><span class="code-tag">${r.code}</span></td>
+      <td style="font-size:13px;color:var(--text);">${r.name}</td>
+      <td><span class="gst-badge ${gstClass(r.gst)}">${r.gst}</span></td>
+      <td><button class="del-btn" onclick="delRow(${i})" title="Remove">×</button></td>
+    </tr>`).join('');
+}
+
+function addRow() {
+  const code = document.getElementById('new-code').value.trim();
+  const name = document.getElementById('new-name').value.trim();
+  const gst  = document.getElementById('new-gst').value;
+  if (!code || !name) { alert('Please enter both a code and account name.'); return; }
+  coa.push({ code, name, gst });
+  document.getElementById('new-code').value = '';
+  document.getElementById('new-name').value = '';
+  renderCOA();
+}
+
+function delRow(i) { coa.splice(i, 1); renderCOA(); }
+
+function loadStarter(type) {
+  coa = [...STARTERS[type]];
+  renderCOA();
+  showTab('ask');
+}
+
+// ── API KEY ──
+function saveKey() {
+  const k = document.getElementById('api-key-input').value.trim();
+  if (!k.startsWith('sk-ant-')) { alert('That doesn\'t look like a valid Anthropic API key (should start with sk-ant-).'); return; }
+  apiKey = k;
+  sessionStorage.setItem('tca_api_key', k);
+  document.getElementById('key-saved').style.display = 'block';
+}
+
+// ── ASK ──
+function setEx(text) {
+  document.getElementById('ask-input').value = text;
+  showTab('ask');
+  document.getElementById('ask-input').focus();
+}
+
+function clearAsk() {
+  document.getElementById('ask-input').value = '';
+  document.getElementById('image-note').value = '';
+  document.getElementById('pdf-note').value = '';
+  document.getElementById('result-area').innerHTML = '';
+  clearFile('image');
+  clearFile('pdf');
+}
+
+function buildSystem() {
+  const coaList = coa.map(r => `${r.code} | ${r.name} | ${r.gst}`).join('\n');
+  return `You are a specialist Australian bookkeeping assistant. Your job is to tell an admin person exactly how to code a receipt or transaction in their accounting system (MYOB or Xero).
+
+CHART OF ACCOUNTS FOR THIS BUSINESS:
+${coaList}
+
+AUSTRALIAN GST RULES:
+- Bank fees, loan interest, government charges: always GST Free
+- Wages and superannuation: always BAS Excluded
+- Depreciation: always BAS Excluded
+- International software (Adobe, Google Ads, Meta, Slack, Zoom, Dropbox etc): GST Free UNLESS the invoice explicitly shows Australian GST charged
+- Client entertainment (meals, events, functions with clients): No GST / FBT applies — NOT the same as staff welfare
+- Staff welfare (milk, coffee, snacks for the office team): GST on Expenses
+- Insurance: GST on Expenses (stamp duty component is GST Free)
+- Motor vehicle purchases over $20,000: Fixed Asset — capitalise, do not expense
+- Equipment and tools under $20,000: expense under instant asset write-off
+- Items under $300: almost always expense, not fixed asset
+- If genuinely uncertain: recommend coding to the Owner Queries suspense account
+
+Respond ONLY with valid JSON — no markdown, no preamble:
+{
+  "account_code": "6-1100",
+  "account_name": "Office Supplies & Stationery",
+  "gst_treatment": "GST on Expenses",
+  "confidence": "confident",
+  "explanation": "2-4 sentence plain English explanation. Mention any ATO risk. Note if split coding needed.",
+  "split": null
+}
+
+For split transactions:
+{
+  "account_code": "SPLIT",
+  "account_name": "Split transaction",
+  "gst_treatment": "See split below",
+  "confidence": "confident",
+  "explanation": "Why this needs splitting.",
+  "split": [
+    {"code":"6-1100","name":"Office Supplies","gst":"GST on Expenses","amount":"approx 60%"},
+    {"code":"1-5000","name":"Fixed Assets","gst":"GST on Capital","amount":"approx 40%"}
+  ]
+}
+
+Set confidence to "uncertain" if unsure. Recommend 8-9999 Owner Queries if cannot determine.`;
+}
+
+// ── INPUT MODE ──
+let currentMode = 'text';
+let imageData = null;   // { base64, mediaType, filename }
+let pdfData   = null;   // { base64, filename }
+
+function setMode(mode) {
+  currentMode = mode;
+  ['text','image','pdf'].forEach(m => {
+    document.getElementById('input-' + m).style.display = m === mode ? 'block' : 'none';
+    document.getElementById('mode-' + m).classList.toggle('active', m === mode);
+  });
+}
+
+// ── FILE HANDLING ──
+function toBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+async function handleImageFile(file) {
+  if (!file) return;
+  const b64 = await toBase64(file);
+  const mt = file.type || 'image/jpeg';
+  imageData = { base64: b64, mediaType: mt, filename: file.name };
+
+  // Show preview
+  document.getElementById('image-filename').textContent = file.name;
+  document.getElementById('image-preview-img').src = 'data:' + mt + ';base64,' + b64;
+  document.getElementById('image-preview').style.display = 'block';
+  document.getElementById('image-drop-zone').style.display = 'none';
+}
+
+async function handlePDFFile(file) {
+  if (!file) return;
+  const b64 = await toBase64(file);
+  pdfData = { base64: b64, filename: file.name };
+
+  document.getElementById('pdf-filename').textContent = file.name;
+  document.getElementById('pdf-preview-name').textContent = file.name;
+  document.getElementById('pdf-preview').style.display = 'block';
+  document.getElementById('pdf-drop-zone').style.display = 'none';
+}
+
+function clearFile(type) {
+  if (type === 'image') {
+    imageData = null;
+    document.getElementById('image-preview').style.display = 'none';
+    document.getElementById('image-drop-zone').style.display = 'block';
+    document.getElementById('image-file').value = '';
+  } else {
+    pdfData = null;
+    document.getElementById('pdf-preview').style.display = 'none';
+    document.getElementById('pdf-drop-zone').style.display = 'block';
+    document.getElementById('pdf-file').value = '';
+  }
+}
+
+// ── DRAG AND DROP ──
+['image-drop-zone','pdf-drop-zone'].forEach(id => {
+  const zone = document.getElementById(id);
+  if (!zone) return;
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    if (id === 'image-drop-zone' && file.type.startsWith('image/')) handleImageFile(file);
+    if (id === 'pdf-drop-zone' && file.type === 'application/pdf') handlePDFFile(file);
+  });
+});
+
+// ── BUILD MESSAGE CONTENT ──
+function buildUserContent() {
+  if (currentMode === 'text') {
+    const q = document.getElementById('ask-input').value.trim();
+    if (!q) return null;
+    return q;
+  }
+
+  if (currentMode === 'image') {
+    if (!imageData) return null;
+    const note = document.getElementById('image-note').value.trim();
+    const content = [
+      {
+        type: 'image',
+        source: { type: 'base64', media_type: imageData.mediaType, data: imageData.base64 }
+      },
+      {
+        type: 'text',
+        text: note
+          ? 'Please read this receipt and advise how to code it. Additional context from the user: ' + note
+          : 'Please read this receipt and advise how to code it in our accounting system.'
+      }
+    ];
+    return content;
+  }
+
+  if (currentMode === 'pdf') {
+    if (!pdfData) return null;
+    const note = document.getElementById('pdf-note').value.trim();
+    const content = [
+      {
+        type: 'document',
+        source: { type: 'base64', media_type: 'application/pdf', data: pdfData.base64 }
+      },
+      {
+        type: 'text',
+        text: note
+          ? 'Please read this invoice or receipt and advise how to code it. Additional context: ' + note
+          : 'Please read this invoice and advise how to code it in our accounting system.'
+      }
+    ];
+    return content;
+  }
+
+  return null;
+}
+
+function getHistoryLabel() {
+  if (currentMode === 'image') return imageData ? '[Photo] ' + imageData.filename : '[Photo]';
+  if (currentMode === 'pdf')   return pdfData   ? '[PDF] '   + pdfData.filename   : '[PDF]';
+  return document.getElementById('ask-input').value.trim();
+}
+
+async function askAI() {
+  const userContent = buildUserContent();
+
+  if (!userContent) {
+    const msgs = {
+      text:  'Please describe a receipt or transaction first.',
+      image: 'Please upload a photo or image first.',
+      pdf:   'Please upload a PDF invoice first.',
+    };
+    alert(msgs[currentMode]);
+    return;
+  }
+
+  if (!apiKey) {
+    showTab('settings');
+    alert('Please enter your Anthropic API key in the Settings tab first.');
+    return;
+  }
+
+  const btn = document.getElementById('ask-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Reading receipt…';
+  document.getElementById('result-area').innerHTML = '';
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-allow-browser': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: buildSystem(),
+        messages: [{ role: 'user', content: userContent }]
+      })
+    });
+
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const raw = data.content?.[0]?.text || '';
+    let result;
+    try {
+      result = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    } catch {
+      throw new Error('Could not parse response. Raw: ' + raw.slice(0, 200));
+    }
+
+    renderResult(result);
+    history.unshift({ question: getHistoryLabel(), result, time: new Date() });
+
+  } catch (err) {
+    document.getElementById('result-area').innerHTML = `
+      <div class="result-card" style="margin-top:20px;">
+        <div class="result-body">
+          <p style="font-size:13px;color:var(--red);">Error: ${err.message}</p>
+          <p style="font-size:12px;color:var(--text-dim);margin-top:8px;">Check your API key in Settings and try again.</p>
+        </div>
+      </div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Get coding advice →';
+  }
+}
+
+function renderResult(result) {
+  const isConfident = result.confidence === 'confident';
+  const isQuery = result.account_code === '8-9999';
+  const statusClass = isQuery ? 'query' : !isConfident ? 'uncertain' : 'confident';
+  const statusLabel = isQuery ? 'Refer to owner — code to Owner Queries' : !isConfident ? 'Review recommended — check with your bookkeeper' : 'Confident — code this transaction now';
+
+  let bodyHTML = '';
+
+  if (result.account_code === 'SPLIT' && result.split) {
+    bodyHTML = `<div style="margin-bottom:14px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dimmer);margin-bottom:8px;">Split transaction — code separately</div>
+      ${result.split.map(s => `
+        <div class="split-row">
+          <span class="split-code">${s.code}</span>
+          <span style="flex:1;color:var(--text);">${s.name}</span>
+          <span class="gst-badge ${gstClass(s.gst)}">${s.gst}</span>
+          <span style="font-size:12px;color:var(--text-dimmer);margin-left:8px;">${s.amount}</span>
+        </div>`).join('')}
+    </div>`;
+  } else {
+    bodyHTML = `<div class="result-grid">
+      <div class="rg-cell">
+        <div class="rg-label">Account code</div>
+        <div class="rg-val mono">${result.account_code}</div>
+      </div>
+      <div class="rg-cell">
+        <div class="rg-label">Account name</div>
+        <div class="rg-val">${result.account_name}</div>
+      </div>
+      <div class="rg-cell">
+        <div class="rg-label">GST treatment</div>
+        <div class="rg-val"><span class="gst-badge ${gstClass(result.gst_treatment)}">${result.gst_treatment}</span></div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('result-area').innerHTML = `
+    <div class="result-card">
+      <div class="result-header">
+        <div class="status-dot ${statusClass}"></div>
+        <div class="status-label">${statusLabel}</div>
+      </div>
+      <div class="result-body">
+        ${bodyHTML}
+        <div class="result-explanation">${result.explanation}</div>
+      </div>
+    </div>`;
+}
+
+function gstClass(gst) {
+  if (!gst) return 'gst-excl';
+  if (gst.includes('on Expenses') || gst.includes('on Capital')) return 'gst-std';
+  if (gst === 'GST Free') return 'gst-free';
+  if (gst.includes('FBT') || gst.includes('No GST')) return 'gst-warn';
+  return 'gst-excl';
+}
+
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (!history.length) {
+    el.innerHTML = '<p style="font-size:13px;color:var(--text-dim);">No queries yet.</p>';
+    return;
+  }
+  el.innerHTML = history.map((h, i) => `
+    <div class="hist-item" onclick="restoreHistory(${i})">
+      <div class="hist-q">${h.question}</div>
+      <div class="hist-code">${h.result.account_code === 'SPLIT' ? 'Split transaction' : h.result.account_code + ' · ' + h.result.account_name}</div>
+    </div>`).join('');
+}
+
+function restoreHistory(i) {
+  document.getElementById('ask-input').value = history[i].question;
+  renderResult(history[i].result);
+  showTab('ask');
+}
+
+// Enter key submits
+document.getElementById('ask-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) askAI();
+});
+</script>
+
+  <!-- Memberstack protection -->
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) {
+              window.location.href = "/login.html";
+            }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

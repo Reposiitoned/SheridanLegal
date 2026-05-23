@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sale Readiness Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2844;
+    --navy-light: #2a3d63;
+    --gold: #b07d3a;
+    --gold-light: #e8d5b0;
+    --cream: #f7f4ee;
+    --text: #1a2844;
+    --muted: #6b7280;
+    --border: #ddd8cc;
+    --green: #1a6b45;
+    --green-bg: #eaf4ee;
+    --amber: #92580a;
+    --amber-bg: #fdf3e3;
+    --red: #8b1f1f;
+    --red-bg: #fdf0f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #eee;
+    color: var(--text);
+    font-size: 10.5pt;
+    line-height: 1.55;
+  }
+
+  .page {
+    width: 210mm;
+    background: white;
+    margin: 20px auto;
+    padding: 16mm 18mm 14mm;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 260mm;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+  }
+
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 12px;
+    border-bottom: 2.5px solid var(--navy);
+    margin-bottom: 0;
+  }
+
+  .brand-mark {
+    font-size: 8pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .cover-doc-type {
+    font-size: 8pt;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .cover-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0 30px;
+  }
+
+  .cover-eyebrow {
+    font-size: 9pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .cover-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 32pt;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .cover-subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14pt;
+    color: var(--navy-light);
+    font-weight: 400;
+    margin-bottom: 28px;
+  }
+
+  .cover-divider {
+    width: 48px;
+    height: 3px;
+    background: var(--gold);
+    margin-bottom: 22px;
+  }
+
+  .cover-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+
+  .cover-meta-cell {
+    background: white;
+    padding: 12px 14px;
+  }
+
+  .cover-meta-label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .cover-meta-value {
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .cover-statement {
+    background: var(--navy);
+    color: white;
+    padding: 16px 20px;
+    font-size: 10pt;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .cover-statement strong {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--gold-light);
+  }
+
+  .cover-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cover-footer-brand {
+    font-size: 8pt;
+    color: var(--gold);
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+  }
+
+  .cover-footer-note {
+    font-size: 7.5pt;
+    color: var(--muted);
+  }
+
+  /* ── DOCUMENT BODY ── */
+  .doc-section {
+    margin-bottom: 22px;
+    page-break-inside: avoid;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-bottom: 7px;
+    border-bottom: 2px solid var(--navy);
+    margin-bottom: 14px;
+  }
+
+  .section-num {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 8pt;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14pt;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  /* Overview grid */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .ov-cell {
+    background: var(--cream);
+    padding: 10px 12px;
+  }
+
+  .ov-label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .ov-value {
+    font-size: 10.5pt;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  .ov-span {
+    grid-column: 1 / -1;
+  }
+
+  /* ── AREA BLOCKS ── */
+  .area-block {
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    page-break-inside: avoid;
+  }
+
+  .area-header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .area-icon-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13pt;
+    flex-shrink: 0;
+  }
+
+  .area-name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--navy);
+    flex: 1;
+  }
+
+  .maturity-badge {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  .mat-strong { background: var(--green-bg); color: var(--green); }
+  .mat-partial { background: var(--amber-bg); color: var(--amber); }
+  .mat-weak { background: var(--red-bg); color: var(--red); }
+
+  .area-body {
+    padding: 10px 14px;
+  }
+
+  /* Process table */
+  .proc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    margin-bottom: 8px;
+  }
+
+  .proc-table th {
+    text-align: left;
+    font-size: 7.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .proc-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #f0ece4;
+    vertical-align: top;
+    line-height: 1.4;
+  }
+
+  .proc-table tr:last-child td { border-bottom: none; }
+
+  .proc-name { font-weight: 500; color: var(--navy); }
+
+  .type-pill {
+    display: inline-block;
+    font-size: 7pt;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .type-t1 { background: #e8f0fb; color: #1a4d9a; }
+  .type-t2 { background: #eeedfe; color: #3d2d9e; }
+  .type-both { background: #fdf3e3; color: var(--amber); }
+
+  .pri-high { color: var(--red); font-weight: 600; }
+  .pri-med { color: var(--amber); font-weight: 500; }
+  .pri-low { color: var(--green); font-weight: 500; }
+
+  .od-flag {
+    display: inline-block;
+    font-size: 7pt;
+    background: var(--red-bg);
+    color: var(--red);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  .area-note {
+    font-size: 9pt;
+    color: var(--muted);
+    font-style: italic;
+    padding: 6px 8px;
+    background: var(--cream);
+    border-left: 2px solid var(--gold-light);
+    margin-top: 6px;
+  }
+
+  /* ── RISK TABLE ── */
+  .risk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin-bottom: 12px;
+  }
+
+  .risk-table th {
+    text-align: left;
+    font-size: 7.5pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 6px 10px;
+    border-bottom: 1.5px solid var(--navy);
+    background: var(--cream);
+  }
+
+  .risk-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  .risk-table tr:last-child td { border-bottom: none; }
+
+  .risk-label {
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 9.5pt;
+  }
+
+  .risk-flag {
+    display: inline-block;
+    font-size: 7pt;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .flag-high { background: var(--red-bg); color: var(--red); }
+  .flag-med { background: var(--amber-bg); color: var(--amber); }
+  .flag-low { background: var(--green-bg); color: var(--green); }
+
+  .resolution {
+    font-size: 9pt;
+    color: var(--green);
+    font-style: italic;
+  }
+
+  /* ── SCOPE SUMMARY ── */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+
+  .scope-cell {
+    background: white;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .scope-area {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .scope-count {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 22pt;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .scope-breakdown {
+    font-size: 7.5pt;
+    color: var(--muted);
+  }
+
+  .scope-total-row {
+    display: flex;
+    background: var(--navy);
+    color: white;
+    padding: 12px 16px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .scope-total-label {
+    font-size: 9pt;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .scope-total-num {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 18pt;
+    font-weight: 700;
+    color: var(--gold-light);
+  }
+
+  /* ── INVESTMENT BOX ── */
+  .investment-box {
+    border: 1.5px solid var(--gold);
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 14px;
+  }
+
+  .inv-col { flex: 1; }
+
+  .inv-label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .inv-value {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14pt;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  .inv-note {
+    font-size: 8.5pt;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* ── CALLOUT ── */
+  .callout-box {
+    background: var(--cream);
+    border-left: 3px solid var(--gold);
+    padding: 10px 14px;
+    font-size: 9.5pt;
+    color: var(--navy);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .callout-box strong { font-weight: 600; }
+
+  /* ── STATEMENT BLOCK ── */
+  .statement-block {
+    background: var(--navy);
+    color: white;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+
+  .statement-block p {
+    font-size: 10pt;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .statement-block strong {
+    font-style: normal;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  /* ── PAGE FOOTER ── */
+  .page-footer {
+    margin-top: 20px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 7.5pt;
+    color: var(--muted);
+  }
+
+  .page-footer .brand {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 8pt;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 14px 0;
+  }
+
+  .gap-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: var(--red-bg);
+    border-left: 3px solid var(--red);
+    padding: 8px 12px;
+    font-size: 9pt;
+    color: var(--red);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; padding: 14mm 16mm 12mm; box-shadow: none; }
+    .cover { min-height: 250mm; }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════════════════════
+       COVER PAGE
+  ══════════════════════════════════════ -->
+  <div class="cover">
+
+    <div class="cover-top">
+      <div>
+        <div class="brand-mark">Knowledgebase.business</div>
+        <div class="cover-doc-type">Confidential · Sale Readiness Assessment</div>
+      </div>
+      <div style="text-align:right; font-size:8pt; color:var(--muted);">
+        <div id="cover-date"></div>
+        <div>Prepared for the vendor and their advisors</div>
+      </div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-eyebrow">Sale Readiness Assessment</div>
+      <div class="cover-title">Operational <em>Readiness</em><br>Review</div>
+      <div class="cover-subtitle">Prepared for: <span id="cover-bizname">Acme Services Pty Ltd</span></div>
+      <div class="cover-divider"></div>
+
+      <div class="cover-meta-grid">
+        <div class="cover-meta-cell">
+          <div class="cover-meta-label">Business</div>
+          <div class="cover-meta-value" id="meta-biz">Acme Services Pty Ltd</div>
+        </div>
+        <div class="cover-meta-cell">
+          <div class="cover-meta-label">Industry</div>
+          <div class="cover-meta-value" id="meta-ind">Professional Services</div>
+        </div>
+        <div class="cover-meta-cell">
+          <div class="cover-meta-label">Assessment Date</div>
+          <div class="cover-meta-value" id="meta-date"></div>
+        </div>
+        <div class="cover-meta-cell">
+          <div class="cover-meta-label">Processes Identified</div>
+          <div class="cover-meta-value" id="meta-procs">24</div>
+        </div>
+        <div class="cover-meta-cell">
+          <div class="cover-meta-label">Sale Timeline</div>
+          <div class="cover-meta-value" id="meta-timeline">6 – 12 months</div>
+        </div>
+        <div class="cover-meta-cell">
+          <div class="cover-meta-label">Overall Readiness</div>
+          <div class="cover-meta-value" id="meta-readiness" style="color:var(--amber);">Partial</div>
+        </div>
+      </div>
+
+      <div class="cover-statement">
+        <p>This report documents the operational structure of <strong id="stmt-biz">Acme Services Pty Ltd</strong> as assessed in a structured discovery session. Its purpose is to provide prospective buyers and their advisors with a clear, frank account of how the business operates — <strong>what is documented, what is not, and what the planned knowledge base will resolve</strong>.</p>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-footer-brand">Knowledgebase.business</div>
+      <div class="cover-footer-note">This document is confidential and prepared solely for the purpose of facilitating the sale of the business named above.</div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 1 — BUSINESS OVERVIEW
+  ══════════════════════════════════════ -->
+  <div class="doc-section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">Business Overview</div>
+    </div>
+
+    <div class="overview-grid">
+      <div class="ov-cell ov-span">
+        <div class="ov-label">What the business does</div>
+        <div class="ov-value" id="ov-desc">Acme Services provides specialist compliance consulting to small and medium businesses across Queensland, delivering regulatory assessments, documentation reviews, and ongoing advisory retainers.</div>
+      </div>
+      <div class="ov-cell">
+        <div class="ov-label">Years in operation</div>
+        <div class="ov-value" id="ov-years">11 years</div>
+      </div>
+      <div class="ov-cell">
+        <div class="ov-label">Locations</div>
+        <div class="ov-value" id="ov-locs">1 — Brisbane CBD office</div>
+      </div>
+      <div class="ov-cell">
+        <div class="ov-label">Total headcount</div>
+        <div class="ov-value" id="ov-hc">7 (including principal)</div>
+      </div>
+      <div class="ov-cell">
+        <div class="ov-label">Reason for sale</div>
+        <div class="ov-value" id="ov-reason">Retirement</div>
+      </div>
+    </div>
+
+    <div class="callout-box">
+      <strong>Key roles:</strong> <span id="ov-roles">Principal (client relationships, major advisory decisions) · Practice Manager (scheduling, billing, compliance reporting) · Two Senior Consultants (delivery) · Two junior associates (admin, documentation) · Part-time bookkeeper</span>
+    </div>
+
+    <div class="overview-grid" style="margin-bottom:0;">
+      <div class="ov-cell">
+        <div class="ov-label">Primary systems</div>
+        <div class="ov-value" id="ov-systems">Xero · Microsoft 365 · SharePoint · HubSpot</div>
+      </div>
+      <div class="ov-cell">
+        <div class="ov-label">Knowledge transfer (current)</div>
+        <div class="ov-value" id="ov-transfer">Primarily verbal — shadowing and direct instruction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 2 — OPERATIONAL ASSESSMENT
+  ══════════════════════════════════════ -->
+  <div class="doc-section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">Operational Assessment</div>
+    </div>
+
+    <div class="callout-box" style="margin-bottom:14px;">
+      The following assessment maps every identified process across four operational areas. Each process is classified by type and priority, and owner-dependent functions are explicitly flagged. Maturity ratings reflect the current state of documentation — not the quality of the underlying operation.
+    </div>
+
+    <!-- MARKETING -->
+    <div class="area-block">
+      <div class="area-header-row">
+        <div class="area-icon-badge" style="background:#E1F5EE; color:#0F6E56;">📣</div>
+        <div class="area-name">Marketing</div>
+        <div class="maturity-badge mat-weak">Weak — owner dependent</div>
+      </div>
+      <div class="area-body">
+        <table class="proc-table">
+          <thead>
+            <tr>
+              <th style="width:44%">Process</th>
+              <th style="width:14%">Type</th>
+              <th style="width:14%">Priority</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="proc-name">Referral network management <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>Principal manages all referral relationships personally. No documented contact list or process.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Google Business profile &amp; reviews</td>
+              <td><span class="type-pill type-t1">T1 screen</span></td>
+              <td class="pri-med">Medium</td>
+              <td>Admin manages reviews ad hoc — no formal collection process.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">LinkedIn presence <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t1">T1 screen</span></td>
+              <td class="pri-med">Medium</td>
+              <td>All posts written and published by principal only.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="area-note">⚠ Marketing is the highest-risk area for buyer confidence. Approximately 80% of new business originates from the principal's personal referral network. This will be addressed in the knowledge base through a referral contact inventory, a systematic review-collection process, and a marketing handover guide.</div>
+      </div>
+    </div>
+
+    <!-- SALES -->
+    <div class="area-block">
+      <div class="area-header-row">
+        <div class="area-icon-badge" style="background:#EEEDFE; color:#534AB7;">🤝</div>
+        <div class="area-name">Sales</div>
+        <div class="maturity-badge mat-partial">Partial — some dependency</div>
+      </div>
+      <div class="area-body">
+        <table class="proc-table">
+          <thead>
+            <tr>
+              <th style="width:44%">Process</th>
+              <th style="width:14%">Type</th>
+              <th style="width:14%">Priority</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="proc-name">Initial enquiry response</td>
+              <td><span class="type-pill type-both">Both</span></td>
+              <td class="pri-high">High</td>
+              <td>Handled by admin for general enquiries; principal for complex or high-value leads.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Discovery consultation <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>All consultations currently conducted by principal. No script or framework exists.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Proposal &amp; engagement letter</td>
+              <td><span class="type-pill type-t1">T1 screen</span></td>
+              <td class="pri-high">High</td>
+              <td>Templates exist but are used inconsistently. Process not documented.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Lead follow-up</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-med">Medium</td>
+              <td>No formal follow-up schedule — relies on principal's memory.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="area-note">The proposal template is a strong foundation. Priority is to document the consultation framework so a senior consultant can run initial meetings without the principal.</div>
+      </div>
+    </div>
+
+    <!-- DELIVERY -->
+    <div class="area-block">
+      <div class="area-header-row">
+        <div class="area-icon-badge" style="background:#E6F1FB; color:#185FA5;">💼</div>
+        <div class="area-name">Delivery</div>
+        <div class="maturity-badge mat-partial">Partial — core work understood</div>
+      </div>
+      <div class="area-body">
+        <table class="proc-table">
+          <thead>
+            <tr>
+              <th style="width:44%">Process</th>
+              <th style="width:14%">Type</th>
+              <th style="width:14%">Priority</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="proc-name">Client file opening (new matter)</td>
+              <td><span class="type-pill type-both">Both</span></td>
+              <td class="pri-high">High</td>
+              <td>Partially documented. Practice manager follows a checklist but it is not current.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Regulatory assessment — standard</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>Four-stage process understood by senior consultants; not written anywhere.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Regulatory assessment — complex <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>Complex assessments require principal sign-off. No documented escalation criteria.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Client report drafting &amp; review</td>
+              <td><span class="type-pill type-both">Both</span></td>
+              <td class="pri-high">High</td>
+              <td>Quality standard is understood but not defined in writing.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Document filing in SharePoint</td>
+              <td><span class="type-pill type-t1">T1 screen</span></td>
+              <td class="pri-med">Medium</td>
+              <td>Inconsistent filing across staff — screen recording needed.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Retainer client check-in schedule</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-med">Medium</td>
+              <td>Managed informally. No formal schedule or trigger system.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Matter closure &amp; archiving</td>
+              <td><span class="type-pill type-both">Both</span></td>
+              <td class="pri-med">Medium</td>
+              <td>No consistent process. Final billing and file closure handled ad hoc.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Client satisfaction &amp; feedback</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-low">Low</td>
+              <td>Not currently collected in a structured way.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="area-note">Delivery is well-understood by the senior team but almost entirely undocumented. The standard assessment process is the single highest-value item to capture — it is the core of what a buyer is purchasing.</div>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="area-block">
+      <div class="area-header-row">
+        <div class="area-icon-badge" style="background:#FAEEDA; color:#854F0B;">⚙️</div>
+        <div class="area-name">Admin</div>
+        <div class="maturity-badge mat-strong">Strongest area — some documentation exists</div>
+      </div>
+      <div class="area-body">
+        <table class="proc-table">
+          <thead>
+            <tr>
+              <th style="width:44%">Process</th>
+              <th style="width:14%">Type</th>
+              <th style="width:14%">Priority</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="proc-name">Monthly invoicing run</td>
+              <td><span class="type-pill type-t1">T1 screen</span></td>
+              <td class="pri-high">High</td>
+              <td>Consistent process in Xero — partially documented. Needs screen recording.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Debtor follow-up</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>No formal escalation process. Handled case-by-case by practice manager.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Bank reconciliation</td>
+              <td><span class="type-pill type-t1">T1 screen</span></td>
+              <td class="pri-med">Medium</td>
+              <td>Done by bookkeeper — no written handover if bookkeeper leaves.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Staff onboarding</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-med">Medium</td>
+              <td>No formal onboarding checklist. Process rebuilt each time.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">End of financial year</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-med">Medium</td>
+              <td>Coordinated with external accountant — process not written internally.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Compliance calendar management</td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-med">Medium</td>
+              <td>Tracked in spreadsheet. High risk if practice manager leaves.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="area-note">Admin is the most stable area — processes exist and are followed consistently. Priority is getting them written down and removing dependence on the practice manager as the sole knowledge holder.</div>
+      </div>
+    </div>
+
+    <!-- MANAGEMENT -->
+    <div class="area-block">
+      <div class="area-header-row">
+        <div class="area-icon-badge" style="background:#F0EAF8; color:#6B35A8;">📊</div>
+        <div class="area-name">Management</div>
+        <div class="maturity-badge mat-weak">Weakest area — entirely owner dependent</div>
+      </div>
+      <div class="area-body">
+        <table class="proc-table">
+          <thead>
+            <tr>
+              <th style="width:44%">Process</th>
+              <th style="width:14%">Type</th>
+              <th style="width:14%">Priority</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="proc-name">Business performance review <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>Principal reviews P&amp;L, WIP, and debtors monthly. No dashboard or documented KPI framework exists.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Team meeting cadence <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>Weekly team meetings run by principal with no agenda template or documented format.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Staff performance management <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-high">High</td>
+              <td>No formal performance review process. Issues handled informally by principal as they arise.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Supplier &amp; contractor management <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-med">Medium</td>
+              <td>All key supplier relationships held by principal. No documented contacts, terms, or renewal dates.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Banking &amp; professional relationships <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-med">Medium</td>
+              <td>Bank, accountant, and legal relationships managed entirely by principal. No handover documentation.</td>
+            </tr>
+            <tr>
+              <td class="proc-name">Annual planning process <span class="od-flag">Owner only</span></td>
+              <td><span class="type-pill type-t2">T2 flow</span></td>
+              <td class="pri-low">Low</td>
+              <td>No documented annual strategy or planning cycle. Goals set informally by principal.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="area-note">⚠ Management is the highest-risk area for a buyer taking over this business. Every management function currently sits with the principal and has no documented framework. This is the area that most directly affects the buyer's confidence in running the business post-settlement — and the area the knowledge base will prioritise first.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION 3 — READINESS SUMMARY
+  ══════════════════════════════════════ -->
+  <div class="doc-section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">Readiness Summary</div>
+    </div>
+
+    <div class="statement-block">
+      <p>This business has strong operational foundations — experienced staff, consistent delivery, and a loyal client base. The primary risk to a buyer is <strong>owner-dependency</strong>: a significant proportion of revenue, relationships, and institutional knowledge currently resides with the principal. The knowledge base engagement below is designed to systematically transfer that knowledge into documented, transferable systems before the business is listed.</p>
+    </div>
+
+    <!-- Owner dependency risks -->
+    <div style="margin-bottom:14px;">
+      <div style="font-family:'Libre Baskerville',serif; font-size:11pt; font-weight:700; color:var(--navy); margin-bottom:10px;">Owner-dependency risk register</div>
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th style="width:30%">Risk</th>
+            <th style="width:12%">Severity</th>
+            <th style="width:30%">Current situation</th>
+            <th>How the knowledge base resolves it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="risk-label">Business performance &amp; KPIs</div></td>
+            <td><span class="risk-flag flag-high">High</span></td>
+            <td>No KPI dashboard or reporting framework. Principal carries all financial awareness in their head.</td>
+            <td class="resolution">KPI framework and monthly performance review process documented. Dashboard template built for incoming owner.</td>
+          </tr>
+          <tr>
+            <td><div class="risk-label">Referral network</div></td>
+            <td><span class="risk-flag flag-high">High</span></td>
+            <td>~80% of new business originates from principal's personal relationships. No contact list documented.</td>
+            <td class="resolution">Referral contact inventory created. Relationship transfer process documented and handed over prior to sale.</td>
+          </tr>
+          <tr>
+            <td><div class="risk-label">Client discovery consultation</div></td>
+            <td><span class="risk-flag flag-high">High</span></td>
+            <td>All consultations conducted by principal. No framework for delegation.</td>
+            <td class="resolution">Consultation script and qualifying framework documented. Senior consultant trained and signed off.</td>
+          </tr>
+          <tr>
+            <td><div class="risk-label">Staff &amp; team management</div></td>
+            <td><span class="risk-flag flag-high">High</span></td>
+            <td>No meeting cadence, performance review process, or management framework documented.</td>
+            <td class="resolution">Meeting templates, performance review process, and team management framework all documented and tested.</td>
+          </tr>
+          <tr>
+            <td><div class="risk-label">Complex assessment sign-off</div></td>
+            <td><span class="risk-flag flag-med">Medium</span></td>
+            <td>Escalation criteria exist in principal's judgment only. Staff cannot identify what qualifies as complex.</td>
+            <td class="resolution">Written escalation criteria created. Decision flowchart built and tested with senior consultants.</td>
+          </tr>
+          <tr>
+            <td><div class="risk-label">Supplier &amp; professional relationships</div></td>
+            <td><span class="risk-flag flag-med">Medium</span></td>
+            <td>All key supplier, banking, and professional relationships held by principal with no handover documentation.</td>
+            <td class="resolution">Supplier register created. Contact list, terms, and renewal dates documented. Warm introductions scheduled pre-settlement.</td>
+          </tr>
+          <tr>
+            <td><div class="risk-label">Practice manager as single point</div></td>
+            <td><span class="risk-flag flag-med">Medium</span></td>
+            <td>Compliance calendar and billing sit entirely with one person. No written backup.</td>
+            <td class="resolution">All admin processes documented with screen recordings. Second staff member cross-trained.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Scope summary -->
+    <div style="font-family:'Libre Baskerville',serif; font-size:11pt; font-weight:700; color:var(--navy); margin-bottom:10px;">Knowledge base — proposed scope</div>
+
+    <div class="scope-grid" style="grid-template-columns:repeat(5,1fr);">
+      <div class="scope-cell">
+        <div class="scope-area">Marketing</div>
+        <div class="scope-count">4</div>
+        <div class="scope-breakdown">2 screen · 2 flow</div>
+      </div>
+      <div class="scope-cell">
+        <div class="scope-area">Sales</div>
+        <div class="scope-count">5</div>
+        <div class="scope-breakdown">2 screen · 3 flow</div>
+      </div>
+      <div class="scope-cell">
+        <div class="scope-area">Delivery</div>
+        <div class="scope-count">10</div>
+        <div class="scope-breakdown">4 screen · 6 flow</div>
+      </div>
+      <div class="scope-cell">
+        <div class="scope-area">Admin</div>
+        <div class="scope-count">6</div>
+        <div class="scope-breakdown">3 screen · 3 flow</div>
+      </div>
+      <div class="scope-cell">
+        <div class="scope-area">Management</div>
+        <div class="scope-count">6</div>
+        <div class="scope-breakdown">1 screen · 5 flow</div>
+      </div>
+    </div>
+
+    <div class="scope-total-row">
+      <span class="scope-total-label">Total deliverables — processes &amp; tools</span>
+      <span class="scope-total-num">31 + 8 tools</span>
+    </div>
+
+    <div class="investment-box">
+      <div class="inv-col">
+        <div class="inv-label">Investment</div>
+        <div class="inv-value">$6,500</div>
+        <div class="inv-note">Includes the $500 assessment fee already paid</div>
+      </div>
+      <div class="inv-col">
+        <div class="inv-label">Delivery timeline</div>
+        <div class="inv-value">6 – 7 weeks</div>
+        <div class="inv-note">From engagement to completed knowledge base</div>
+      </div>
+      <div class="inv-col">
+        <div class="inv-label">Output</div>
+        <div class="inv-value">Complete knowledge base</div>
+        <div class="inv-note">Delivered as a branded, hosted, password-protected site</div>
+      </div>
+    </div>
+
+    <div class="callout-box">
+      <strong>For the buyer's advisors:</strong> The knowledge base produced through this engagement will be made available as part of the vendor's due diligence package. It constitutes a complete operational handover document — covering every process, every system, and every role — and is designed to significantly reduce the buyer's onboarding risk and post-settlement dependency on the vendor.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    <div class="brand">Knowledgebase.business</div>
+    <div>Confidential · Prepared for <span id="footer-biz">Acme Services Pty Ltd</span> · <span id="footer-date"></span></div>
+  </div>
+
+</div>
+
+<script>
+const d = new Date();
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const dateStr = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+document.getElementById('cover-date').textContent = dateStr;
+document.getElementById('meta-date').textContent = dateStr;
+document.getElementById('footer-date').textContent = dateStr;
+</script>
+
+  <!-- Memberstack protection -->
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) {
+              window.location.href = "/login.html";
+            }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

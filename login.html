@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #f0f5ef;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.login-card {
+  background: #ffffff;
+  border: 1px solid #d4e8d1;
+  border-radius: 12px;
+  padding: 40px 40px 36px;
+  width: 100%;
+  max-width: 400px;
+}
+.brand {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  color: #2d5a27;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a3d16;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 13px;
+  color: #4a7c59;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+.field { margin-bottom: 14px; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4a7c59;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.field input {
+  width: 100%;
+  padding: 10px 12px;
+  background: #f0f5ef;
+  border: 1px solid #d4e8d1;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1a3d16;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.field input:focus { border-color: #2d5a27; }
+.field input::placeholder { color: #8aab97; }
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: #2d5a27;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 6px;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.88; }
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 24px 0 16px;
+}
+.footer-note {
+  font-size: 12px;
+  color: #8aab97;
+  text-align: center;
+  line-height: 1.6;
+}
+.footer-note a { color: #4a7c59; text-decoration: none; }
+.footer-note a:hover { color: #2d5a27; }
+.error-msg {
+  background: #fdf0f0;
+  border: 1px solid #f0c0c0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #8b1f1f;
+  margin-bottom: 14px;
+  display: none;
+}
+.ms-login { display: none; }
+</style>
+</head>
+<body>
+
+<div class="login-card">
+  <div class="brand">Knowledgebase.business</div>
+  <div class="title">Sign in</div>
+  <div class="subtitle">Access your knowledge base and tools.</div>
+
+  <div class="error-msg" id="error-msg">Incorrect email or password. Please try again.</div>
+
+  <div class="field">
+    <label>Email address</label>
+    <input type="email" id="email" placeholder="you@yourbusiness.com.au" autocomplete="email" />
+  </div>
+
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Your password" autocomplete="current-password" />
+  </div>
+
+  <button class="btn" id="login-btn" onclick="doLogin()">Sign in →</button>
+
+  <div class="divider"></div>
+
+  <div class="footer-note">
+    Having trouble signing in?<br>
+    Contact <a href="mailto:hello@knowledgebase.business">hello@knowledgebase.business</a>
+  </div>
+</div>
+
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+async function doLogin() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('error-msg');
+
+  if (!email || !password) {
+    err.textContent = 'Please enter your email and password.';
+    err.style.display = 'block';
+    return;
+  }
+
+  btn.textContent = 'Signing in…';
+  btn.disabled = true;
+  err.style.display = 'none';
+
+  try {
+    const checkInterval = setInterval(async function() {
+      if (window.$memberstackDom) {
+        clearInterval(checkInterval);
+        try {
+          await window.$memberstackDom.loginMemberEmailPassword({
+            email: email,
+            password: password,
+          });
+          window.location.href = '/dashboard.html';
+        } catch (e) {
+          err.textContent = 'Incorrect email or password. Please try again.';
+          err.style.display = 'block';
+          btn.textContent = 'Sign in →';
+          btn.disabled = false;
+        }
+      }
+    }, 100);
+  } catch(e) {
+    err.textContent = 'Something went wrong. Please try again.';
+    err.style.display = 'block';
+    btn.textContent = 'Sign in →';
+    btn.disabled = false;
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>
