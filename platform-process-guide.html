@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Process Guide — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --forest-lt: #4a7c59;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.08);
+  --gold-dim:  rgba(200,168,75,0.25);
+  --bg:        #f0f5ef;
+  --white:     #ffffff;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-mid:  #3d6b47;
+  --text-muted:#6b9a78;
+  --text-dim:  #a0c4a8;
+  --code-bg:   #1a3d16;
+  --code-text: #e8d5a0;
+  --process-bg:#d4e8d1;
+  --tool-bg:   #e8f0fb;
+  --tool-color:#1a4a8a;
+  --warn-bg:   #fdf3e3;
+  --warn-color:#854f0b;
+  --mono:      'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── SIDEBAR + LAYOUT ── */
+.layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+.sidebar {
+  background: var(--forest-dk);
+  position: fixed;
+  width: 260px;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid var(--gold);
+}
+
+.sb-brand {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sb-logo {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.sb-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+}
+
+.sb-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 2px;
+}
+
+.sb-nav { padding: 16px 0; flex: 1; }
+
+.sb-section {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  padding: 12px 20px 5px;
+}
+
+.sb-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 20px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.sb-link:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+.sb-link.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-bg); }
+
+.sb-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+.sb-link.active .sb-dot { background: var(--gold); }
+
+.sb-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  line-height: 1.5;
+}
+
+/* ── MAIN ── */
+.main { margin-left: 260px; }
+
+.page-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 48px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ph-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+
+.ph-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ph-badge {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: var(--process-bg);
+  color: var(--forest);
+  font-weight: 500;
+}
+
+/* ── CONTENT ── */
+.content { padding: 40px 48px 80px; max-width: 860px; }
+
+/* ── SECTION ── */
+.doc-section { margin-bottom: 48px; }
+
+.section-anchor { display: block; margin-top: -80px; padding-top: 80px; }
+
+.section-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.section-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--forest);
+}
+
+.section-intro {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+
+/* ── HEADINGS ── */
+h3 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  margin-top: 24px;
+}
+
+p { font-size: 14px; color: var(--text-mid); line-height: 1.75; margin-bottom: 12px; }
+
+/* ── STEP BLOCKS ── */
+.steps { display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px; }
+
+.step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.step-num {
+  background: var(--forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.step-body { padding: 14px 18px; }
+
+.step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.step-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ── CODE BLOCKS ── */
+.code-block {
+  background: var(--code-bg);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.code-label {
+  padding: 8px 14px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-family: var(--mono);
+}
+
+.code-content {
+  padding: 14px 16px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--code-text);
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--process-bg);
+  color: var(--forest);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* ── CALLOUTS ── */
+.callout {
+  border-left: 3px solid var(--gold);
+  background: var(--gold-bg);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.callout strong { color: var(--forest); font-weight: 500; }
+
+.callout-warn {
+  border-left: 3px solid #c8671a;
+  background: var(--warn-bg);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--warn-color);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* ── TABLES ── */
+.doc-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+
+.doc-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-bottom: 1.5px solid var(--forest);
+  background: var(--white);
+}
+
+.doc-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+
+.doc-table tr:nth-child(even) td { background: rgba(212,232,209,0.2); }
+.doc-table tr:last-child td { border-bottom: none; }
+
+.doc-table td:first-child { font-family: var(--mono); font-size: 12px; color: var(--forest); font-weight: 500; }
+
+/* ── COLOUR SWATCHES ── */
+.swatch-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
+.swatch {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  min-width: 120px;
+}
+
+.swatch-colour { height: 40px; }
+
+.swatch-info {
+  padding: 8px 10px;
+  background: var(--white);
+}
+
+.swatch-name { font-size: 12px; font-weight: 500; color: var(--text); }
+.swatch-hex { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+
+/* ── CHECKLIST ── */
+.checklist { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+
+.check-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.check-item:hover { background: #f8fbf7; }
+.check-item.done { background: var(--process-bg); color: var(--forest); }
+
+.check-box {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+
+.check-item.done .check-box {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: white;
+  font-size: 11px;
+}
+
+/* ── FILE LIST ── */
+.file-list { display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px; }
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.file-name { font-family: var(--mono); font-size: 12px; color: var(--forest); font-weight: 500; flex: 1; }
+.file-desc { font-size: 12px; color: var(--text-muted); }
+
+.file-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-public { background: #e6f1fb; color: #185fa5; }
+.badge-protected { background: var(--process-bg); color: var(--forest); }
+.badge-template { background: #eeedfe; color: #534ab7; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .page-header, .content { padding-left: 20px; padding-right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">Knowledgebase.business</div>
+    <div class="sb-title">Platform Process Guide</div>
+    <div class="sb-sub">Internal · Team reference</div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-section">Getting started</div>
+    <a href="#overview" class="sb-link active"><div class="sb-dot"></div> Overview</a>
+    <a href="#tools" class="sb-link"><div class="sb-dot"></div> Tools you need</a>
+    <a href="#structure" class="sb-link"><div class="sb-dot"></div> File structure</a>
+
+    <div class="sb-section">Daily workflow</div>
+    <a href="#workflow" class="sb-link"><div class="sb-dot"></div> Adding a file</a>
+    <a href="#deploy" class="sb-link"><div class="sb-dot"></div> Deploying changes</a>
+    <a href="#testing" class="sb-link"><div class="sb-dot"></div> Testing a deploy</a>
+
+    <div class="sb-section">Standards</div>
+    <a href="#design" class="sb-link"><div class="sb-dot"></div> Design system</a>
+    <a href="#protection" class="sb-link"><div class="sb-dot"></div> Memberstack protection</a>
+    <a href="#naming" class="sb-link"><div class="sb-dot"></div> Naming conventions</a>
+
+    <div class="sb-section">Clients</div>
+    <a href="#new-client" class="sb-link"><div class="sb-dot"></div> Adding a new client</a>
+    <a href="#tailoring" class="sb-link"><div class="sb-dot"></div> Tailoring tools</a>
+    <a href="#offboarding" class="sb-link"><div class="sb-dot"></div> Offboarding a client</a>
+  </nav>
+
+  <div class="sb-footer">
+    Questions? Contact Roy at<br>hello@knowledgebase.business
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <div class="page-header">
+    <div>
+      <div class="ph-eyebrow">Internal documentation</div>
+      <div class="ph-title">Platform Process Guide</div>
+    </div>
+    <span class="ph-badge">Knowledgebase.business team</span>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="doc-section">
+      <span class="section-anchor" id="overview"></span>
+      <div class="section-eyebrow">Section 01</div>
+      <div class="section-title">Overview — how the platform works</div>
+      <div class="section-intro">This document tells everyone who works on Knowledgebase.business exactly how to build, update, and deploy tools and pages. Read this before touching any file.</div>
+
+      <p>The platform is a set of HTML files hosted on Netlify and connected to a GitHub repository. When you add or change a file in the GitHub repository, Netlify automatically detects the change and redeploys the site within seconds. No manual uploading required after setup.</p>
+
+      <p>Memberstack sits in front of the protected tools and controls who can access them. Clients log in with their credentials and land on their dashboard. When a client's subscription ends, their Memberstack account is deactivated and they immediately lose access to all tools.</p>
+
+      <div class="callout">
+        <strong>The golden rule:</strong> Never drag and drop files directly to Netlify. Always go through GitHub. Direct uploads bypass version control and can cause the site to lose files that weren't included in the drag.
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="doc-section">
+      <span class="section-anchor" id="tools"></span>
+      <div class="section-eyebrow">Section 02</div>
+      <div class="section-title">Tools you need</div>
+      <div class="section-intro">Every team member working on the platform needs these four things set up before they can contribute.</div>
+
+      <table class="doc-table">
+        <thead><tr><th>Tool</th><th>What it does</th><th>Where to get it</th></tr></thead>
+        <tbody>
+          <tr><td>GitHub Desktop</td><td>Manages the repository on your Mac. Shows changes, lets you commit and push without using the command line.</td><td>desktop.github.com</td></tr>
+          <tr><td>GitHub account</td><td>Stores the repository in the cloud. Must be added as a collaborator on the Knowledge Base repository.</td><td>github.com</td></tr>
+          <tr><td>VS Code or any text editor</td><td>For editing HTML files. VS Code is preferred — it shows errors and has useful extensions.</td><td>code.visualstudio.com</td></tr>
+          <tr><td>Netlify access</td><td>To check deploys and manage site settings. Ask Roy for access to the knowledgebase-business site.</td><td>app.netlify.com</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout-warn">
+        Never share the Memberstack admin credentials or the Anthropic API key in Slack, email, or any chat tool. These are sensitive and must be stored only in the password manager.
+      </div>
+    </div>
+
+    <!-- FILE STRUCTURE -->
+    <div class="doc-section">
+      <span class="section-anchor" id="structure"></span>
+      <div class="section-eyebrow">Section 03</div>
+      <div class="section-title">File structure</div>
+      <div class="section-intro">All files live at the root level of the Knowledge Base repository. There are no subfolders — everything sits flat so Netlify can serve them directly.</div>
+
+      <div class="file-list">
+        <div class="file-item">
+          <div class="file-name">index.html</div>
+          <div class="file-badge badge-public">Public</div>
+          <div class="file-desc">Redirects to login.html — the default homepage</div>
+        </div>
+        <div class="file-item">
+          <div class="file-name">login.html</div>
+          <div class="file-badge badge-public">Public</div>
+          <div class="file-desc">Client sign-in page — Memberstack handles authentication</div>
+        </div>
+        <div class="file-item">
+          <div class="file-name">dashboard.html</div>
+          <div class="file-badge badge-protected">Protected</div>
+          <div class="file-desc">Client dashboard — tool tiles, usage stats, subscription info</div>
+        </div>
+        <div class="file-item">
+          <div class="file-name">transaction-coding-assistant.html</div>
+          <div class="file-badge badge-protected">Protected</div>
+          <div class="file-desc">AI receipt coding tool — configured per client COA</div>
+        </div>
+        <div class="file-item">
+          <div class="file-name">myob-coa-checker.html</div>
+          <div class="file-badge badge-protected">Protected</div>
+          <div class="file-desc">Chart of accounts audit tool — generic Australian rules</div>
+        </div>
+        <div class="file-item">
+          <div class="file-name">sale-readiness-assessment.html</div>
+          <div class="file-badge badge-protected">Protected</div>
+          <div class="file-desc">Buyer-facing operational assessment document</div>
+        </div>
+        <div class="file-item">
+          <div class="file-name">pre-session-questionnaire.html</div>
+          <div class="file-badge badge-public">Public</div>
+          <div class="file-desc">Sent to clients before the audit session — no login required</div>
+        </div>
+        <div class="file-item">
+          <div class="file-name">[client]-[tool].html</div>
+          <div class="file-badge badge-template">Template</div>
+          <div class="file-desc">Client-specific tool versions — e.g. lawfirm-coding-assistant.html</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>No subfolders.</strong> All files go in the root of the repository. If Netlify can't find a file it's almost always because it ended up in a subfolder by mistake.
+      </div>
+    </div>
+
+    <!-- WORKFLOW -->
+    <div class="doc-section">
+      <span class="section-anchor" id="workflow"></span>
+      <div class="section-eyebrow">Section 04</div>
+      <div class="section-title">Adding or updating a file</div>
+      <div class="section-intro">Follow these steps every time you add a new tool, update an existing page, or make any change to the platform.</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Get the file ready</div>
+            <div class="step-desc">Build or edit the HTML file. Make sure it uses the correct design system (Section 07) and — if it's a protected tool — includes the Memberstack script (Section 08).</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Drop it into the Knowledge Base folder</div>
+            <div class="step-desc">Open Finder and navigate to the Knowledge Base repository folder. Drag the file in. If replacing an existing file, click Replace when prompted.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Open GitHub Desktop</div>
+            <div class="step-desc">You'll see the changed file appear in the Changes tab. Uncheck .DS_Store if it appears — never commit that file.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Write a commit message</div>
+            <div class="step-desc">In the Summary field, write a short description of what changed. Examples: "Add law firm coding assistant", "Update login page colours", "Fix COA checker GST rule". Be specific — this is your change log.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">Commit to main</div>
+            <div class="step-desc">Click Commit to main. This saves the change to your local repository.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">Push origin</div>
+            <div class="step-desc">Click Push origin at the top of GitHub Desktop. This sends the change to GitHub, which triggers Netlify to auto-deploy. The site updates within 30 seconds.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPLOY -->
+    <div class="doc-section">
+      <span class="section-anchor" id="testing"></span>
+      <div class="section-eyebrow">Section 05</div>
+      <div class="section-title">Testing after a deploy</div>
+      <div class="section-intro">Every deploy should be tested before telling a client it's ready. Takes two minutes.</div>
+
+      <div class="checklist" id="deploy-checklist">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"></div>
+          <span>Netlify shows <strong>Published</strong> in green on the Deploys page</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"></div>
+          <span>Go to <code>knowledgebase-business.netlify.app/login.html</code> — login page loads correctly</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"></div>
+          <span>The new or updated file is accessible at its URL — e.g. <code>/transaction-coding-assistant.html</code></span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"></div>
+          <span>If the file is protected — confirm it redirects to login when accessed without being signed in</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"></div>
+          <span>If the file uses the Claude API — test one query to confirm the API call succeeds</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box"></div>
+          <span>Colours and fonts match the design system — Forest green, gold, DM Sans, Libre Baskerville</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESIGN SYSTEM -->
+    <div class="doc-section">
+      <span class="section-anchor" id="design"></span>
+      <div class="section-eyebrow">Section 06</div>
+      <div class="section-title">Design system — Forest &amp; Gold</div>
+      <div class="section-intro">Every page and tool on the platform uses this palette and these fonts. No exceptions. Consistency across every touchpoint is what makes the platform feel professional.</div>
+
+      <h3>Colour palette</h3>
+
+      <div class="swatch-row">
+        <div class="swatch">
+          <div class="swatch-colour" style="background:#2d5a27;"></div>
+          <div class="swatch-info"><div class="swatch-name">Forest (Primary)</div><div class="swatch-hex">#2d5a27</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-colour" style="background:#1a3d16;"></div>
+          <div class="swatch-info"><div class="swatch-name">Forest Dark</div><div class="swatch-hex">#1a3d16</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-colour" style="background:#c8a84b;"></div>
+          <div class="swatch-info"><div class="swatch-name">Gold (Accent)</div><div class="swatch-hex">#c8a84b</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-colour" style="background:#f0f5ef;"></div>
+          <div class="swatch-info"><div class="swatch-name">Background</div><div class="swatch-hex">#f0f5ef</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-colour" style="background:#d4e8d1; border-top: 1px solid #d4e8d1;"></div>
+          <div class="swatch-info"><div class="swatch-name">Process badge</div><div class="swatch-hex">#d4e8d1</div></div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-colour" style="background:#e8f0fb;"></div>
+          <div class="swatch-info"><div class="swatch-name">Tool badge</div><div class="swatch-hex">#e8f0fb</div></div>
+        </div>
+      </div>
+
+      <h3>Typography</h3>
+      <table class="doc-table">
+        <thead><tr><th>Font</th><th>Use</th><th>Import</th></tr></thead>
+        <tbody>
+          <tr><td>Libre Baskerville</td><td>Headings, brand name, hero titles</td><td>Google Fonts — weights 400, 700, italic</td></tr>
+          <tr><td>DM Sans</td><td>Body text, labels, buttons, all UI text</td><td>Google Fonts — weights 300, 400, 500, 600</td></tr>
+          <tr><td>JetBrains Mono</td><td>Code, account codes, file names, system values</td><td>Google Fonts — weights 400, 500, 700</td></tr>
+        </tbody>
+      </table>
+
+      <h3>CSS variables to include in every file</h3>
+      <div class="code-block">
+        <div class="code-label">CSS — paste into every :root block</div>
+        <div class="code-content">:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --forest-lt: #4a7c59;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.08);
+  --bg:        #f0f5ef;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-muted:#6b9a78;
+  --process-bg:#d4e8d1;  /* green badge background */
+  --tool-bg:   #e8f0fb;  /* blue badge background */
+  --tool-color:#1a4a8a;  /* blue badge text */
+}</div>
+      </div>
+
+      <h3>Buttons</h3>
+      <div class="code-block">
+        <div class="code-label">Primary button</div>
+        <div class="code-content">background: #2d5a27;  color: #ffffff;  border: none;
+border-radius: 6px;  padding: 10px 22px;  font-size: 14px;</div>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Accent button</div>
+        <div class="code-content">background: #c8a84b;  color: #1a3d16;  border: none;
+border-radius: 6px;  padding: 10px 22px;  font-size: 14px;  font-weight: 600;</div>
+      </div>
+    </div>
+
+    <!-- MEMBERSTACK -->
+    <div class="doc-section">
+      <span class="section-anchor" id="protection"></span>
+      <div class="section-eyebrow">Section 07</div>
+      <div class="section-title">Memberstack protection</div>
+      <div class="section-intro">Any tool that clients should only access when logged in needs the Memberstack script. Public pages — the landing page, the login page, the questionnaire — do not need it.</div>
+
+      <p>Paste this block just before the closing <code>&lt;/body&gt;</code> tag of every protected HTML file:</p>
+
+      <div class="code-block">
+        <div class="code-label">Memberstack protection script — paste before &lt;/body&gt;</div>
+        <div class="code-content">&lt;!-- Memberstack protection --&gt;
+&lt;script src="https://static.memberstack.com/scripts/v1/memberstack.js"
+  data-memberstack-key="pk_781f69891fdb2812d4b0"&gt;&lt;/script&gt;
+&lt;script&gt;
+  document.addEventListener("DOMContentLoaded", function() {
+    var checkInterval = setInterval(function() {
+      if (window.$memberstackDom) {
+        clearInterval(checkInterval);
+        window.$memberstackDom.getCurrentMember().then(function(result) {
+          if (!result.data) {
+            window.location.href = "/login.html";
+          }
+        });
+      }
+    }, 100);
+  });
+&lt;/script&gt;</div>
+      </div>
+
+      <div class="callout-warn">
+        Never add the Memberstack script to <code>login.html</code>, <code>index.html</code>, or <code>pre-session-questionnaire.html</code>. These pages must be publicly accessible — adding protection to them will lock everyone out.
+      </div>
+    </div>
+
+    <!-- NAMING -->
+    <div class="doc-section">
+      <span class="section-anchor" id="naming"></span>
+      <div class="section-eyebrow">Section 08</div>
+      <div class="section-title">Naming conventions</div>
+      <div class="section-intro">Consistent file naming keeps the repository readable and prevents broken links.</div>
+
+      <table class="doc-table">
+        <thead><tr><th>Type</th><th>Format</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Platform tools</td><td>descriptive-name.html (lowercase, hyphens)</td><td>transaction-coding-assistant.html</td></tr>
+          <tr><td>Client-specific tools</td><td>clientname-toolname.html</td><td>lawfirm-coding-assistant.html</td></tr>
+          <tr><td>Process documents</td><td>process-name.html</td><td>sale-readiness-assessment.html</td></tr>
+          <tr><td>Never use</td><td>Spaces, capitals, underscores, version numbers</td><td>NOT: Coding Assistant v2.html</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- NEW CLIENT -->
+    <div class="doc-section">
+      <span class="section-anchor" id="new-client"></span>
+      <div class="section-eyebrow">Section 09</div>
+      <div class="section-title">Adding a new client</div>
+      <div class="section-intro">Follow these steps every time a new client comes onto the platform.</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Switch Memberstack to Live Mode</div>
+            <div class="step-desc">Go to app.memberstack.com. Toggle from Test Mode to Live Mode. This is required before creating real client accounts.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Create the client's Memberstack account</div>
+            <div class="step-desc">Go to Members → Add Member. Enter their email address. Set a temporary password. Assign them to the correct plan (Starter, Professional, or Premium).</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Tailor the coding assistant</div>
+            <div class="step-desc">Follow the tailoring guide to configure a client-specific version of the coding assistant with their chart of accounts. Name it clientname-coding-assistant.html and add it to the repository.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Update the dashboard tile links</div>
+            <div class="step-desc">If the client has a tailored tool, update the dashboard to link to their specific version rather than the generic one. Create a client-specific dashboard if needed.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">Send credentials</div>
+            <div class="step-desc">Email the client: their login URL (knowledgebase-business.netlify.app/login.html), their email address, and their temporary password. Ask them to save it securely.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">Test the login before telling the client</div>
+            <div class="step-desc">Log in yourself using their credentials. Confirm the dashboard loads, all their tools are accessible, and the coding assistant uses their COA. Then tell the client they're live.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OFFBOARDING -->
+    <div class="doc-section">
+      <span class="section-anchor" id="offboarding"></span>
+      <div class="section-eyebrow">Section 10</div>
+      <div class="section-title">Offboarding a client</div>
+      <div class="section-intro">When a client cancels or their subscription lapses, follow these steps immediately.</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Deactivate in Memberstack</div>
+            <div class="step-desc">Go to Members, find the client, click their account, and click Deactivate or Suspend. Their login stops working immediately. Do not delete the account — deactivating preserves their history and allows reinstatement.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Keep their files in the repository</div>
+            <div class="step-desc">Do not delete their tailored tool files from GitHub. They're harmless — no one can access them without a Memberstack login. Keeping them means you can reinstate the client instantly if they return.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Note the reason</div>
+            <div class="step-desc">Record in your CRM or notes why the client left — cancelled, non-payment, completed engagement, referred on. This feeds into the engagement health data over time.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Reinstating a client</strong> is one click in Memberstack — reactivate their account and they're back in immediately. No rebuilding required.
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<script>
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  const box = el.querySelector('.check-box');
+  if (el.classList.contains('done')) {
+    box.textContent = '✓';
+  } else {
+    box.textContent = '';
+  }
+}
+
+// Highlight active sidebar link on scroll
+const sections = document.querySelectorAll('.section-anchor');
+const links = document.querySelectorAll('.sb-link');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  links.forEach(l => {
+    l.classList.remove('active');
+    l.querySelector('.sb-dot').style.background = 'rgba(255,255,255,0.2)';
+    if (l.getAttribute('href') === '#' + current) {
+      l.classList.add('active');
+      l.querySelector('.sb-dot').style.background = 'var(--gold)';
+    }
+  });
+});
+</script>
+</body>
+</html>
