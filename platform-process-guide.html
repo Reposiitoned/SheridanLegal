@@ -43,17 +43,18 @@ body {
 }
 
 /* ── SIDEBAR + LAYOUT ── */
-.layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+.layout { display: flex; min-height: 100vh; }
 
 .sidebar {
   background: var(--forest-dk);
   position: fixed;
+  top: 0; left: 0; bottom: 0;
   width: 220px;
-  height: 100vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   border-right: 2px solid var(--gold);
+  z-index: 20;
 }
 
 .sb-brand {
@@ -119,12 +120,12 @@ body {
 }
 
 /* ── MAIN ── */
-.main { margin-left: 220px; }
+.main { margin-left: 220px; flex: 1; min-width: 0; width: calc(100% - 220px); }
 
 .page-header {
   background: var(--white);
   border-bottom: 1px solid var(--border);
-  padding: 20px 40px;
+  padding: 20px 56px;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -159,7 +160,7 @@ body {
 }
 
 /* ── CONTENT ── */
-.content { padding: 32px 40px 80px; max-width: 100%; }
+.content { padding: 36px 56px 80px; max-width: 900px; box-sizing: border-box; }
 
 /* ── SECTION ── */
 .doc-section { margin-bottom: 48px; }
@@ -190,7 +191,6 @@ body {
   color: var(--text-muted);
   margin-bottom: 24px;
   line-height: 1.7;
-  max-width: 680px;
 }
 
 /* ── HEADINGS ── */
@@ -203,7 +203,7 @@ h3 {
   margin-top: 24px;
 }
 
-p { font-size: 14px; color: var(--text-mid); line-height: 1.75; margin-bottom: 12px; max-width: 680px; }
+p { font-size: 14px; color: var(--text-mid); line-height: 1.75; margin-bottom: 12px; }
 
 /* ── STEP BLOCKS ── */
 .steps { display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px; }
