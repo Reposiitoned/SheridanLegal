@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategy & Decision Audit — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.09);
+  --gold-dim:  rgba(200,168,75,0.3);
+  --bg:        #f0f5ef;
+  --white:     #ffffff;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-mid:  #3d6b47;
+  --text-muted:#6b9a78;
+  --text-dim:  #a8c8b0;
+  --red:       #8b1f1f;
+  --red-bg:    #fdf0f0;
+  --amber:     #854f0b;
+  --amber-bg:  #fdf3e3;
+  --green:     #1a6b45;
+  --green-bg:  #e8f5ee;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; }
+
+/* HEADER */
+.site-header { background: var(--forest-dk); border-bottom: 2px solid var(--gold); padding: 13px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.header-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.header-right { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+/* HERO */
+.hero { background: var(--forest-dk); padding: 36px 32px 44px; }
+.hero-inner { max-width: 800px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(22px, 3.5vw, 32px); font-weight: 700; color: #fff; margin-bottom: 10px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.5); max-width: 560px; line-height: 1.7; font-weight: 300; margin-bottom: 20px; }
+.hero-books { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero-book { font-size: 12px; padding: 5px 12px; border-radius: 99px; border: 1px solid var(--gold-dim); color: rgba(255,255,255,0.6); }
+
+/* TABS */
+.tabs-wrap { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; position: sticky; top: 53px; z-index: 40; }
+.tabs { max-width: 800px; margin: 0 auto; display: flex; gap: 0; }
+.tab { padding: 14px 20px; font-size: 14px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .15s; white-space: nowrap; background: none; border-top: none; border-left: none; border-right: none; font-family: 'DM Sans', sans-serif; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--forest); border-bottom-color: var(--gold); }
+
+/* BODY */
+.page-body { max-width: 800px; margin: 0 auto; padding: 36px 32px 80px; }
+.section-panel { display: none; animation: fadeIn .25s ease; }
+.section-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SECTION HEADING */
+.s-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+.s-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; padding-bottom: 10px; border-bottom: 2px solid var(--forest); }
+.s-intro { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; line-height: 1.7; }
+.book-ref { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: var(--gold); background: var(--gold-bg); border: 1px solid var(--gold-dim); border-radius: 99px; padding: 3px 10px; margin-bottom: 16px; }
+
+/* FIELD */
+.fg { margin-bottom: 18px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fh { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-style: italic; line-height: 1.5; }
+.fi { width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .15s; }
+.fi:focus { border-color: var(--forest); background: var(--white); }
+.fi::placeholder { color: var(--text-dim); }
+textarea.fi { resize: vertical; min-height: 80px; line-height: 1.6; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* CHIPS */
+.chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.chip { padding: 5px 13px; border: 1px solid var(--border); border-radius: 99px; font-size: 12px; cursor: pointer; color: var(--text-muted); background: var(--white); transition: all .15s; font-family: 'DM Sans', sans-serif; user-select: none; }
+.chip:hover { border-color: var(--forest); color: var(--forest); }
+.chip.sel { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+/* CALLOUT */
+.callout { border-left: 3px solid var(--gold); background: var(--gold-bg); border-radius: 0 6px 6px 0; padding: 11px 14px; font-size: 13px; color: var(--text-mid); margin-bottom: 18px; line-height: 1.6; }
+.callout strong { color: var(--forest); font-weight: 500; }
+.callout-warn { border-left: 3px solid var(--amber); background: var(--amber-bg); border-radius: 0 6px 6px 0; padding: 11px 14px; font-size: 13px; color: var(--amber); margin-bottom: 18px; line-height: 1.6; }
+
+/* SUBSECTION */
+.sub-heading { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: var(--text); margin: 22px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+
+/* SCALE */
+.scale { display: flex; gap: 8px; margin-top: 6px; }
+.scale-btn { flex: 1; padding: 8px 4px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; cursor: pointer; color: var(--text-muted); background: var(--white); text-align: center; transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.scale-btn:hover { border-color: var(--forest); }
+.scale-btn.sel { background: var(--forest); color: #fff; border-color: var(--forest); }
+.scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* DECISION REGISTER */
+.decision-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 13px; }
+.decision-table th { text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); padding: 7px 10px; border-bottom: 2px solid var(--forest); background: var(--white); }
+.decision-table td { padding: 5px 5px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.decision-table tr:nth-child(even) td { background: rgba(212,232,209,0.12); }
+.dt-input { width: 100%; padding: 5px 7px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; background: var(--white); color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.dt-input:focus { border-color: var(--forest); }
+.dt-select { width: 100%; padding: 5px 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; background: var(--white); color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.add-row-btn { font-size: 12px; color: var(--text-muted); border: 1px dashed var(--border); border-radius: 5px; padding: 6px 14px; cursor: pointer; background: none; margin-top: 6px; transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.add-row-btn:hover { color: var(--forest); border-color: var(--forest); }
+
+/* FIREFIGHTING GRID */
+.ff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+.ff-cell { background: var(--white); padding: 14px 16px; }
+.ff-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
+.ff-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-style: italic; }
+.ff-cell.str .ff-label { color: var(--green); }
+.ff-cell.weak .ff-label { color: var(--red); }
+.ff-cell.proactive .ff-label { color: var(--forest); }
+.ff-cell.reactive .ff-label { color: var(--amber); }
+
+/* STEP BLOCK */
+.step-block { background: #f8fbf7; border: 1px solid var(--border); border-left: 4px solid var(--forest); border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 10px; }
+.step-num { font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 5px; }
+.step-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+
+/* DIVIDER */
+.sdiv { height: 1px; background: var(--border); margin: 22px 0; }
+
+/* ABCD */
+.abcd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+.abcd-card { border-radius: 8px; padding: 12px 14px; text-align: center; border: 1px solid var(--border); }
+.abcd-card.a { background: var(--green-bg); border-color: var(--green); }
+.abcd-card.b { background: var(--bg); }
+.abcd-card.c { background: var(--amber-bg); border-color: var(--amber); }
+.abcd-card.d { background: var(--red-bg); border-color: var(--red); }
+.abcd-letter { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; margin-bottom: 3px; }
+.abcd-card.a .abcd-letter { color: var(--green); }
+.abcd-card.b .abcd-letter { color: var(--text-muted); }
+.abcd-card.c .abcd-letter { color: var(--amber); }
+.abcd-card.d .abcd-letter { color: var(--red); }
+.abcd-label { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+.abcd-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+.abcd-count { margin-top: 8px; }
+.abcd-count input { width: 50px; text-align: center; padding: 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text); }
+
+/* PRINT */
+@media print { .site-header, .tabs-wrap { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .section-panel { display: block !important; } }
+
+@media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } .abcd-grid { grid-template-columns: repeat(2, 1fr); } .ff-grid { grid-template-columns: 1fr; } .page-body { padding: 20px 16px 60px; } .tabs-wrap, .hero, .site-header { padding-left: 16px; padding-right: 16px; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-brand">Knowledgebase.business · Discovery Audit</div>
+  <div class="header-right">Strategy & Decision sections</div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Business audit — advanced sections</div>
+    <div class="hero-title">Strategy & <em>Decision</em> audit</div>
+    <div class="hero-sub">Two sections based on Roy West's published frameworks. Use alongside the main process inventory audit. Together they surface not just what the business does — but how it thinks and decides.</div>
+    <div class="hero-books">
+      <div class="hero-book">📘 Pivot, Pause, But Don't Panic</div>
+      <div class="hero-book">📗 Don't Do Nothing</div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('strategy')" id="tab-strategy">1 · Strategy</button>
+    <button class="tab" onclick="switchTab('decisions')" id="tab-decisions">2 · Decision-making</button>
+    <button class="tab" onclick="switchTab('register')" id="tab-register">3 · Decision register</button>
+    <button class="tab" onclick="switchTab('summary')" id="tab-summary">4 · Summary</button>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- ════════════════════════════════
+       TAB 1 — STRATEGY
+  ════════════════════════════════ -->
+  <div class="section-panel active" id="panel-strategy">
+
+    <div class="s-eyebrow">Based on Pivot, Pause, But Don't Panic</div>
+    <div class="s-title">Strategy — where is this business going?</div>
+    <div class="s-intro">Most small businesses operate without a documented strategy. This section surfaces whether one exists, how clear it is, and whether the owner is stuck in the firefighting trap that prevents strategic thinking from happening at all.</div>
+
+    <div class="callout">
+      <strong>Consultant note:</strong> Start with the firefighting question — it frames everything that follows. Most owners will recognise themselves immediately. The goal isn't to make them feel bad but to open the conversation about what's possible when they step out of reactive mode.
+    </div>
+
+    <!-- FIREFIGHTING -->
+    <div class="sub-heading">The firefighting trap</div>
+    <div class="book-ref">📘 Chapter 1 — The Firefighting Trap</div>
+
+    <div class="fg">
+      <label class="fl">On a typical week, how much time is spent reacting to problems versus working on the business proactively?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'react')">Almost all reactive — firefighting every day</span>
+        <span class="chip" onclick="tog(this,'react')">Mostly reactive with some planning time</span>
+        <span class="chip" onclick="tog(this,'react')">Roughly equal — reactive and proactive</span>
+        <span class="chip" onclick="tog(this,'react')">Mostly proactive — fires are the exception</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">What does the owner do most of each day?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'daytype')">Client work and delivery</span>
+        <span class="chip" onclick="tog(this,'daytype')">Solving problems and putting out fires</span>
+        <span class="chip" onclick="tog(this,'daytype')">Managing staff and operations</span>
+        <span class="chip" onclick="tog(this,'daytype')">Sales and business development</span>
+        <span class="chip" onclick="tog(this,'daytype')">Strategic planning and thinking</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Does the owner protect dedicated time for strategic thinking?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'thinktime')">Yes — scheduled weekly thinking time</span>
+        <span class="chip" onclick="tog(this,'thinktime')">Occasionally — when things quieten down</span>
+        <span class="chip" onclick="tog(this,'thinktime')">Rarely — always too busy</span>
+        <span class="chip" onclick="tog(this,'thinktime')">Never — hasn't occurred to me</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">What is the biggest thing the firefighting trap is costing this business right now?</label>
+      <div class="fh">The Burnout Tax, the Profit Plateau, the Missed Opportunity Cost, the Team Disengagement Tax — which resonates most?</div>
+      <textarea class="fi" id="ff-cost" rows="3" placeholder="e.g. Owner is burning out — working 7 days and the profit hasn't moved in 3 years. Team is reactive because the owner is reactive. No time to think about the future…"></textarea>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <!-- STRATEGY EXISTS -->
+    <div class="sub-heading">Does a strategy exist?</div>
+    <div class="book-ref">📘 Chapter 2 — The Missing Roadmap</div>
+
+    <div class="fg">
+      <label class="fl">Does the business have a documented strategic plan?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'stratexists')">Yes — written, current, and referenced regularly</span>
+        <span class="chip" onclick="tog(this,'stratexists')">Partial — exists but not current or not used</span>
+        <span class="chip" onclick="tog(this,'stratexists')">In the owner's head only — not documented</span>
+        <span class="chip" onclick="tog(this,'stratexists')">No strategy — operating day to day</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Can the owner clearly state where the business will be in 3 years?</label>
+      <textarea class="fi" id="vision-3yr" rows="2" placeholder="Ask them directly — 'Where do you want this business to be in 3 years?' Record their answer verbatim. Vague answers = no real strategy…"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Does the business have a clear Mission, Vision, and Values?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'mvv')">Yes — written and lived</span>
+        <span class="chip" onclick="tog(this,'mvv')">Partial — some elements exist</span>
+        <span class="chip" onclick="tog(this,'mvv')">In the owner's head but not written</span>
+        <span class="chip" onclick="tog(this,'mvv')">No — not defined</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Does the business have a clear Unique Value Proposition — something specific that answers "why us"?</label>
+      <textarea class="fi" id="uvp-audit" rows="2" placeholder="Ask: 'Why should a client choose you over a competitor?' Record their answer. 'Great service' is not a UVP…"></textarea>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <!-- STRATEGIC AUDIT -->
+    <div class="sub-heading">The strategic audit — current state</div>
+    <div class="book-ref">📘 Chapter 3 — The Strategic Audit</div>
+
+    <div class="callout">
+      <strong>From the book:</strong> "You can't plan a road trip without knowing where you're starting from." Use these four quadrants to quickly map the business's current strategic position.
+    </div>
+
+    <div class="ff-grid">
+      <div class="ff-cell str">
+        <div class="ff-label">Strengths</div>
+        <div class="ff-sub">What does the business do better than anyone?</div>
+        <textarea class="fi" id="swot-s" rows="4" placeholder="Reputation, team, client relationships, niche expertise, location, process…"></textarea>
+      </div>
+      <div class="ff-cell weak">
+        <div class="ff-label">Weaknesses</div>
+        <div class="ff-sub">Where are the internal gaps or limitations?</div>
+        <textarea class="fi" id="swot-w" rows="4" placeholder="Owner dependency, no documented processes, inconsistent delivery, cash flow, no sales system…"></textarea>
+      </div>
+      <div class="ff-cell proactive">
+        <div class="ff-label">Opportunities</div>
+        <div class="ff-sub">What external conditions could be leveraged?</div>
+        <textarea class="fi" id="swot-o" rows="4" placeholder="Market trends, competitor exits, new technology, underserved client segment…"></textarea>
+      </div>
+      <div class="ff-cell reactive">
+        <div class="ff-label">Threats</div>
+        <div class="ff-sub">What external risks are on the horizon?</div>
+        <textarea class="fi" id="swot-t" rows="4" placeholder="New competitors, economic conditions, key staff departure, regulation changes…"></textarea>
+      </div>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <!-- 90-DAY PRIORITIES -->
+    <div class="sub-heading">90-day sprint — current priorities</div>
+    <div class="book-ref">📘 Chapter 7 — The Power of the 90-Day Sprint</div>
+
+    <div class="fg">
+      <label class="fl">If you asked the owner "what are your top 3 priorities for the next 90 days?" — what do they say?</label>
+      <div class="fh">Record their actual answer. If they list more than 5 things, prompt them: "If you could only do 3 of those, which 3 move the business forward most?" Unfocused lists signal a missing strategy.</div>
+      <textarea class="fi" id="priorities-90" rows="4" placeholder="1. …&#10;2. …&#10;3. …"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Does the business run a monthly strategy meeting?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'stratmtg')">Yes — scheduled, protected, and productive</span>
+        <span class="chip" onclick="tog(this,'stratmtg')">Occasionally — but not structured</span>
+        <span class="chip" onclick="tog(this,'stratmtg')">No — we talk about things informally</span>
+        <span class="chip" onclick="tog(this,'stratmtg')">No — haven't thought about it</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Does the business measure progress against strategic goals?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'kpis')">Yes — defined KPIs reviewed regularly</span>
+        <span class="chip" onclick="tog(this,'kpis')">Partially — some numbers tracked informally</span>
+        <span class="chip" onclick="tog(this,'kpis')">Revenue only — nothing strategic</span>
+        <span class="chip" onclick="tog(this,'kpis')">No measurement at all</span>
+      </div>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <!-- STRATEGY MATURITY -->
+    <div class="sub-heading">Strategy maturity — overall assessment</div>
+    <div class="fg">
+      <label class="fl">Rate the overall strategic maturity of this business</label>
+      <div class="scale" id="scale-strategy">
+        <button class="scale-btn" onclick="setScale(this,'strategy',1)">1</button>
+        <button class="scale-btn" onclick="setScale(this,'strategy',2)">2</button>
+        <button class="scale-btn" onclick="setScale(this,'strategy',3)">3</button>
+        <button class="scale-btn" onclick="setScale(this,'strategy',4)">4</button>
+        <button class="scale-btn" onclick="setScale(this,'strategy',5)">5</button>
+      </div>
+      <div class="scale-labels"><span>No strategy — pure firefighting</span><span>Clear, documented, lived strategy</span></div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Key strategy observation or risk</label>
+      <textarea class="fi" id="strategy-notes" rows="3" placeholder="What stands out from this conversation? What is the most critical strategic gap? What does the owner not see that you can see from the outside?"></textarea>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB 2 — DECISION-MAKING
+  ════════════════════════════════ -->
+  <div class="section-panel" id="panel-decisions">
+
+    <div class="s-eyebrow">Based on Don't Do Nothing</div>
+    <div class="s-title">Decision-making — how does this business decide?</div>
+    <div class="s-intro">Your business is the sum of all the decisions you've made to date. This section surfaces whether the business uses a documented decision process, where decisions are made well, and where they break down — costing time, money, and growth.</div>
+
+    <div class="callout">
+      <strong>From the book:</strong> "Decision-making is a primary, continuous, and indispensable component of your role as an owner and leader. Today, tomorrow, and every day after that, you'll make more decisions than any other activity. Yet formal decision training is non-existent."
+    </div>
+
+    <!-- PROCESS -->
+    <div class="sub-heading">The decision-making process</div>
+    <div class="book-ref">📗 The 5-Step Business Decision Process</div>
+
+    <div class="fg">
+      <label class="fl">Does the owner use a consistent process when making significant business decisions?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'decprocess')">Yes — a clear, documented process</span>
+        <span class="chip" onclick="tog(this,'decprocess')">Informal — same general approach each time</span>
+        <span class="chip" onclick="tog(this,'decprocess')">Gut feel and experience only</span>
+        <span class="chip" onclick="tog(this,'decprocess')">No consistent process — it varies</span>
+        <span class="chip" onclick="tog(this,'decprocess')">Never thought about having a process</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Walk through the 5-step decision process — where does this business currently excel or fall short?</label>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">Step 1 — Write your Question Statement</div>
+      <div class="step-title">Defining the problem before solving it</div>
+      <textarea class="fi" id="step1" rows="2" placeholder="Does the owner define the problem clearly before jumping to solutions? Or do they often solve the wrong problem?"></textarea>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">Step 2 — Challenge everything</div>
+      <div class="step-title">Intuition, assumptions, and biases</div>
+      <textarea class="fi" id="step2" rows="2" placeholder="Does the owner challenge their assumptions and biases? Or do they rely heavily on gut feel and 'we've always done it this way'?"></textarea>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">Step 3 — Identify alternatives</div>
+      <div class="step-title">Choices, risks, and consequences</div>
+      <textarea class="fi" id="step3" rows="2" placeholder="Does the owner explore multiple options before deciding? Or do they jump to the first workable solution?"></textarea>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">Step 4 — Implementation</div>
+      <div class="step-title">Choose, communicate, and act</div>
+      <textarea class="fi" id="step4" rows="2" placeholder="Does the owner follow through on decisions? Are they communicated clearly to the team? Do good ideas wilt on the vine?"></textarea>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">Step 5 — Continuous feedback loop</div>
+      <div class="step-title">Monitor, review, and pivot</div>
+      <textarea class="fi" id="step5" rows="2" placeholder="Does the business review the outcomes of major decisions? Or does it move on without learning from results?"></textarea>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <!-- ROUTINE vs EXCEPTION -->
+    <div class="sub-heading">The routine and the exception</div>
+    <div class="book-ref">📗 Chapter 4 — The Routine and The Exception</div>
+
+    <div class="callout">
+      <strong>From the book:</strong> "Over 90% of everyday activities are routine. When routine decisions are well documented, the business is effective and profitable. Inefficiency arises when established processes are either not in place or disregarded."
+    </div>
+
+    <div class="fg">
+      <label class="fl">How well are routine operational decisions documented and followed?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'routine')">Excellently — McDonald's-style processes for everything</span>
+        <span class="chip" onclick="tog(this,'routine')">Well — key processes documented and followed</span>
+        <span class="chip" onclick="tog(this,'routine')">Partially — some documented, much verbal</span>
+        <span class="chip" onclick="tog(this,'routine')">Poorly — mostly verbal, inconsistent</span>
+        <span class="chip" onclick="tog(this,'routine')">Not at all — improvised every time</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">When a team member faces a problem, what do they do?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'teamdec')">Refer to the documented process</span>
+        <span class="chip" onclick="tog(this,'teamdec')">Ask a senior team member</span>
+        <span class="chip" onclick="tog(this,'teamdec')">Come straight to the owner</span>
+        <span class="chip" onclick="tog(this,'teamdec')">Make their own call — good or bad</span>
+        <span class="chip" onclick="tog(this,'teamdec')">Avoid it and hope it goes away</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">What are the most common "exception" decisions that consume the owner's time?</label>
+      <div class="fh">Exceptions are situations outside the norm that require leadership to resolve — often because no process exists for them yet.</div>
+      <textarea class="fi" id="exceptions" rows="3" placeholder="e.g. Client complaints, pricing disputes, staff conflicts, supplier issues, anything that requires the owner personally every time…"></textarea>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <!-- DECISION BLOCKERS -->
+    <div class="sub-heading">What stops good decisions from being made?</div>
+    <div class="book-ref">📗 Chapter 3 — Fixing the Causes of Bad Decision-Making</div>
+
+    <div class="fg">
+      <label class="fl">Which of these causes of poor decision-making are present in this business?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'blockers')">Lack of strategy — no direction to decide against</span>
+        <span class="chip" onclick="tog(this,'blockers')">Communication breakdowns — decisions not shared</span>
+        <span class="chip" onclick="tog(this,'blockers')">Paralysis by fear — waiting too long to act</span>
+        <span class="chip" onclick="tog(this,'blockers')">Closed to new ideas — defaulting to what worked before</span>
+        <span class="chip" onclick="tog(this,'blockers')">Overconfidence — assuming the outcome without checking</span>
+        <span class="chip" onclick="tog(this,'blockers')">Indecision — avoiding difficult calls</span>
+        <span class="chip" onclick="tog(this,'blockers')">Sunk cost fallacy — staying with bad decisions too long</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Is there a significant decision the owner has been avoiding?</label>
+      <div class="fh">The book calls these "decisions left to rot." They compound over time and always cost more to fix later than now.</div>
+      <textarea class="fi" id="avoided-dec" rows="3" placeholder="A team member who isn't working, a client relationship that needs addressing, a pricing change, a system that needs replacing, a partnership that isn't working…"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Does the owner confuse being busy with making progress?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'busy')">Yes — busyness is worn as a badge of honour</span>
+        <span class="chip" onclick="tog(this,'busy')">Sometimes — awareness is there but habits persist</span>
+        <span class="chip" onclick="tog(this,'busy')">Rarely — the owner is good at distinguishing</span>
+        <span class="chip" onclick="tog(this,'busy')">No — clear distinction between activity and progress</span>
+      </div>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <!-- RETHINK FRAMEWORK -->
+    <div class="sub-heading">The Rethink Decision-Making Framework</div>
+    <div class="book-ref">📗 Chapter 9 — The Rethink Decision-Making Framework</div>
+
+    <div class="callout">
+      <strong>From the book:</strong> "Creativity, Collaboration, Critical Thinking, Convince an independent observer. Your decision-making process must be multidimensional. Linear thinking won't do the job in today's complex business environment."
+    </div>
+
+    <div class="fg">
+      <label class="fl">How does the owner currently generate and evaluate new ideas?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'ideas')">Structured process — creativity then analysis</span>
+        <span class="chip" onclick="tog(this,'ideas')">Collaborates with team before deciding</span>
+        <span class="chip" onclick="tog(this,'ideas')">Uses an external advisor or coach</span>
+        <span class="chip" onclick="tog(this,'ideas')">Acts on gut feel without much analysis</span>
+        <span class="chip" onclick="tog(this,'ideas')">Rarely generates new ideas — too busy with today</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Does the owner have a trusted external advisor, coach, or accountability partner?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'advisor')">Yes — regular sessions, genuinely challenging</span>
+        <span class="chip" onclick="tog(this,'advisor')">Yes — but mostly compliance, not challenge</span>
+        <span class="chip" onclick="tog(this,'advisor')">Accountant or lawyer only — reactive advice</span>
+        <span class="chip" onclick="tog(this,'advisor')">No — making decisions alone</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Overall decision-making maturity — consultant assessment</label>
+      <div class="scale" id="scale-decisions">
+        <button class="scale-btn" onclick="setScale(this,'decisions',1)">1</button>
+        <button class="scale-btn" onclick="setScale(this,'decisions',2)">2</button>
+        <button class="scale-btn" onclick="setScale(this,'decisions',3)">3</button>
+        <button class="scale-btn" onclick="setScale(this,'decisions',4)">4</button>
+        <button class="scale-btn" onclick="setScale(this,'decisions',5)">5</button>
+      </div>
+      <div class="scale-labels"><span>Pure gut feel, no process</span><span>Consistent, documented decision process</span></div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Key decision-making observation or risk</label>
+      <textarea class="fi" id="dec-notes" rows="3" placeholder="What stood out most? A decision being avoided? A bias you observed? A gap between how they think they decide and how they actually decide?"></textarea>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB 3 — DECISION REGISTER
+  ════════════════════════════════ -->
+  <div class="section-panel" id="panel-register">
+
+    <div class="s-eyebrow">Based on Don't Do Nothing — Chapter 4</div>
+    <div class="s-title">Decision register — who decides what?</div>
+    <div class="s-intro">A decision register maps the key decisions in the business — who currently owns them, what criteria are used, and whether the process is documented. It's one of the most valuable assets for a buyer because it shows the business can function without the owner.</div>
+
+    <div class="callout">
+      <strong>Why this matters for buyers:</strong> If the answer to every decision is "the owner decides," that is owner-dependency documented in real time. The goal of the knowledge base is to change that — each decision should have a clear owner, clear criteria, and a documented process.
+    </div>
+
+    <div class="callout-warn">
+      Complete one row per major recurring decision. Focus on decisions that happen regularly — not one-offs. Aim for 10–15 rows across all areas of the business.
+    </div>
+
+    <table class="decision-table" id="decision-register">
+      <thead>
+        <tr>
+          <th style="width:22%">Decision</th>
+          <th style="width:12%">Area</th>
+          <th style="width:16%">Currently owned by</th>
+          <th style="width:14%">Should be owned by</th>
+          <th style="width:20%">Criteria used</th>
+          <th style="width:12%">Documented?</th>
+          <th style="width:4%"></th>
+        </tr>
+      </thead>
+      <tbody id="register-body">
+        <tr>
+          <td><input class="dt-input" type="text" placeholder="e.g. Approve a client discount…"/></td>
+          <td><select class="dt-select"><option>Marketing</option><option>Sales</option><option>Delivery</option><option>Admin</option><option>Management</option><option>People</option><option>Finance</option></select></td>
+          <td><input class="dt-input" type="text" placeholder="Owner only…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Practice manager…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Under $500, existing client…"/></td>
+          <td><select class="dt-select"><option>Yes</option><option>Partially</option><option>No</option></select></td>
+          <td><button class="add-row-btn" onclick="removeRow(this)" style="padding:3px 8px;font-size:12px;">×</button></td>
+        </tr>
+        <tr>
+          <td><input class="dt-input" type="text" placeholder="e.g. Hire a new team member…"/></td>
+          <td><select class="dt-select"><option>Marketing</option><option>Sales</option><option>Delivery</option><option>Admin</option><option>Management</option><option>People</option><option>Finance</option></select></td>
+          <td><input class="dt-input" type="text" placeholder="Owner only…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Owner + manager…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Budget approved, culture fit…"/></td>
+          <td><select class="dt-select"><option>Yes</option><option>Partially</option><option>No</option></select></td>
+          <td><button class="add-row-btn" onclick="removeRow(this)" style="padding:3px 8px;font-size:12px;">×</button></td>
+        </tr>
+        <tr>
+          <td><input class="dt-input" type="text" placeholder="e.g. Accept a new client…"/></td>
+          <td><select class="dt-select"><option>Marketing</option><option>Sales</option><option>Delivery</option><option>Admin</option><option>Management</option><option>People</option><option>Finance</option></select></td>
+          <td><input class="dt-input" type="text" placeholder="Owner only…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Owner…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Fits ideal client profile…"/></td>
+          <td><select class="dt-select"><option>Yes</option><option>Partially</option><option>No</option></select></td>
+          <td><button class="add-row-btn" onclick="removeRow(this)" style="padding:3px 8px;font-size:12px;">×</button></td>
+        </tr>
+        <tr>
+          <td><input class="dt-input" type="text" placeholder="e.g. Approve a supplier invoice…"/></td>
+          <td><select class="dt-select"><option>Marketing</option><option>Sales</option><option>Delivery</option><option>Admin</option><option>Management</option><option>People</option><option>Finance</option></select></td>
+          <td><input class="dt-input" type="text" placeholder="Owner or admin…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Admin manager…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Under $1,000, budgeted…"/></td>
+          <td><select class="dt-select"><option>Yes</option><option>Partially</option><option>No</option></select></td>
+          <td><button class="add-row-btn" onclick="removeRow(this)" style="padding:3px 8px;font-size:12px;">×</button></td>
+        </tr>
+        <tr>
+          <td><input class="dt-input" type="text" placeholder="e.g. Respond to a client complaint…"/></td>
+          <td><select class="dt-select"><option>Marketing</option><option>Sales</option><option>Delivery</option><option>Admin</option><option>Management</option><option>People</option><option>Finance</option></select></td>
+          <td><input class="dt-input" type="text" placeholder="Owner always…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Senior team member…"/></td>
+          <td><input class="dt-input" type="text" placeholder="Complaint policy + dollar threshold…"/></td>
+          <td><select class="dt-select"><option>Yes</option><option>Partially</option><option>No</option></select></td>
+          <td><button class="add-row-btn" onclick="removeRow(this)" style="padding:3px 8px;font-size:12px;">×</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="add-row-btn" onclick="addDecisionRow()">+ Add decision</button>
+
+    <div class="sdiv"></div>
+
+    <!-- CLIENT ABCD -->
+    <div class="sub-heading">Client classification — the ABCD ranking</div>
+    <div class="book-ref">📗 Chapter 8 — Are All Clients Financially Equal?</div>
+
+    <div class="callout">
+      <strong>From the book:</strong> "Please don't consider all clients equal because they're not. Quantifying the value of your clients in terms of time, effort, and profit will allow your business to function better." — Roy West
+    </div>
+
+    <div class="abcd-grid">
+      <div class="abcd-card a">
+        <div class="abcd-letter">A</div>
+        <div class="abcd-label">Awesome</div>
+        <div class="abcd-desc">High value, great to work with, pays on time, refers others. High lifetime value.</div>
+        <div class="abcd-count"><input type="number" min="0" placeholder="0" id="abcd-a"/></div>
+      </div>
+      <div class="abcd-card b">
+        <div class="abcd-letter">B</div>
+        <div class="abcd-label">Basic</div>
+        <div class="abcd-desc">Routine work, good relationships, stable income. The solid middle.</div>
+        <div class="abcd-count"><input type="number" min="0" placeholder="0" id="abcd-b"/></div>
+      </div>
+      <div class="abcd-card c">
+        <div class="abcd-letter">C</div>
+        <div class="abcd-label">Can't deal with</div>
+        <div class="abcd-desc">Drains time, complains, pays late, demands more than they pay for.</div>
+        <div class="abcd-count"><input type="number" min="0" placeholder="0" id="abcd-c"/></div>
+      </div>
+      <div class="abcd-card d">
+        <div class="abcd-letter">D</div>
+        <div class="abcd-label">Dead</div>
+        <div class="abcd-desc">Unprofitable, difficult, or already inactive. Should be moved on.</div>
+        <div class="abcd-count"><input type="number" min="0" placeholder="0" id="abcd-d"/></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Is the business aware of which clients are C or D — and doing anything about it?</label>
+      <textarea class="fi" id="abcd-notes" rows="2" placeholder="Any C or D clients consuming disproportionate time? Relationships that need renegotiating or ending?"></textarea>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB 4 — SUMMARY
+  ════════════════════════════════ -->
+  <div class="section-panel" id="panel-summary">
+
+    <div class="s-eyebrow">Consultant assessment</div>
+    <div class="s-title">Strategy & Decision summary</div>
+    <div class="s-intro">Use this section to consolidate the key findings from both sections into a clear picture of what the knowledge base needs to address beyond the operational processes.</div>
+
+    <div class="callout">
+      The operational knowledge base addresses the <em>what</em> and <em>how</em> of running the business. The strategy and decision sections address the <em>why</em> and <em>who decides</em>. Together they create a complete picture for any buyer, incoming manager, or growth plan.
+    </div>
+
+    <div class="two-col">
+      <div class="fg">
+        <label class="fl">Strategy maturity score (1–5)</label>
+        <div class="fi" id="summary-strategy-score" style="background:var(--bg);padding:10px 12px;font-weight:500;">Not yet rated</div>
+      </div>
+      <div class="fg">
+        <label class="fl">Decision-making maturity score (1–5)</label>
+        <div class="fi" id="summary-dec-score" style="background:var(--bg);padding:10px 12px;font-weight:500;">Not yet rated</div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">The three most important strategy and decision findings from this session</label>
+      <textarea class="fi" id="top3-findings" rows="5" placeholder="1. The business has no documented strategy — the owner knows where they want to go but it exists only in their head…&#10;2. All significant decisions run through the owner — three common decision types that could be delegated are not documented…&#10;3. The business has 4 C or D clients consuming approximately 30% of the team's time…"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">What does the knowledge base need to include to address these findings?</label>
+      <textarea class="fi" id="kb-requirements" rows="5" placeholder="1. One-Page Strategy Plan built with the owner — Mission, Vision, Values, UVP, 90-day priorities documented&#10;2. Decision register for at least 15 key decision types — with clear ownership and criteria&#10;3. Client classification review — action plan to address C and D clients&#10;4. Monthly strategy meeting cadence established and documented…"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">The single most important decision the owner needs to make — and hasn't yet</label>
+      <textarea class="fi" id="the-decision" rows="3" placeholder="The decision being avoided that is costing the business most right now…"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Recommended premium program unlock for this client</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'unlock')">The Pivot — One-Page Strategy Plan (clearly needs this first)</span>
+        <span class="chip" onclick="tog(this,'unlock')">The People layer — after HR processes are documented</span>
+        <span class="chip" onclick="tog(this,'unlock')">Financial mastery — numbers unclear, decisions made blind</span>
+        <span class="chip" onclick="tog(this,'unlock')">Exit or scale — sale preparation is the primary driver</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Overall session notes</label>
+      <textarea class="fi" id="session-overall" rows="4" placeholder="Any additional context — owner's demeanour, relationship dynamics, sensitivities, timing considerations, opportunities the knowledge base could address that weren't captured elsewhere…"></textarea>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function tog(el, grp) {
+  const singles = ['react','daytype','thinktime','stratexists','mvv','stratmtg','kpis','decprocess','routine','teamdec','busy','ideas','advisor','unlock'];
+  if (singles.includes(grp)) el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.toggle('sel');
+}
+
+const scaleScores = {};
+function setScale(el, key, val) {
+  scaleScores[key] = val;
+  const btns = el.closest('.scale').querySelectorAll('.scale-btn');
+  btns.forEach((b, i) => b.classList.toggle('sel', i < val));
+  if (key === 'strategy') document.getElementById('summary-strategy-score').textContent = val + ' / 5';
+  if (key === 'decisions') document.getElementById('summary-dec-score').textContent = val + ' / 5';
+}
+
+function addDecisionRow() {
+  const tbody = document.getElementById('register-body');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input class="dt-input" type="text" placeholder="Decision name…"/></td>
+    <td><select class="dt-select"><option>Marketing</option><option>Sales</option><option>Delivery</option><option>Admin</option><option>Management</option><option>People</option><option>Finance</option></select></td>
+    <td><input class="dt-input" type="text" placeholder="Currently owned by…"/></td>
+    <td><input class="dt-input" type="text" placeholder="Should be owned by…"/></td>
+    <td><input class="dt-input" type="text" placeholder="Criteria used…"/></td>
+    <td><select class="dt-select"><option>Yes</option><option>Partially</option><option>No</option></select></td>
+    <td><button class="add-row-btn" onclick="removeRow(this)" style="padding:3px 8px;font-size:12px;">×</button></td>
+  `;
+  tbody.appendChild(tr);
+  tr.querySelector('input').focus();
+}
+
+function removeRow(btn) {
+  const tbody = document.getElementById('register-body');
+  if (tbody.rows.length > 1) btn.closest('tr').remove();
+}
+
+// Auto-save to localStorage
+function save() {
+  const data = {};
+  document.querySelectorAll('textarea, input[type=text], input[type=number]').forEach(el => {
+    if (el.id) data[el.id] = el.value;
+  });
+  data._scales = scaleScores;
+  try { localStorage.setItem('kb_strategy_dec', JSON.stringify(data)); } catch(e) {}
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem('kb_strategy_dec');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Object.entries(data).forEach(([id, val]) => {
+      if (id === '_scales') return;
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+    if (data._scales) {
+      Object.entries(data._scales).forEach(([key, val]) => {
+        const container = document.getElementById('scale-' + key);
+        if (container) {
+          const btns = container.querySelectorAll('.scale-btn');
+          btns.forEach((b, i) => b.classList.toggle('sel', i < val));
+          if (key === 'strategy') document.getElementById('summary-strategy-score').textContent = val + ' / 5';
+          if (key === 'decisions') document.getElementById('summary-dec-score').textContent = val + ' / 5';
+        }
+      });
+    }
+  } catch(e) {}
+}
+
+load();
+setInterval(save, 30000);
+document.addEventListener('input', save);
+document.addEventListener('change', save);
+</script>
+</body>
+</html>

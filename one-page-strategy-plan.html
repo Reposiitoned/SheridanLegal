@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One-Page Strategy Plan — Pivot, Pause, But Don't Panic</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --forest-lt: #4a7c59;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.09);
+  --gold-dim:  rgba(200,168,75,0.3);
+  --bg:        #f0f5ef;
+  --white:     #ffffff;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-mid:  #3d6b47;
+  --text-muted:#6b9a78;
+  --text-dim:  #a8c8b0;
+  --red:       #c0392b;
+  --red-bg:    #fdecea;
+  --amber:     #d4820a;
+  --amber-bg:  #fef5e7;
+  --green-ind: #1a6b45;
+  --green-bg:  #e8f5ee;
+  --section-1: #1a3d16;
+  --section-2: #2d5a27;
+  --section-3: #3d6b3a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--forest-dk);
+  border-bottom: 2px solid var(--gold);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.header-title { font-size: 13px; color: rgba(255,255,255,0.45); }
+
+.header-actions { display: flex; gap: 8px; }
+
+.btn-print {
+  padding: 7px 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 5px;
+  background: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.btn-print:hover { border-color: var(--gold); color: var(--gold); }
+
+.btn-save {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 5px;
+  background: var(--gold);
+  color: var(--forest-dk);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity 0.15s;
+}
+
+.btn-save:hover { opacity: 0.85; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--forest-dk);
+  padding: 40px 32px 48px;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.hero-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.hero-title em { font-style: italic; color: var(--gold); }
+
+.hero-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.5);
+  max-width: 560px;
+  margin: 0 auto 28px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.progress-wrap { max-width: 560px; margin: 0 auto; }
+.progress-label { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+.progress-bg { height: 4px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width 0.5s ease; width: 0%; }
+
+/* ── BODY ── */
+.page-body { max-width: 920px; margin: 0 auto; padding: 36px 24px 80px; }
+
+/* ── PLAN SECTIONS ── */
+.plan-section {
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.section-header.foundation { background: var(--section-1); }
+.section-header.engine { background: var(--section-2); }
+.section-header.actions { background: var(--section-3); }
+.section-header.rhythm { background: #4a7c59; }
+
+.section-number {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  flex: 1;
+}
+
+.section-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+.section-chevron { font-size: 16px; color: rgba(255,255,255,0.4); transition: transform 0.2s; flex-shrink: 0; }
+.section-chevron.open { transform: rotate(180deg); }
+
+.section-body {
+  background: var(--white);
+  padding: 24px;
+  display: none;
+}
+
+.section-body.open { display: block; }
+
+/* ── FIELDS ── */
+.field-group { margin-bottom: 20px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+.field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.field-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.field-book {
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fafcfa;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.field-input:focus { border-color: var(--forest-lt); background: var(--white); }
+.field-input::placeholder { color: var(--text-dim); }
+textarea.field-input { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--gold-bg);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.callout strong { color: var(--forest); }
+
+/* ── EFFORT AUDIT ── */
+.effort-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 13px; }
+
+.effort-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  padding: 7px 10px;
+  border-bottom: 1.5px solid var(--forest);
+  background: var(--white);
+}
+
+.effort-table td { padding: 6px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.effort-table tr:nth-child(even) td { background: rgba(212,232,209,0.15); }
+
+.effort-table input[type=text] {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  background: var(--white);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+}
+
+.effort-table input[type=text]:focus { border-color: var(--forest-lt); }
+
+.score-cell {
+  width: 60px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: center;
+  background: var(--white);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+}
+
+.score-cell:focus { border-color: var(--forest-lt); }
+
+.gap-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+.gap-vampire { background: var(--red-bg); color: var(--red); }
+.gap-quickwin { background: var(--green-bg); color: var(--green-ind); }
+.gap-core { background: var(--amber-bg); color: var(--amber); }
+.gap-none { background: transparent; color: transparent; }
+
+.add-row-btn {
+  font-size: 12px;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  border-radius: 5px;
+  padding: 6px 14px;
+  cursor: pointer;
+  background: none;
+  margin-top: 6px;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.add-row-btn:hover { color: var(--forest); border-color: var(--forest-lt); }
+
+/* ── SWOT ── */
+.swot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.swot-cell { background: var(--white); padding: 16px; }
+
+.swot-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+
+.swot-cell.strengths .swot-label { color: var(--green-ind); }
+.swot-cell.weaknesses .swot-label { color: var(--red); }
+.swot-cell.opportunities .swot-label { color: var(--forest); }
+.swot-cell.threats .swot-label { color: var(--amber); }
+
+.swot-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-style: italic; }
+
+/* ── PRIORITIES ── */
+.priority-card {
+  background: #f8fbf7;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--forest);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+
+.priority-num {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* ── KPI SCORECARD ── */
+.scorecard {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.scorecard-header {
+  background: var(--forest);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scorecard-title { font-size: 13px; font-weight: 500; color: #fff; }
+.scorecard-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px 80px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.kpi-row:last-child { border-bottom: none; }
+.kpi-row:nth-child(even) { background: rgba(212,232,209,0.1); }
+
+.kpi-row input {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  background: var(--white);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  width: 100%;
+}
+
+.kpi-row input:focus { border-color: var(--forest-lt); }
+
+.traffic-select {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.traffic-green { background: var(--green-bg); color: var(--green-ind); border-color: var(--green-ind); }
+.traffic-amber { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
+.traffic-red { background: var(--red-bg); color: var(--red); border-color: var(--red); }
+
+/* ── MONTHLY MEETING ── */
+.meeting-agenda {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.agenda-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 14px;
+  align-items: start;
+  background: #f8fbf7;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.agenda-time {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+  padding-top: 2px;
+}
+
+.agenda-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.agenda-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+/* ── ONE PAGE PREVIEW ── */
+.one-page-preview {
+  background: var(--white);
+  border: 2px solid var(--forest);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.opp-header {
+  background: var(--forest-dk);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.opp-title { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; color: #fff; }
+.opp-biz { font-size: 12px; color: var(--gold); }
+
+.opp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+
+.opp-cell { background: var(--white); padding: 14px 16px; }
+
+.opp-cell-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.opp-cell-val {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 36px;
+}
+
+.opp-cell-val.empty { color: var(--text-dim); font-style: italic; }
+
+/* ── SECTION DIVIDER ── */
+.sdiv { height: 1px; background: var(--border); margin: 20px 0; }
+
+/* ── SAVE INDICATOR ── */
+.save-indicator {
+  font-size: 12px;
+  color: var(--green-ind);
+  padding: 6px 12px;
+  background: var(--green-bg);
+  border-radius: 5px;
+  display: none;
+}
+
+/* ── VIDEO PLACEHOLDER ── */
+.video-block {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+
+.video-placeholder {
+  background: var(--forest-dk);
+  aspect-ratio: 16/9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(200,168,75,0.08) 0%, transparent 70%);
+}
+
+.vp-play {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.video-placeholder:hover .vp-play { transform: scale(1.08); opacity: 0.9; }
+
+.vp-play-icon {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 18px solid var(--forest-dk);
+  margin-left: 4px;
+}
+
+.vp-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  max-width: 480px;
+  padding: 0 24px;
+}
+
+.vp-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  position: relative;
+  text-align: center;
+}
+
+.video-footer {
+  background: var(--white);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vf-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.vf-badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--gold-bg);
+  color: var(--gold);
+  border: 1px solid rgba(200,168,75,0.25);
+}
+
+.vimeo-embed { display: none; }
+.vimeo-embed iframe { width: 100%; display: block; border: none; }
+
+/* ── PRINT ── */
+@media print {
+  .site-header, .hero, .section-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .section-body { display: block !important; }
+  body { background: white; }
+}
+
+@media (max-width: 640px) {
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .swot-grid { grid-template-columns: 1fr; }
+  .opp-grid { grid-template-columns: 1fr; }
+  .kpi-row { grid-template-columns: 1fr; }
+  .page-body { padding: 20px 16px 60px; }
+  .site-header { padding: 12px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div>
+    <div class="header-brand">Knowledgebase.business</div>
+    <div class="header-title">Pivot, Pause, But Don't Panic — Strategy Program</div>
+  </div>
+  <div class="header-actions">
+    <span class="save-indicator" id="save-indicator">✓ Saved</span>
+    <button class="btn-print" onclick="window.print()">Print / PDF</button>
+    <button class="btn-save" onclick="saveAll()">Save progress</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Your living strategic document</div>
+  <div class="hero-title">The One-Page <em>Strategy Plan</em></div>
+  <div class="hero-sub">Work through each section in order. Your plan updates as you go. Return to it monthly — this is not a document you finish, it is one you live.</div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Your progress</span><span id="progress-pct">0% complete</span></div>
+    <div class="progress-bg"><div class="progress-fill" id="progress-bar"></div></div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="page-body">
+
+  <!-- ONE-PAGE PREVIEW -->
+  <div class="one-page-preview" id="live-preview">
+    <div class="opp-header">
+      <div class="opp-title">One-Page Strategy Plan</div>
+      <div class="opp-biz" id="preview-biz">Your business name</div>
+    </div>
+    <div class="opp-grid">
+      <div class="opp-cell">
+        <div class="opp-cell-label">Mission</div>
+        <div class="opp-cell-val empty" id="preview-mission">Complete Section 1 →</div>
+      </div>
+      <div class="opp-cell">
+        <div class="opp-cell-label">Vision</div>
+        <div class="opp-cell-val empty" id="preview-vision">Complete Section 1 →</div>
+      </div>
+      <div class="opp-cell">
+        <div class="opp-cell-label">Core values</div>
+        <div class="opp-cell-val empty" id="preview-values">Complete Section 1 →</div>
+      </div>
+      <div class="opp-cell">
+        <div class="opp-cell-label">Unique value proposition</div>
+        <div class="opp-cell-val empty" id="preview-uvp">Complete Section 2 →</div>
+      </div>
+      <div class="opp-cell">
+        <div class="opp-cell-label">Ideal customer</div>
+        <div class="opp-cell-val empty" id="preview-customer">Complete Section 2 →</div>
+      </div>
+      <div class="opp-cell">
+        <div class="opp-cell-label">Competitive edge</div>
+        <div class="opp-cell-val empty" id="preview-edge">Complete Section 2 →</div>
+      </div>
+      <div class="opp-cell" style="grid-column:1/-1;">
+        <div class="opp-cell-label">90-day strategic priorities</div>
+        <div class="opp-cell-val empty" id="preview-priorities">Complete Section 3 →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 1 — THE FOUNDATION
+  ═══════════════════════════════════ -->
+  <div class="plan-section">
+    <div class="section-header foundation" onclick="toggleSection('foundation')">
+      <div>
+        <div class="section-number">Part 1 · The Pause</div>
+        <div class="section-title">The Foundation — Your North Star</div>
+        <div class="section-sub">Mission, Vision, and Core Values</div>
+      </div>
+      <div class="section-chevron open" id="chev-foundation">▾</div>
+    </div>
+    <div class="section-body open" id="body-foundation">
+
+      <div class="video-block">
+        <div class="video-placeholder" onclick="playVideo('foundation')" id="vp-foundation">
+          <div class="vp-play"><div class="vp-play-icon"></div></div>
+          <div class="vp-title">Video 1 — The Foundation</div>
+          <div class="vp-sub">Roy West · approx. 7 min · Coming soon on Vimeo</div>
+        </div>
+        <div class="vimeo-embed" id="ve-foundation">
+          <!-- Paste your Vimeo embed code here once recorded -->
+          <!-- <iframe src="https://player.vimeo.com/video/YOUR_ID?autoplay=1" height="400" frameborder="0" allowfullscreen></iframe> -->
+        </div>
+        <div class="video-footer">
+          <div class="vf-label">Why Mission, Vision & Values aren't corporate fluff — and how the Effort Audit reveals where your time is really going</div>
+          <span class="vf-badge">Vimeo</span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>From the book:</strong> "Before you can build a new roadmap, you need to find your purpose and direction. These provide your business with meaning, purpose, and direction. They serve as a steady reference point when you feel unsure."
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 4 — Finding Your Purpose</span>
+        <label class="field-label">Business name</label>
+        <input class="field-input" id="biz-name" type="text" placeholder="Your trading name…" oninput="updatePreview()" />
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Vision — Where You're Going</span>
+        <label class="field-label">Vision statement</label>
+        <div class="field-hint">Your long-term, aspirational destination. Big, inspiring, 5–10 years out. "To be the most trusted…"</div>
+        <textarea class="field-input" id="vision" rows="2" placeholder="Close your eyes. Picture your business ten years from now at remarkable success. What does the world look like because of it? Write that future in one or two sentences…" oninput="updatePreview()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Mission — What You Do</span>
+        <label class="field-label">Mission statement</label>
+        <div class="field-hint">Complete this sentence: "We exist to help [ideal customer] achieve [desired outcome] by [how you do it]."</div>
+        <textarea class="field-input" id="mission" rows="2" placeholder="We exist to help…" oninput="updatePreview()"></textarea>
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Core Values — What You Believe</span>
+        <label class="field-label">Core values</label>
+        <div class="field-hint">3–5 non-negotiable principles that guide your behaviour and define your culture. Simple, memorable words.</div>
+        <input class="field-input" id="values" type="text" placeholder="e.g. Quality · Integrity · Community" oninput="updatePreview()" />
+      </div>
+
+      <div class="sdiv"></div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 3 — The Effort Audit</span>
+        <label class="field-label">The Effort Audit — Time vs. Impact</label>
+        <div class="field-hint">List your top 10–12 weekly activities. Score each out of 10 for Time & Energy (T&E) and Impact on Strategic Growth (ISG). High T&E + Low ISG = energy vampires to delegate or eliminate.</div>
+      </div>
+
+      <table class="effort-table" id="effort-table">
+        <thead>
+          <tr>
+            <th style="width:42%">Activity</th>
+            <th style="width:14%">T&E (1-10)</th>
+            <th style="width:14%">ISG (1-10)</th>
+            <th style="width:18%">Classification</th>
+            <th style="width:12%"></th>
+          </tr>
+        </thead>
+        <tbody id="effort-body">
+          <tr><td><input type="text" placeholder="e.g. Responding to client emails…"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td class="gap-cell"></td><td><button onclick="removeRow(this)" class="add-row-btn" style="padding:3px 8px;font-size:11px;">×</button></td></tr>
+          <tr><td><input type="text" placeholder="e.g. Sales calls…"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td class="gap-cell"></td><td><button onclick="removeRow(this)" class="add-row-btn" style="padding:3px 8px;font-size:11px;">×</button></td></tr>
+          <tr><td><input type="text" placeholder="e.g. Putting out a client fire…"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td class="gap-cell"></td><td><button onclick="removeRow(this)" class="add-row-btn" style="padding:3px 8px;font-size:11px;">×</button></td></tr>
+          <tr><td><input type="text" placeholder="e.g. Invoicing and bookkeeping…"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td class="gap-cell"></td><td><button onclick="removeRow(this)" class="add-row-btn" style="padding:3px 8px;font-size:11px;">×</button></td></tr>
+          <tr><td><input type="text" placeholder="e.g. Working on new ideas…"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td class="gap-cell"></td><td><button onclick="removeRow(this)" class="add-row-btn" style="padding:3px 8px;font-size:11px;">×</button></td></tr>
+        </tbody>
+      </table>
+      <button class="add-row-btn" onclick="addEffortRow()">+ Add activity</button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 2 — THE ENGINE
+  ═══════════════════════════════════ -->
+  <div class="plan-section">
+    <div class="section-header engine" onclick="toggleSection('engine')">
+      <div>
+        <div class="section-number">Part 2 · The Pivot</div>
+        <div class="section-title">The Engine — Your Strategy</div>
+        <div class="section-sub">UVP, Ideal Customer, Competitive Edge, SWOT</div>
+      </div>
+      <div class="section-chevron" id="chev-engine">▾</div>
+    </div>
+    <div class="section-body" id="body-engine">
+
+      <div class="video-block">
+        <div class="video-placeholder" onclick="playVideo('engine')" id="vp-engine">
+          <div class="vp-play"><div class="vp-play-icon"></div></div>
+          <div class="vp-title">Video 2 — The Engine</div>
+          <div class="vp-sub">Roy West · approx. 8 min · Coming soon on Vimeo</div>
+        </div>
+        <div class="vimeo-embed" id="ve-engine">
+          <!-- Paste your Vimeo embed code here once recorded -->
+        </div>
+        <div class="video-footer">
+          <div class="vf-label">How to write a UVP that means something — and the SWOT exercise done properly, not as a corporate box-tick</div>
+          <span class="vf-badge">Vimeo</span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>From the book:</strong> "Your Mission, Vision, and Values are the internal compass. Your Unique Value Proposition is the external message that attracts your ideal customer. It answers the most critical question in your customer's mind: Why should I desperately seek you out?"
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 4 — Your Unique Value Proposition</span>
+        <label class="field-label">Unique Value Proposition (UVP)</label>
+        <div class="field-hint">Specific, unique, benefit-oriented. "We empower [customer] to [outcome] by [how]." Not "great service" — that's table stakes.</div>
+        <textarea class="field-input" id="uvp" rows="3" placeholder="We empower [your ideal customer] to [their desired outcome] through [what makes you different]…" oninput="updatePreview()"></textarea>
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <span class="field-book">↗ Chapter 5 — Ideal Customer</span>
+          <label class="field-label">Ideal customer profile</label>
+          <div class="field-hint">Go beyond demographics. Who are they, what do they want, what keeps them up at night?</div>
+          <textarea class="field-input" id="ideal-customer" rows="4" placeholder="Role/title, main goal, biggest frustration, what they value most…" oninput="updatePreview()"></textarea>
+        </div>
+        <div class="field-group">
+          <span class="field-book">↗ Chapter 5 — Where They Are</span>
+          <label class="field-label">Their watering hole</label>
+          <div class="field-hint">Where do they go to learn, connect, and solve problems? Online, in person, what they read.</div>
+          <textarea class="field-input" id="watering-hole" rows="4" placeholder="LinkedIn groups, industry events, specific publications, Google search terms…"></textarea>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 5 — SWOT Analysis</span>
+        <label class="field-label">SWOT — Your competitive position</label>
+        <div class="field-hint">Brutal honesty required. Strengths and Weaknesses are internal. Opportunities and Threats are external.</div>
+      </div>
+
+      <div class="swot-grid">
+        <div class="swot-cell strengths">
+          <div class="swot-label">Strengths</div>
+          <div class="swot-sub">What do you do better than anyone else?</div>
+          <textarea class="field-input" id="swot-s" rows="4" placeholder="Unique skills, loyal clients, reputation, process, team…"></textarea>
+        </div>
+        <div class="swot-cell weaknesses">
+          <div class="swot-label">Weaknesses</div>
+          <div class="swot-sub">Where are your internal gaps?</div>
+          <textarea class="field-input" id="swot-w" rows="4" placeholder="No repeatable sales process, cash flow, owner-dependency…"></textarea>
+        </div>
+        <div class="swot-cell opportunities">
+          <div class="swot-label">Opportunities</div>
+          <div class="swot-sub">What external conditions can you leverage?</div>
+          <textarea class="field-input" id="swot-o" rows="4" placeholder="Market trends, competitor gaps, new technology, regulation changes…"></textarea>
+        </div>
+        <div class="swot-cell threats">
+          <div class="swot-label">Threats</div>
+          <div class="swot-sub">What external risks are on the horizon?</div>
+          <textarea class="field-input" id="swot-t" rows="4" placeholder="New competitors, economic conditions, platform changes…"></textarea>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Competitive edge — your single biggest advantage</label>
+        <div class="field-hint">From your SWOT — what is the one thing you do that your competitors can't or won't? Your process, specialisation, technology, relationships?</div>
+        <textarea class="field-input" id="competitive-edge" rows="2" placeholder="Our biggest advantage is…" oninput="updatePreview()"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 3 — THE ACTIONS
+  ═══════════════════════════════════ -->
+  <div class="plan-section">
+    <div class="section-header actions" onclick="toggleSection('actions')">
+      <div>
+        <div class="section-number">Part 3 · The Roadmap</div>
+        <div class="section-title">The Actions — Your 90-Day Sprint</div>
+        <div class="section-sub">Strategic priorities, KPIs, and the Simple Scorecard</div>
+      </div>
+      <div class="section-chevron" id="chev-actions">▾</div>
+    </div>
+    <div class="section-body" id="body-actions">
+
+      <div class="video-block">
+        <div class="video-placeholder" onclick="playVideo('actions')" id="vp-actions">
+          <div class="vp-play"><div class="vp-play-icon"></div></div>
+          <div class="vp-title">Video 3 — The 90-Day Sprint</div>
+          <div class="vp-sub">Roy West · approx. 7 min · Coming soon on Vimeo</div>
+        </div>
+        <div class="vimeo-embed" id="ve-actions">
+          <!-- Paste your Vimeo embed code here once recorded -->
+        </div>
+        <div class="video-footer">
+          <div class="vf-label">How to pick three priorities that actually move the needle — and why five priorities is the same as none</div>
+          <span class="vf-badge">Vimeo</span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>From the book:</strong> "A 90-day sprint is urgent enough to create focus, long enough to make a significant impact, and agile enough to allow for pivots. If something isn't working after 30 days, you haven't invested a full year into a bad idea."
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 6 — Strategic Priorities</span>
+        <label class="field-label">Current 90-day sprint</label>
+        <input class="field-input" id="sprint-period" type="text" placeholder="e.g. Q3 2026 · July – September" style="margin-bottom:14px;" />
+
+        <label class="field-label">Top 3–5 strategic priorities</label>
+        <div class="field-hint">Be ruthless — if you have more than five, they are no longer priorities. Each one should move the needle on your strategy, not just keep the lights on.</div>
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-num">Priority 1 — Most important</div>
+        <input class="field-input" id="p1" type="text" placeholder="e.g. Build a repeatable lead generation system…" style="margin-bottom:8px;" oninput="updatePreview()" />
+        <input class="field-input" id="p1-kpi" type="text" placeholder="KPI: How will you know you've succeeded? Be specific and measurable. e.g. Generate 20 qualified leads per month." />
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-num">Priority 2</div>
+        <input class="field-input" id="p2" type="text" placeholder="e.g. Hire and onboard one key team member…" style="margin-bottom:8px;" oninput="updatePreview()" />
+        <input class="field-input" id="p2-kpi" type="text" placeholder="KPI: e.g. New hire fully onboarded and productive by week 12." />
+      </div>
+
+      <div class="priority-card">
+        <div class="priority-num">Priority 3</div>
+        <input class="field-input" id="p3" type="text" placeholder="e.g. Document and systematise the delivery process…" style="margin-bottom:8px;" oninput="updatePreview()" />
+        <input class="field-input" id="p3-kpi" type="text" placeholder="KPI: e.g. All 12 core delivery processes documented and tested." />
+      </div>
+
+      <div class="priority-card" id="p4-card">
+        <div class="priority-num">Priority 4 (optional)</div>
+        <input class="field-input" id="p4" type="text" placeholder="e.g. Launch the new pricing model…" style="margin-bottom:8px;" oninput="updatePreview()" />
+        <input class="field-input" id="p4-kpi" type="text" placeholder="KPI:" />
+      </div>
+
+      <div class="priority-card" id="p5-card">
+        <div class="priority-num">Priority 5 (optional)</div>
+        <input class="field-input" id="p5" type="text" placeholder="e.g. Increase average client value by 20%…" style="margin-bottom:8px;" oninput="updatePreview()" />
+        <input class="field-input" id="p5-kpi" type="text" placeholder="KPI:" />
+      </div>
+
+      <div class="sdiv"></div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 7 — The Simple Scorecard</span>
+        <label class="field-label">KPI Scorecard — traffic light status</label>
+        <div class="field-hint">Update this every two weeks. Green = on track. Amber = falling behind, needs attention. Red = significantly behind, pivot fast.</div>
+      </div>
+
+      <div class="scorecard">
+        <div class="scorecard-header">
+          <div class="scorecard-title">Simple Scorecard</div>
+          <div class="scorecard-sub">Update fortnightly before your strategy review</div>
+        </div>
+        <div class="kpi-row" style="background:#f8fbf7;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);padding:7px 16px;">
+          <div>Priority & KPI</div><div>Target</div><div>Actual progress</div><div>Status</div>
+        </div>
+        <div id="scorecard-rows">
+          <div class="kpi-row"><input type="text" placeholder="Priority 1 KPI…" /><input type="text" placeholder="Target…" /><input type="text" placeholder="This week…" /><select class="traffic-select traffic-green" onchange="updateTrafficLight(this)"><option value="green">🟢 On track</option><option value="amber">🟡 Slipping</option><option value="red">🔴 Behind</option></select></div>
+          <div class="kpi-row"><input type="text" placeholder="Priority 2 KPI…" /><input type="text" placeholder="Target…" /><input type="text" placeholder="This week…" /><select class="traffic-select traffic-green" onchange="updateTrafficLight(this)"><option value="green">🟢 On track</option><option value="amber">🟡 Slipping</option><option value="red">🔴 Behind</option></select></div>
+          <div class="kpi-row"><input type="text" placeholder="Priority 3 KPI…" /><input type="text" placeholder="Target…" /><input type="text" placeholder="This week…" /><select class="traffic-select traffic-green" onchange="updateTrafficLight(this)"><option value="green">🟢 On track</option><option value="amber">🟡 Slipping</option><option value="red">🔴 Behind</option></select></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 8 — The Strategy Sieve</span>
+        <label class="field-label">Your "No" list — what you are saying no to this sprint</label>
+        <div class="field-hint">"Every time you say yes to something that doesn't fit your strategy, you're saying no to your priorities." — Roy West</div>
+        <textarea class="field-input" id="no-list" rows="3" placeholder="The opportunities, requests, and ideas you are deliberately not pursuing this sprint — and why…"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 4 — DON'T PANIC
+  ═══════════════════════════════════ -->
+  <div class="plan-section">
+    <div class="section-header rhythm" onclick="toggleSection('rhythm')">
+      <div>
+        <div class="section-number">Part 4 · Don't Panic</div>
+        <div class="section-title">The Rhythm — Monthly Strategy Meeting</div>
+        <div class="section-sub">Making strategy a sustainable, repeatable habit</div>
+      </div>
+      <div class="section-chevron" id="chev-rhythm">▾</div>
+    </div>
+    <div class="section-body" id="body-rhythm">
+
+      <div class="video-block">
+        <div class="video-placeholder" onclick="playVideo('rhythm')" id="vp-rhythm">
+          <div class="vp-play"><div class="vp-play-icon"></div></div>
+          <div class="vp-title">Video 4 — The Monthly Rhythm</div>
+          <div class="vp-sub">Roy West · approx. 6 min · Coming soon on Vimeo</div>
+        </div>
+        <div class="vimeo-embed" id="ve-rhythm">
+          <!-- Paste your Vimeo embed code here once recorded -->
+        </div>
+        <div class="video-footer">
+          <div class="vf-label">The monthly strategy meeting — what it is, what it isn't, and how to run one your team actually looks forward to</div>
+          <span class="vf-badge">Vimeo</span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>From the book:</strong> "A strategic plan is not a magic bullet; it's a living document that requires ongoing attention. The monthly strategy meeting is your dedicated, protected time to step away from the daily chaos — to work on your business, not just in it."
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Monthly meeting date</label>
+          <div class="field-hint">Book it now. Same day each month — treat it as your most important client meeting.</div>
+          <input class="field-input" id="meeting-day" type="text" placeholder="e.g. First Monday of every month, 8:00am" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Accountability partner or coach</label>
+          <div class="field-hint">"Having an accountability partner is not a luxury; it is an essential part of your strategic success." — Roy West</div>
+          <input class="field-input" id="accountability" type="text" placeholder="Name and how you'll check in with them…" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="field-book">↗ Chapter 9 — The Meeting Agenda</span>
+        <label class="field-label">Your monthly meeting agenda</label>
+      </div>
+
+      <div class="meeting-agenda">
+        <div class="agenda-item">
+          <div class="agenda-time">5 min</div>
+          <div><div class="agenda-name">Check-in</div><div class="agenda-desc">One round-robin question: "What was your biggest win from last month, in work or life?" Sets a positive, open tone.</div></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">15 min</div>
+          <div><div class="agenda-name">KPI Review</div><div class="agenda-desc">Review the Simple Scorecard. For Green KPIs: what can we learn? For Red/Amber: what is the root cause — not who is to blame.</div></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">45 min</div>
+          <div><div class="agenda-name">Strategic Discussion</div><div class="agenda-desc">One high-impact topic from the KPI review or One-Page Plan. Deep thinking, not status updates. Ask: "What if we…?" and "Why do you think…?"</div></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">15 min</div>
+          <div><div class="agenda-name">Recalibrate & Actions</div><div class="agenda-desc">Update the One-Page Plan if needed. Assign action items — each with one owner and a deadline. No action without a name and a date.</div></div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">5 min</div>
+          <div><div class="agenda-name">Look Ahead</div><div class="agenda-desc">Confirm priorities and key actions for the coming month. Close with an encouraging message tying work back to the Mission and Vision.</div></div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top:16px;">
+        <label class="field-label">This month's strategic discussion topic</label>
+        <div class="field-hint">One big question to explore at the next meeting. What does your scorecard tell you? What decision needs to be made?</div>
+        <textarea class="field-input" id="discussion-topic" rows="2" placeholder="e.g. Our lead generation KPI is red — do we pivot the channel or double down? What assumptions did we make that were wrong?"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">This month's action items</label>
+        <div class="field-hint">From the last meeting. Each item needs one owner and one deadline.</div>
+        <textarea class="field-input" id="action-items" rows="4" placeholder="1. [Name] to [action] by [date]&#10;2. [Name] to [action] by [date]&#10;3. [Name] to [action] by [date]"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── VIDEO ──
+function playVideo(section) {
+  const embed = document.getElementById('ve-' + section);
+  const placeholder = document.getElementById('vp-' + section);
+  if (embed.innerHTML.trim().replace(/<!--[\s\S]*?-->/g, '').trim()) {
+    placeholder.style.display = 'none';
+    embed.style.display = 'block';
+  } else {
+    alert('This video is coming soon on Vimeo. Check back once Roy has recorded it — or read the corresponding chapters in the book in the meantime.');
+  }
+}
+
+// ── SECTION TOGGLE ──
+function toggleSection(name) {
+  const body = document.getElementById('body-' + name);
+  const chev = document.getElementById('chev-' + name);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+  updateProgress();
+}
+
+// ── LIVE PREVIEW ──
+function updatePreview() {
+  const biz = document.getElementById('biz-name').value;
+  const mission = document.getElementById('mission').value;
+  const vision = document.getElementById('vision').value;
+  const values = document.getElementById('values').value;
+  const uvp = document.getElementById('uvp').value;
+  const customer = document.getElementById('ideal-customer').value;
+  const edge = document.getElementById('competitive-edge').value;
+  const p1 = document.getElementById('p1').value;
+  const p2 = document.getElementById('p2').value;
+  const p3 = document.getElementById('p3').value;
+
+  const setVal = (id, val, fallback) => {
+    const el = document.getElementById(id);
+    if (val.trim()) { el.textContent = val; el.classList.remove('empty'); }
+    else { el.textContent = fallback; el.classList.add('empty'); }
+  };
+
+  document.getElementById('preview-biz').textContent = biz || 'Your business name';
+  setVal('preview-mission', mission, 'Complete Section 1 →');
+  setVal('preview-vision', vision, 'Complete Section 1 →');
+  setVal('preview-values', values, 'Complete Section 1 →');
+  setVal('preview-uvp', uvp, 'Complete Section 2 →');
+  setVal('preview-customer', customer, 'Complete Section 2 →');
+  setVal('preview-edge', edge, 'Complete Section 2 →');
+
+  const priorities = [p1, p2, p3].filter(p => p.trim()).join('\n');
+  setVal('preview-priorities', priorities, 'Complete Section 3 →');
+
+  updateProgress();
+}
+
+// ── PROGRESS ──
+function updateProgress() {
+  const fields = ['mission','vision','values','uvp','ideal-customer','competitive-edge','p1','p1-kpi','meeting-day'];
+  let filled = 0;
+  fields.forEach(id => { const el = document.getElementById(id); if (el && el.value.trim()) filled++; });
+  const pct = Math.round(filled / fields.length * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '% complete';
+}
+
+// ── EFFORT AUDIT ──
+function classifyRow(input) {
+  const row = input.closest('tr');
+  const inputs = row.querySelectorAll('.score-cell');
+  const te = parseInt(inputs[0].value) || 0;
+  const isg = parseInt(inputs[1].value) || 0;
+  const cell = row.querySelector('.gap-cell');
+  if (!te || !isg) { cell.innerHTML = ''; return; }
+  let label = '', cls = 'gap-none';
+  if (te >= 6 && isg <= 4) { label = 'Energy vampire'; cls = 'gap-vampire'; }
+  else if (te <= 4 && isg >= 6) { label = 'Quick win'; cls = 'gap-quickwin'; }
+  else if (te >= 6 && isg >= 6) { label = 'Core strategic'; cls = 'gap-core'; }
+  else { label = 'Monitor'; cls = 'gap-none'; }
+  cell.innerHTML = label ? `<span class="gap-badge ${cls}">${label}</span>` : '';
+}
+
+function addEffortRow() {
+  const tbody = document.getElementById('effort-body');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td><input type="text" placeholder="Activity…"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td><input type="number" class="score-cell" min="1" max="10" placeholder="—" oninput="classifyRow(this)"/></td><td class="gap-cell"></td><td><button onclick="removeRow(this)" class="add-row-btn" style="padding:3px 8px;font-size:11px;">×</button></td>';
+  tbody.appendChild(tr);
+  tr.querySelector('input').focus();
+}
+
+function removeRow(btn) {
+  const tbody = document.getElementById('effort-body');
+  if (tbody.rows.length > 2) btn.closest('tr').remove();
+}
+
+// ── TRAFFIC LIGHT ──
+function updateTrafficLight(sel) {
+  sel.className = 'traffic-select';
+  const val = sel.value;
+  if (val === 'green') sel.classList.add('traffic-green');
+  else if (val === 'amber') sel.classList.add('traffic-amber');
+  else sel.classList.add('traffic-red');
+}
+
+// ── SAVE ──
+function saveAll() {
+  const data = {};
+  document.querySelectorAll('.field-input').forEach(el => {
+    if (el.id) data[el.id] = el.value;
+  });
+  try {
+    localStorage.setItem('ppbdp_plan', JSON.stringify(data));
+    const ind = document.getElementById('save-indicator');
+    ind.style.display = 'inline-block';
+    setTimeout(() => ind.style.display = 'none', 2500);
+  } catch(e) { alert('Could not save — please export to PDF instead.'); }
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem('ppbdp_plan');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Object.entries(data).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+    updatePreview();
+  } catch(e) {}
+}
+
+// ── INIT ──
+loadSaved();
+updateProgress();
+
+// Auto-save every 60 seconds
+setInterval(saveAll, 60000);
+</script>
+</body>
+</html>
