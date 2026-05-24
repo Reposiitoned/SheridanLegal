@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pivot — Strategic Clarity · Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest: #2d5a27; --forest-dk: #1a3d16; --forest-lt: #4a7c59;
+  --gold: #c8a84b; --gold-bg: rgba(200,168,75,0.09); --gold-dim: rgba(200,168,75,0.3);
+  --bg: #f0f5ef; --white: #fff; --border: #d4e8d1;
+  --text: #1a3d16; --text-muted: #6b9a78; --text-dim: #a8c8b0;
+  --green-bg: #e8f5ee; --green: #1a6b45;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* NAV */
+nav { background: var(--forest-dk); border-bottom: 2px solid var(--gold); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.nav-back { font-size: 12px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color .15s; }
+.nav-back:hover { color: var(--gold); }
+
+/* HERO — dark, urgent, firefighting trap */
+.hero {
+  background: var(--forest-dk);
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 28px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(200,168,75,0.12) 0%, transparent 65%);
+}
+.hero::after {
+  content: 'PIVOT';
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Libre Baskerville', serif;
+  font-size: 220px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  pointer-events: none;
+  letter-spacing: -10px;
+}
+.hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 380px; gap: 60px; align-items: center; width: 100%; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 20px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-body { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 28px; font-weight: 300; }
+.hero-body strong { color: #fff; font-weight: 500; }
+.hero-cta-group { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.btn-primary { padding: 14px 30px; border: none; border-radius: 8px; background: var(--gold); color: var(--forest-dk); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-primary:hover { opacity: .88; }
+.btn-milestone { padding: 13px 24px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: none; color: rgba(255,255,255,0.6); font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-milestone:hover { border-color: var(--gold); color: var(--gold); }
+.hero-price-block { text-align: right; padding: 28px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; backdrop-filter: blur(10px); }
+.price-label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+.price-amount { font-family: 'Libre Baskerville', serif; font-size: 52px; font-weight: 700; color: var(--gold); line-height: 1; }
+.price-period { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+.price-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 18px 0; }
+.price-includes { text-align: left; }
+.price-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 7px; }
+.price-item:last-child { margin-bottom: 0; }
+.price-tick { color: var(--gold); font-size: 14px; }
+
+/* BODY */
+.page-body { max-width: 960px; margin: 0 auto; padding: 60px 28px 80px; }
+
+/* PROBLEM SECTION */
+.problem-section { margin-bottom: 60px; }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.3; }
+.section-title em { font-style: italic; }
+.section-body { font-size: 15px; color: var(--text-muted); line-height: 1.8; max-width: 640px; }
+
+/* TRAP CARDS */
+.trap-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 32px; }
+.trap-card { background: var(--white); border: 1px solid var(--border); border-top: 3px solid var(--forest); border-radius: 8px; padding: 20px; }
+.trap-icon { font-size: 24px; margin-bottom: 10px; }
+.trap-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.trap-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.trap-cost { font-size: 12px; font-weight: 600; color: var(--forest); margin-top: 10px; }
+
+/* WHAT'S INSIDE */
+.inside-section { margin-bottom: 60px; }
+.inside-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+.inside-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+.inside-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 6px; }
+.inside-name { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; font-family: 'Libre Baskerville', serif; }
+.inside-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.inside-features { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.inside-feature { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 7px; }
+.inside-feature::before { content: '→'; color: var(--gold); font-size: 11px; }
+
+/* ROY QUOTE */
+.roy-quote { background: var(--forest-dk); border-radius: 12px; padding: 36px 40px; margin-bottom: 60px; position: relative; overflow: hidden; }
+.roy-quote::before { content: '"'; font-family: 'Libre Baskerville', serif; font-size: 200px; color: rgba(200,168,75,0.06); position: absolute; top: -40px; left: 10px; line-height: 1; pointer-events: none; }
+.rq-text { font-family: 'Libre Baskerville', serif; font-size: 20px; font-style: italic; color: rgba(255,255,255,0.85); line-height: 1.7; position: relative; max-width: 640px; margin-bottom: 18px; }
+.rq-sig { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+/* TRANSFORMATION */
+.transform-section { margin-bottom: 60px; }
+.transform-grid { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0; margin-top: 28px; align-items: start; }
+.transform-before { background: var(--white); border: 1px solid #e8b4b4; border-radius: 10px 0 0 10px; padding: 24px; }
+.transform-after { background: var(--white); border: 1px solid rgba(26,107,69,0.25); border-radius: 0 10px 10px 0; padding: 24px; }
+.transform-arrow { display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--gold); background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.transform-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 12px; }
+.transform-before .transform-label { color: #8b1f1f; }
+.transform-after .transform-label { color: var(--green); }
+.transform-item { font-size: 13px; color: var(--text-muted); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 8px; }
+.transform-item:last-child { border-bottom: none; }
+.transform-item-icon { flex-shrink: 0; font-size: 12px; margin-top: 2px; }
+
+/* MILESTONE TRACK */
+.milestone-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 60px; }
+.ms-title { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.ms-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+.ms-track { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.ms-task { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); }
+.ms-check { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.ms-check.done { background: var(--forest); border-color: var(--forest); color: #fff; }
+.ms-progress-bar { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+.ms-progress-fill { height: 100%; background: var(--forest); border-radius: 99px; width: 50%; }
+.ms-progress-label { font-size: 12px; color: var(--text-muted); }
+
+/* CTA SECTION */
+.cta-section { background: var(--forest-dk); border-radius: 12px; padding: 40px; text-align: center; }
+.cta-eyebrow { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.cta-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.cta-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+.cta-price { font-family: 'Libre Baskerville', serif; font-size: 40px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+.cta-period { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 24px; }
+.cta-buttons { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+/* PAYMENT MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--white); border-radius: 14px; width: 100%; max-width: 520px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.25); transform: translateY(12px); transition: transform .2s; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header { background: var(--forest-dk); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: #fff; }
+.modal-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 20px; cursor: pointer; line-height: 1; transition: color .15s; }
+.modal-close:hover { color: #fff; }
+.modal-summary { background: var(--gold-bg); border-bottom: 1px solid var(--gold-dim); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.ms-what { font-size: 13px; color: var(--text-muted); }
+.ms-amount { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: var(--forest); }
+.modal-body { padding: 24px; }
+.fg { margin-bottom: 16px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fi { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .15s; }
+.fi:focus { border-color: var(--forest); }
+.fi::placeholder { color: var(--text-dim); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.card-row { display: flex; gap: 8px; }
+.card-input { flex: 1; padding: 10px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.card-input:focus { border-color: var(--forest); }
+.stripe-note { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+.stripe-note a { color: var(--forest); }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
+.btn-pay { width: 100%; padding: 13px; border: none; border-radius: 8px; background: var(--forest); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-pay:hover { opacity: .88; }
+.guarantee { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); margin-top: 10px; justify-content: center; }
+.guarantee-icon { font-size: 16px; }
+
+@media(max-width:700px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-price-block { display: none; }
+  .trap-grid { grid-template-columns: 1fr; }
+  .inside-grid { grid-template-columns: 1fr; }
+  .transform-grid { grid-template-columns: 1fr; }
+  .transform-arrow { display: none; }
+  .transform-before { border-radius: 10px; margin-bottom: 8px; }
+  .transform-after { border-radius: 10px; }
+  .page-body { padding: 40px 16px 60px; }
+  nav { padding: 12px 16px; }
+  .hero { padding: 40px 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Knowledgebase.business</div>
+  <a href="/dashboard.html" class="nav-back">← Back to dashboard</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Scale Layer · Premium section 1</div>
+      <div class="hero-title">Stop fighting<br>fires. <em>Start<br>building<br>strategy.</em></div>
+      <div class="hero-body">You didn't start a business to spend every day reacting. But somewhere between the phone calls, the staff problems, and the client emergencies — <strong>strategy became something you'd get to later.</strong> Later never arrives. This section changes that.</div>
+      <div class="hero-cta-group">
+        <button class="btn-primary" onclick="openPayment()">Unlock now — $297 →</button>
+        <button class="btn-milestone" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn through milestones</button>
+      </div>
+    </div>
+    <div class="hero-price-block">
+      <div class="price-label">One-off investment</div>
+      <div class="price-amount">$297</div>
+      <div class="price-period">once · yours to keep forever</div>
+      <div class="price-divider"></div>
+      <div class="price-includes">
+        <div class="price-item"><span class="price-tick">✓</span> PDF — Pivot, Pause, But Don't Panic</div>
+        <div class="price-item"><span class="price-tick">✓</span> Tool — One-Page Strategy Plan</div>
+        <div class="price-item"><span class="price-tick">✓</span> Tool — 90-Day Sprint Planner</div>
+        <div class="price-item"><span class="price-tick">✓</span> Instant access on payment</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- THE PROBLEM -->
+  <div class="problem-section">
+    <div class="section-eyebrow">The problem</div>
+    <div class="section-title">The firefighting trap is <em>costing you more</em> than you think.</div>
+    <div class="section-body">Most small business owners spend 80% of their time reacting. Client problems. Staff questions. Supplier issues. The urgent always beats the important. And the strategic work — the thinking that would actually grow the business — never gets done.</div>
+
+    <div class="trap-grid">
+      <div class="trap-card">
+        <div class="trap-icon">🔥</div>
+        <div class="trap-title">The Burnout Tax</div>
+        <div class="trap-body">Working 60-hour weeks without moving the needle. Busy every day, no closer to the business you wanted to build.</div>
+        <div class="trap-cost">Costs you in health and energy</div>
+      </div>
+      <div class="trap-card">
+        <div class="trap-icon">📉</div>
+        <div class="trap-title">The Profit Plateau</div>
+        <div class="trap-body">Revenue stays flat because growth requires strategic thinking — and strategic thinking requires time you haven't got.</div>
+        <div class="trap-cost">Costs you in revenue</div>
+      </div>
+      <div class="trap-card">
+        <div class="trap-icon">⏳</div>
+        <div class="trap-title">The Missed Opportunity Cost</div>
+        <div class="trap-body">The right clients, the right partnerships, the right pivots — all spotted too late because there was no time to look ahead.</div>
+        <div class="trap-cost">Costs you in growth</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROY QUOTE -->
+  <div class="roy-quote">
+    <div class="rq-text">"True growth comes not from being busy, but from being intentional. The One-Page Strategy Plan is not a document you finish — it is one you live. Return to it monthly. Let it shape every decision."</div>
+    <div class="rq-sig">— Roy West, Pivot, Pause, But Don't Panic</div>
+  </div>
+
+  <!-- WHAT'S INSIDE -->
+  <div class="inside-section">
+    <div class="section-eyebrow">What's inside</div>
+    <div class="section-title">Three things that change how you lead.</div>
+    <div class="inside-grid">
+      <div class="inside-card">
+        <div class="inside-type">PDF Guide</div>
+        <div class="inside-name">Pivot, Pause, But Don't Panic</div>
+        <div class="inside-body">Roy West's complete strategic framework for small business owners. Ten chapters covering the firefighting trap, the strategic audit, the 90-day sprint, the monthly review rhythm, and the mindset shift from reactive to proactive.</div>
+        <div class="inside-features">
+          <div class="inside-feature">The firefighting trap — why you're stuck and how to get out</div>
+          <div class="inside-feature">The Effort Audit — score every task against strategic impact</div>
+          <div class="inside-feature">Mission, Vision, and Values — built for your specific business</div>
+          <div class="inside-feature">The Strategy Sieve — how to say no with confidence</div>
+        </div>
+      </div>
+      <div class="inside-card">
+        <div class="inside-type">Interactive Tool</div>
+        <div class="inside-name">One-Page Strategy Plan</div>
+        <div class="inside-body">The centrepiece of the program. A living interactive document built from the book framework — Mission, Vision, Values, UVP, SWOT, 90-day priorities, KPI scorecard, and monthly meeting agenda. With video guides from Roy for each section.</div>
+        <div class="inside-features">
+          <div class="inside-feature">Four sections — each with a video walkthrough</div>
+          <div class="inside-feature">Live preview updates as you build your plan</div>
+          <div class="inside-feature">Auto-saves every 60 seconds — never lose your work</div>
+          <div class="inside-feature">Prints to PDF for team sharing</div>
+        </div>
+      </div>
+      <div class="inside-card" style="grid-column:1/-1;">
+        <div class="inside-type">Interactive Tool</div>
+        <div class="inside-name">90-Day Sprint Planner</div>
+        <div class="inside-body">Strategy without execution is a wish. The 90-Day Sprint Planner takes your One-Page Strategy Plan and breaks it into a structured quarter — priorities, KPIs, weekly rhythm, and a traffic-light scorecard you update fortnightly. Coming with the Strategic Clarity unlock.</div>
+        <div class="inside-features">
+          <div class="inside-feature">Quarter-by-quarter execution framework</div>
+          <div class="inside-feature">Traffic light KPI scorecard — updated fortnightly</div>
+          <div class="inside-feature">Monthly strategy meeting agenda builder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSFORMATION -->
+  <div class="transform-section">
+    <div class="section-eyebrow">The transformation</div>
+    <div class="section-title">Before and after — what actually changes.</div>
+    <div class="transform-grid">
+      <div class="transform-before">
+        <div class="transform-label">Before</div>
+        <div class="transform-item"><span class="transform-item-icon">✗</span>No documented strategy — direction exists only in the owner's head</div>
+        <div class="transform-item"><span class="transform-item-icon">✗</span>Priorities change week to week — whatever's loudest wins</div>
+        <div class="transform-item"><span class="transform-item-icon">✗</span>No KPIs — impossible to know if you're winning or losing</div>
+        <div class="transform-item"><span class="transform-item-icon">✗</span>No monthly strategy meeting — urgent always beats important</div>
+        <div class="transform-item"><span class="transform-item-icon">✗</span>Saying yes to everything — no framework for saying no</div>
+      </div>
+      <div class="transform-arrow">→</div>
+      <div class="transform-after">
+        <div class="transform-label">After</div>
+        <div class="transform-item"><span class="transform-item-icon">✓</span>One-Page Strategy Plan — visible to the whole team</div>
+        <div class="transform-item"><span class="transform-item-icon">✓</span>Three clear 90-day priorities — nothing else gets time</div>
+        <div class="transform-item"><span class="transform-item-icon">✓</span>Simple scorecard — green, amber, red, updated fortnightly</div>
+        <div class="transform-item"><span class="transform-item-icon">✓</span>Monthly strategy meeting — protected, structured, effective</div>
+        <div class="transform-item"><span class="transform-item-icon">✓</span>The Strategy Sieve — no becomes the most powerful word</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MILESTONE -->
+  <div class="milestone-section" id="milestone-section">
+    <div class="ms-title">Prefer to earn it?</div>
+    <div class="ms-sub">Complete the Milestone 2 tasks and unlock Strategic Clarity at no extra cost. You're already halfway there.</div>
+    <div class="ms-progress-bar"><div class="ms-progress-fill"></div></div>
+    <div class="ms-progress-label" style="margin-bottom:16px;">3 of 6 tasks complete · 50%</div>
+    <div class="ms-track">
+      <div class="ms-task"><div class="ms-check done">✓</div>Complete the discovery audit session</div>
+      <div class="ms-task"><div class="ms-check done">✓</div>Document all six process areas</div>
+      <div class="ms-task"><div class="ms-check done">✓</div>Complete the COA audit</div>
+      <div class="ms-task"><div class="ms-check"></div>Run the Effort Audit — score your weekly activities</div>
+      <div class="ms-task"><div class="ms-check"></div>Interview 3 key clients for feedback</div>
+      <div class="ms-task"><div class="ms-check"></div>Complete Business Uni — Module 1: The Firefighting Trap</div>
+    </div>
+    <div style="font-size:13px;color:var(--text-muted);margin-top:16px;">Or skip the tasks and unlock immediately for $297 — same access, right now.</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-eyebrow">Ready to stop reacting?</div>
+    <div class="cta-title">The Pivot — Strategic Clarity</div>
+    <div class="cta-sub">PDF guide, two interactive tools, and a framework built from a published book. One payment. Yours to keep forever.</div>
+    <div class="cta-price">$297</div>
+    <div class="cta-period">One-off · Instant access · Part of lifetime access at $797</div>
+    <div class="cta-buttons">
+      <button class="btn-primary" onclick="openPayment()">Unlock now for $297 →</button>
+      <button class="btn-milestone" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn it through milestones instead</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payment-modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Unlock Strategic Clarity</div>
+      <button class="modal-close" onclick="closePayment()">×</button>
+    </div>
+    <div class="modal-summary">
+      <div class="ms-what">The Pivot — PDF guide + 2 tools</div>
+      <div class="ms-amount">$297</div>
+    </div>
+    <div class="modal-body">
+      <div class="fg">
+        <label class="fl">Full name</label>
+        <input class="fi" type="text" placeholder="Your name…" />
+      </div>
+      <div class="fg">
+        <label class="fl">Email address</label>
+        <input class="fi" type="email" placeholder="your@email.com" />
+      </div>
+      <div class="fg">
+        <label class="fl">Card number</label>
+        <input class="fi" type="text" placeholder="1234 5678 9012 3456" maxlength="19" />
+      </div>
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">Expiry</label>
+          <input class="fi" type="text" placeholder="MM / YY" maxlength="7" />
+        </div>
+        <div class="fg">
+          <label class="fl">CVC</label>
+          <input class="fi" type="text" placeholder="123" maxlength="4" />
+        </div>
+      </div>
+      <div class="stripe-note">🔒 Payments secured by <a href="https://stripe.com" target="_blank">Stripe</a>. Your card details are never stored.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-pay" onclick="processPayment()">Pay $297 — unlock immediately →</button>
+      <div class="guarantee"><span class="guarantee-icon">✓</span>Instant access on payment · One-off cost · No subscription</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openPayment() {
+  document.getElementById('payment-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePayment() {
+  document.getElementById('payment-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('payment-modal')) closePayment();
+}
+function processPayment() {
+  // Stripe integration point — replace this with Stripe.js payment intent confirmation
+  alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.');
+}
+</script>
+
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  var checkInterval = setInterval(function() {
+    if (window.$memberstackDom) {
+      clearInterval(checkInterval);
+      window.$memberstackDom.getCurrentMember().then(function(result) {
+        if (!result.data) { window.location.href = '/login.html'; }
+      });
+    }
+  }, 100);
+</script>
+</body>
+</html>

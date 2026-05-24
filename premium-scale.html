@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --forest:#2d5a27; --forest-dk:#1a3d16; --gold:#c8a84b; --gold-bg:rgba(200,168,75,0.09); --gold-dim:rgba(200,168,75,0.3); --bg:#f0f5ef; --white:#fff; --border:#d4e8d1; --text:#1a3d16; --text-muted:#6b9a78; --text-dim:#a8c8b0; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:12px 28px; display:flex; align-items:center; justify-content:space-between; }
+.nav-brand { font-family:'Libre Baskerville',serif; font-size:13px; color:var(--gold); }
+.nav-back { font-size:12px; color:rgba(255,255,255,0.45); text-decoration:none; }
+.nav-back:hover { color:var(--gold); }
+.hero { background:var(--forest-dk); min-height:480px; display:flex; align-items:center; justify-content:center; padding:60px 28px; text-align:center; position:relative; overflow:hidden; }
+.hero::before { content:'SCALE'; position:absolute; font-family:'Libre Baskerville',serif; font-size:200px; font-weight:700; color:rgba(200,168,75,0.04); top:50%; left:50%; transform:translate(-50%,-50%); letter-spacing:-8px; pointer-events:none; white-space:nowrap; }
+.hero-inner { max-width:600px; position:relative; z-index:1; }
+.hero-eyebrow { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; font-weight:500; }
+.hero-title { font-family:'Libre Baskerville',serif; font-size:clamp(32px,5vw,56px); font-weight:700; color:#fff; line-height:1.1; margin-bottom:18px; }
+.hero-title em { font-style:italic; color:var(--gold); }
+.hero-body { font-size:16px; color:rgba(255,255,255,0.55); line-height:1.8; margin-bottom:32px; font-weight:300; max-width:480px; margin-left:auto; margin-right:auto; }
+.coming-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:28px 32px; display:inline-block; text-align:left; min-width:320px; }
+.cc-eyebrow { font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.cc-item { display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(255,255,255,0.5); padding:5px 0; }
+.cc-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); opacity:.5; flex-shrink:0; }
+.page-body { max-width:720px; margin:0 auto; padding:60px 28px 80px; text-align:center; }
+.notify-section { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:36px 40px; }
+.notify-title { font-family:'Libre Baskerville',serif; font-size:24px; font-weight:700; color:var(--text); margin-bottom:8px; }
+.notify-sub { font-size:14px; color:var(--text-muted); line-height:1.7; margin-bottom:24px; max-width:480px; margin-left:auto; margin-right:auto; }
+.notify-form { display:flex; gap:10px; max-width:420px; margin:0 auto; }
+.notify-input { flex:1; padding:11px 14px; border:1px solid var(--border); border-radius:7px; font-size:14px; background:#fafcfa; color:var(--text); font-family:'DM Sans',sans-serif; outline:none; }
+.notify-input:focus { border-color:var(--forest); }
+.notify-btn { padding:11px 22px; border:none; border-radius:7px; background:var(--forest); color:#fff; font-size:14px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
+.notify-note { font-size:12px; color:var(--text-muted); margin-top:12px; }
+.current-section { margin-top:48px; }
+.cs-title { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.12em; color:var(--text-muted); margin-bottom:16px; }
+.cs-links { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.cs-link { background:var(--white); border:1px solid var(--border); border-radius:8px; padding:16px; text-decoration:none; text-align:left; display:block; transition:border-color .15s; }
+.cs-link:hover { border-color:var(--forest); }
+.cs-link-eyebrow { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); margin-bottom:4px; }
+.cs-link-name { font-size:13px; font-weight:500; color:var(--text); }
+.cs-link-desc { font-size:12px; color:var(--text-muted); margin-top:2px; }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">Knowledgebase.business</div>
+  <a href="/dashboard.html" class="nav-back">← Back to dashboard</a>
+</nav>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Stage 4 · Scale · Coming soon</div>
+    <div class="hero-title">Grow bigger.<br><em>Break nothing.</em></div>
+    <div class="hero-body">Scaling without systems creates chaos. The Scale section is being written now — a complete framework for growing a business without losing what made it work in the first place.</div>
+    <div class="coming-card">
+      <div class="cc-eyebrow">What's coming in the Scale section</div>
+      <div class="cc-item"><div class="cc-dot"></div>Growth readiness assessment</div>
+      <div class="cc-item"><div class="cc-dot"></div>Hiring and leadership framework</div>
+      <div class="cc-item"><div class="cc-dot"></div>Multi-location operations guide</div>
+      <div class="cc-item"><div class="cc-dot"></div>Capacity planning tools</div>
+      <div class="cc-item"><div class="cc-dot"></div>Growth roadmap planner</div>
+      <div class="cc-item"><div class="cc-dot"></div>Roy West — Scale blueprint (in progress)</div>
+    </div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="notify-section">
+    <div class="notify-title">Be notified when Scale launches</div>
+    <div class="notify-sub">Leave your email and we'll let you know the moment the Scale section is available — including early access pricing for existing platform members.</div>
+    <div class="notify-form">
+      <input class="notify-input" type="email" placeholder="your@email.com" />
+      <button class="notify-btn" onclick="alert('Thank you — we will be in touch when Scale launches.')">Notify me →</button>
+    </div>
+    <div class="notify-note">No spam. One email when it launches.</div>
+  </div>
+  <div class="current-section">
+    <div class="cs-title">Available now in the Scale Layer</div>
+    <div class="cs-links">
+      <a href="/premium-strategic-clarity.html" class="cs-link">
+        <div class="cs-link-eyebrow">Stage 2 · Build</div>
+        <div class="cs-link-name">The Pivot — Strategic clarity</div>
+        <div class="cs-link-desc">One-Page Strategy Plan and 90-Day Sprint Planner</div>
+      </a>
+      <a href="/premium-survive.html" class="cs-link">
+        <div class="cs-link-eyebrow">Stage 3 · Survive</div>
+        <div class="cs-link-name">Don't Do Nothing</div>
+        <div class="cs-link-desc">Crisis decision framework and business continuity planner</div>
+      </a>
+      <a href="/premium-exit.html" class="cs-link">
+        <div class="cs-link-eyebrow">Stage 5 · Exit</div>
+        <div class="cs-link-name">Exit — Built to sell for more</div>
+        <div class="cs-link-desc">Sale readiness report and buyer preparation framework</div>
+      </a>
+      <a href="/dashboard.html" class="cs-link">
+        <div class="cs-link-eyebrow">Lifetime access</div>
+        <div class="cs-link-name">Lock in at $797 now</div>
+        <div class="cs-link-desc">Scale section included when it launches — no extra charge</div>
+      </a>
+    </div>
+  </div>
+</div>
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  var ci = setInterval(function() {
+    if (window.$memberstackDom) { clearInterval(ci); window.$memberstackDom.getCurrentMember().then(function(r) { if (!r.data) window.location.href='/login.html'; }); }
+  }, 100);
+</script>
+</body>
+</html>

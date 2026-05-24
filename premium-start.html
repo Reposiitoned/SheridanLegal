@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest: #2d5a27; --forest-dk: #1a3d16; --forest-lt: #4a7c59;
+  --gold: #c8a84b; --gold-bg: rgba(200,168,75,0.09); --gold-dim: rgba(200,168,75,0.3);
+  --bg: #f0f5ef; --white: #fff; --border: #d4e8d1;
+  --text: #1a3d16; --text-muted: #6b9a78; --text-dim: #a8c8b0;
+  --green-bg: #e8f5ee; --green: #1a6b45;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+nav { background: var(--forest-dk); border-bottom: 2px solid var(--gold); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.nav-back { font-size: 12px; color: rgba(255,255,255,0.45); text-decoration: none; }
+.nav-back:hover { color: var(--gold); }
+
+/* HERO — fresh, hopeful, the beginning of something */
+.hero {
+  background: linear-gradient(160deg, #0a2a0a 0%, var(--forest-dk) 50%, #1a3a0a 100%);
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  padding: 60px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(200,168,75,0.1) 0%, transparent 45%),
+    radial-gradient(circle at 10% 80%, rgba(45,90,39,0.2) 0%, transparent 50%);
+}
+/* Sunrise rays */
+.hero-rays {
+  position: absolute;
+  bottom: -40px;
+  right: 60px;
+  width: 400px;
+  height: 400px;
+  background: conic-gradient(
+    from 200deg,
+    transparent 0deg,
+    rgba(200,168,75,0.04) 5deg,
+    transparent 10deg,
+    rgba(200,168,75,0.03) 15deg,
+    transparent 20deg,
+    rgba(200,168,75,0.05) 25deg,
+    transparent 30deg,
+    rgba(200,168,75,0.02) 35deg,
+    transparent 40deg,
+    rgba(200,168,75,0.04) 45deg,
+    transparent 50deg,
+    rgba(200,168,75,0.03) 55deg,
+    transparent 60deg
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 360px; gap: 60px; align-items: center; width: 100%; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(30px, 4.5vw, 50px); font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 20px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-body { font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 28px; font-weight: 300; }
+.hero-body strong { color: #fff; font-weight: 500; }
+.hero-quote-block { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-left: 3px solid var(--gold); border-radius: 0 10px 10px 0; padding: 20px 22px; }
+.hq-text { font-family: 'Libre Baskerville', serif; font-size: 16px; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 10px; }
+.hq-sig { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+/* COMING SOON BADGE */
+.coming-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(200,168,75,0.15); border: 1px solid var(--gold-dim); border-radius: 99px; padding: 6px 16px; font-size: 12px; font-weight: 500; color: var(--gold); margin-bottom: 24px; }
+.coming-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* BODY */
+.page-body { max-width: 960px; margin: 0 auto; padding: 60px 28px 80px; }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.3; }
+.section-title em { font-style: italic; }
+.section-body { font-size: 15px; color: var(--text-muted); line-height: 1.8; max-width: 640px; margin-bottom: 32px; }
+
+/* THE REGRETS SECTION */
+.regrets-section { background: var(--forest-dk); border-radius: 12px; padding: 40px; margin-bottom: 60px; position: relative; overflow: hidden; }
+.regrets-section::before { content: '30'; position: absolute; font-family: 'Libre Baskerville', serif; font-size: 200px; font-weight: 700; color: rgba(200,168,75,0.04); right: -20px; top: -30px; line-height: 1; pointer-events: none; }
+.regrets-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; position: relative; }
+.regrets-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 28px; position: relative; }
+.regrets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; position: relative; }
+.regret-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px; }
+.regret-icon { font-size: 20px; margin-bottom: 8px; }
+.regret-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 5px; }
+.regret-body { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+.regret-kb { font-size: 11px; color: var(--gold); margin-top: 8px; font-style: italic; }
+
+/* WHAT START COVERS */
+.coming-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; margin-bottom: 60px; }
+.coming-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; opacity: .85; }
+.coming-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 5px; }
+.coming-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; font-family: 'Libre Baskerville', serif; }
+.coming-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.coming-items { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.coming-item { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+.coming-item::before { content: '·'; color: var(--gold); font-size: 16px; line-height: 1; }
+
+/* LIFECYCLE */
+.lifecycle-section { margin-bottom: 60px; }
+.lifecycle-strip { display: flex; gap: 3px; margin-top: 24px; }
+.lifecycle-stage { flex: 1; border-radius: 6px; padding: 14px 16px; }
+.ls-active { background: var(--forest); }
+.ls-coming { background: var(--white); border: 1px solid var(--border); }
+.ls-stage-label { font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+.ls-active .ls-stage-label { color: rgba(255,255,255,0.5); }
+.ls-coming .ls-stage-label { color: var(--text-muted); }
+.ls-stage-name { font-size: 13px; font-weight: 600; }
+.ls-active .ls-stage-name { color: #fff; }
+.ls-coming .ls-stage-name { color: var(--text); }
+.ls-stage-status { font-size: 10px; margin-top: 4px; }
+.ls-active .ls-stage-status { color: var(--gold); }
+.ls-coming .ls-stage-status { color: var(--text-muted); }
+
+/* NOTIFY */
+.notify-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 36px 40px; margin-bottom: 60px; text-align: center; }
+.notify-title { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.notify-sub { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; }
+.notify-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 12px; }
+.notify-input { flex: 1; padding: 11px 14px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.notify-input:focus { border-color: var(--forest); }
+.notify-btn { padding: 11px 22px; border: none; border-radius: 7px; background: var(--forest); color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; transition: opacity .15s; }
+.notify-btn:hover { opacity: .88; }
+.notify-note { font-size: 12px; color: var(--text-muted); }
+
+/* ROY NOTE */
+.roy-note { background: var(--gold-bg); border: 1px solid var(--gold-dim); border-radius: 12px; padding: 28px 32px; margin-bottom: 60px; }
+.rn-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.rn-text { font-family: 'Libre Baskerville', serif; font-size: 17px; font-style: italic; color: var(--text); line-height: 1.7; margin-bottom: 12px; }
+.rn-sig { font-size: 13px; color: var(--text-muted); }
+
+/* LIFETIME NOTE */
+.lifetime-note { background: var(--forest-dk); border-radius: 12px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.ln-text { }
+.ln-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 5px; }
+.ln-sub { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+.ln-pill { font-size: 11px; font-weight: 500; color: var(--gold); background: rgba(200,168,75,0.15); padding: 2px 10px; border-radius: 99px; margin-top: 8px; display: inline-block; }
+.btn-lifetime { flex-shrink: 0; padding: 11px 22px; border: none; border-radius: 7px; background: var(--gold); color: var(--forest-dk); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; transition: opacity .15s; }
+.btn-lifetime:hover { opacity: .88; }
+
+/* CURRENT SECTIONS */
+.current-section { margin-top: 48px; }
+.cs-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .12em; color: var(--text-muted); margin-bottom: 14px; }
+.cs-links { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.cs-link { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-decoration: none; display: block; transition: border-color .15s; }
+.cs-link:hover { border-color: var(--forest); }
+.cs-link-eyebrow { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 4px; }
+.cs-link-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.cs-link-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+@media(max-width:700px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-quote-block { display: none; }
+  .regrets-grid, .coming-grid, .cs-links { grid-template-columns: 1fr; }
+  .lifecycle-strip { flex-direction: column; }
+  .lifetime-note { flex-direction: column; }
+  .notify-form { flex-direction: column; }
+  .page-body { padding: 40px 16px 60px; }
+  nav, .hero { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Knowledgebase.business</div>
+  <a href="/dashboard.html" class="nav-back">← Back to dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-rays"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="coming-badge"><div class="coming-dot"></div>Coming soon — Stage 1</div>
+      <div class="hero-eyebrow">Stage 1 · Start</div>
+      <div class="hero-title"><em>"I wish I had<br>this 30 years<br>ago."</em></div>
+      <div class="hero-body">Every experienced business owner says it. Every new business owner deserves it. <strong>Start gives you the tools, the frameworks, and the foundations that most people spend decades learning the hard way.</strong></div>
+    </div>
+    <div class="hero-quote-block">
+      <div class="hq-text">"The most expensive education in business is the one you pay for with your own mistakes. I made most of mine in the first five years — before I had any framework for thinking about what I was building. Start is the book I wish someone had handed me on day one."</div>
+      <div class="hq-sig">— Roy West, Knowledgebase.business</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- THE REGRETS -->
+  <div class="regrets-section">
+    <div class="regrets-title">Thirty years of lessons. One section.</div>
+    <div class="regrets-sub">The things most business owners learn too late — and what Start is built to give you from day one.</div>
+    <div class="regrets-grid">
+      <div class="regret-card">
+        <div class="regret-icon">📋</div>
+        <div class="regret-title">No documented processes from the start</div>
+        <div class="regret-body">The first three staff members learned by watching. When they left, the knowledge went with them. Starting again every time.</div>
+        <div class="regret-kb">KB Start: Process documentation built in from day one.</div>
+      </div>
+      <div class="regret-card">
+        <div class="regret-icon">🏗️</div>
+        <div class="regret-title">Built the business around myself</div>
+        <div class="regret-body">Every decision came to me. Every client relationship ran through me. When I wasn't there, nothing moved. Owner dependency baked in from the start.</div>
+        <div class="regret-kb">KB Start: Structure that works without you from the beginning.</div>
+      </div>
+      <div class="regret-card">
+        <div class="regret-icon">💰</div>
+        <div class="regret-title">No financial literacy in year one</div>
+        <div class="regret-body">Revenue felt like success. Didn't understand margin, cash flow, or why a busy month could still leave the bank account empty. Learned this expensively.</div>
+        <div class="regret-kb">KB Start: Financial foundations before the first invoice goes out.</div>
+      </div>
+      <div class="regret-card">
+        <div class="regret-icon">🎯</div>
+        <div class="regret-title">No strategy — just momentum</div>
+        <div class="regret-body">Took whatever came in. Said yes to everything. Three years in — busy, exhausted, and no clearer on where the business was going than on day one.</div>
+        <div class="regret-kb">KB Start: Direction set from the beginning. Not retrofitted later.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT'S COMING -->
+  <div class="section-eyebrow">What Start will include</div>
+  <div class="section-title">Everything you need to get it right<br><em>from the beginning.</em></div>
+  <div class="coming-grid">
+    <div class="coming-card">
+      <div class="coming-type">PDF Guide — In progress</div>
+      <div class="coming-name">Start — The book Roy wishes existed 30 years ago</div>
+      <div class="coming-body">The foundational framework for starting a business the right way. Structure, systems, strategy, and the financial basics — before the bad habits form.</div>
+      <div class="coming-items">
+        <div class="coming-item">Choosing the right structure from day one</div>
+        <div class="coming-item">Your first processes — what to document before you hire anyone</div>
+        <div class="coming-item">Pricing for profit — not just to win the work</div>
+        <div class="coming-item">The 90-day launch framework</div>
+        <div class="coming-item">The three things that kill most businesses in year one</div>
+      </div>
+    </div>
+    <div class="coming-card">
+      <div class="coming-type">Interactive Tool — Coming</div>
+      <div class="coming-name">Business Foundations Checklist</div>
+      <div class="coming-body">A structured checklist across every area of the business — legal, financial, operational, marketing. Confirms the foundations are in place before you scale anything on top of them.</div>
+      <div class="coming-items">
+        <div class="coming-item">Legal and structure essentials</div>
+        <div class="coming-item">Financial setup — accounts, GST, payroll</div>
+        <div class="coming-item">First client process — documented before client two</div>
+        <div class="coming-item">Team foundations — even if it's just you</div>
+      </div>
+    </div>
+    <div class="coming-card">
+      <div class="coming-type">Interactive Tool — Coming</div>
+      <div class="coming-name">90-Day Launch Planner</div>
+      <div class="coming-body">The first 90 days set the pattern for everything that follows. This tool structures the launch quarter — priorities, milestones, first client targets, and the foundations that need to be in place by day 90.</div>
+      <div class="coming-items">
+        <div class="coming-item">Week-by-week launch sequence</div>
+        <div class="coming-item">First client acquisition framework</div>
+        <div class="coming-item">Foundation milestones — what must exist by day 90</div>
+        <div class="coming-item">The decisions to make now — not in six months</div>
+      </div>
+    </div>
+    <div class="coming-card">
+      <div class="coming-type">Interactive Tool — Coming</div>
+      <div class="coming-name">Startup Financial Model</div>
+      <div class="coming-body">Revenue projections, break-even analysis, and cash flow planning for a business in its first 12 months. Built for founders who need to understand their numbers before their accountant explains them at year end.</div>
+      <div class="coming-items">
+        <div class="coming-item">Break-even calculator — how many clients to cover costs</div>
+        <div class="coming-item">12-month cash flow projection</div>
+        <div class="coming-item">Pricing model — what to charge to make it worth it</div>
+        <div class="coming-item">Owner salary planning — pay yourself from the start</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIFECYCLE -->
+  <div class="lifecycle-section">
+    <div class="section-eyebrow">The business lifecycle</div>
+    <div class="section-title">Start is where everything begins.</div>
+    <div class="section-body">Knowledgebase.business is the only platform that serves a business owner at every stage of their journey — from the first idea through to the final sale.</div>
+    <div class="lifecycle-strip">
+      <div class="lifecycle-stage ls-active">
+        <div class="ls-stage-label">Stage 1</div>
+        <div class="ls-stage-name">Start</div>
+        <div class="ls-stage-status">Coming soon</div>
+      </div>
+      <div class="lifecycle-stage ls-active">
+        <div class="ls-stage-label">Stage 2</div>
+        <div class="ls-stage-name">Build</div>
+        <div class="ls-stage-status">Available now</div>
+      </div>
+      <div class="lifecycle-stage ls-active">
+        <div class="ls-stage-label">Stage 3</div>
+        <div class="ls-stage-name">Survive</div>
+        <div class="ls-stage-status">Available now</div>
+      </div>
+      <div class="lifecycle-stage ls-coming">
+        <div class="ls-stage-label">Stage 4</div>
+        <div class="ls-stage-name">Scale</div>
+        <div class="ls-stage-status">Coming soon</div>
+      </div>
+      <div class="lifecycle-stage ls-active">
+        <div class="ls-stage-label">Stage 5</div>
+        <div class="ls-stage-name">Exit</div>
+        <div class="ls-stage-status">Available now</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROY NOTE -->
+  <div class="roy-note">
+    <div class="rn-eyebrow">A note from Roy</div>
+    <div class="rn-text">"I started my first business with enthusiasm, some skill, and almost no understanding of how to build something that could run without me, serve clients consistently, or survive a crisis. I learned all of that the hard way — over thirty years, through three businesses, a cyclone, and a pandemic. Start is the section I'm most looking forward to writing. Because if I'd had it in 1995, everything after would have been easier."</div>
+    <div class="rn-sig">— Roy West, Knowledgebase.business</div>
+  </div>
+
+  <!-- NOTIFY -->
+  <div class="notify-section">
+    <div class="notify-title">Be notified when Start launches</div>
+    <div class="notify-sub">Leave your email and we'll let you know the moment Start is available — including early access pricing for existing platform members and their referrals.</div>
+    <div class="notify-form">
+      <input class="notify-input" type="email" placeholder="your@email.com" />
+      <button class="notify-btn" onclick="notify()">Notify me →</button>
+    </div>
+    <div class="notify-note">No spam. One email when it launches. Unsubscribe any time.</div>
+  </div>
+
+  <!-- LIFETIME NOTE -->
+  <div class="lifetime-note">
+    <div class="ln-text">
+      <div class="ln-title">Lifetime access includes Start — at no extra charge.</div>
+      <div class="ln-sub">Lock in lifetime access at $797 today and Start is included the moment it launches. As the platform grows, the lifetime deal becomes more valuable — and the price never changes.</div>
+      <div class="ln-pill">Start included on launch</div>
+    </div>
+    <button class="btn-lifetime" onclick="window.location.href='/dashboard.html'">Lock in lifetime access — $797 →</button>
+  </div>
+
+  <!-- CURRENT SECTIONS -->
+  <div class="current-section">
+    <div class="cs-title">Available now in the Scale Layer</div>
+    <div class="cs-links">
+      <a href="/premium-strategic-clarity.html" class="cs-link">
+        <div class="cs-link-eyebrow">Stage 2 · Build</div>
+        <div class="cs-link-name">The Pivot</div>
+        <div class="cs-link-desc">Strategic clarity and One-Page Strategy Plan</div>
+      </a>
+      <a href="/premium-survive.html" class="cs-link">
+        <div class="cs-link-eyebrow">Stage 3 · Survive</div>
+        <div class="cs-link-name">Don't Do Nothing</div>
+        <div class="cs-link-desc">Crisis decision framework</div>
+      </a>
+      <a href="/premium-exit.html" class="cs-link">
+        <div class="cs-link-eyebrow">Stage 5 · Exit</div>
+        <div class="cs-link-name">Exit</div>
+        <div class="cs-link-desc">Built to sell for more than you think</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function notify() {
+  const input = document.querySelector('.notify-input');
+  if (!input.value || !input.value.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+  alert('Thank you — we will notify you the moment Start launches. Watch your inbox.');
+  input.value = '';
+}
+</script>
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  var ci = setInterval(function() {
+    if (window.$memberstackDom) { clearInterval(ci); window.$memberstackDom.getCurrentMember().then(function(r) { if (!r.data) window.location.href='/login.html'; }); }
+  }, 100);
+</script>
+</body>
+</html>

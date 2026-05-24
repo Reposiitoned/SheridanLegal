@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exit — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest: #2d5a27; --forest-dk: #1a3d16; --forest-lt: #4a7c59;
+  --gold: #c8a84b; --gold-bg: rgba(200,168,75,0.09); --gold-dim: rgba(200,168,75,0.3);
+  --bg: #f0f5ef; --white: #fff; --border: #d4e8d1;
+  --text: #1a3d16; --text-muted: #6b9a78; --text-dim: #a8c8b0;
+  --green-bg: #e8f5ee; --green: #1a6b45;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+nav { background: var(--forest-dk); border-bottom: 2px solid var(--gold); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.nav-back { font-size: 12px; color: rgba(255,255,255,0.45); text-decoration: none; }
+.nav-back:hover { color: var(--gold); }
+
+/* HERO — consequential, a fork in the road */
+.hero {
+  background: var(--forest-dk);
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  padding: 60px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-fork {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  display: flex;
+}
+.fork-exit {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(139,31,31,0.08) 0%, rgba(139,31,31,0.03) 100%);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+.fork-scale {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(45,90,39,0.1) 0%, rgba(45,90,39,0.04) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+}
+.fork-label { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 12px; opacity: .5; }
+.fork-exit .fork-label { color: #f4908a; }
+.fork-scale .fork-label { color: #6fd4a8; }
+.fork-icon { font-size: 36px; margin-bottom: 10px; opacity: .3; }
+.fork-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: rgba(255,255,255,0.2); }
+.hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; width: 100%; max-width: 560px; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(32px, 5vw, 54px); font-weight: 700; color: #fff; line-height: 1.1; margin-bottom: 20px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-body { font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 32px; font-weight: 300; }
+.hero-cta-group { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.btn-primary { padding: 14px 30px; border: none; border-radius: 8px; background: var(--gold); color: var(--forest-dk); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-primary:hover { opacity: .88; }
+.btn-secondary { padding: 13px 24px; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; background: none; color: rgba(255,255,255,0.5); font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+/* BODY */
+.page-body { max-width: 960px; margin: 0 auto; padding: 60px 28px 80px; }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.3; }
+.section-title em { font-style: italic; }
+.section-body { font-size: 15px; color: var(--text-muted); line-height: 1.8; max-width: 640px; margin-bottom: 32px; }
+
+/* PATH SELECTOR */
+.path-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 60px; }
+.path-card { background: var(--white); padding: 32px; }
+.path-card.exit-path { border-top: 4px solid #8b1f1f; }
+.path-card.scale-path { border-top: 4px solid var(--forest); }
+.path-icon { font-size: 32px; margin-bottom: 14px; }
+.path-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.path-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+.path-items { display: flex; flex-direction: column; gap: 6px; }
+.path-item { font-size: 13px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 8px; }
+.path-item-icon { flex-shrink: 0; font-size: 12px; margin-top: 2px; }
+.path-cta { margin-top: 18px; }
+.path-cta-text { font-size: 12px; color: var(--text-muted); font-style: italic; }
+
+/* INSIDE */
+.inside-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; margin-bottom: 60px; }
+.inside-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+.inside-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 6px; }
+.inside-name { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; font-family: 'Libre Baskerville', serif; }
+.inside-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.inside-features { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.inside-feature { font-size: 12px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 7px; }
+.inside-feature::before { content: '→'; color: var(--gold); font-size: 11px; margin-top: 2px; flex-shrink: 0; }
+
+/* TIMING */
+.timing-section { background: var(--forest-dk); border-radius: 12px; padding: 36px 40px; margin-bottom: 60px; }
+.timing-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.timing-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+.timing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.timing-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 22px; }
+.timing-name { font-size: 12px; font-weight: 600; color: var(--gold); margin-bottom: 8px; }
+.timing-what { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; margin-bottom: 10px; }
+.timing-note { font-size: 12px; color: rgba(255,255,255,0.35); font-style: italic; }
+
+/* ROY */
+.roy-quote { background: var(--bg); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 0 12px 12px 0; padding: 28px 32px; margin-bottom: 60px; }
+.rq-text { font-family: 'Libre Baskerville', serif; font-size: 18px; font-style: italic; color: var(--text); line-height: 1.7; margin-bottom: 12px; }
+.rq-sig { font-size: 13px; color: var(--text-muted); }
+
+/* PRACTICE SMARTS */
+.ps-callout { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 60px; display: flex; align-items: flex-start; gap: 20px; }
+.ps-icon { width: 48px; height: 48px; border-radius: 10px; background: var(--gold-bg); border: 1px solid var(--gold-dim); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.ps-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+.ps-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.ps-link { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--forest); font-weight: 500; text-decoration: none; }
+.ps-link:hover { color: var(--gold); }
+
+/* MILESTONE */
+.milestone-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 60px; }
+.ms-title { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.ms-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+.locked-note { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text-muted); }
+
+/* CTA */
+.cta-section { background: var(--forest-dk); border-radius: 12px; padding: 48px 40px; text-align: center; position: relative; overflow: hidden; }
+.cta-section::before { content: '→'; font-family: 'Libre Baskerville', serif; font-size: 260px; font-weight: 700; color: rgba(200,168,75,0.04); position: absolute; right: -40px; top: 50%; transform: translateY(-50%); line-height: 1; pointer-events: none; }
+.cta-eyebrow { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; position: relative; }
+.cta-title { font-family: 'Libre Baskerville', serif; font-size: 30px; font-weight: 700; color: #fff; margin-bottom: 10px; position: relative; }
+.cta-sub { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; position: relative; }
+.cta-price { font-family: 'Libre Baskerville', serif; font-size: 44px; font-weight: 700; color: var(--gold); margin-bottom: 6px; position: relative; }
+.cta-period { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 28px; position: relative; }
+.cta-buttons { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; position: relative; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--white); border-radius: 14px; width: 100%; max-width: 520px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.25); transform: translateY(12px); transition: transform .2s; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header { background: var(--forest-dk); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: #fff; }
+.modal-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 20px; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: #fff; }
+.modal-summary { background: var(--gold-bg); border-bottom: 1px solid var(--gold-dim); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.ms-what { font-size: 13px; color: var(--text-muted); }
+.ms-amount { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: var(--forest); }
+.modal-body { padding: 24px; }
+.fg { margin-bottom: 16px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fi { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.fi:focus { border-color: var(--forest); }
+.fi::placeholder { color: var(--text-dim); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stripe-note { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+.stripe-note a { color: var(--forest); }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
+.btn-pay { width: 100%; padding: 13px; border: none; border-radius: 8px; background: var(--forest); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-pay:hover { opacity: .88; }
+.guarantee { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); margin-top: 10px; justify-content: center; }
+
+@media(max-width:700px) {
+  .hero-fork { display: none; }
+  .path-selector { grid-template-columns: 1fr; }
+  .timing-grid { grid-template-columns: 1fr; }
+  .inside-grid { grid-template-columns: 1fr; }
+  .ps-callout { flex-direction: column; }
+  .page-body { padding: 40px 16px 60px; }
+  nav, .hero { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Knowledgebase.business</div>
+  <a href="/dashboard.html" class="nav-back">← Back to dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-fork">
+    <div class="fork-exit">
+      <div class="fork-label">Exit</div>
+      <div class="fork-icon">🚪</div>
+      <div class="fork-title">Sell well</div>
+    </div>
+    <div class="fork-scale">
+      <div class="fork-label">Scale</div>
+      <div class="fork-icon">📈</div>
+      <div class="fork-title">Grow further</div>
+    </div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Scale Layer · Premium section 4</div>
+    <div class="hero-title">Built to sell<br><em>for more<br>than you<br>think.</em></div>
+    <div class="hero-body">Every business owner eventually faces the same fork in the road. Do you exit — and sell what you've built for what it's truly worth? Or do you scale — and build something bigger? This section prepares you for both.</div>
+    <div class="hero-cta-group">
+      <button class="btn-primary" onclick="openPayment()">Unlock now — $297 →</button>
+      <button class="btn-secondary" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn through milestones</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div style="margin-bottom:48px;">
+    <div class="section-eyebrow">The decision</div>
+    <div class="section-title">Exit — both require<br><em>the same preparation.</em></div>
+    <div class="section-body">Whether you're selling the business or growing it, the work is the same — documented processes, reduced owner dependency, clear financials, a team that performs. The knowledge base you've been building is the asset. This section shows you what to do with it.</div>
+  </div>
+
+  <div class="path-selector">
+    <div class="path-card exit-path">
+      <div class="path-icon">🚪</div>
+      <div class="path-title">Exit path</div>
+      <div class="path-subtitle">You've decided to sell. The question is how to maximise what you get — and how to make the process as clean as possible for every party involved.</div>
+      <div class="path-items">
+        <div class="path-item"><span class="path-item-icon">→</span>Understand what buyers actually look for — and fear</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Build a knowledge base that reads like an operational data room</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Identify and fix the gaps that chip price or kill deals</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Generate the evidence that justifies your multiple</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Reduce owner dependency before due diligence begins</div>
+      </div>
+    </div>
+    <div class="path-card scale-path">
+      <div class="path-icon">📈</div>
+      <div class="path-title">Scale path</div>
+      <div class="path-subtitle">You want to grow — bigger team, more revenue, more markets. Scaling without systems creates chaos. This path builds the infrastructure growth requires.</div>
+      <div class="path-items">
+        <div class="path-item"><span class="path-item-icon">→</span>Identify where growth breaks the business before it does</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Build the systems that absorb growth without owner involvement</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Create the leadership structure that runs in your absence</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Map the growth roadmap — 90 days, 12 months, 3 years</div>
+        <div class="path-item"><span class="path-item-icon">→</span>Decide when to hire, when to partner, when to stop</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow">What's inside</div>
+  <div class="section-title">The tools that turn your knowledge base<br>into your most valuable asset.</div>
+  <div class="inside-grid">
+    <div class="inside-card">
+      <div class="inside-type">PDF Guide</div>
+      <div class="inside-name">Exit Blueprint</div>
+      <div class="inside-body">The definitive guide to your next chapter. Two complete frameworks — one for sale preparation, one for scaling — written from Roy's experience with businesses at both crossroads. The insight: the preparation is the same. Only the destination changes.</div>
+      <div class="inside-features">
+        <div class="inside-feature">What buyers pay a premium for — and what kills the deal</div>
+        <div class="inside-feature">The 18-month sale preparation timeline</div>
+        <div class="inside-feature">The scaling infrastructure checklist — what needs to exist before you grow</div>
+        <div class="inside-feature">How to position your knowledge base as a sale asset</div>
+      </div>
+    </div>
+    <div class="inside-card">
+      <div class="inside-type">Interactive Tool</div>
+      <div class="inside-name">Sale Readiness Report — Enhanced</div>
+      <div class="inside-body">The enhanced version of the Sale Readiness Assessment you already have. This version includes buyer-lens scoring — rating the business from a sophisticated buyer's perspective, not just an operational one. Produces a prioritised gap list and estimated value impact for each gap.</div>
+      <div class="inside-features">
+        <div class="inside-feature">130-item assessment across all operational areas</div>
+        <div class="inside-feature">Buyer-lens scoring — what a sophisticated buyer sees</div>
+        <div class="inside-feature">Gap prioritisation — fix these first to protect the price</div>
+        <div class="inside-feature">Estimated multiple impact per gap</div>
+      </div>
+    </div>
+    <div class="inside-card" style="grid-column:1/-1;">
+      <div class="inside-type">Interactive Tool</div>
+      <div class="inside-name">Growth Roadmap Planner</div>
+      <div class="inside-body">If scaling is your path — this tool builds the roadmap. Starts with a growth readiness assessment, moves to constraint identification, and builds a phased growth plan across people, systems, markets, and capital. Connects directly to your One-Page Strategy Plan for the strategic layer.</div>
+      <div class="inside-features">
+        <div class="inside-feature">Growth readiness — can the business absorb 50% more volume?</div>
+        <div class="inside-feature">Constraint mapping — where will it break first?</div>
+        <div class="inside-feature">Phased growth plan — 90 days, year 1, year 3</div>
+        <div class="inside-feature">Capital and hiring decision framework</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timing-section">
+    <div class="timing-title">Timing — when to use this section</div>
+    <div class="timing-sub">Exit isn't just for business owners who've decided. It's for business owners who are thinking. The earlier you prepare, the better the outcome.</div>
+    <div class="timing-grid">
+      <div class="timing-card">
+        <div class="timing-name">12–18 months from sale</div>
+        <div class="timing-what">The ideal time. Full Discover and Build — every gap identified, documented, and systematised. The knowledge base becomes the operational data room.</div>
+        <div class="timing-note">Maximises multiple and simplifies due diligence</div>
+      </div>
+      <div class="timing-card">
+        <div class="timing-name">6 months from sale</div>
+        <div class="timing-what">Rapid preparation — identify the critical gaps that most affect buyer confidence. Fix them fast. Document everything that already exists.</div>
+        <div class="timing-note">Protects the price. Avoids the worst conditions</div>
+      </div>
+      <div class="timing-card">
+        <div class="timing-name">Planning to scale</div>
+        <div class="timing-what">The time to prepare is before the growth arrives. Build the infrastructure now — systems, people, processes — so growth doesn't create chaos.</div>
+        <div class="timing-note">Scale without breaking what already works</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="roy-quote">
+    <div class="rq-text">"Most vendors have spent 20 years building something they cannot clearly explain to a buyer. Most will leave money on the table as a result. What Practice Smarts builds — the documented processes, the verified status track, the tools — is precisely what a buyer's solicitor and accountant are looking for. It is evidence that the business is real, transferable, and not dependent on the person selling it."</div>
+    <div class="rq-sig">— Roy West, Exit Blueprint</div>
+  </div>
+
+  <div class="ps-callout">
+    <div class="ps-icon">🔍</div>
+    <div>
+      <div class="ps-title">Want someone in the room with you?</div>
+      <div class="ps-body">Exit preparation is also available as a bespoke Practice Smarts engagement — Roy and the team working directly with you and your advisors to build the operational data room, close the gaps, and position the business for the best possible outcome. This section gives you the framework. Practice Smarts gives you the team.</div>
+      <a href="mailto:hello@knowledgebase.business?subject=Exit — Practice Smarts enquiry" class="ps-link">Enquire about a Practice Smarts engagement →</a>
+    </div>
+  </div>
+
+  <div class="milestone-section" id="milestone-section">
+    <div class="ms-title">Prefer to earn it?</div>
+    <div class="ms-sub">Exit is the final milestone — earned after completing all four program milestones. The knowledge base you've built throughout the program is the asset this section helps you leverage.</div>
+    <div class="locked-note">🔒 Complete all four milestones to earn Exit access. Or unlock immediately for $297 — same access, right now. <a href="/premium-financial-mastery.html" style="color:var(--forest);text-decoration:none;font-weight:500;">View Financial Mastery →</a></div>
+    <div style="font-size:13px;color:var(--text-muted);margin-top:16px;">Or unlock now for $297 and start preparing today — whatever direction you're heading.</div>
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-eyebrow">The decision that defines what comes next</div>
+    <div class="cta-title">Exit</div>
+    <div class="cta-sub">The blueprint, the enhanced sale readiness report, and the growth roadmap planner. Two paths. One section. The preparation is the same.</div>
+    <div class="cta-price">$297</div>
+    <div class="cta-period">One-off · Instant access · Part of lifetime access at $797</div>
+    <div class="cta-buttons">
+      <button class="btn-primary" onclick="openPayment()">Unlock now for $297 →</button>
+      <button class="btn-secondary" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn through milestones</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="payment-modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Unlock Exit</div><button class="modal-close" onclick="closePayment()">×</button></div>
+    <div class="modal-summary"><div class="ms-what">Exit — blueprint + 2 tools</div><div class="ms-amount">$297</div></div>
+    <div class="modal-body">
+      <div class="fg"><label class="fl">Full name</label><input class="fi" type="text" placeholder="Your name…" /></div>
+      <div class="fg"><label class="fl">Email address</label><input class="fi" type="email" placeholder="your@email.com" /></div>
+      <div class="fg"><label class="fl">Card number</label><input class="fi" type="text" placeholder="1234 5678 9012 3456" maxlength="19" /></div>
+      <div class="two-col"><div class="fg"><label class="fl">Expiry</label><input class="fi" type="text" placeholder="MM / YY" maxlength="7" /></div><div class="fg"><label class="fl">CVC</label><input class="fi" type="text" placeholder="123" maxlength="4" /></div></div>
+      <div class="stripe-note">🔒 Payments secured by <a href="https://stripe.com" target="_blank">Stripe</a>. Your card details are never stored.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-pay" onclick="processPayment()">Pay $297 — unlock immediately →</button>
+      <div class="guarantee">✓ Instant access · One-off cost · No subscription</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openPayment() { document.getElementById('payment-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closePayment() { document.getElementById('payment-modal').classList.remove('open'); document.body.style.overflow = ''; }
+function closeModalOutside(e) { if (e.target === document.getElementById('payment-modal')) closePayment(); }
+function processPayment() { alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.'); }
+</script>
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  var ci = setInterval(function() {
+    if (window.$memberstackDom) { clearInterval(ci); window.$memberstackDom.getCurrentMember().then(function(r) { if (!r.data) window.location.href='/login.html'; }); }
+  }, 100);
+</script>
+</body>
+</html>

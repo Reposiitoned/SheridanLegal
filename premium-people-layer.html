@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The People Layer — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest: #2d5a27; --forest-dk: #1a3d16; --forest-lt: #4a7c59;
+  --gold: #c8a84b; --gold-bg: rgba(200,168,75,0.09); --gold-dim: rgba(200,168,75,0.3);
+  --bg: #f0f5ef; --white: #fff; --border: #d4e8d1;
+  --text: #1a3d16; --text-muted: #6b9a78; --text-dim: #a8c8b0;
+  --green-bg: #e8f5ee; --green: #1a6b45;
+  --warm: #3d2b1f; --warm-light: #7a5c4a;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+nav { background: var(--forest-dk); border-bottom: 2px solid var(--gold); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.nav-back { font-size: 12px; color: rgba(255,255,255,0.45); text-decoration: none; }
+.nav-back:hover { color: var(--gold); }
+
+/* HERO — warm, human, people-focused */
+.hero {
+  background: linear-gradient(135deg, #2d1f0f 0%, #1a3d16 60%, #2d5a27 100%);
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  padding: 60px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(200,168,75,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(200,168,75,0.06) 0%, transparent 40%);
+}
+.hero-dots {
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 10px;
+  opacity: 0.06;
+}
+.hero-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+.hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 360px; gap: 60px; align-items: center; width: 100%; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(30px, 4.5vw, 48px); font-weight: 700; color: #fff; line-height: 1.15; margin-bottom: 18px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-body { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 28px; font-weight: 300; }
+.hero-cta-group { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.btn-primary { padding: 14px 30px; border: none; border-radius: 8px; background: var(--gold); color: var(--forest-dk); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-primary:hover { opacity: .88; }
+.btn-secondary { padding: 13px 24px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: none; color: rgba(255,255,255,0.6); font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+.hero-people-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.person-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 14px;
+}
+.person-initials { width: 32px; height: 32px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--forest-dk); margin-bottom: 8px; }
+.person-name { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); margin-bottom: 2px; }
+.person-role { font-size: 11px; color: rgba(255,255,255,0.35); }
+.person-status { font-size: 10px; font-weight: 600; margin-top: 8px; padding: 2px 8px; border-radius: 99px; display: inline-block; }
+.status-green { background: rgba(26,107,69,0.3); color: #6fd4a8; }
+.status-amber { background: rgba(133,79,11,0.3); color: #f0b95a; }
+
+/* BODY */
+.page-body { max-width: 960px; margin: 0 auto; padding: 60px 28px 80px; }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.3; }
+.section-title em { font-style: italic; }
+.section-body { font-size: 15px; color: var(--text-muted); line-height: 1.8; max-width: 640px; margin-bottom: 32px; }
+
+/* COST CALCULATION */
+.cost-section { background: var(--forest-dk); border-radius: 12px; padding: 36px 40px; margin-bottom: 60px; }
+.cost-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.cost-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+.cost-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.cost-item { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 18px; text-align: center; }
+.cost-num { font-family: 'Libre Baskerville', serif; font-size: 32px; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+.cost-label { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+/* INSIDE */
+.inside-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; margin-bottom: 60px; }
+.inside-card { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--forest); border-radius: 0 10px 10px 0; padding: 22px; }
+.inside-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 6px; }
+.inside-name { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; font-family: 'Libre Baskerville', serif; }
+.inside-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.inside-features { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.inside-feature { font-size: 12px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 7px; }
+.inside-feature::before { content: '→'; color: var(--gold); font-size: 11px; margin-top: 2px; flex-shrink: 0; }
+
+/* ROY */
+.roy-quote { background: var(--bg); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 0 12px 12px 0; padding: 28px 32px; margin-bottom: 60px; }
+.rq-text { font-family: 'Libre Baskerville', serif; font-size: 18px; font-style: italic; color: var(--text); line-height: 1.7; margin-bottom: 12px; }
+.rq-sig { font-size: 13px; color: var(--text-muted); }
+
+/* SCENARIOS */
+.scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; margin-bottom: 60px; }
+.scenario-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.scenario-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.scenario-problem { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; padding: 10px; background: var(--bg); border-radius: 6px; line-height: 1.5; }
+.scenario-solution { font-size: 13px; color: var(--green); display: flex; align-items: flex-start; gap: 7px; }
+.scenario-solution::before { content: '✓'; font-weight: 600; flex-shrink: 0; }
+
+/* MILESTONE */
+.milestone-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 60px; }
+.ms-title { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.ms-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+.ms-track { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.ms-task { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); }
+.ms-check { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.ms-check.done { background: var(--forest); border-color: var(--forest); color: #fff; }
+.locked-note { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text-muted); }
+
+/* CTA */
+.cta-section { background: linear-gradient(135deg, #2d1f0f 0%, #1a3d16 100%); border-radius: 12px; padding: 40px; text-align: center; }
+.cta-eyebrow { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.cta-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.cta-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 24px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+.cta-price { font-family: 'Libre Baskerville', serif; font-size: 40px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+.cta-period { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 24px; }
+.cta-buttons { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--white); border-radius: 14px; width: 100%; max-width: 520px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.25); transform: translateY(12px); transition: transform .2s; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header { background: var(--forest-dk); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: #fff; }
+.modal-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 20px; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: #fff; }
+.modal-summary { background: var(--gold-bg); border-bottom: 1px solid var(--gold-dim); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.ms-what { font-size: 13px; color: var(--text-muted); }
+.ms-amount { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: var(--forest); }
+.modal-body { padding: 24px; }
+.fg { margin-bottom: 16px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fi { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.fi:focus { border-color: var(--forest); }
+.fi::placeholder { color: var(--text-dim); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stripe-note { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+.stripe-note a { color: var(--forest); }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
+.btn-pay { width: 100%; padding: 13px; border: none; border-radius: 8px; background: var(--forest); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-pay:hover { opacity: .88; }
+.guarantee { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); margin-top: 10px; justify-content: center; }
+
+@media(max-width:700px) {
+  .hero-inner, .cost-grid, .inside-grid, .scenario-grid { grid-template-columns: 1fr; }
+  .hero-people-grid { display: none; }
+  .page-body { padding: 40px 16px 60px; }
+  nav, .hero { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Knowledgebase.business</div>
+  <a href="/dashboard.html" class="nav-back">← Back to dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-dots">
+    <!-- 50 dots representing team members -->
+    <script>for(let i=0;i<50;i++)document.write('<div class="hero-dot"></div>')</script>
+  </div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Scale Layer · Premium section 2</div>
+      <div class="hero-title">Your team is your<br>biggest asset.<br><em>Act like it.</em></div>
+      <div class="hero-body">Great businesses aren't built by great owners working harder. They're built by great teams working well. The People Layer gives you the tools and the language to lead your team — not manage them.</div>
+      <div class="hero-cta-group">
+        <button class="btn-primary" onclick="openPayment()">Unlock now — $297 →</button>
+        <button class="btn-secondary" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn through milestones</button>
+      </div>
+    </div>
+    <div class="hero-people-grid">
+      <div class="person-card"><div class="person-initials">SL</div><div class="person-name">Sarah L.</div><div class="person-role">Practice Manager</div><div class="person-status status-green">On track</div></div>
+      <div class="person-card"><div class="person-initials">JM</div><div class="person-name">James M.</div><div class="person-role">Senior Associate</div><div class="person-status status-green">Developing</div></div>
+      <div class="person-card"><div class="person-initials">PT</div><div class="person-name">Priya T.</div><div class="person-role">Admin</div><div class="person-status status-amber">Needs support</div></div>
+      <div class="person-card"><div class="person-initials">CW</div><div class="person-name">Chris W.</div><div class="person-role">Associate</div><div class="person-status status-green">On track</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div style="margin-bottom:60px;">
+    <div class="section-eyebrow">The problem</div>
+    <div class="section-title">People problems don't fix themselves.<br><em>Silence makes them worse.</em></div>
+    <div class="section-body">Most small business owners avoid difficult conversations with their team. Not because they don't care — because they don't have a framework for having them well. So the underperformer stays. The miscommunication festers. The good person leaves because they never felt seen.</div>
+  </div>
+
+  <div class="cost-section">
+    <div class="cost-title">What people problems actually cost</div>
+    <div class="cost-sub">Before you decide whether $297 is worth it — consider what avoiding these conversations is already costing you.</div>
+    <div class="cost-grid">
+      <div class="cost-item"><div class="cost-num">$25K</div><div class="cost-label">Average cost to replace one staff member — recruitment, training, lost productivity</div></div>
+      <div class="cost-item"><div class="cost-num">6 mo</div><div class="cost-label">Average time for a new team member to reach full productivity without a structured onboarding</div></div>
+      <div class="cost-item"><div class="cost-num">34%</div><div class="cost-label">Productivity reduction linked to disengaged team members who feel their concerns aren't heard</div></div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow">What's inside</div>
+  <div class="section-title">Three things that change how you lead your team.</div>
+  <div class="inside-grid">
+    <div class="inside-card">
+      <div class="inside-type">PDF Guide</div>
+      <div class="inside-name">People & Performance</div>
+      <div class="inside-body">A practical guide to building a team that performs without you in every conversation. Covers hiring for culture, onboarding that actually works, performance conversations done well, and how to retain the people you can't afford to lose.</div>
+      <div class="inside-features">
+        <div class="inside-feature">Hiring — finding people who fit the culture, not just the role</div>
+        <div class="inside-feature">Onboarding — from first day to full productivity</div>
+        <div class="inside-feature">Performance — the conversation most owners avoid</div>
+        <div class="inside-feature">Retention — why good people leave and how to keep them</div>
+      </div>
+    </div>
+    <div class="inside-card">
+      <div class="inside-type">Interactive Tool</div>
+      <div class="inside-name">Performance Conversation Framework</div>
+      <div class="inside-body">A structured tool for the conversations most business owners dread. Not a script — a framework. It guides you through the preparation, the conversation, and the follow-up. So the hard conversation actually leads somewhere.</div>
+      <div class="inside-features">
+        <div class="inside-feature">Preparation guide — what to gather before the conversation</div>
+        <div class="inside-feature">Conversation structure — open, explore, agree, commit</div>
+        <div class="inside-feature">Outcome record — what was agreed, who owns it, by when</div>
+        <div class="inside-feature">Follow-up tracker — did it stick?</div>
+      </div>
+    </div>
+    <div class="inside-card" style="grid-column:1/-1;">
+      <div class="inside-type">Interactive Tool</div>
+      <div class="inside-name">1:1 Meeting Framework</div>
+      <div class="inside-body">The fortnightly 1:1 is the most underused leadership tool in small business. Done well, it surfaces problems before they become crises, builds trust, and develops capability. This tool structures every 1:1 so it's consistently valuable — not a status update dressed as a conversation.</div>
+      <div class="inside-features">
+        <div class="inside-feature">Pre-meeting prompt sent to the team member automatically</div>
+        <div class="inside-feature">Structured agenda — wins, challenges, priorities, development</div>
+        <div class="inside-feature">Action log — captures commitments from both sides</div>
+        <div class="inside-feature">History view — see the pattern of conversations over time</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow">When you need it</div>
+  <div class="section-title">The situations this section was built for.</div>
+  <div class="scenario-grid">
+    <div class="scenario-card">
+      <div class="scenario-title">The underperformer you've been avoiding</div>
+      <div class="scenario-problem">"I know I need to have the conversation but I don't know how to start it without it becoming a confrontation."</div>
+      <div class="scenario-solution">The Performance Conversation Framework structures exactly this conversation — preparation, approach, and what to do after.</div>
+    </div>
+    <div class="scenario-card">
+      <div class="scenario-title">The good person who's disengaged</div>
+      <div class="scenario-problem">"She's been with us for four years. Lately she seems flat. I don't know what's going on and I'm scared to ask."</div>
+      <div class="scenario-solution">The 1:1 framework creates a regular, safe space for exactly this conversation — before it becomes a resignation.</div>
+    </div>
+    <div class="scenario-card">
+      <div class="scenario-title">The new hire who never gets up to speed</div>
+      <div class="scenario-problem">"We've hired three people in two years. None of them lasted 12 months. Something's wrong with our onboarding."</div>
+      <div class="scenario-solution">The People guide covers onboarding structure — from orientation through to verified competence, not just hope they figure it out.</div>
+    </div>
+    <div class="scenario-card">
+      <div class="scenario-title">The team that relies on the owner for everything</div>
+      <div class="scenario-problem">"Every decision comes to me. I can't take a week off without my phone going constantly. I'm the bottleneck."</div>
+      <div class="scenario-solution">The 1:1 and performance frameworks build team capability and confidence — so decisions start happening without you.</div>
+    </div>
+  </div>
+
+  <div class="roy-quote">
+    <div class="rq-text">"The leader who asks great questions gets better answers than the leader who gives great instructions. Your team already knows most of what needs to be done. Your job is to create the conditions for them to act on it."</div>
+    <div class="rq-sig">— Roy West, People & Performance guide</div>
+  </div>
+
+  <div class="milestone-section" id="milestone-section">
+    <div class="ms-title">Prefer to earn it?</div>
+    <div class="ms-sub">The People Layer unlocks after Milestone 2 — Strategic Clarity. Complete that first, then these tasks.</div>
+    <div class="locked-note">🔒 Complete Milestone 2 — Strategic Clarity — to unlock the People Layer milestone tasks. <a href="/premium-strategic-clarity.html" style="color:var(--forest);text-decoration:none;font-weight:500;">View Strategic Clarity →</a></div>
+    <div style="font-size:13px;color:var(--text-muted);margin-top:16px;">Or skip ahead and unlock immediately for $297 — full access, right now.</div>
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-eyebrow">Ready to lead — not just manage?</div>
+    <div class="cta-title">The People Layer</div>
+    <div class="cta-sub">PDF guide and two interactive frameworks built for the conversations most business owners avoid — and the outcomes that follow when they don't.</div>
+    <div class="cta-price">$297</div>
+    <div class="cta-period">One-off · Instant access · Part of lifetime access at $797</div>
+    <div class="cta-buttons">
+      <button class="btn-primary" onclick="openPayment()">Unlock now for $297 →</button>
+      <button class="btn-secondary" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn through milestones</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="payment-modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Unlock The People Layer</div><button class="modal-close" onclick="closePayment()">×</button></div>
+    <div class="modal-summary"><div class="ms-what">People Layer — PDF guide + 2 tools</div><div class="ms-amount">$297</div></div>
+    <div class="modal-body">
+      <div class="fg"><label class="fl">Full name</label><input class="fi" type="text" placeholder="Your name…" /></div>
+      <div class="fg"><label class="fl">Email address</label><input class="fi" type="email" placeholder="your@email.com" /></div>
+      <div class="fg"><label class="fl">Card number</label><input class="fi" type="text" placeholder="1234 5678 9012 3456" maxlength="19" /></div>
+      <div class="two-col"><div class="fg"><label class="fl">Expiry</label><input class="fi" type="text" placeholder="MM / YY" maxlength="7" /></div><div class="fg"><label class="fl">CVC</label><input class="fi" type="text" placeholder="123" maxlength="4" /></div></div>
+      <div class="stripe-note">🔒 Payments secured by <a href="https://stripe.com" target="_blank">Stripe</a>. Your card details are never stored.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-pay" onclick="processPayment()">Pay $297 — unlock immediately →</button>
+      <div class="guarantee">✓ Instant access on payment · One-off cost · No subscription</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openPayment() { document.getElementById('payment-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closePayment() { document.getElementById('payment-modal').classList.remove('open'); document.body.style.overflow = ''; }
+function closeModalOutside(e) { if (e.target === document.getElementById('payment-modal')) closePayment(); }
+function processPayment() { alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.'); }
+</script>
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  var ci = setInterval(function() {
+    if (window.$memberstackDom) { clearInterval(ci); window.$memberstackDom.getCurrentMember().then(function(r) { if (!r.data) window.location.href='/login.html'; }); }
+  }, 100);
+</script>
+</body>
+</html>
