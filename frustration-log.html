@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frustration Log — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --forest-lt: #4a7c59;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.09);
+  --gold-dim:  rgba(200,168,75,0.3);
+  --bg:        #f0f5ef;
+  --white:     #ffffff;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-mid:  #3d6b47;
+  --text-muted:#6b9a78;
+  --text-dim:  #a8c8b0;
+  --red:       #8b1f1f;
+  --red-bg:    #fdf0f0;
+  --red-border:#e8b4b4;
+  --amber:     #854f0b;
+  --amber-bg:  #fdf3e3;
+  --green:     #1a6b45;
+  --green-bg:  #e8f5ee;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--forest-dk);
+  border-bottom: 3px solid var(--gold);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.header-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--forest-dk);
+  padding: 36px 32px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '!';
+  position: absolute;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 280px;
+  font-weight: 700;
+  color: rgba(200,168,75,0.05);
+  top: -40px;
+  right: -20px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.hero-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.15;
+}
+
+.hero-title em { font-style: italic; color: var(--gold); }
+
+.hero-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.5);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ── BODY ── */
+.page-body {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap { margin-bottom: 32px; }
+.progress-steps { display: flex; gap: 4px; margin-bottom: 8px; }
+.progress-step {
+  flex: 1;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--border);
+  transition: background .3s;
+}
+.progress-step.done { background: var(--gold); }
+.progress-step.active { background: var(--forest); }
+.progress-label { font-size: 11px; color: var(--text-muted); }
+
+/* ── PANELS ── */
+.panel { display: none; animation: fadeUp .25s ease; }
+.panel.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── PANEL HEADINGS ── */
+.panel-num {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 5px;
+}
+
+.panel-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  border-bottom: 2px solid var(--forest);
+  padding-bottom: 10px;
+}
+
+.panel-intro {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+
+/* ── FIELDS ── */
+.fg { margin-bottom: 20px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fh { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; line-height: 1.5; font-style: italic; }
+
+.fi {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 14px;
+  background: #fafcfa;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color .15s;
+}
+.fi:focus { border-color: var(--forest); background: var(--white); }
+.fi::placeholder { color: var(--text-dim); }
+textarea.fi { resize: vertical; min-height: 90px; line-height: 1.6; }
+select.fi { cursor: pointer; }
+
+/* ── CHIP ROW ── */
+.chip-row { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 6px; }
+.chip {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-muted);
+  background: var(--white);
+  transition: all .15s;
+  font-family: 'DM Sans', sans-serif;
+  user-select: none;
+}
+.chip:hover { border-color: var(--forest-lt); color: var(--forest); }
+.chip.sel { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+/* ── COST CALCULATOR ── */
+.cost-calc {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.cost-calc-header {
+  background: var(--forest);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cost-calc-title { font-size: 13px; font-weight: 500; color: #fff; }
+.cost-calc-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+
+.cost-calc-body { padding: 16px; }
+
+.cost-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cost-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.cost-field input, .cost-field select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fafcfa;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color .15s;
+}
+
+.cost-field input:focus, .cost-field select:focus { border-color: var(--forest); }
+
+.cost-result {
+  background: var(--forest-dk);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.cost-result-label { font-size: 12px; color: rgba(255,255,255,0.5); }
+.cost-result-amount { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--gold); }
+.cost-result-period { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.cost-zero { color: rgba(255,255,255,0.3); font-size: 22px; }
+
+/* ── URGENCY ── */
+.urgency-card {
+  border-radius: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all .15s;
+  margin-bottom: 8px;
+  background: var(--white);
+}
+.urgency-card:hover { border-color: var(--forest-lt); }
+.urgency-card.sel { border-color: var(--forest); background: var(--green-bg); }
+.urgency-card.sel-amber { border-color: var(--amber); background: var(--amber-bg); }
+.urgency-card.sel-red { border-color: var(--red); background: var(--red-bg); }
+
+.urgency-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-green { background: var(--green); }
+.dot-amber { background: var(--amber); }
+.dot-red { background: var(--red); }
+
+.urgency-label { font-size: 14px; font-weight: 500; color: var(--text); }
+.urgency-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+
+/* ── DIVIDER ── */
+.sdiv { height: 1px; background: var(--border); margin: 22px 0; }
+
+/* ── NAV BUTTONS ── */
+.nav-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-back {
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+}
+.btn-back:hover { border-color: var(--forest-lt); color: var(--text); }
+
+.btn-next {
+  padding: 11px 28px;
+  border: none;
+  border-radius: 7px;
+  background: var(--forest);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity .15s;
+}
+.btn-next:hover { opacity: .85; }
+
+.btn-submit {
+  padding: 11px 28px;
+  border: none;
+  border-radius: 7px;
+  background: var(--gold);
+  color: var(--forest-dk);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity .15s;
+}
+.btn-submit:hover { opacity: .85; }
+
+/* ── SUCCESS ── */
+.success-panel {
+  text-align: center;
+  padding: 48px 24px;
+}
+.success-icon { font-size: 56px; margin-bottom: 16px; }
+.success-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.success-sub { font-size: 15px; color: var(--text-muted); max-width: 420px; margin: 0 auto 24px; line-height: 1.7; }
+.success-cost {
+  display: inline-block;
+  background: var(--forest-dk);
+  border-radius: 10px;
+  padding: 14px 28px;
+  margin-bottom: 28px;
+}
+.success-cost-label { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
+.success-cost-amount { font-family: 'Libre Baskerville', serif; font-size: 32px; font-weight: 700; color: var(--gold); }
+.btn-new {
+  padding: 10px 24px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+}
+.btn-new:hover { border-color: var(--forest); color: var(--forest); }
+
+/* CALLOUT */
+.callout {
+  background: var(--gold-bg);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 6px 6px 0;
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.callout strong { color: var(--forest); font-weight: 500; }
+
+@media (max-width: 600px) {
+  .cost-row { grid-template-columns: 1fr; }
+  .page-body { padding: 28px 16px 60px; }
+  .site-header { padding: 12px 16px; }
+  .hero { padding: 28px 16px 36px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="header-brand">Knowledgebase.business</div>
+    <div class="header-sub">Continuous improvement — powered by your team</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Your frustration has a cost</div>
+  <div class="hero-title">The <em>Frustration</em> Log</div>
+  <div class="hero-sub">Something in your work is slowing you down, eating your time, or driving you crazy. Log it here — it takes 3 minutes and could save the business thousands.</div>
+</div>
+
+<div class="page-body">
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="progress-step active" id="ps-0"></div>
+      <div class="progress-step" id="ps-1"></div>
+      <div class="progress-step" id="ps-2"></div>
+      <div class="progress-step" id="ps-3"></div>
+    </div>
+    <div class="progress-label" id="progress-label">Step 1 of 4 — Who are you?</div>
+  </div>
+
+  <!-- ════ PANEL 1 — WHO ════ -->
+  <div class="panel active" id="panel-0">
+    <div class="panel-num">Step 1 of 4</div>
+    <div class="panel-title">About you</div>
+    <div class="panel-intro">We need to know who you are so we can follow up if needed — and so the business owner gets a copy of everything you log.</div>
+
+    <div class="fg">
+      <label class="fl">Your name</label>
+      <input class="fi" id="your-name" type="text" placeholder="First and last name…" />
+    </div>
+
+    <div class="fg">
+      <label class="fl">Your role</label>
+      <input class="fi" id="your-role" type="text" placeholder="e.g. Practice manager, Senior associate, Admin…" />
+    </div>
+
+    <div class="fg">
+      <label class="fl">Your email address</label>
+      <div class="fh">A copy of this log will be sent to you and the business owner.</div>
+      <input class="fi" id="your-email" type="email" placeholder="your@email.com" />
+    </div>
+
+    <div class="nav-btns">
+      <div></div>
+      <button class="btn-next" onclick="goTo(1)">Next — the frustration →</button>
+    </div>
+  </div>
+
+  <!-- ════ PANEL 2 — WHAT ════ -->
+  <div class="panel" id="panel-1">
+    <div class="panel-num">Step 2 of 4</div>
+    <div class="panel-title">What's frustrating you?</div>
+    <div class="panel-intro">Describe the problem as clearly as you can. No frustration is too small — the ones that happen every day are often the most expensive.</div>
+
+    <div class="fg">
+      <label class="fl">What category does this fall into?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'cat')">Process — the way something is done</span>
+        <span class="chip" onclick="tog(this,'cat')">System — software or technology</span>
+        <span class="chip" onclick="tog(this,'cat')">Task — a specific job or step</span>
+        <span class="chip" onclick="tog(this,'cat')">Communication — handoffs or information gaps</span>
+        <span class="chip" onclick="tog(this,'cat')">People — roles or responsibilities unclear</span>
+        <span class="chip" onclick="tog(this,'cat')">Other</span>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Give it a name — one short line</label>
+      <div class="fh">Something you'd call it in a meeting. e.g. "Trust reconciliation every Friday" or "Finding the right invoice code"</div>
+      <input class="fi" id="frustration-name" type="text" placeholder="e.g. Chasing client documents before a matter can open…" />
+    </div>
+
+    <div class="fg">
+      <label class="fl">Describe what happens — and what's wrong with it</label>
+      <div class="fh">What do you have to do? Where does it break down? What would a better version look like?</div>
+      <textarea class="fi" id="frustration-desc" rows="5" placeholder="Walk me through what you actually do step by step, and where it goes wrong or slows you down…"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Which area of the business does this affect most?</label>
+      <div class="chip-row">
+        <span class="chip" onclick="tog(this,'area')">Marketing</span>
+        <span class="chip" onclick="tog(this,'area')">Sales / enquiries</span>
+        <span class="chip" onclick="tog(this,'area')">Delivery / client work</span>
+        <span class="chip" onclick="tog(this,'area')">Admin / finance</span>
+        <span class="chip" onclick="tog(this,'area')">Management / team</span>
+        <span class="chip" onclick="tog(this,'area')">IT / systems</span>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goTo(0)">← Back</button>
+      <button class="btn-next" onclick="goTo(2)">Next — the cost →</button>
+    </div>
+  </div>
+
+  <!-- ════ PANEL 3 — COST ════ -->
+  <div class="panel" id="panel-2">
+    <div class="panel-num">Step 3 of 4</div>
+    <div class="panel-title">What does it cost?</div>
+    <div class="panel-intro">This is the part most people skip — but it's the most important. When we can put a dollar figure on a frustration, it becomes impossible to ignore.</div>
+
+    <div class="callout">
+      <strong>Not every frustration happens daily.</strong> Fill in how long it takes each time and how often it happens — we'll calculate the annual cost automatically.
+    </div>
+
+    <div class="cost-calc">
+      <div class="cost-calc-header">
+        <div class="cost-calc-title">Annual cost calculator</div>
+        <div class="cost-calc-sub">Updates as you type</div>
+      </div>
+      <div class="cost-calc-body">
+        <div class="cost-row">
+          <div class="cost-field">
+            <label>Time it takes each occurrence</label>
+            <select id="calc-duration" onchange="calcCost()">
+              <option value="0">Select time…</option>
+              <option value="5">5 minutes</option>
+              <option value="10">10 minutes</option>
+              <option value="15">15 minutes</option>
+              <option value="20">20 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+              <option value="60">1 hour</option>
+              <option value="90">1.5 hours</option>
+              <option value="120">2 hours</option>
+              <option value="180">3 hours</option>
+              <option value="240">Half a day</option>
+              <option value="480">Full day</option>
+            </select>
+          </div>
+          <div class="cost-field">
+            <label>How often does it happen?</label>
+            <select id="calc-frequency" onchange="calcCost()">
+              <option value="0">Select frequency…</option>
+              <option value="1">Once a year</option>
+              <option value="2">A few times a year</option>
+              <option value="6">Monthly</option>
+              <option value="12">Twice a month</option>
+              <option value="26">Weekly</option>
+              <option value="52">A few times a week</option>
+              <option value="104">Daily (5 days/week)</option>
+              <option value="260">Multiple times a day</option>
+            </select>
+          </div>
+        </div>
+        <div class="cost-row">
+          <div class="cost-field">
+            <label>Your approximate hourly rate ($)</label>
+            <input type="number" id="calc-rate" placeholder="e.g. 45" min="0" oninput="calcCost()" />
+          </div>
+          <div class="cost-field">
+            <label>How many people does this affect?</label>
+            <select id="calc-people" onchange="calcCost()">
+              <option value="1">Just me</option>
+              <option value="2">2 people</option>
+              <option value="3">3 people</option>
+              <option value="4">4 people</option>
+              <option value="5">5+ people</option>
+            </select>
+          </div>
+        </div>
+        <div class="cost-result">
+          <div>
+            <div class="cost-result-label">Estimated annual cost to the business</div>
+            <div class="cost-result-period" id="calc-breakdown">Fill in the fields above to calculate</div>
+          </div>
+          <div class="cost-result-amount" id="calc-result"><span class="cost-zero">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Is there any other cost beyond time? </label>
+      <div class="fh">Errors it causes, client impact, rework, stress on the team, missed deadlines…</div>
+      <textarea class="fi" id="other-cost" rows="3" placeholder="e.g. When this goes wrong we sometimes have to redo the whole reconciliation which takes an extra 2 hours and delays client billing…"></textarea>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goTo(1)">← Back</button>
+      <button class="btn-next" onclick="goTo(3)">Next — urgency →</button>
+    </div>
+  </div>
+
+  <!-- ════ PANEL 4 — URGENCY + SUBMIT ════ -->
+  <div class="panel" id="panel-3">
+    <div class="panel-num">Step 4 of 4</div>
+    <div class="panel-title">How urgent is this?</div>
+    <div class="panel-intro">Help us prioritise. Some frustrations are critical right now — others can wait. Your answer shapes what we work on first.</div>
+
+    <div class="fg">
+      <label class="fl">How urgent is this frustration?</label>
+      <div id="urgency-cards">
+        <div class="urgency-card" onclick="selUrgency(this,'low')" id="urg-low">
+          <div class="urgency-dot dot-green"></div>
+          <div>
+            <div class="urgency-label">Minor irritation — worth fixing eventually</div>
+            <div class="urgency-sub">Slows things down but we manage. Not causing major problems right now.</div>
+          </div>
+        </div>
+        <div class="urgency-card" onclick="selUrgency(this,'medium')" id="urg-medium">
+          <div class="urgency-dot dot-amber"></div>
+          <div>
+            <div class="urgency-label">Significant — costing us time or money regularly</div>
+            <div class="urgency-sub">Noticeable impact on the team. Should be fixed in the next few months.</div>
+          </div>
+        </div>
+        <div class="urgency-card" onclick="selUrgency(this,'high')" id="urg-high">
+          <div class="urgency-dot dot-red"></div>
+          <div>
+            <div class="urgency-label">Critical — this needs to be fixed now</div>
+            <div class="urgency-sub">Causing real damage — to clients, team morale, or the business financially. Can't wait.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sdiv"></div>
+
+    <div class="fg">
+      <label class="fl">If you could wave a magic wand — what would the ideal solution look like?</label>
+      <div class="fh">Don't worry about whether it's possible. Just describe the outcome you'd want.</div>
+      <textarea class="fi" id="ideal-solution" rows="3" placeholder="e.g. I'd love a simple checklist that the front desk follows every time a new client calls, so nothing gets missed and I don't have to re-explain it…"></textarea>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Anything else we should know?</label>
+      <textarea class="fi" id="extra-notes" rows="2" placeholder="Any context, history, or other people we should talk to about this…"></textarea>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goTo(2)">← Back</button>
+      <button class="btn-submit" onclick="submitLog()">Submit frustration log →</button>
+    </div>
+  </div>
+
+  <!-- ════ SUCCESS ════ -->
+  <div class="panel" id="panel-success">
+    <div class="success-panel">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Frustration logged</div>
+      <div class="success-sub">Thank you. Your log has been sent to the business owner and a copy is on its way to your inbox. We'll review it and let you know what we're doing about it.</div>
+      <div class="success-cost" id="success-cost-block" style="display:none;">
+        <div class="success-cost-label">Annual cost you identified</div>
+        <div class="success-cost-amount" id="success-cost-amount"></div>
+      </div>
+      <div class="panel-intro" style="margin-bottom:24px;">Every frustration you log is a chance to make the business better. The ones closest to the work are the ones that matter most.</div>
+      <button class="btn-new" onclick="resetForm()">Log another frustration</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentPanel = 0;
+let annualCost = 0;
+
+const steps = [
+  'Step 1 of 4 — Who are you?',
+  'Step 2 of 4 — What\'s frustrating you?',
+  'Step 3 of 4 — What does it cost?',
+  'Step 4 of 4 — Urgency and solution'
+];
+
+function goTo(n) {
+  document.getElementById('panel-' + currentPanel).classList.remove('active');
+  document.getElementById('ps-' + currentPanel).classList.remove('active');
+  document.getElementById('ps-' + currentPanel).classList.add('done');
+  currentPanel = n;
+  document.getElementById('panel-' + n).classList.add('active');
+  document.getElementById('ps-' + n).classList.remove('done');
+  document.getElementById('ps-' + n).classList.add('active');
+  document.getElementById('progress-label').textContent = steps[n];
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function tog(el, grp) {
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function selUrgency(el, level) {
+  document.querySelectorAll('.urgency-card').forEach(c => {
+    c.classList.remove('sel', 'sel-amber', 'sel-red');
+  });
+  if (level === 'low') el.classList.add('sel');
+  else if (level === 'medium') el.classList.add('sel-amber');
+  else el.classList.add('sel-red');
+}
+
+function calcCost() {
+  const duration = parseInt(document.getElementById('calc-duration').value) || 0;
+  const frequency = parseInt(document.getElementById('calc-frequency').value) || 0;
+  const rate = parseFloat(document.getElementById('calc-rate').value) || 0;
+  const people = parseInt(document.getElementById('calc-people').value) || 1;
+
+  if (!duration || !frequency || !rate) {
+    document.getElementById('calc-result').innerHTML = '<span class="cost-zero">—</span>';
+    document.getElementById('calc-breakdown').textContent = 'Fill in the fields above to calculate';
+    annualCost = 0;
+    return;
+  }
+
+  const hoursPerOccurrence = duration / 60;
+  const annualHours = hoursPerOccurrence * frequency * people;
+  annualCost = Math.round(annualHours * rate);
+
+  const formatted = '$' + annualCost.toLocaleString('en-AU');
+  document.getElementById('calc-result').textContent = formatted;
+  document.getElementById('calc-breakdown').textContent =
+    `${duration} min × ${frequency}×/year × ${people} person${people > 1 ? 's' : ''} @ $${rate}/hr`;
+}
+
+function submitLog() {
+  const name = document.getElementById('your-name').value.trim();
+  const email = document.getElementById('your-email').value.trim();
+
+  if (!name || !email) {
+    alert('Please fill in your name and email before submitting.');
+    goTo(0);
+    return;
+  }
+
+  const frustName = document.getElementById('frustration-name').value.trim();
+  if (!frustName) {
+    alert('Please give the frustration a name before submitting.');
+    goTo(1);
+    return;
+  }
+
+  // Build email body
+  const urgency = document.querySelector('.urgency-card.sel, .urgency-card.sel-amber, .urgency-card.sel-red');
+  const urgencyText = urgency ? urgency.querySelector('.urgency-label').textContent : 'Not specified';
+  const category = document.querySelector('.chip.sel') ? document.querySelector('#panel-1 .chip-row:first-of-type .chip.sel')?.textContent : 'Not specified';
+
+  const subject = encodeURIComponent(`Frustration Log — ${frustName} — ${name}`);
+  const body = encodeURIComponent(
+`FRUSTRATION LOG
+Submitted by: ${name} (${document.getElementById('your-role').value})
+Email: ${email}
+
+FRUSTRATION: ${frustName}
+
+DESCRIPTION:
+${document.getElementById('frustration-desc').value}
+
+AREA AFFECTED: ${document.querySelector('#panel-1 .chip-row:last-of-type .chip.sel')?.textContent || 'Not specified'}
+
+ANNUAL COST ESTIMATE: ${annualCost ? '$' + annualCost.toLocaleString('en-AU') : 'Not calculated'}
+Other costs: ${document.getElementById('other-cost').value}
+
+URGENCY: ${urgencyText}
+
+IDEAL SOLUTION:
+${document.getElementById('ideal-solution').value}
+
+ADDITIONAL NOTES:
+${document.getElementById('extra-notes').value}
+`);
+
+  // Open mail client
+  const mailTo = `hello@knowledgebase.business?cc=${encodeURIComponent(email)}&subject=${subject}&body=${body}`;
+  window.location.href = `mailto:${mailTo}`;
+
+  // Show success
+  setTimeout(() => {
+    document.getElementById('panel-3').classList.remove('active');
+    document.getElementById('panel-success').classList.add('active');
+    document.getElementById('progress-label').textContent = 'Submitted — thank you';
+    if (annualCost > 0) {
+      document.getElementById('success-cost-block').style.display = 'inline-block';
+      document.getElementById('success-cost-amount').textContent = '$' + annualCost.toLocaleString('en-AU') + '/year';
+    }
+  }, 500);
+}
+
+function resetForm() {
+  document.getElementById('panel-success').classList.remove('active');
+  document.querySelectorAll('.fi').forEach(el => el.value = '');
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('.urgency-card').forEach(c => c.classList.remove('sel','sel-amber','sel-red'));
+  document.getElementById('calc-result').innerHTML = '<span class="cost-zero">—</span>';
+  document.getElementById('calc-breakdown').textContent = 'Fill in the fields above to calculate';
+  annualCost = 0;
+  currentPanel = 0;
+  document.querySelectorAll('.progress-step').forEach((s,i) => {
+    s.classList.remove('active','done');
+    if (i === 0) s.classList.add('active');
+  });
+  document.getElementById('panel-0').classList.add('active');
+  document.getElementById('progress-label').textContent = steps[0];
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+<!-- Memberstack protection -->
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var checkInterval = setInterval(function() {
+      if (window.$memberstackDom) {
+        clearInterval(checkInterval);
+        window.$memberstackDom.getCurrentMember().then(function(result) {
+          if (!result.data) { window.location.href = "/login.html"; }
+        });
+      }
+    }, 100);
+  });
+</script>
+
+</body>
+</html>

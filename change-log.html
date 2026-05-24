@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Change Log — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --forest-lt: #4a7c59;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.09);
+  --gold-dim:  rgba(200,168,75,0.3);
+  --bg:        #f0f5ef;
+  --white:     #ffffff;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-mid:  #3d6b47;
+  --text-muted:#6b9a78;
+  --text-dim:  #a8c8b0;
+  --red:       #8b1f1f;
+  --red-bg:    #fdf0f0;
+  --amber:     #854f0b;
+  --amber-bg:  #fdf3e3;
+  --green:     #1a6b45;
+  --green-bg:  #e8f5ee;
+  --process-bg:#d4e8d1;
+  --tool-bg:   #e8f0fb;
+  --tool-text: #1a4a8a;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* HEADER */
+.site-header { background: var(--forest-dk); border-bottom: 3px solid var(--gold); padding: 13px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.header-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.header-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.header-actions { display: flex; gap: 8px; }
+.btn-add-header { padding: 7px 16px; border: none; border-radius: 6px; background: var(--gold); color: var(--forest-dk); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-add-header:hover { opacity: .85; }
+
+/* HERO */
+.hero { background: var(--forest-dk); padding: 36px 32px 44px; position: relative; overflow: hidden; }
+.hero::before { content: '✓'; position: absolute; font-size: 240px; color: rgba(200,168,75,0.05); right: -10px; top: -30px; font-family: 'Libre Baskerville', serif; pointer-events: none; }
+.hero-inner { max-width: 920px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 700; color: #fff; margin-bottom: 10px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.5); max-width: 560px; line-height: 1.7; font-weight: 300; margin-bottom: 24px; }
+
+/* STATS */
+.stats-row { display: flex; gap: 24px; flex-wrap: wrap; }
+.stat-item { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 18px; }
+.stat-num { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 700; color: var(--gold); line-height: 1; }
+.stat-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+/* BODY */
+.page-body { max-width: 920px; margin: 0 auto; padding: 32px 24px 80px; }
+
+/* FILTERS */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+.filter-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 99px; font-size: 12px; cursor: pointer; color: var(--text-muted); background: var(--white); transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.filter-btn:hover { border-color: var(--forest-lt); color: var(--forest); }
+.filter-btn.active { background: var(--forest); color: #fff; border-color: var(--forest); }
+.filter-sep { font-size: 12px; color: var(--text-dim); }
+
+/* SECTION LABEL */
+.section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .12em; color: var(--text-muted); margin-bottom: 10px; }
+
+/* CHANGE CARDS */
+.changes-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+
+.change-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color .15s; }
+.change-card:hover { border-color: var(--forest-lt); }
+
+.change-card-header { padding: 14px 18px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--border); }
+.change-card-left { flex: 1; }
+.change-date { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.change-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+.change-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 99px; letter-spacing: .04em; }
+.badge-process { background: var(--process-bg); color: var(--forest); }
+.badge-tool { background: var(--tool-bg); color: var(--tool-text); }
+.badge-system { background: var(--amber-bg); color: var(--amber); }
+.badge-communication { background: #f0e8fb; color: #5a2d82; }
+.badge-people { background: var(--red-bg); color: var(--red); }
+
+.change-saving { text-align: right; flex-shrink: 0; }
+.saving-label { font-size: 10px; color: var(--text-muted); margin-bottom: 2px; }
+.saving-amount { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--green); }
+.saving-period { font-size: 10px; color: var(--text-muted); }
+
+.change-card-body { padding: 14px 18px; }
+.before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+.before-block { background: var(--red-bg); border: 1px solid var(--red-border, #e8b4b4); border-radius: 7px; padding: 11px 13px; }
+.after-block { background: var(--green-bg); border: 1px solid rgba(26,107,69,0.2); border-radius: 7px; padding: 11px 13px; }
+
+.ba-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 5px; }
+.before-block .ba-label { color: var(--red); }
+.after-block .ba-label { color: var(--green); }
+.ba-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+.change-what { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
+.change-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border); }
+.change-logged-by { font-size: 11px; color: var(--text-muted); }
+.change-actions { display: flex; gap: 8px; }
+.btn-edit { font-size: 11px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 4px; background: none; color: var(--text-muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-edit:hover { border-color: var(--forest-lt); color: var(--forest); }
+.btn-delete { font-size: 11px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 4px; background: none; color: var(--text-muted); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-delete:hover { border-color: var(--red); color: var(--red); }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 60px 24px; border: 1px dashed var(--border); border-radius: 10px; background: var(--white); }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-title { font-family: 'Libre Baskerville', serif; font-size: 18px; color: var(--text); margin-bottom: 6px; }
+.empty-sub { font-size: 13px; color: var(--text-muted); max-width: 380px; margin: 0 auto 20px; line-height: 1.6; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); transform: translateY(10px); transition: transform .2s; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--forest-dk); border-radius: 12px 12px 0 0; }
+.modal-title { font-family: 'Libre Baskerville', serif; font-size: 17px; font-weight: 700; color: #fff; }
+.modal-close { font-size: 20px; color: rgba(255,255,255,0.4); cursor: pointer; background: none; border: none; line-height: 1; transition: color .15s; }
+.modal-close:hover { color: #fff; }
+.modal-body { padding: 22px; }
+.modal-footer { padding: 16px 22px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 10px; }
+
+/* FORM */
+.fg { margin-bottom: 16px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fh { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-style: italic; }
+.fi { width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .15s; }
+.fi:focus { border-color: var(--forest); background: var(--white); }
+.fi::placeholder { color: var(--text-dim); }
+textarea.fi { resize: vertical; min-height: 70px; line-height: 1.6; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.btn-cancel { padding: 9px 20px; border: 1px solid var(--border); border-radius: 7px; background: none; color: var(--text-muted); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-cancel:hover { border-color: var(--forest-lt); color: var(--text); }
+.btn-save { padding: 9px 24px; border: none; border-radius: 7px; background: var(--forest); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-save:hover { opacity: .85; }
+
+/* FRUSTRATION LINK */
+.frustration-link { background: var(--gold-bg); border: 1px solid var(--gold-dim); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: var(--text-mid); display: flex; align-items: center; gap: 10px; }
+.fl-icon { font-size: 18px; flex-shrink: 0; }
+
+@media (max-width: 600px) {
+  .before-after { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .stats-row { gap: 10px; }
+  .page-body { padding: 20px 16px 60px; }
+  .site-header { padding: 12px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="header-brand">Knowledgebase.business</div>
+    <div class="header-sub">Every improvement. Every saving. All in one place.</div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-add-header" onclick="openModal()">+ Log an improvement</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Your improvement register</div>
+    <div class="hero-title">The <em>Change Log</em></div>
+    <div class="hero-sub">Every frustration resolved, every process improved, every tool built — recorded here with the before, the after, and what it saved the business. This is your proof of progress.</div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Improvements recorded</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-saving">$0</div>
+        <div class="stat-label">Estimated annual saving</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-this-year">0</div>
+        <div class="stat-label">Changes this year</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterBy('all', this)">All changes</button>
+    <span class="filter-sep">·</span>
+    <button class="filter-btn" onclick="filterBy('Process', this)">Process</button>
+    <button class="filter-btn" onclick="filterBy('Tool', this)">Tool</button>
+    <button class="filter-btn" onclick="filterBy('System', this)">System</button>
+    <button class="filter-btn" onclick="filterBy('Communication', this)">Communication</button>
+    <button class="filter-btn" onclick="filterBy('People', this)">People</button>
+  </div>
+
+  <div class="section-label" id="list-label">All improvements</div>
+  <div class="changes-list" id="changes-list"></div>
+  <div class="empty-state" id="empty-state" style="display:none;">
+    <div class="empty-icon">📋</div>
+    <div class="empty-title">No improvements logged yet</div>
+    <div class="empty-sub">Every improvement starts with a frustration. When something gets fixed — a process, a tool, a system — record it here so the business never forgets the progress it's made.</div>
+    <button class="btn-add-header" onclick="openModal()" style="display:inline-block;">Log your first improvement →</button>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Log an improvement</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="frustration-link">
+        <div class="fl-icon">🔗</div>
+        <div>Link this to a frustration log entry if there is one — or log a standalone improvement. Either way, record the before and after clearly.</div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Improvement name</label>
+        <div class="fh">One clear line — what was fixed or built?</div>
+        <input class="fi" id="f-name" type="text" placeholder="e.g. Trust reconciliation checklist — reduced from 45 min to 12 min…" />
+      </div>
+
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">Date resolved</label>
+          <input class="fi" id="f-date" type="date" />
+        </div>
+        <div class="fg">
+          <label class="fl">Category</label>
+          <select class="fi" id="f-category">
+            <option value="">Select…</option>
+            <option>Process</option>
+            <option>Tool</option>
+            <option>System</option>
+            <option>Communication</option>
+            <option>People</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">Area of business</label>
+          <select class="fi" id="f-area">
+            <option value="">Select…</option>
+            <option>Marketing</option>
+            <option>Sales / enquiries</option>
+            <option>Delivery / client work</option>
+            <option>Admin / finance</option>
+            <option>Management / team</option>
+            <option>IT / systems</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Logged by</label>
+          <input class="fi" id="f-logged-by" type="text" placeholder="Your name…" />
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Before — what was the frustration or problem?</label>
+        <textarea class="fi" id="f-before" rows="3" placeholder="Describe what the situation was like before the improvement. Be specific — time, cost, errors, stress…"></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="fl">After — what changed and how?</label>
+        <textarea class="fi" id="f-after" rows="3" placeholder="What was built, changed, or documented? What does the team do differently now?"></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="fl">What was done to make this change?</label>
+        <textarea class="fi" id="f-what" rows="2" placeholder="e.g. Built a 12-step checklist in the platform, documented the MYOB export process, created a call script…"></textarea>
+      </div>
+
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">Annual cost before ($)</label>
+          <div class="fh">From the frustration log if available</div>
+          <input class="fi" id="f-cost-before" type="number" min="0" placeholder="e.g. 3900" oninput="calcSaving()" />
+        </div>
+        <div class="fg">
+          <label class="fl">Estimated annual cost after ($)</label>
+          <div class="fh">Leave blank if eliminated entirely</div>
+          <input class="fi" id="f-cost-after" type="number" min="0" placeholder="e.g. 1040" oninput="calcSaving()" />
+        </div>
+      </div>
+
+      <div id="saving-preview" style="display:none; background:var(--green-bg); border:1px solid rgba(26,107,69,0.2); border-radius:7px; padding:11px 14px; font-size:13px; color:var(--green); margin-bottom:16px;">
+        Estimated annual saving: <strong id="saving-preview-amount"></strong>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveChange()">Save improvement</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let changes = [];
+let editingId = null;
+let currentFilter = 'all';
+
+// Load from localStorage
+function load() {
+  try {
+    const raw = localStorage.getItem('kb_change_log');
+    if (raw) changes = JSON.parse(raw);
+  } catch(e) { changes = []; }
+  render();
+}
+
+function save() {
+  try { localStorage.setItem('kb_change_log', JSON.stringify(changes)); } catch(e) {}
+}
+
+function render(filter) {
+  filter = filter || currentFilter;
+  const list = document.getElementById('changes-list');
+  const empty = document.getElementById('empty-state');
+  const label = document.getElementById('list-label');
+
+  let filtered = filter === 'all' ? changes : changes.filter(c => c.category === filter);
+  filtered = [...filtered].reverse();
+
+  label.textContent = filter === 'all' ? 'All improvements' : filter + ' improvements';
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    list.innerHTML = filtered.map(c => cardHTML(c)).join('');
+  }
+
+  updateStats();
+}
+
+function cardHTML(c) {
+  const saving = (c.costBefore || 0) - (c.costAfter || 0);
+  const savingStr = saving > 0 ? '$' + saving.toLocaleString('en-AU') : '—';
+  const badgeCls = 'badge-' + (c.category || 'process').toLowerCase().replace(/[^a-z]/g,'');
+  const dateStr = c.date ? new Date(c.date).toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' }) : '';
+
+  return `
+  <div class="change-card" id="card-${c.id}">
+    <div class="change-card-header">
+      <div class="change-card-left">
+        <div class="change-date">${dateStr}${c.area ? ' · ' + c.area : ''}</div>
+        <div class="change-name">${esc(c.name)}</div>
+        <div class="change-badges">
+          ${c.category ? `<span class="badge ${badgeCls}">${esc(c.category)}</span>` : ''}
+        </div>
+      </div>
+      ${saving > 0 ? `
+      <div class="change-saving">
+        <div class="saving-label">Annual saving</div>
+        <div class="saving-amount">${savingStr}</div>
+        <div class="saving-period">per year</div>
+      </div>` : ''}
+    </div>
+    <div class="change-card-body">
+      ${c.before || c.after ? `
+      <div class="before-after">
+        <div class="before-block">
+          <div class="ba-label">Before</div>
+          <div class="ba-text">${esc(c.before || '—')}</div>
+        </div>
+        <div class="after-block">
+          <div class="ba-label">After</div>
+          <div class="ba-text">${esc(c.after || '—')}</div>
+        </div>
+      </div>` : ''}
+      ${c.what ? `<div class="change-what">${esc(c.what)}</div>` : ''}
+      <div class="change-footer">
+        <div class="change-logged-by">${c.loggedBy ? 'Logged by ' + esc(c.loggedBy) : ''}</div>
+        <div class="change-actions">
+          <button class="btn-edit" onclick="editChange('${c.id}')">Edit</button>
+          <button class="btn-delete" onclick="deleteChange('${c.id}')">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function updateStats() {
+  const total = changes.length;
+  const totalSaving = changes.reduce((sum, c) => sum + Math.max(0, (c.costBefore||0) - (c.costAfter||0)), 0);
+  const thisYear = changes.filter(c => c.date && new Date(c.date).getFullYear() === new Date().getFullYear()).length;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-saving').textContent = totalSaving > 0 ? '$' + totalSaving.toLocaleString('en-AU') : '$0';
+  document.getElementById('stat-this-year').textContent = thisYear;
+}
+
+function openModal(id) {
+  editingId = id || null;
+  const modal = document.getElementById('modal-overlay');
+  document.getElementById('modal-title').textContent = id ? 'Edit improvement' : 'Log an improvement';
+
+  // Set today's date as default
+  if (!id) {
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+    clearForm();
+  } else {
+    const c = changes.find(x => x.id === id);
+    if (c) populateForm(c);
+  }
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  editingId = null;
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function clearForm() {
+  ['f-name','f-date','f-category','f-area','f-logged-by','f-before','f-after','f-what','f-cost-before','f-cost-after']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('saving-preview').style.display = 'none';
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+}
+
+function populateForm(c) {
+  document.getElementById('f-name').value = c.name || '';
+  document.getElementById('f-date').value = c.date || '';
+  document.getElementById('f-category').value = c.category || '';
+  document.getElementById('f-area').value = c.area || '';
+  document.getElementById('f-logged-by').value = c.loggedBy || '';
+  document.getElementById('f-before').value = c.before || '';
+  document.getElementById('f-after').value = c.after || '';
+  document.getElementById('f-what').value = c.what || '';
+  document.getElementById('f-cost-before').value = c.costBefore || '';
+  document.getElementById('f-cost-after').value = c.costAfter || '';
+  calcSaving();
+}
+
+function calcSaving() {
+  const before = parseFloat(document.getElementById('f-cost-before').value) || 0;
+  const after = parseFloat(document.getElementById('f-cost-after').value) || 0;
+  const saving = before - after;
+  const preview = document.getElementById('saving-preview');
+  if (before > 0) {
+    preview.style.display = 'block';
+    document.getElementById('saving-preview-amount').textContent = saving > 0 ? '$' + saving.toLocaleString('en-AU') + ' per year' : 'No saving — review the numbers';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function saveChange() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { alert('Please give the improvement a name.'); return; }
+
+  const change = {
+    id: editingId || Date.now().toString(),
+    name,
+    date: document.getElementById('f-date').value,
+    category: document.getElementById('f-category').value,
+    area: document.getElementById('f-area').value,
+    loggedBy: document.getElementById('f-logged-by').value.trim(),
+    before: document.getElementById('f-before').value.trim(),
+    after: document.getElementById('f-after').value.trim(),
+    what: document.getElementById('f-what').value.trim(),
+    costBefore: parseFloat(document.getElementById('f-cost-before').value) || 0,
+    costAfter: parseFloat(document.getElementById('f-cost-after').value) || 0,
+  };
+
+  if (editingId) {
+    const idx = changes.findIndex(c => c.id === editingId);
+    if (idx > -1) changes[idx] = change;
+  } else {
+    changes.push(change);
+  }
+
+  save();
+  render();
+  closeModal();
+}
+
+function editChange(id) { openModal(id); }
+
+function deleteChange(id) {
+  if (!confirm('Delete this improvement record?')) return;
+  changes = changes.filter(c => c.id !== id);
+  save();
+  render();
+}
+
+function filterBy(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render(filter);
+}
+
+load();
+</script>
+
+<!-- Memberstack protection -->
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var checkInterval = setInterval(function() {
+      if (window.$memberstackDom) {
+        clearInterval(checkInterval);
+        window.$memberstackDom.getCurrentMember().then(function(result) {
+          if (!result.data) { window.location.href = "/login.html"; }
+        });
+      }
+    }, 100);
+  });
+</script>
+
+</body>
+</html>

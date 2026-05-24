@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survive — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest: #2d5a27; --forest-dk: #1a3d16; --forest-lt: #4a7c59;
+  --gold: #c8a84b; --gold-bg: rgba(200,168,75,0.09); --gold-dim: rgba(200,168,75,0.3);
+  --bg: #f0f5ef; --white: #fff; --border: #d4e8d1;
+  --text: #1a3d16; --text-muted: #6b9a78; --text-dim: #a8c8b0;
+  --green-bg: #e8f5ee; --green: #1a6b45;
+  --storm: #1a1a2e; --storm-2: #16213e;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+nav { background: var(--forest-dk); border-bottom: 2px solid var(--gold); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.nav-back { font-size: 12px; color: rgba(255,255,255,0.45); text-decoration: none; }
+.nav-back:hover { color: var(--gold); }
+
+/* HERO — storm, crisis, controlled intensity */
+.hero {
+  background: linear-gradient(160deg, var(--storm) 0%, var(--storm-2) 40%, #0d2010 100%);
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  padding: 60px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 85% 20%, rgba(200,168,75,0.08) 0%, transparent 45%),
+    radial-gradient(ellipse at 15% 80%, rgba(45,90,39,0.15) 0%, transparent 50%);
+}
+.hero-rain {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    105deg,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.015) 2px,
+    rgba(255,255,255,0.015) 4px
+  );
+  pointer-events: none;
+}
+.hero-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 360px; gap: 60px; align-items: center; width: 100%; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(36px, 5.5vw, 60px); font-weight: 700; color: #fff; line-height: 1.05; margin-bottom: 20px; letter-spacing: -1px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-body { font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 28px; font-weight: 300; }
+.hero-body strong { color: #fff; font-weight: 500; }
+.hero-cta-group { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.btn-primary { padding: 14px 30px; border: none; border-radius: 8px; background: var(--gold); color: var(--forest-dk); font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-primary:hover { opacity: .88; }
+.btn-secondary { padding: 13px 24px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: none; color: rgba(255,255,255,0.6); font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+/* CRISIS CARD */
+.crisis-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 24px; }
+.cc-eyebrow { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: rgba(200,168,75,0.7); margin-bottom: 14px; }
+.cc-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.cc-item:last-child { border-bottom: none; }
+.cc-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; opacity: .7; }
+.cc-text { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+.cc-text strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+
+/* BODY */
+.page-body { max-width: 960px; margin: 0 auto; padding: 60px 28px 80px; }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.section-title { font-family: 'Libre Baskerville', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 1.3; }
+.section-title em { font-style: italic; }
+.section-body { font-size: 15px; color: var(--text-muted); line-height: 1.8; max-width: 640px; margin-bottom: 32px; }
+
+/* ROY'S STORY */
+.story-section { background: var(--storm); border-radius: 12px; padding: 40px; margin-bottom: 60px; position: relative; overflow: hidden; }
+.story-section::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(200,168,75,0.05) 0%, transparent 60%); }
+.story-eyebrow { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; position: relative; }
+.story-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 16px; position: relative; }
+.story-body { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.9; position: relative; max-width: 680px; }
+.story-body strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+
+/* 5-STEP PROCESS */
+.process-section { margin-bottom: 60px; }
+.process-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 28px; }
+.process-step { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; display: flex; align-items: flex-start; gap: 16px; }
+.step-num { font-family: 'Libre Baskerville', serif; font-size: 32px; font-weight: 700; color: var(--gold); line-height: 1; flex-shrink: 0; opacity: .4; width: 36px; }
+.step-content { flex: 1; }
+.step-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+.step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.step-crisis { font-size: 12px; font-style: italic; color: var(--gold); margin-top: 6px; }
+
+/* INSIDE */
+.inside-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; margin-bottom: 60px; }
+.inside-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+.inside-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 6px; }
+.inside-name { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; font-family: 'Libre Baskerville', serif; }
+.inside-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.inside-features { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.inside-feature { font-size: 12px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 7px; }
+.inside-feature::before { content: '→'; color: var(--gold); font-size: 11px; margin-top: 2px; flex-shrink: 0; }
+
+/* ABCD */
+.abcd-section { background: var(--forest-dk); border-radius: 12px; padding: 36px 40px; margin-bottom: 60px; }
+.abcd-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.abcd-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+.abcd-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.abcd-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px; text-align: center; }
+.abcd-letter { font-family: 'Libre Baskerville', serif; font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+.abcd-card.a .abcd-letter { color: #6fd4a8; }
+.abcd-card.b .abcd-letter { color: rgba(255,255,255,0.5); }
+.abcd-card.c .abcd-letter { color: #f0b95a; }
+.abcd-card.d .abcd-letter { color: #f4908a; }
+.abcd-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+.abcd-desc { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.4; }
+.abcd-crisis { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 8px; font-style: italic; }
+
+/* ROY QUOTE */
+.roy-quote { background: var(--bg); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 0 12px 12px 0; padding: 28px 32px; margin-bottom: 60px; }
+.rq-text { font-family: 'Libre Baskerville', serif; font-size: 18px; font-style: italic; color: var(--text); line-height: 1.7; margin-bottom: 12px; }
+.rq-sig { font-size: 13px; color: var(--text-muted); }
+
+/* CRISIS UNLOCK NOTE */
+.crisis-unlock { background: var(--white); border: 2px solid var(--gold); border-radius: 12px; padding: 24px 28px; margin-bottom: 60px; display: flex; align-items: flex-start; gap: 16px; }
+.cu-icon { font-size: 28px; flex-shrink: 0; }
+.cu-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+.cu-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+/* MILESTONE */
+.milestone-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 60px; }
+.ms-title { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.ms-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+.locked-note { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text-muted); }
+
+/* CTA */
+.cta-section { background: linear-gradient(160deg, var(--storm) 0%, #0d2010 100%); border-radius: 12px; padding: 48px 40px; text-align: center; position: relative; overflow: hidden; }
+.cta-section::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(105deg, transparent, transparent 2px, rgba(255,255,255,0.01) 2px, rgba(255,255,255,0.01) 4px); }
+.cta-eyebrow { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; position: relative; }
+.cta-title { font-family: 'Libre Baskerville', serif; font-size: 30px; font-weight: 700; color: #fff; margin-bottom: 10px; position: relative; }
+.cta-sub { font-size: 14px; color: rgba(255,255,255,0.45); margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; position: relative; }
+.cta-price { font-family: 'Libre Baskerville', serif; font-size: 44px; font-weight: 700; color: var(--gold); margin-bottom: 6px; position: relative; }
+.cta-period { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 28px; position: relative; }
+.cta-buttons { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; position: relative; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--white); border-radius: 14px; width: 100%; max-width: 520px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.3); transform: translateY(12px); transition: transform .2s; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header { background: var(--storm); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: #fff; }
+.modal-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 20px; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: #fff; }
+.modal-summary { background: var(--gold-bg); border-bottom: 1px solid var(--gold-dim); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.ms-what { font-size: 13px; color: var(--text-muted); }
+.ms-amount { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: var(--forest); }
+.modal-body { padding: 24px; }
+.fg { margin-bottom: 16px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fi { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.fi:focus { border-color: var(--forest); }
+.fi::placeholder { color: var(--text-dim); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stripe-note { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+.stripe-note a { color: var(--forest); }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
+.btn-pay { width: 100%; padding: 13px; border: none; border-radius: 8px; background: var(--forest); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.btn-pay:hover { opacity: .88; }
+.guarantee { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); margin-top: 10px; justify-content: center; }
+
+@media(max-width:700px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .crisis-card { display: none; }
+  .inside-grid { grid-template-columns: 1fr; }
+  .abcd-grid { grid-template-columns: repeat(2,1fr); }
+  .page-body { padding: 40px 16px 60px; }
+  nav, .hero { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Knowledgebase.business</div>
+  <a href="/dashboard.html" class="nav-back">← Back to dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-rain"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Stage 3 · Survive</div>
+      <div class="hero-title"><em>Don't<br>Do<br>Nothing.</em></div>
+      <div class="hero-body">When the storm hits — <strong>the cyclone, the pandemic, the key person who walks out, the client who takes half your revenue</strong> — the worst thing you can do is freeze. The second worst is panic. This section was written for the moments when everything is on the line.</div>
+      <div class="hero-cta-group">
+        <button class="btn-primary" onclick="openPayment()">Unlock now — $297 →</button>
+        <button class="btn-secondary" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn through milestones</button>
+      </div>
+    </div>
+    <div class="crisis-card">
+      <div class="cc-eyebrow">When you need this section</div>
+      <div class="cc-item"><div class="cc-icon">🌀</div><div class="cc-text"><strong>Natural disaster or external crisis</strong> — business continuity when the world stops</div></div>
+      <div class="cc-item"><div class="cc-icon">💰</div><div class="cc-text"><strong>Cash flow emergency</strong> — decisions under financial pressure</div></div>
+      <div class="cc-item"><div class="cc-icon">🚪</div><div class="cc-text"><strong>Key person departure</strong> — knowledge walks out the door</div></div>
+      <div class="cc-item"><div class="cc-icon">📉</div><div class="cc-text"><strong>Major client loss</strong> — sudden revenue gap</div></div>
+      <div class="cc-item"><div class="cc-icon">🏥</div><div class="cc-text"><strong>Health event</strong> — business continuity when the owner can't be there</div></div>
+      <div class="cc-item"><div class="cc-icon">⚖️</div><div class="cc-text"><strong>Legal or regulatory crisis</strong> — decisions with consequences</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- ROY'S STORY -->
+  <div class="story-section">
+    <div class="story-eyebrow">Written from experience</div>
+    <div class="story-title">Roy West has been in the storm.</div>
+    <div class="story-body">Cyclone Debbie. COVID-19. A sailing charter business in the Whitsundays — one of the most beautiful places on earth and one of the most exposed businesses you can run. <strong>When the cyclone came, the question wasn't what to do. The question was how to decide what to do when everything you thought you knew was wrong.</strong><br><br>Don't Do Nothing was written in that moment. Not after it — during it. The 5-step decision framework wasn't developed in a boardroom. It was tested in a crisis, refined under pressure, and published because every business owner deserves a process for making decisions when the stakes are highest.</div>
+  </div>
+
+  <!-- THE PROBLEM -->
+  <div style="margin-bottom:48px;">
+    <div class="section-eyebrow">The problem</div>
+    <div class="section-title">Crisis decisions are the ones<br><em>that define everything after.</em></div>
+    <div class="section-body">Most business owners have no decision-making process for normal times. In a crisis — when time is short, information is incomplete, and consequences are severe — they have even less. The result is paralysis, panic, or the wrong decision made fast. This section gives you a process that works precisely when everything else isn't.</div>
+  </div>
+
+  <!-- THE 5-STEP PROCESS -->
+  <div class="process-section">
+    <div class="section-eyebrow">The framework</div>
+    <div class="section-title">The 5-step decision process — <em>under pressure.</em></div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Write your Question Statement</div>
+          <div class="step-desc">Define the problem before you try to solve it. In a crisis, the urgency to act often means solving the wrong problem entirely. Write it down. The act of writing forces clarity.</div>
+          <div class="step-crisis">In a crisis: "What is the one decision, if made well, that changes everything right now?"</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Challenge everything</div>
+          <div class="step-desc">Intuition, assumptions, biases, incomplete information. In normal times these distort decisions. In a crisis they can be catastrophic. What do you actually know? What are you assuming? What are the 188 cognitive biases that might be at work right now?</div>
+          <div class="step-crisis">In a crisis: Strip the assumptions. What is actually true right now, not what you feared would be true?</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Identify alternatives</div>
+          <div class="step-desc">There is almost never only one path. Map the alternatives — choices, risks, and consequences of each. The first workable option is rarely the best one, even under time pressure.</div>
+          <div class="step-crisis">In a crisis: What are the three paths? What does each one cost if it goes wrong?</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Implement</div>
+          <div class="step-desc">Choose, communicate, and act. The best decision implemented slowly is often worse than a good decision implemented fast. Communicate the decision clearly — to the team, to clients, to suppliers. Uncertainty kills confidence.</div>
+          <div class="step-crisis">In a crisis: Decide now. Communicate immediately. Silence is more damaging than imperfect information.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Create a feedback loop</div>
+          <div class="step-desc">Monitor, review, pivot. The decision you made yesterday may need to change today as new information arrives. A crisis is not a single event — it is a sequence of decisions. Stay in the loop.</div>
+          <div class="step-crisis">In a crisis: Review daily. What has changed? What do you know now that you didn't know yesterday?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIDE -->
+  <div class="section-eyebrow">What's inside</div>
+  <div class="section-title">The tools that keep you moving<br>when everything stops.</div>
+  <div class="inside-grid">
+    <div class="inside-card">
+      <div class="inside-type">PDF Guide</div>
+      <div class="inside-name">Don't Do Nothing</div>
+      <div class="inside-body">Roy West's complete decision-making framework for small business owners — written during a crisis, tested in one, and published for every owner who will face their own. The 5-step process, the cognitive biases that destroy decisions under pressure, the Rethink Framework for new ideas, and the ABCD client ranking for when you need to cut.</div>
+      <div class="inside-features">
+        <div class="inside-feature">The 5-step business decision process</div>
+        <div class="inside-feature">188 cognitive biases — the ones that matter in a crisis</div>
+        <div class="inside-feature">The Rethink Framework — creativity under pressure</div>
+        <div class="inside-feature">The decision being avoided — and why avoiding it is the real risk</div>
+      </div>
+    </div>
+    <div class="inside-card">
+      <div class="inside-type">Interactive Tool</div>
+      <div class="inside-name">Crisis Decision Register</div>
+      <div class="inside-body">A structured decision log for crisis periods. Maps each major decision through the 5-step process — question statement, assumptions challenged, alternatives considered, action taken, and outcome recorded. The record of how the business survived becomes one of its most valuable assets.</div>
+      <div class="inside-features">
+        <div class="inside-feature">5-step process guide for each crisis decision</div>
+        <div class="inside-feature">Assumption challenger — what do you actually know?</div>
+        <div class="inside-feature">Alternative mapping — the paths not taken</div>
+        <div class="inside-feature">Outcome tracking — the feedback loop</div>
+      </div>
+    </div>
+    <div class="inside-card" style="grid-column:1/-1;">
+      <div class="inside-type">Interactive Tool</div>
+      <div class="inside-name">Business Continuity Planner</div>
+      <div class="inside-body">The plan you build before you need it. Maps every critical function of the business — who does it, what happens if they can't, what the minimum viable operation looks like. A business with a continuity plan survives crises that kill businesses without one. The knowledge base you've already built is 80% of this plan.</div>
+      <div class="inside-features">
+        <div class="inside-feature">Critical function mapping — what must keep running?</div>
+        <div class="inside-feature">Key person risk — who takes over if someone can't be there?</div>
+        <div class="inside-feature">Minimum viable operation — what can you cut and still survive?</div>
+        <div class="inside-feature">Communication plan — who needs to know what, and when?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABCD IN CRISIS -->
+  <div class="abcd-section">
+    <div class="abcd-title">The ABCD client ranking — when you need to cut</div>
+    <div class="abcd-sub">From the book. In a survival situation you cannot serve everyone equally. Know which clients to protect and which to release.</div>
+    <div class="abcd-grid">
+      <div class="abcd-card a">
+        <div class="abcd-letter">A</div>
+        <div class="abcd-name">Awesome</div>
+        <div class="abcd-desc">High value, great to work with, pays on time, refers others.</div>
+        <div class="abcd-crisis">Protect at all costs. Personal contact. Priority service.</div>
+      </div>
+      <div class="abcd-card b">
+        <div class="abcd-letter">B</div>
+        <div class="abcd-name">Basic</div>
+        <div class="abcd-desc">Routine, stable, good relationships. The solid middle.</div>
+        <div class="abcd-crisis">Maintain service. Honest communication about your situation.</div>
+      </div>
+      <div class="abcd-card c">
+        <div class="abcd-letter">C</div>
+        <div class="abcd-name">Can't deal with</div>
+        <div class="abcd-desc">Drains time, complains, pays late, demands more than they pay for.</div>
+        <div class="abcd-crisis">Release with grace. The time they free up goes to A clients.</div>
+      </div>
+      <div class="abcd-card d">
+        <div class="abcd-letter">D</div>
+        <div class="abcd-name">Dead</div>
+        <div class="abcd-desc">Unprofitable, difficult, or already inactive.</div>
+        <div class="abcd-crisis">Release immediately. Do not spend another hour on D clients in a crisis.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROY QUOTE -->
+  <div class="roy-quote">
+    <div class="rq-text">"Decision-making is a primary, continuous, and indispensable component of your role as a leader. Today, tomorrow, and every day — you make more decisions than any other activity. Yet formal decision training is non-existent. Most business owners learn to decide by making expensive mistakes. This book is the training they never got."</div>
+    <div class="rq-sig">— Roy West, Don't Do Nothing</div>
+  </div>
+
+  <!-- CRISIS UNLOCK NOTE -->
+  <div class="crisis-unlock">
+    <div class="cu-icon">⚡</div>
+    <div>
+      <div class="cu-title">If you're in a crisis right now — this section has no milestone gate.</div>
+      <div class="cu-body">Milestone gates exist because the program is designed to be worked through in sequence. But a business in crisis doesn't have the luxury of sequence. If you need this section now — unlock it immediately. $297. Instant access. The tools and the framework are available within minutes of payment.</div>
+    </div>
+  </div>
+
+  <!-- MILESTONE -->
+  <div class="milestone-section" id="milestone-section">
+    <div class="ms-title">Not in a crisis? Earn it.</div>
+    <div class="ms-sub">Complete the Milestone 3 tasks to unlock Survive at no extra cost. Having the framework before you need it is the whole point.</div>
+    <div class="locked-note">🔒 Complete Milestone 3 — People Layer — to unlock the Survive milestone tasks. Or unlock immediately for $297 and have the framework ready before you need it.</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-top:16px;">The best time to prepare for a crisis is before it happens.</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-eyebrow">When the storm comes — be ready</div>
+    <div class="cta-title">Survive</div>
+    <div class="cta-sub">Don't Do Nothing — the complete PDF guide — plus the Crisis Decision Register and Business Continuity Planner. The framework for every decision that matters most.</div>
+    <div class="cta-price">$297</div>
+    <div class="cta-period">One-off · Instant access · Part of lifetime access at $797</div>
+    <div class="cta-buttons">
+      <button class="btn-primary" onclick="openPayment()">Unlock now for $297 →</button>
+      <button class="btn-secondary" onclick="document.getElementById('milestone-section').scrollIntoView({behavior:'smooth'})">Earn through milestones</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="payment-modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Unlock Survive</div><button class="modal-close" onclick="closePayment()">×</button></div>
+    <div class="modal-summary"><div class="ms-what">Survive — PDF guide + 2 tools</div><div class="ms-amount">$297</div></div>
+    <div class="modal-body">
+      <div class="fg"><label class="fl">Full name</label><input class="fi" type="text" placeholder="Your name…" /></div>
+      <div class="fg"><label class="fl">Email address</label><input class="fi" type="email" placeholder="your@email.com" /></div>
+      <div class="fg"><label class="fl">Card number</label><input class="fi" type="text" placeholder="1234 5678 9012 3456" maxlength="19" /></div>
+      <div class="two-col"><div class="fg"><label class="fl">Expiry</label><input class="fi" type="text" placeholder="MM / YY" maxlength="7" /></div><div class="fg"><label class="fl">CVC</label><input class="fi" type="text" placeholder="123" maxlength="4" /></div></div>
+      <div class="stripe-note">🔒 Payments secured by <a href="https://stripe.com" target="_blank">Stripe</a>. Your card details are never stored.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-pay" onclick="processPayment()">Pay $297 — unlock immediately →</button>
+      <div class="guarantee">✓ Instant access · One-off cost · No milestone gate in a crisis</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openPayment() { document.getElementById('payment-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closePayment() { document.getElementById('payment-modal').classList.remove('open'); document.body.style.overflow = ''; }
+function closeModalOutside(e) { if (e.target === document.getElementById('payment-modal')) closePayment(); }
+function processPayment() { alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.'); }
+</script>
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  var ci = setInterval(function() {
+    if (window.$memberstackDom) { clearInterval(ci); window.$memberstackDom.getCurrentMember().then(function(r) { if (!r.data) window.location.href='/login.html'; }); }
+  }, 100);
+</script>
+</body>
+</html>
