@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Professional Services Revenue Model — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal: #2d5a27;
+  --teal-dim: #2d5a2744;
+  --teal-faint: #2d5a2718;
+  --bg: #f0f7fa;
+  --bg-panel: #ffffff;
+  --border: #d4e8d1;
+  --text: #1a3d16;
+  --text-muted: #4a7a94;
+  --text-dim: #a0bfcc;
+  --orange: #ff8a65;
+  --purple: #ce93d8;
+  --green: #4fc3f7;
+  --red: #ef5350;
+  --amber: #ffb74d;
+  --aqua: #4db6ac;
+}
+
+body {
+  background: linear-gradient(160deg, #f0f7fa 0%, #e6f2f8 50%, #f4f8fb 100%);
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+
+/* ── HEADER ── */
+.top-bar {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand {
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: var(--teal);
+}
+.mode-toggle {
+  display: flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+.mode-btn {
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  padding: 7px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+.mode-btn.active { background: var(--teal); color: #fff; }
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - 64px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: rgba(255,255,255,0.7);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+.sidebar-section {
+  margin-bottom: 4px;
+}
+.sidebar-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 10px 20px 6px;
+}
+.person-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+  position: relative;
+}
+.person-btn:hover { background: rgba(46,143,163,0.06); }
+.person-btn.active { background: rgba(46,143,163,0.12); }
+.person-btn.active::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--teal);
+  border-radius: 2px 0 0 2px;
+}
+.person-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 14px;
+  flex-shrink: 0;
+  color: #fff;
+}
+.person-info { flex: 1; min-width: 0; }
+.person-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.person-btn.active .person-name { color: var(--teal); }
+.person-role {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.person-profit {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.sidebar-divider { height: 1px; background: var(--border); margin: 10px 20px; }
+
+/* FIRM SUMMARY button */
+.summary-btn {
+  width: calc(100% - 32px);
+  margin: 8px 16px 0;
+  padding: 12px 16px;
+  background: var(--teal-faint);
+  border: 1px solid var(--teal-dim);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+.summary-btn:hover { background: rgba(46,143,163,0.15); }
+.summary-btn.active { background: var(--teal); }
+.summary-btn.active .sb-label,
+.summary-btn.active .sb-sub { color: #fff; }
+.sb-label {
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+}
+.sb-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ── MAIN CONTENT ── */
+.main { padding: 28px; overflow: auto; }
+
+/* ── PERSON VIEW ── */
+.person-view { display: none; }
+.person-view.active { display: block; }
+
+.person-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.person-header-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 22px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.person-header-info h2 {
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1;
+}
+.person-header-info p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.name-input {
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  border: none;
+  outline: none;
+  background: transparent;
+  border-bottom: 2px dashed var(--border);
+  padding: 2px 4px;
+  min-width: 200px;
+  transition: border-color 0.2s;
+}
+.name-input:focus { border-bottom-color: var(--teal); }
+
+/* ── TWO COLUMN ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: relative; height: auto; }
+  .two-col { grid-template-columns: 1fr; }
+}
+
+/* ── PANEL ── */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 20px;
+  margin-bottom: 16px;
+}
+.panel-title {
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* ── SLIDERS ── */
+.slider-row { margin-bottom: 18px; }
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.slider-name {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.slider-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+}
+.slider-track {
+  position: relative;
+  height: 6px;
+  border-radius: 3px;
+  background: #d8eaf2;
+}
+.slider-fill {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.05s;
+}
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 3px solid var(--bg-panel);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: left 0.05s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+input[type=range] {
+  position: absolute;
+  width: 100%; height: 100%;
+  top: 0; left: 0;
+  opacity: 0;
+  cursor: pointer;
+  margin: 0;
+}
+.slider-minmax {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.slider-minmax span { font-size: 10px; color: var(--text-dim); }
+
+/* ── METRIC CARDS ── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.metric-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.metric-card.wide {
+  grid-column: 1 / -1;
+}
+.metric-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.metric-value {
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.metric-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* Health badge */
+.health-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+.health-label { font-family: 'Libre Baskerville', sans-serif; font-size: 22px; letter-spacing: 0.06em; }
+.health-pct { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 600; }
+
+/* Cost bars */
+.cost-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.cost-bar-name { font-size: 12px; color: var(--text-muted); min-width: 90px; flex-shrink: 0; }
+.cost-bar-track { flex: 1; height: 5px; background: #d8eaf2; border-radius: 3px; overflow: hidden; }
+.cost-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.cost-bar-val { font-family: 'DM Mono', monospace; font-size: 11px; min-width: 72px; text-align: right; }
+
+/* Insights */
+.insight-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.insight-row:last-child { border-bottom: none; }
+.insight-name { font-size: 12px; color: var(--text-muted); }
+.insight-note { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+.insight-val { font-family: 'Libre Baskerville', sans-serif; font-size: 18px; color: var(--text); letter-spacing: 0.04em; }
+
+/* ── SUPPORT STAFF VIEW ── */
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+.support-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+.support-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.support-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.support-name-input {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  border: none;
+  outline: none;
+  background: transparent;
+  border-bottom: 1.5px dashed var(--border);
+  padding: 2px 4px;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+.support-name-input:focus { border-bottom-color: var(--teal); }
+.support-role-tag {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── FIRM SUMMARY ── */
+.summary-view { display: none; }
+.summary-view.active { display: block; }
+
+.firm-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+@media (max-width: 1000px) {
+  .firm-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.kpi-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+}
+.kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 6px; }
+.kpi-value { font-family: 'Libre Baskerville', sans-serif; font-size: 36px; letter-spacing: 0.04em; line-height: 1; }
+.kpi-sub { font-size: 11px; color: var(--text-dim); margin-top: 5px; font-family: 'DM Mono', monospace; }
+
+/* Firm table */
+.firm-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-panel);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.firm-table th {
+  background: #edf5f9;
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.firm-table td {
+  padding: 10px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.firm-table tr:last-child td { border-bottom: none; }
+.firm-table tr.total-row td {
+  background: #edf5f9;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+}
+.mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.pill-green { background: #e3f8ff; color: #2d5a27; border: 1px solid #b8e4f0; }
+.pill-red   { background: #ffeded; color: #c62828; border: 1px solid #ffcdd2; }
+.pill-amber { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+
+/* Support cost panel */
+.support-summary {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Badge period */
+.period-badge {
+  display: inline-block;
+  font-family: 'Libre Baskerville', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  background: rgba(46,143,163,0.12);
+  color: var(--teal);
+  border: 1px solid rgba(46,143,163,0.3);
+  border-radius: 4px;
+  padding: 2px 7px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="top-bar">
+  <div class="brand">Knowledgebase.business · Firm Revenue Model</div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btn-annual" onclick="setMode('annual')">Annual</button>
+    <button class="mode-btn" id="btn-monthly" onclick="setMode('monthly')">Monthly</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <button class="summary-btn active" id="nav-summary" onclick="showView('summary')">
+      <div class="sb-label">Firm Summary</div>
+      <div class="sb-sub">All [Team size] staff · complete P&L</div>
+    </button>
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Fee Earners</div>
+      <!-- injected by JS -->
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Support Staff</div>
+      <!-- injected by JS -->
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+
+    <!-- FIRM SUMMARY VIEW -->
+    <div class="summary-view active" id="view-summary">
+      <h2 style="font-family:'Libre Baskerville',sans-serif;font-size:30px;letter-spacing:0.04em;margin-bottom:6px;">Firm Overview</h2>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">4 fee earners · 5 support staff · complete business P&L</p>
+
+      <div class="firm-kpi-grid" id="firm-kpis">
+        <!-- injected -->
+      </div>
+
+      <div class="panel-title" style="margin-bottom:12px;">FEE EARNER BREAKDOWN <span class="period-badge" id="summary-badge">ANNUAL</span></div>
+      <table class="firm-table" id="firm-table">
+        <thead>
+          <tr>
+            <th>Fee Earner</th>
+            <th>Rate</th>
+            <th>Hours</th>
+            <th>Revenue</th>
+            <th>Total Cost</th>
+            <th>Net Profit</th>
+            <th>Margin</th>
+            <th>Health</th>
+          </tr>
+        </thead>
+        <tbody id="firm-tbody"></tbody>
+      </table>
+
+      <div class="support-summary">
+        <div class="panel-title">SUPPORT STAFF COST <span class="period-badge" id="support-badge">ANNUAL</span></div>
+        <div id="support-table-rows"></div>
+        <div style="display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);margin-top:8px;">
+          <span style="font-size:13px;font-weight:600;">Total Support Cost</span>
+          <span class="mono" id="total-support-cost" style="font-weight:700;color:var(--orange)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEE EARNER VIEWS: 4 -->
+    <!-- injected by JS -->
+
+    <!-- SUPPORT STAFF VIEW -->
+    <div class="person-view" id="view-support">
+      <div class="person-header">
+        <div class="person-header-avatar" style="background:linear-gradient(135deg,#4db6ac,#26a69a);">S</div>
+        <div class="person-header-info">
+          <h2>Support Staff</h2>
+          <p>5 staff · administrative & paralegal roles · salary cost centre</p>
+        </div>
+      </div>
+      <div class="support-grid" id="support-grid">
+        <!-- injected by JS -->
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+var mode = 'annual';
+
+var FEE_COLORS = [
+  'linear-gradient(135deg,#2d5a27,#1a7a8f)',
+  'linear-gradient(135deg,#5c6bc0,#3949ab)',
+  'linear-gradient(135deg,#26a69a,#00897b)',
+  'linear-gradient(135deg,#7e57c2,#5e35b1)'
+];
+var FEE_ACCENTS = ['#2d5a27','#5c6bc0','#26a69a','#7e57c2'];
+
+var SUP_COLORS = [
+  'linear-gradient(135deg,#ff8a65,#f4511e)',
+  'linear-gradient(135deg,#ce93d8,#ab47bc)',
+  'linear-gradient(135deg,#ffb74d,#fb8c00)',
+  'linear-gradient(135deg,#81c784,#43a047)',
+  'linear-gradient(135deg,#4fc3f7,#0288d1)'
+];
+
+// State
+var feeEarners = [
+  { name:'Fee Earner 1', role:'Principal', rate:350, hours:1400, salary:180000, support:20000, overhead:60000 },
+  { name:'Fee Earner 2', role:'Senior Associate', rate:280, hours:1200, salary:120000, support:15000, overhead:50000 },
+  { name:'Fee Earner 3', role:'Associate', rate:220, hours:1100, salary:90000, support:12000, overhead:40000 },
+  { name:'Fee Earner 4', role:'Graduate', rate:160, hours:1000, salary:70000, support:10000, overhead:35000 }
+];
+
+var supportStaff = [
+  { name:'Support 1', role:'Practice Manager', salary:85000 },
+  { name:'Support 2', role:'Paralegal', salary:65000 },
+  { name:'Support 3', role:'Legal Secretary', salary:58000 },
+  { name:'Support 4', role:'Receptionist', salary:52000 },
+  { name:'Support 5', role:'Accounts / Admin', salary:55000 }
+];
+
+// ─────────────────────────────────────────────
+// BUILD DOM
+// ─────────────────────────────────────────────
+function buildUI() {
+  var sidebar = document.querySelector('.sidebar-section:first-of-type + .sidebar-divider + .sidebar-section');
+  // Re-query properly
+  var sections = document.querySelectorAll('.sidebar-section');
+  var feeSect = sections[0];
+  var supSect  = sections[1];
+
+  // Fee earner nav items
+  feeEarners.forEach(function(fe, i) {
+    var btn = document.createElement('button');
+    btn.className = 'person-btn';
+    btn.id = 'nav-fee-' + i;
+    btn.setAttribute('data-view', 'fee-' + i);
+    btn.onclick = function() { showView('fee-' + i); };
+    btn.innerHTML =
+      '<div class="person-avatar" style="background:' + FEE_COLORS[i] + '">' + (i+1) + '</div>' +
+      '<div class="person-info">' +
+        '<div class="person-name" id="nav-name-' + i + '">' + fe.name + '</div>' +
+        '<div class="person-role">' + fe.role + '</div>' +
+      '</div>' +
+      '<div class="person-profit" id="nav-profit-' + i + '"></div>';
+    feeSect.appendChild(btn);
+
+    // Create view
+    var view = document.createElement('div');
+    view.className = 'person-view';
+    view.id = 'view-fee-' + i;
+    view.innerHTML = buildFeeView(i);
+    document.getElementById('main').insertBefore(view, document.getElementById('view-support'));
+  });
+
+  // Support nav
+  var supBtn = document.createElement('button');
+  supBtn.className = 'person-btn';
+  supBtn.id = 'nav-support';
+  supBtn.onclick = function() { showView('support'); };
+  supBtn.innerHTML =
+    '<div class="person-avatar" style="background:linear-gradient(135deg,#4db6ac,#26a69a)">S</div>' +
+    '<div class="person-info"><div class="person-name">All Support Staff</div><div class="person-role">5 staff members</div></div>' +
+    '<div class="person-profit" id="nav-support-cost" style="color:var(--orange)"></div>';
+  supSect.appendChild(supBtn);
+
+  // Build support cards
+  buildSupportCards();
+
+  // Wire up all slider inputs
+  feeEarners.forEach(function(_, i) { wireSliders(i); });
+  supportStaff.forEach(function(_, i) { wireSupportSlider(i); });
+
+  update();
+}
+
+function buildFeeView(i) {
+  var fe = feeEarners[i];
+  var acc = FEE_ACCENTS[i];
+  return '<div class="person-header">' +
+    '<div class="person-header-avatar" style="background:' + FEE_COLORS[i] + ';font-size:22px;">' + (i+1) + '</div>' +
+    '<div class="person-header-info">' +
+      '<input class="name-input" id="name-input-' + i + '" value="' + fe.name + '" oninput="updateName(' + i + ',this.value)" />' +
+      '<p><input style="border:none;outline:none;background:transparent;color:var(--text-muted);font-size:13px;width:200px" value="' + fe.role + '" oninput="feeEarners[' + i + '].role=this.value;updateSidebarNames()" /></p>' +
+    '</div>' +
+  '</div>' +
+
+  '<div class="two-col">' +
+    '<div>' +
+      '<div class="panel">' +
+        '<div class="panel-title">INPUTS</div>' +
+        slider('fee'+i, 'rate', 'Charge-out Rate', acc, 150, 1200, fe.rate) +
+        slider('fee'+i, 'hours', 'Billable Hours / Year', acc, 0, 2200, fe.hours) +
+        slider('fee'+i, 'salary', 'Lawyer Salary / Year', '#ce93d8', 20000, 500000, fe.salary) +
+        slider('fee'+i, 'support', 'Legal Support', '#4db6ac', 0, 100000, fe.support) +
+        slider('fee'+i, 'overhead', 'Annual Overhead', '#ff8a65', 20000, 400000, fe.overhead) +
+      '</div>' +
+
+      '<div class="panel">' +
+        '<div class="panel-title">COST BREAKDOWN <span class="period-badge" id="fee'+i+'-cb-badge">ANNUAL</span></div>' +
+        costBar(i, 'salary', '#ce93d8', 'Salary') +
+        costBar(i, 'support', '#4db6ac', 'Support') +
+        costBar(i, 'overhead', '#ff8a65', 'Overhead') +
+        costBar(i, 'total', '#ef5350', 'Total Costs') +
+        '<div style="margin-top:8px;font-size:11px;color:var(--text-dim)">Costs are <span id="fee'+i+'-cost-pct"></span> of gross revenue</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div>' +
+      '<div class="health-row" id="fee'+i+'-health">' +
+        '<div><div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:3px">Health</div>' +
+        '<div class="health-label" id="fee'+i+'-health-label"></div></div>' +
+        '<div class="health-pct" id="fee'+i+'-health-pct"></div>' +
+      '</div>' +
+
+      '<div class="metrics-grid">' +
+        '<div class="metric-card wide" style="border-color:' + acc + '33">' +
+          '<div class="metric-label" id="fee'+i+'-lbl-rev">Gross Revenue — Annual</div>' +
+          '<div class="metric-value" id="fee'+i+'-rev" style="color:' + acc + '"></div>' +
+          '<div class="metric-sub" id="fee'+i+'-rev-sub"></div>' +
+        '</div>' +
+        '<div class="metric-card" style="border-color:#ff8a6533">' +
+          '<div class="metric-label" id="fee'+i+'-lbl-cost">Total Costs — Annual</div>' +
+          '<div class="metric-value" style="font-size:26px;color:#ff8a65" id="fee'+i+'-cost"></div>' +
+          '<div class="metric-sub" id="fee'+i+'-cost-sub"></div>' +
+        '</div>' +
+        '<div class="metric-card" style="border-color:#4fc3f733">' +
+          '<div class="metric-label" id="fee'+i+'-lbl-profit">Net Profit — Annual</div>' +
+          '<div class="metric-value" style="font-size:26px;" id="fee'+i+'-profit"></div>' +
+          '<div class="metric-sub" id="fee'+i+'-margin"></div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="panel">' +
+        '<div class="panel-title">KEY INSIGHTS</div>' +
+        insight(i,'be','Break-even hours','') +
+        insight(i,'util','Utilisation rate','vs 1,800hr target') +
+        insight(i,'edr','Effective daily rate','') +
+        insight(i,'surplus','Surplus profit hours','') +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function slider(prefix, key, label, color, min, max, val) {
+  return '<div class="slider-row">' +
+    '<div class="slider-labels">' +
+      '<span class="slider-name">' + label + '</span>' +
+      '<span class="slider-value" id="' + prefix + '-val-' + key + '" style="color:' + color + '"></span>' +
+    '</div>' +
+    '<div class="slider-track">' +
+      '<div class="slider-fill" id="' + prefix + '-fill-' + key + '" style="background:' + color + '"></div>' +
+      '<input type="range" min="' + min + '" max="' + max + '" value="' + val + '" id="' + prefix + '-s-' + key + '" oninput="onSlider(\'' + prefix + '\',\'' + key + '\')" />' +
+      '<div class="slider-thumb" id="' + prefix + '-thumb-' + key + '" style="background:' + color + '"></div>' +
+    '</div>' +
+    '<div class="slider-minmax"><span>$' + min.toLocaleString('en-AU') + (key==='hours'?'':''  ) + '</span><span>' + (key==='hours'?'2,200 hrs':'$'+max.toLocaleString('en-AU')) + '</span></div>' +
+  '</div>';
+}
+
+function costBar(i, key, color, label) {
+  return '<div class="cost-bar-row">' +
+    '<span class="cost-bar-name">' + label + '</span>' +
+    '<div class="cost-bar-track"><div class="cost-bar-fill" id="fee'+i+'-cb-'+key+'" style="background:'+color+'"></div></div>' +
+    '<span class="cost-bar-val" id="fee'+i+'-cbv-'+key+'" style="color:'+color+'"></span>' +
+  '</div>';
+}
+
+function insight(i, key, label, note) {
+  return '<div class="insight-row">' +
+    '<div><div class="insight-name">' + label + '</div>' +
+    (note ? '<div class="insight-note" id="fee'+i+'-ins-'+key+'-note">'+note+'</div>' : '<div class="insight-note" id="fee'+i+'-ins-'+key+'-note"></div>') + '</div>' +
+    '<div class="insight-val" id="fee'+i+'-ins-'+key+'"></div>' +
+  '</div>';
+}
+
+function buildSupportCards() {
+  var grid = document.getElementById('support-grid');
+  supportStaff.forEach(function(s, i) {
+    var card = document.createElement('div');
+    card.className = 'support-card';
+    card.innerHTML =
+      '<div class="support-card-header">' +
+        '<div class="support-avatar" style="background:' + SUP_COLORS[i] + '">' + (i+1) + '</div>' +
+        '<div style="flex:1">' +
+          '<input class="support-name-input" value="' + s.name + '" oninput="updateSupportName(' + i + ',this.value)" />' +
+          '<div class="support-role-tag"><input style="border:none;outline:none;background:transparent;color:var(--text-muted);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;width:100%" value="' + s.role + '" oninput="supportStaff[' + i + '].role=this.value" /></div>' +
+        '</div>' +
+      '</div>' +
+      slider('sup'+i, 'salary', 'Annual Salary', SUP_COLORS[i].includes('ff8a') ? '#ff8a65' : '#7986cb', 30000, 150000, s.salary) +
+      '<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">' +
+        '<span style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em">Annual Cost</span>' +
+        '<span class="mono" id="sup'+i+'-total" style="font-weight:700;color:#ff8a65"></span>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+// ─────────────────────────────────────────────
+// SLIDER WIRING
+// ─────────────────────────────────────────────
+function wireSliders(i) {
+  ['rate','hours','salary','support','overhead'].forEach(function(k) {
+    var el = document.getElementById('fee' + i + '-s-' + k);
+    if (el) el.addEventListener('input', function() { updateFee(i); updateSummary(); updateSidebarProfits(); });
+  });
+}
+
+function wireSupportSlider(i) {
+  var el = document.getElementById('sup' + i + '-s-salary');
+  if (el) el.addEventListener('input', function() { updateSupportCard(i); updateSummary(); });
+}
+
+function onSlider(prefix, key) {
+  // handled by wireSliders events
+}
+
+// ─────────────────────────────────────────────
+// UPDATES
+// ─────────────────────────────────────────────
+function setSliderUI(prefix, key, min, max) {
+  var el = document.getElementById(prefix + '-s-' + key);
+  if (!el) return +0;
+  var val = +el.value;
+  var ratio = ((val - min) / (max - min)) * 100;
+  var fill = document.getElementById(prefix + '-fill-' + key);
+  var thumb = document.getElementById(prefix + '-thumb-' + key);
+  if (fill)  fill.style.width = ratio + '%';
+  if (thumb) thumb.style.left = ratio + '%';
+  return val;
+}
+
+function fmt(n) {
+  var abs = Math.abs(n), sign = n < 0 ? '-' : '';
+  if (abs >= 1000000) return sign + '$' + (abs/1000000).toFixed(2) + 'M';
+  return sign + '$' + Math.round(abs).toLocaleString('en-AU');
+}
+function pct(n) { return (isNaN(n) ? 0 : n).toFixed(1) + '%'; }
+
+function getHealth(margin) {
+  if (margin > 40)      return { label:'STRONG',      color:'#2d5a27' };
+  if (margin > 20)      return { label:'HEALTHY',     color:'#4fc3f7' };
+  if (margin > 0)       return { label:'TIGHT',       color:'#ffb74d' };
+  return { label:'LOSS-MAKING', color:'#ef5350' };
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-annual').classList.toggle('active', m==='annual');
+  document.getElementById('btn-monthly').classList.toggle('active', m==='monthly');
+  update();
+}
+
+function update() {
+  feeEarners.forEach(function(_, i) { updateFee(i); });
+  supportStaff.forEach(function(_, i) { updateSupportCard(i); });
+  updateSummary();
+  updateSidebarProfits();
+}
+
+function updateFee(i) {
+  var isM = mode === 'monthly';
+  var div = isM ? 12 : 1;
+  var period = isM ? 'Monthly' : 'Annual';
+  var prefix = 'fee' + i;
+
+  var rate     = setSliderUI(prefix, 'rate',     150,    1200);
+  var hoursAnn = setSliderUI(prefix, 'hours',    0,      2200);
+  var salary   = setSliderUI(prefix, 'salary',   20000,  500000);
+  var support  = setSliderUI(prefix, 'support',  0,      100000);
+  var overhead = setSliderUI(prefix, 'overhead', 20000,  400000);
+
+  // save to state
+  feeEarners[i].rate     = rate;
+  feeEarners[i].hours    = hoursAnn;
+  feeEarners[i].salary   = salary;
+  feeEarners[i].support  = support;
+  feeEarners[i].overhead = overhead;
+
+  var grossAnn  = rate * hoursAnn;
+  var costsAnn  = salary + support + overhead;
+  var profitAnn = grossAnn - costsAnn;
+  var margin    = grossAnn > 0 ? (profitAnn / grossAnn) * 100 : 0;
+  var gross = grossAnn / div, costs = costsAnn / div, profit = profitAnn / div;
+
+  setText(prefix+'-val-rate',    '$' + rate.toLocaleString('en-AU') + '/hr');
+  setText(prefix+'-val-hours',   hoursAnn.toLocaleString('en-AU') + ' hrs/yr');
+  setText(prefix+'-val-salary',  '$' + salary.toLocaleString('en-AU') + '/yr');
+  setText(prefix+'-val-support', '$' + support.toLocaleString('en-AU') + '/yr');
+  setText(prefix+'-val-overhead','$' + overhead.toLocaleString('en-AU') + '/yr');
+
+  var h = getHealth(margin);
+  setStyle(prefix+'-health', 'background', 'linear-gradient(135deg,' + h.color + '12,' + h.color + '06)');
+  setStyle(prefix+'-health', 'borderColor', h.color + '44');
+  setText(prefix+'-health-label', h.label);
+  setStyle(prefix+'-health-label', 'color', h.color);
+  setText(prefix+'-health-pct', grossAnn > 0 ? pct(margin) : '—');
+  setStyle(prefix+'-health-pct', 'color', h.color);
+
+  setText(prefix+'-lbl-rev',  'Gross Revenue — ' + period);
+  setText(prefix+'-rev',      fmt(gross));
+  setText(prefix+'-rev-sub',  fmt(grossAnn/220) + '/day  ·  ' + (isM ? fmt(grossAnn) + ' annually' : fmt(grossAnn/12) + '/month'));
+  setText(prefix+'-lbl-cost', 'Total Costs — ' + period);
+  setText(prefix+'-cost',     fmt(costs));
+  setText(prefix+'-cost-sub', 'Sal ' + fmt(salary/div) + '  Sup ' + fmt(support/div) + '  OH ' + fmt(overhead/div));
+  setText(prefix+'-lbl-profit','Net Profit — ' + period);
+  setText(prefix+'-profit',   fmt(profit));
+  setStyle(prefix+'-profit',  'color', profit >= 0 ? '#4fc3f7' : '#ef5350');
+  setText(prefix+'-margin',   'Margin: ' + pct(margin) + (isM ? '  ·  ' + fmt(profitAnn) + ' annual' : '  ·  ' + fmt(profitAnn/12) + '/month'));
+
+  // cost bars
+  var cbBadge = document.getElementById(prefix+'-cb-badge');
+  if (cbBadge) cbBadge.textContent = period.toUpperCase();
+  ['salary','support','overhead'].forEach(function(k) {
+    var v = feeEarners[i][k];
+    setWidth(prefix+'-cb-'+k, grossAnn > 0 ? Math.min(100,(v/grossAnn)*100)+'%' : '0%');
+    setText(prefix+'-cbv-'+k, fmt(v/div));
+  });
+  setWidth(prefix+'-cb-total', grossAnn > 0 ? Math.min(100,(costsAnn/grossAnn)*100)+'%' : '0%');
+  setText(prefix+'-cbv-total', fmt(costs));
+  var cr = grossAnn > 0 ? (costsAnn/grossAnn)*100 : 0;
+  setText(prefix+'-cost-pct', grossAnn > 0 ? pct(cr) : '—');
+
+  // insights (always annual)
+  var beHours = rate > 0 ? Math.ceil(costsAnn / rate) : 0;
+  var surplus = hoursAnn - beHours;
+  setText(prefix+'-ins-be', beHours + ' hrs/yr');
+  setText(prefix+'-ins-be-note', 'to cover all costs at $'+rate+'/hr');
+  setText(prefix+'-ins-util', pct((hoursAnn/1800)*100));
+  setText(prefix+'-ins-edr', fmt(rate * 8));
+  setText(prefix+'-ins-edr-note', '$'+rate+'/hr × 8hr day');
+  setText(prefix+'-ins-surplus', surplus > 0 ? surplus + ' hrs' : 'None');
+  setText(prefix+'-ins-surplus-note', surplus > 0 ? 'hrs generating pure profit' : 'not yet profitable');
+}
+
+function updateSupportCard(i) {
+  var prefix = 'sup' + i;
+  var salary = setSliderUI(prefix, 'salary', 30000, 150000);
+  supportStaff[i].salary = salary;
+  setText(prefix+'-val-salary', '$' + salary.toLocaleString('en-AU') + '/yr');
+  var div = mode === 'monthly' ? 12 : 1;
+  setText(prefix+'-total', fmt(salary / div));
+}
+
+function updateSummary() {
+  var isM = mode === 'monthly';
+  var div = isM ? 12 : 1;
+  var period = isM ? 'Monthly' : 'Annual';
+
+  setText('summary-badge', period.toUpperCase());
+  setText('support-badge',  period.toUpperCase());
+
+  var totalRev = 0, totalCost = 0, totalProfit = 0;
+  feeEarners.forEach(function(fe) {
+    var gross = fe.rate * fe.hours;
+    var cost  = fe.salary + fe.support + fe.overhead;
+    totalRev    += gross;
+    totalCost   += cost;
+    totalProfit += gross - cost;
+  });
+  var totalSupport = supportStaff.reduce(function(s,x){return s+x.salary;},0);
+  var totalCostIncSupport = totalCost + totalSupport;
+  var totalProfitNet = totalRev - totalCostIncSupport;
+  var firmMargin = totalRev > 0 ? (totalProfitNet / totalRev) * 100 : 0;
+
+  var h = getHealth(firmMargin);
+
+  // KPI cards
+  var kpis = document.getElementById('firm-kpis');
+  kpis.innerHTML =
+    kpiCard('Gross Revenue', fmt(totalRev/div), isM ? fmt(totalRev)+' annually' : fmt(totalRev/12)+'/month', '#2d5a27') +
+    kpiCard('Total Costs', fmt(totalCostIncSupport/div), '4 fee earners + 5 support', '#ff8a65') +
+    kpiCard('Net Profit', fmt(totalProfitNet/div), 'Margin: ' + pct(firmMargin), totalProfitNet >= 0 ? '#4fc3f7' : '#ef5350') +
+    kpiCard('Firm Health', h.label, pct(firmMargin) + ' profit margin', h.color);
+
+  // Fee earner table
+  var tbody = document.getElementById('firm-tbody');
+  tbody.innerHTML = '';
+  var sumRev = 0, sumCost = 0, sumProfit = 0;
+  feeEarners.forEach(function(fe, i) {
+    var gross = fe.rate * fe.hours;
+    var cost  = fe.salary + fe.support + fe.overhead;
+    var profit = gross - cost;
+    var margin = gross > 0 ? (profit/gross)*100 : 0;
+    var h2 = getHealth(margin);
+    sumRev += gross; sumCost += cost; sumProfit += profit;
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:'+FEE_COLORS[i]+';display:flex;align-items:center;justify-content:center;font-family:\'Libre Baskerville\',sans-serif;font-size:13px;color:#fff">'+(i+1)+'</div><span style="font-weight:600" id="tbl-name-'+i+'">'+fe.name+'</span></div></td>' +
+      '<td class="mono">$' + fe.rate + '/hr</td>' +
+      '<td class="mono">' + fe.hours.toLocaleString('en-AU') + '</td>' +
+      '<td class="mono" style="color:#2d5a27">' + fmt(gross/div) + '</td>' +
+      '<td class="mono" style="color:#ff8a65">' + fmt(cost/div) + '</td>' +
+      '<td class="mono" style="color:' + (profit>=0?'#4fc3f7':'#ef5350') + '">' + fmt(profit/div) + '</td>' +
+      '<td class="mono">' + pct(margin) + '</td>' +
+      '<td><span class="pill ' + (margin>40?'pill-green':margin>0?'pill-amber':'pill-red') + '">' + h2.label + '</span></td>';
+    tbody.appendChild(tr);
+  });
+  // Totals row
+  var ttr = document.createElement('tr');
+  ttr.className = 'total-row';
+  ttr.innerHTML =
+    '<td>TOTALS (fee earners)</td><td>—</td><td>—</td>' +
+    '<td style="color:#2d5a27">' + fmt(sumRev/div) + '</td>' +
+    '<td style="color:#ff8a65">' + fmt(sumCost/div) + '</td>' +
+    '<td style="color:' + (sumProfit>=0?'#4fc3f7':'#ef5350') + '">' + fmt(sumProfit/div) + '</td>' +
+    '<td>' + pct(sumRev>0?(sumProfit/sumRev)*100:0) + '</td><td>—</td>';
+  tbody.appendChild(ttr);
+
+  // Support staff table
+  var supRows = document.getElementById('support-table-rows');
+  supRows.innerHTML = '';
+  supportStaff.forEach(function(s, i) {
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)';
+    row.innerHTML =
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        '<div style="width:22px;height:22px;border-radius:5px;background:'+SUP_COLORS[i]+';display:flex;align-items:center;justify-content:center;font-family:\'Libre Baskerville\',sans-serif;font-size:11px;color:#fff">'+(i+1)+'</div>' +
+        '<div><div style="font-size:13px;font-weight:500" id="summ-sup-name-'+i+'">'+s.name+'</div><div style="font-size:11px;color:var(--text-muted)">'+s.role+'</div></div>' +
+      '</div>' +
+      '<span class="mono" style="color:#ff8a65">'+fmt(s.salary/div)+'</span>';
+    supRows.appendChild(row);
+  });
+  setText('total-support-cost', fmt(totalSupport/div));
+}
+
+function kpiCard(label, value, sub, color) {
+  return '<div class="kpi-card" style="border-color:'+color+'33">' +
+    '<div class="kpi-label">'+label+'</div>' +
+    '<div class="kpi-value" style="color:'+color+'">'+value+'</div>' +
+    '<div class="kpi-sub">'+sub+'</div>' +
+  '</div>';
+}
+
+function updateSidebarProfits() {
+  feeEarners.forEach(function(fe, i) {
+    var gross = fe.rate * fe.hours;
+    var cost  = fe.salary + fe.support + fe.overhead;
+    var profit = gross - cost;
+    var div = mode === 'monthly' ? 12 : 1;
+    var el = document.getElementById('nav-profit-' + i);
+    if (el) {
+      el.textContent = fmt(profit/div);
+      el.style.color = profit >= 0 ? '#2d5a27' : '#ef5350';
+    }
+    var nameEl = document.getElementById('nav-name-' + i);
+    if (nameEl) nameEl.textContent = feeEarners[i].name;
+    var tblName = document.getElementById('tbl-name-' + i);
+    if (tblName) tblName.textContent = feeEarners[i].name;
+  });
+  var totalSupport = supportStaff.reduce(function(s,x){return s+x.salary;},0);
+  var div = mode === 'monthly' ? 12 : 1;
+  var el = document.getElementById('nav-support-cost');
+  if (el) el.textContent = fmt(totalSupport/div);
+}
+
+function updateSidebarNames() {
+  feeEarners.forEach(function(fe, i) {
+    var el = document.getElementById('nav-name-' + i);
+    if (el) el.textContent = fe.name;
+  });
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+function showView(id) {
+  // Hide all views
+  document.querySelectorAll('.person-view, .summary-view').forEach(function(v) {
+    v.classList.remove('active');
+  });
+  // Deactivate all nav buttons
+  document.querySelectorAll('.person-btn, .summary-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+
+  var view = document.getElementById('view-' + id);
+  if (view) view.classList.add('active');
+
+  var nav = document.getElementById('nav-' + id.replace('-','_'));
+  if (!nav) nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('active');
+
+  // fee earner nav buttons
+  if (id.startsWith('fee-')) {
+    var idx = id.split('-')[1];
+    var btn = document.getElementById('nav-fee-' + idx);
+    if (btn) btn.classList.add('active');
+  } else if (id === 'support') {
+    var btn2 = document.getElementById('nav-support');
+    if (btn2) btn2.classList.add('active');
+  } else if (id === 'summary') {
+    var btn3 = document.getElementById('nav-summary');
+    if (btn3) btn3.classList.add('active');
+  }
+}
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function setText(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+function setStyle(id, prop, val) { var el = document.getElementById(id); if (el) el.style[prop] = val; }
+function setWidth(id, val) { var el = document.getElementById(id); if (el) el.style.width = val; }
+
+function updateName(i, val) {
+  feeEarners[i].name = val;
+  updateSidebarNames();
+  updateSummary();
+}
+function updateSupportName(i, val) {
+  supportStaff[i].name = val;
+  updateSummary();
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+buildUI();
+</script>
+
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) { window.location.href = "/login.html"; }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

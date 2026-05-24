@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Form — Knowledgebase.business — Business SOP Tool Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #0d2b36;
+  --navy-mid:   #1a3f4d;
+  --teal:       #0c5c52;
+  --teal-light: #e8f5f3;
+  --aqua:       #3a9e91;
+  --aqua-light: #9ecdd6;
+  --amber:      #9a6020;
+  --amber-bg:   #fdf6ec;
+  --red:        #7a2020;
+  --red-bg:     #fdf0f0;
+  --green:      #2e7d5c;
+  --green-bg:   #eaf5ef;
+  --ink:        #1a2830;
+  --ink-mid:    #3a4e58;
+  --ink-faint:  #8aa0ac;
+  --rule:       #dce8f0;
+  --page:       #f2f7f9;
+  --white:      #ffffff;
+  --card-radius: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── BANNER ── */
+.banner {
+  height: 4px;
+  background: linear-gradient(90deg, var(--teal), var(--aqua), var(--aqua-light));
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--navy);
+  padding: 36px 40px 30px;
+}
+.header-inner { max-width: 860px; margin: 0 auto; }
+.header-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--aqua-light);
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.header-sub {
+  font-size: 13px;
+  color: var(--aqua-light);
+  font-weight: 300;
+  opacity: 0.75;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  background: var(--navy-mid);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 40px;
+}
+.progress-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.progress-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--aqua-light);
+  white-space: nowrap;
+  opacity: 0.7;
+}
+.progress-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--aqua), var(--aqua-light));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.progress-pct {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--aqua-light);
+  opacity: 0.7;
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ── MAIN ── */
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 40px 60px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border-radius: var(--card-radius);
+  border: 1.5px solid var(--rule);
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.card:focus-within { border-color: var(--aqua); }
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 24px 18px;
+  background: #f7fbfc;
+  border-bottom: 1.5px solid var(--rule);
+}
+.card-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+.card-hint {
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.card-body {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── FIELDS ── */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+.field-hint {
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin-top: -3px;
+  margin-bottom: 2px;
+}
+
+input[type="text"],
+textarea,
+select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--ink);
+  background: var(--page);
+  border: 1.5px solid var(--rule);
+  border-radius: 6px;
+  padding: 10px 13px;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+  resize: vertical;
+}
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--aqua);
+  background: var(--white);
+}
+textarea { min-height: 110px; line-height: 1.6; }
+textarea.tall { min-height: 160px; }
+textarea.short { min-height: 80px; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
+
+/* ── CALLOUT ── */
+.callout {
+  border-radius: 7px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.callout-teal {
+  background: var(--teal-light);
+  border-left: 3px solid var(--aqua);
+  color: var(--teal);
+}
+.callout-amber {
+  background: var(--amber-bg);
+  border-left: 3px solid var(--amber);
+  color: var(--amber);
+}
+
+/* ── POLICY ROWS ── */
+.policy-section { display: flex; flex-direction: column; gap: 10px; }
+.policy-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: 2px;
+}
+.policy-rows { display: flex; flex-direction: column; gap: 8px; }
+.policy-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.policy-tag {
+  flex-shrink: 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 9px;
+  border-radius: 4px;
+  min-width: 58px;
+  text-align: center;
+}
+.policy-tag.always {
+  background: rgba(46,125,92,0.15);
+  color: var(--green);
+  border: 1px solid rgba(46,125,92,0.25);
+}
+.policy-tag.never {
+  background: rgba(122,32,32,0.12);
+  color: var(--red);
+  border: 1px solid rgba(122,32,32,0.2);
+}
+.policy-row input {
+  flex: 1;
+  min-height: unset;
+  padding: 8px 12px;
+}
+.policy-row .remove-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
+}
+.policy-row .remove-btn:hover { color: var(--red); background: var(--red-bg); }
+
+.add-policy-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.add-policy-row button {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1.5px solid var(--rule);
+  cursor: pointer;
+  background: var(--white);
+  color: var(--ink-mid);
+  transition: all 0.15s;
+}
+.add-policy-row button:hover { border-color: var(--aqua); color: var(--teal); }
+.add-policy-row button.btn-always:hover { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+.add-policy-row button.btn-never:hover { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+
+.policy-divider {
+  height: 1px;
+  background: var(--rule);
+  margin: 6px 0;
+}
+
+/* ── STEPS LIST (repeatable) ── */
+.steps-list { display: flex; flex-direction: column; gap: 8px; }
+.step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.step-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+}
+.step-row input { flex: 1; }
+.step-row .remove-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  font-size: 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 7px;
+  transition: color 0.15s, background 0.15s;
+}
+.step-row .remove-btn:hover { color: var(--red); background: var(--red-bg); }
+.add-step-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1.5px dashed var(--rule);
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink-faint);
+  transition: all 0.15s;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+.add-step-btn:hover { border-color: var(--aqua); color: var(--teal); background: var(--teal-light); }
+
+/* ── GENERATE ── */
+.generate-wrap {
+  background: var(--white);
+  border-radius: var(--card-radius);
+  border: 1.5px solid var(--rule);
+  padding: 28px 24px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.generate-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.generate-sub {
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  margin-bottom: 20px;
+}
+.generate-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 32px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--navy);
+  color: var(--white);
+  letter-spacing: 0.02em;
+  transition: background 0.2s, transform 0.1s;
+}
+.generate-btn:hover { background: var(--teal); }
+.generate-btn:active { transform: scale(0.98); }
+
+/* ── BRIEF OUTPUT ── */
+.brief-wrap {
+  display: none;
+  background: var(--white);
+  border-radius: var(--card-radius);
+  border: 1.5px solid var(--aqua);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.brief-wrap.visible { display: block; }
+.brief-header {
+  background: var(--navy);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brief-header-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aqua-light);
+}
+.copy-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: var(--aqua-light);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.15); }
+.copy-btn.copied { background: var(--teal); color: var(--white); border-color: var(--teal); }
+
+.brief-output {
+  padding: 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 500px;
+  overflow-y: auto;
+  background: #f9fcfd;
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 24px 40px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  opacity: 0.5;
+}
+
+@media (max-width: 620px) {
+  .header { padding: 28px 20px 22px; }
+  .progress-wrap { padding: 12px 20px; }
+  .main { padding: 24px 16px 48px; }
+  .card-body { padding: 18px 16px; }
+  .card-header { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="banner"></div>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">Repositioned · Business SOP Tool Kit</div>
+    <div class="header-title">Process Form — Knowledgebase.business</div>
+    <div class="header-sub">Complete all seven sections — takes most people 15–30 minutes</div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-label">Progress</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-pct" id="progress-pct">0%</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- CARD 1: ABOUT THIS PROCESS -->
+  <div class="card" id="card-1">
+    <div class="card-header">
+      <div class="card-num">1</div>
+      <div>
+        <div class="card-title">About This Process</div>
+        <div class="card-hint">Identify the process and who it belongs to</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Process Name <span style="color:var(--red);font-weight:400;">*</span></label>
+        <div class="field-hint">What do you call this process day-to-day? e.g. "Initial Booking", "File Opening", "Settlement Day"</div>
+        <input type="text" id="f-name" placeholder="e.g. Initial Client Booking" oninput="updateProgress()">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Written for <span style="color:var(--red);font-weight:400;">*</span></label>
+          <div class="field-hint">Role, not person — e.g. "Reception", "Conveyancer"</div>
+          <input type="text" id="f-role" placeholder="e.g. Reception" oninput="updateProgress()">
+        </div>
+        <div class="field">
+          <label>Business / Team</label>
+          <div class="field-hint">Which firm or department does this belong to?</div>
+          <input type="text" id="f-business" placeholder="e.g. Knowledgebase.business" oninput="updateProgress()">
+        </div>
+      </div>
+      <div class="field">
+        <label>What triggers this process?</label>
+        <div class="field-hint">What event, action, or request causes this process to start?</div>
+        <input type="text" id="f-trigger" placeholder="e.g. A client calls or walks in asking about a property purchase" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <label>What does it produce?</label>
+        <div class="field-hint">What is the result when this process is completed correctly?</div>
+        <input type="text" id="f-outcome" placeholder="e.g. A confirmed consultation booking with conflict check complete" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <label>Brief description</label>
+        <div class="field-hint">2–3 sentences. What happens in this process and why does it matter?</div>
+        <textarea class="short" id="f-description" placeholder="This process covers everything from the moment a new client makes contact through to confirming their first appointment. It ensures we capture the right information, complete a conflict check, and set expectations before the consultation..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: THE STEPS -->
+  <div class="card" id="card-2">
+    <div class="card-header">
+      <div class="card-num">2</div>
+      <div>
+        <div class="card-title">The Steps</div>
+        <div class="card-hint">Walk through the process as it actually happens — one step per line</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="callout callout-teal">
+        Write each step as something a person <strong>does</strong> — start with a verb. Don't worry about getting them perfect. Aim for the real sequence, not the ideal one. You can use the textarea or the numbered rows below.
+      </div>
+      <div class="field">
+        <label>Free-form notes</label>
+        <div class="field-hint">Describe the process in your own words — the tool will use this to structure the SOP</div>
+        <textarea class="tall" id="f-steps-freeform" placeholder="e.g. Client calls or walks in. Reception greets them and asks what they need. If it's a property matter, we take their name and number first before discussing anything. Then we check for conflicts in LEAP..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>Key steps — numbered list <span style="font-weight:400;text-transform:none;letter-spacing:0;font-style:italic;color:var(--ink-faint);">— optional, use instead of or alongside the notes above</span></label>
+        <div class="steps-list" id="steps-list"></div>
+        <button class="add-step-btn" onclick="addStep()">+ Add a step</button>
+      </div>
+      <div class="field">
+        <label>Roughly how many steps?</label>
+        <div class="field-hint">Ballpark only — this helps size the tool</div>
+        <input type="text" id="f-step-count" placeholder="e.g. 12–15" oninput="updateProgress()">
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: DECISION POINTS -->
+  <div class="card" id="card-3">
+    <div class="card-header">
+      <div class="card-num">3</div>
+      <div>
+        <div class="card-title">Decision Points &amp; Branches</div>
+        <div class="card-hint">Where does the process fork? What questions or conditions change what happens next?</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="callout callout-teal">
+        A decision point is any moment where the answer to a question changes what happens next. These become the diamond shapes in the flowchart. Even simple Yes/No questions count — e.g. "Is there a conflict?" or "Did the client confirm?"
+      </div>
+      <div class="field">
+        <label>Decision points in this process</label>
+        <div class="field-hint">List each fork. For each one, note the question and what happens for each answer.</div>
+        <textarea class="tall" id="f-decisions" placeholder="e.g.&#10;1. Is the matter within scope? — YES: continue booking. NO: advise client and refer elsewhere.&#10;2. Does a conflict exist in LEAP? — YES: escalate to principal before proceeding. NO: continue.&#10;3. Does the client want a phone, video, or in-person consultation? — changes the room/link preparation step." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>Common exceptions or edge cases</label>
+        <div class="field-hint">What situations break the normal flow? Walk-ins after hours, difficult clients, system outages, etc.</div>
+        <textarea class="short" id="f-exceptions" placeholder="e.g. Walk-in with no appointment during a busy period — reception takes name and number and offers a callback. LEAP is down — use the paper intake form in the top drawer." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4: SYSTEMS & TOOLS -->
+  <div class="card" id="card-4">
+    <div class="card-header">
+      <div class="card-num">4</div>
+      <div>
+        <div class="card-title">Systems &amp; Tools</div>
+        <div class="card-hint">What software, forms, templates, and physical items does this process use?</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Software &amp; systems</label>
+        <div class="field-hint">List every system used at any point — name the specific module if you can</div>
+        <textarea class="short" id="f-systems" placeholder="e.g. LEAP (New Matter wizard, Conflict Check module), MYOB (trust account), Microsoft Outlook, phone system, firm website contact form" oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>Forms, templates &amp; documents</label>
+        <div class="field-hint">Any paper forms, Word templates, email templates, or PDFs used in this process</div>
+        <textarea class="short" id="f-forms" placeholder="e.g. Client Intake Form (paper backup), Engagement Letter template, Consultation Confirmation email template, Trust Account Authority form" oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>Physical props or equipment</label>
+        <div class="field-hint">Anything physical — room, printer, scanner, signing pad, etc.</div>
+        <input type="text" id="f-props" placeholder="e.g. Meeting room 1, reception sign-in sheet, scanner" oninput="updateProgress()">
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 5: POLICY -->
+  <div class="card" id="card-5">
+    <div class="card-header">
+      <div class="card-num" style="background:var(--navy);">5</div>
+      <div>
+        <div class="card-title">Policy — Always &amp; Never</div>
+        <div class="card-hint">The rules this process must never break, regardless of circumstances</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="callout callout-teal">
+        <strong>Two layers of policy:</strong> Firm-level rules come from leadership and apply everywhere. Process-level rules are specific to this workflow — often unwritten, living in someone's head. Both go here. Write them as plain "Always…" or "Never…" statements.
+      </div>
+
+      <!-- FIRM-LEVEL -->
+      <div class="policy-section">
+        <div class="policy-section-label">Firm-level — set by leadership, applies across all processes</div>
+        <div class="policy-rows" id="firm-policy-rows"></div>
+        <div class="add-policy-row">
+          <button class="btn-always" onclick="addPolicyRow('firm','always')">+ Always</button>
+          <button class="btn-never" onclick="addPolicyRow('firm','never')">+ Never</button>
+        </div>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <!-- PROCESS-LEVEL -->
+      <div class="policy-section">
+        <div class="policy-section-label">Process-level — specific to this workflow</div>
+        <div class="policy-rows" id="proc-policy-rows"></div>
+        <div class="add-policy-row">
+          <button class="btn-always" onclick="addPolicyRow('proc','always')">+ Always</button>
+          <button class="btn-never" onclick="addPolicyRow('proc','never')">+ Never</button>
+        </div>
+      </div>
+
+      <div class="callout callout-amber" style="margin-top:4px;">
+        If you're not sure what the rules are, leave this section and ask the business owner or principal — these statements matter more than any other part of the form.
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 6: COMPLIANCE -->
+  <div class="card" id="card-6">
+    <div class="card-header">
+      <div class="card-num">6</div>
+      <div>
+        <div class="card-title">Compliance &amp; Obligations</div>
+        <div class="card-hint">Legal, regulatory, or professional obligations specific to this process</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Regulatory obligations</label>
+        <div class="field-hint">Any legislation, industry rules, or professional standards that apply — e.g. LPUL, ARNECC, Privacy Act</div>
+        <textarea class="short" id="f-compliance" placeholder="e.g. Conflict check required under LPUL before a retainer is signed. Client must receive a costs disclosure before any fee is agreed. Verification of identity required for all conveyancing matters under ARNECC." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>Internal rules &amp; firm standards</label>
+        <div class="field-hint">Things not required by law but required by firm policy or the principal</div>
+        <textarea class="short" id="f-internal-rules" placeholder="e.g. All new matters must be entered in LEAP before the consultation, not after. Consultation fees are always quoted in writing before the appointment." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>Time-critical steps or deadlines</label>
+        <div class="field-hint">Any steps that must happen within a specific timeframe</div>
+        <input type="text" id="f-deadlines" placeholder="e.g. Confirmation email sent within 30 minutes of booking. Conflict check completed before end of same business day." oninput="updateProgress()">
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 7: ANYTHING ELSE -->
+  <div class="card" id="card-7">
+    <div class="card-header">
+      <div class="card-num">7</div>
+      <div>
+        <div class="card-title">Anything Else</div>
+        <div class="card-hint">What we haven't asked that the tool builder needs to know</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>What goes wrong most often?</label>
+        <div class="field-hint">The most common failure points in this process — what do new staff get wrong?</div>
+        <textarea class="short" id="f-pitfalls" placeholder="e.g. Staff sometimes discuss the matter before taking a name and number. The conflict check is skipped when the office is busy. Clients aren't told about the consultation fee upfront." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>Who owns this process?</label>
+        <div class="field-hint">Name and role of the person responsible for keeping this process current</div>
+        <input type="text" id="f-owner" placeholder="e.g. Micheline KB — Principal" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <label>Who do staff ask when something goes wrong?</label>
+        <div class="field-hint">The escalation point — name, role, or both</div>
+        <input type="text" id="f-escalation" placeholder="e.g. The principal, or senior conveyancer on duty" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <label>Anything else the tool builder should know</label>
+        <div class="field-hint">Unusual context, seasonal patterns, planned changes, history behind the process</div>
+        <textarea class="short" id="f-other" placeholder="e.g. This process was overhauled in January after a compliance audit. December–February is very quiet so some steps may be skipped during that period. We're planning to move to e-signature in mid-year." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="generate-wrap">
+    <div class="generate-title">Ready to generate your brief?</div>
+    <div class="generate-sub">Review your answers above, then click below to create a structured brief for Practice Smarts.</div>
+    <button class="generate-btn" onclick="generateBrief()">Generate Brief for Practice Smarts</button>
+  </div>
+
+  <!-- BRIEF OUTPUT -->
+  <div class="brief-wrap" id="brief-wrap">
+    <div class="brief-header">
+      <div class="brief-header-title">Process Mapping Brief — Practice Smarts</div>
+      <button class="copy-btn" id="copy-btn" onclick="copyBrief()">Copy brief</button>
+    </div>
+    <div class="brief-output" id="brief-output"></div>
+  </div>
+
+</div><!-- /main -->
+
+<div class="footer">Repositioned · Business SOP Tool Kit · Process Form — Knowledgebase.business</div>
+
+<script>
+// ── STEP ROWS ──
+var stepCount = 0;
+function addStep() {
+  stepCount++;
+  var list = document.getElementById('steps-list');
+  var row = document.createElement('div');
+  row.className = 'step-row';
+  row.id = 'step-row-' + stepCount;
+  var num = stepCount;
+  row.innerHTML =
+    '<div class="step-num">' + num + '</div>' +
+    '<input type="text" placeholder="e.g. Answer the call and greet the client" oninput="updateProgress()">' +
+    '<button class="remove-btn" onclick="removeStep(\'step-row-' + stepCount + '\')">×</button>';
+  list.appendChild(row);
+  row.querySelector('input').focus();
+  updateProgress();
+}
+function removeStep(id) {
+  var row = document.getElementById(id);
+  if (row) { row.remove(); renumberSteps(); updateProgress(); }
+}
+function renumberSteps() {
+  var rows = document.querySelectorAll('.step-row');
+  rows.forEach(function(r, i) { r.querySelector('.step-num').textContent = i + 1; });
+}
+function getSteps() {
+  var rows = document.querySelectorAll('.step-row input');
+  var steps = [];
+  rows.forEach(function(inp) { if (inp.value.trim()) steps.push(inp.value.trim()); });
+  return steps;
+}
+
+// ── POLICY ROWS ──
+var policyCount = 0;
+function addPolicyRow(section, type) {
+  policyCount++;
+  var containerId = section + '-policy-rows';
+  var container = document.getElementById(containerId);
+  var row = document.createElement('div');
+  row.className = 'policy-row';
+  row.id = 'pr-' + policyCount;
+  var tagLabel = type === 'always' ? 'ALWAYS' : 'NEVER';
+  var tagClass = type === 'always' ? 'always' : 'never';
+  var placeholder = type === 'always'
+    ? (section === 'firm' ? 'e.g. obtain written conflict check confirmation before booking' : 'e.g. capture name and number before discussing the matter')
+    : (section === 'firm' ? 'e.g. provide legal advice before a retainer is signed' : 'e.g. leave a walk-in waiting more than two minutes unacknowledged');
+  row.innerHTML =
+    '<div class="policy-tag ' + tagClass + '">' + tagLabel + '</div>' +
+    '<input type="text" placeholder="' + placeholder + '" oninput="updateProgress()">' +
+    '<button class="remove-btn" onclick="removePolicyRow(\'pr-' + policyCount + '\')">×</button>';
+  container.appendChild(row);
+  row.querySelector('input').focus();
+  updateProgress();
+}
+function removePolicyRow(id) {
+  var row = document.getElementById(id);
+  if (row) { row.remove(); updateProgress(); }
+}
+function getPolicyRows(section) {
+  var container = document.getElementById(section + '-policy-rows');
+  var rows = container.querySelectorAll('.policy-row');
+  var result = [];
+  rows.forEach(function(r) {
+    var tag = r.querySelector('.policy-tag').textContent.trim();
+    var val = r.querySelector('input').value.trim();
+    if (val) result.push(tag + ' ' + val);
+  });
+  return result;
+}
+
+// ── PROGRESS ──
+function updateProgress() {
+  var fields = [
+    'f-name','f-role','f-business','f-trigger','f-outcome','f-description',
+    'f-steps-freeform','f-step-count',
+    'f-decisions','f-exceptions',
+    'f-systems','f-forms','f-props',
+    'f-compliance','f-internal-rules','f-deadlines',
+    'f-pitfalls','f-owner','f-escalation','f-other'
+  ];
+  var filled = 0;
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.value.trim().length > 0) filled++;
+  });
+  // Count policy rows that have content
+  var pRows = document.querySelectorAll('.policy-row input');
+  var hasPolicy = false;
+  pRows.forEach(function(inp) { if (inp.value.trim()) hasPolicy = true; });
+  if (hasPolicy) filled++;
+  // Count step rows
+  var sRows = document.querySelectorAll('.step-row input');
+  var hasSteps = false;
+  sRows.forEach(function(inp) { if (inp.value.trim()) hasSteps = true; });
+  if (hasSteps) filled++;
+
+  var total = fields.length + 2;
+  var pct = Math.round((filled / total) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+// ── GENERATE BRIEF ──
+function generateBrief() {
+  var lines = [];
+
+  lines.push('PROCESS MAPPING BRIEF — FOR PRACTICE SMARTS');
+  lines.push('============================================');
+  lines.push('');
+
+  // Card 1
+  lines.push('SECTION 1 — ABOUT THIS PROCESS');
+  lines.push('--------------------------------');
+  lines.push('Process Name:   ' + (val('f-name') || '—'));
+  lines.push('Written For:    ' + (val('f-role') || '—'));
+  lines.push('Business/Team:  ' + (val('f-business') || '—'));
+  lines.push('Trigger:        ' + (val('f-trigger') || '—'));
+  lines.push('Outcome:        ' + (val('f-outcome') || '—'));
+  if (val('f-description')) {
+    lines.push('');
+    lines.push('Description:');
+    lines.push(val('f-description'));
+  }
+  lines.push('');
+
+  // Card 2
+  lines.push('SECTION 2 — THE STEPS');
+  lines.push('----------------------');
+  if (val('f-steps-freeform')) {
+    lines.push('Free-form description:');
+    lines.push(val('f-steps-freeform'));
+    lines.push('');
+  }
+  var steps = getSteps();
+  if (steps.length > 0) {
+    lines.push('Numbered steps:');
+    steps.forEach(function(s, i) { lines.push((i+1) + '. ' + s); });
+    lines.push('');
+  }
+  if (val('f-step-count')) lines.push('Approximate step count: ' + val('f-step-count'));
+  lines.push('');
+
+  // Card 3
+  lines.push('SECTION 3 — DECISION POINTS & BRANCHES');
+  lines.push('----------------------------------------');
+  if (val('f-decisions')) {
+    lines.push('Decision points:');
+    lines.push(val('f-decisions'));
+    lines.push('');
+  }
+  if (val('f-exceptions')) {
+    lines.push('Exceptions/edge cases:');
+    lines.push(val('f-exceptions'));
+  }
+  lines.push('');
+
+  // Card 4
+  lines.push('SECTION 4 — SYSTEMS & TOOLS');
+  lines.push('-----------------------------');
+  if (val('f-systems')) lines.push('Software/systems: ' + val('f-systems'));
+  if (val('f-forms')) lines.push('Forms/templates:  ' + val('f-forms'));
+  if (val('f-props')) lines.push('Physical props:   ' + val('f-props'));
+  lines.push('');
+
+  // Card 5 — Policy
+  lines.push('SECTION 5 — POLICY (ALWAYS / NEVER)');
+  lines.push('--------------------------------------');
+  var firmPolicy = getPolicyRows('firm');
+  var procPolicy = getPolicyRows('proc');
+  if (firmPolicy.length > 0) {
+    lines.push('Firm-level:');
+    firmPolicy.forEach(function(p) { lines.push('  • ' + p); });
+    lines.push('');
+  } else {
+    lines.push('Firm-level: (none entered)');
+    lines.push('');
+  }
+  if (procPolicy.length > 0) {
+    lines.push('Process-level:');
+    procPolicy.forEach(function(p) { lines.push('  • ' + p); });
+  } else {
+    lines.push('Process-level: (none entered)');
+  }
+  lines.push('');
+
+  // Card 6
+  lines.push('SECTION 6 — COMPLIANCE & OBLIGATIONS');
+  lines.push('---------------------------------------');
+  if (val('f-compliance')) { lines.push('Regulatory:'); lines.push(val('f-compliance')); lines.push(''); }
+  if (val('f-internal-rules')) { lines.push('Internal rules:'); lines.push(val('f-internal-rules')); lines.push(''); }
+  if (val('f-deadlines')) lines.push('Time-critical steps: ' + val('f-deadlines'));
+  lines.push('');
+
+  // Card 7
+  lines.push('SECTION 7 — ANYTHING ELSE');
+  lines.push('---------------------------');
+  if (val('f-pitfalls')) { lines.push('Common failure points:'); lines.push(val('f-pitfalls')); lines.push(''); }
+  if (val('f-owner')) lines.push('Process owner:     ' + val('f-owner'));
+  if (val('f-escalation')) lines.push('Escalation point:  ' + val('f-escalation'));
+  if (val('f-other')) { lines.push(''); lines.push('Additional context:'); lines.push(val('f-other')); }
+  lines.push('');
+  lines.push('============================================');
+  lines.push('End of brief');
+
+  var text = lines.join('\n');
+  document.getElementById('brief-output').textContent = text;
+  document.getElementById('brief-wrap').classList.add('visible');
+  document.getElementById('brief-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function val(id) {
+  var el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function copyBrief() {
+  var text = document.getElementById('brief-output').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy brief';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// init
+updateProgress();
+</script>
+
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) { window.location.href = "/login.html"; }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

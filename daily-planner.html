@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily Planner — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --lime: #2d5a27;
+  --bg: #f0f5ef;
+  --bg-panel: #ffffff;
+  --border: #d4e8d1;
+  --text: #1a3d16;
+  --text-muted: #4a7c59;
+  --text-dim: #a0c4a8;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding: 40px 24px;
+}
+
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ── HEADER ── */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  color: var(--lime);
+}
+.date-display {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--lime);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── WIN OF THE DAY ── */
+.win-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--lime);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 28px;
+}
+.win-box textarea {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  resize: none;
+  line-height: 1.5;
+}
+.win-box textarea::placeholder { color: var(--text-dim); }
+
+/* ── PRIORITY TASKS ── */
+.priorities {
+  margin-bottom: 28px;
+}
+.priority-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.priority-row:first-of-type { border-top: 1px solid var(--border); }
+.priority-num {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 22px;
+  color: var(--lime);
+  width: 24px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.priority-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid var(--text-dim);
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  background: none;
+}
+.priority-check:hover { border-color: var(--lime); }
+.priority-check.done {
+  background: rgba(171,186,23,0.15);
+  border-color: var(--lime);
+}
+.priority-check.done::after {
+  content: '✓';
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--lime);
+}
+.priority-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.4;
+}
+.priority-input::placeholder { color: var(--text-dim); }
+.priority-input.done-text {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+/* ── TASK LIST ── */
+.task-section { margin-bottom: 28px; }
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.task-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--text-dim);
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  background: none;
+}
+.task-check:hover { border-color: var(--lime); }
+.task-check.done { background: rgba(171,186,23,0.15); border-color: var(--lime); }
+.task-check.done::after { content: '✓'; font-size: 10px; font-weight: 700; color: var(--lime); }
+.task-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+}
+.task-input::placeholder { color: var(--text-dim); }
+.task-input.done-text { text-decoration: line-through; color: var(--text-dim); }
+
+/* ── ADD ROW ── */
+.add-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+.add-btn {
+  background: none;
+  border: 1px dashed var(--text-dim);
+  color: var(--text-dim);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.add-btn:hover { border-color: var(--lime); color: var(--lime); }
+
+/* ── NOTES ── */
+.notes-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 28px;
+}
+.notes-box textarea {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  resize: none;
+  line-height: 1.7;
+  min-height: 80px;
+}
+.notes-box textarea::placeholder { color: var(--text-dim); }
+
+/* ── ACTIONS ── */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.btn {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  padding: 10px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: #2d5a27;
+  color: #ffffff;
+  border: none;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-outline {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.btn-outline:hover { border-color: var(--lime); color: var(--lime); }
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; color: #1a3d16; padding: 20px; }
+  .brand { color: #2d5a27; }
+  .date-display { color: #1a3d16; }
+  .section-label { color: #2d5a27; }
+  .win-box, .notes-box { background: #f9f9f9; border-color: #ddd; }
+  .win-box { border-left-color: #2d5a27; }
+  .priority-num { color: #2d5a27; }
+  .priority-input, .task-input, textarea { color: #1a3d16; }
+  .priority-check, .task-check { border-color: #999; }
+  .priority-row, .task-row { border-color: #eee; }
+  .actions { display: none; }
+  .section-label::after { background: #eee; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOP -->
+  <div class="top">
+    <div class="brand">Knowledgebase.business · Daily Planner</div>
+    <div class="date-display" id="date-display"></div>
+  </div>
+
+  <!-- WIN -->
+  <div class="section-label">One Win I'm Aiming For Today</div>
+  <div class="win-box">
+    <textarea id="win" rows="2" placeholder="What would make today a success?"></textarea>
+  </div>
+
+  <!-- TOP 3 PRIORITIES -->
+  <div class="section-label">Top 3 Priorities</div>
+  <div class="priorities" id="priorities">
+    <div class="priority-row">
+      <div class="priority-num">1</div>
+      <div class="priority-check" onclick="togglePriority(this)"></div>
+      <input class="priority-input" type="text" placeholder="Most important task today…" />
+    </div>
+    <div class="priority-row">
+      <div class="priority-num">2</div>
+      <div class="priority-check" onclick="togglePriority(this)"></div>
+      <input class="priority-input" type="text" placeholder="Second priority…" />
+    </div>
+    <div class="priority-row">
+      <div class="priority-num">3</div>
+      <div class="priority-check" onclick="togglePriority(this)"></div>
+      <input class="priority-input" type="text" placeholder="Third priority…" />
+    </div>
+  </div>
+
+  <!-- TASK LIST -->
+  <div class="task-section">
+    <div class="section-label">Everything Else</div>
+    <div id="task-list">
+      <div class="task-row">
+        <div class="task-check" onclick="toggleTask(this)"></div>
+        <input class="task-input" type="text" placeholder="Add a task…" />
+      </div>
+      <div class="task-row">
+        <div class="task-check" onclick="toggleTask(this)"></div>
+        <input class="task-input" type="text" placeholder="Add a task…" />
+      </div>
+      <div class="task-row">
+        <div class="task-check" onclick="toggleTask(this)"></div>
+        <input class="task-input" type="text" placeholder="Add a task…" />
+      </div>
+      <div class="task-row">
+        <div class="task-check" onclick="toggleTask(this)"></div>
+        <input class="task-input" type="text" placeholder="Add a task…" />
+      </div>
+      <div class="task-row">
+        <div class="task-check" onclick="toggleTask(this)"></div>
+        <input class="task-input" type="text" placeholder="Add a task…" />
+      </div>
+    </div>
+    <div class="add-row">
+      <button class="add-btn" onclick="addTask()">+ Add row</button>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section-label">Notes &amp; Follow-Ups</div>
+  <div class="notes-box">
+    <textarea id="notes" rows="4" placeholder="Anything to carry forward, calls to make, ideas to capture…"></textarea>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save as PDF</button>
+    <button class="btn btn-outline" onclick="clearDay()">New Day</button>
+  </div>
+
+</div>
+
+<script>
+// Set today's date
+const d = new Date();
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+document.getElementById('date-display').textContent =
+  days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+// Toggle priority checkbox
+function togglePriority(el) {
+  el.classList.toggle('done');
+  const input = el.nextElementSibling;
+  input.classList.toggle('done-text');
+}
+
+// Toggle task checkbox
+function toggleTask(el) {
+  el.classList.toggle('done');
+  const input = el.nextElementSibling;
+  input.classList.toggle('done-text');
+}
+
+// Add a new task row
+function addTask() {
+  const list = document.getElementById('task-list');
+  const row = document.createElement('div');
+  row.className = 'task-row';
+  row.innerHTML = `
+    <div class="task-check" onclick="toggleTask(this)"></div>
+    <input class="task-input" type="text" placeholder="Add a task…" />`;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+// Clear for a new day
+function clearDay() {
+  document.querySelectorAll('.priority-input, .task-input').forEach(i => i.value = '');
+  document.querySelectorAll('.priority-check, .task-check').forEach(c => c.classList.remove('done'));
+  document.querySelectorAll('.priority-input, .task-input').forEach(i => i.classList.remove('done-text'));
+  document.getElementById('win').value = '';
+  document.getElementById('notes').value = '';
+  // Reset task list to 5 blank rows
+  const list = document.getElementById('task-list');
+  list.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const row = document.createElement('div');
+    row.className = 'task-row';
+    row.innerHTML = `<div class="task-check" onclick="toggleTask(this)"></div><input class="task-input" type="text" placeholder="Add a task…" />`;
+    list.appendChild(row);
+  }
+  // Update date
+  const d = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('date-display').textContent =
+    days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+}
+</script>
+
+  <!-- Memberstack protection -->
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) { window.location.href = "/login.html"; }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

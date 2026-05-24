@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Script Library — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cream:#f5f1ea;--navy:#1b2a3b;--navy-soft:#2e3f52;
+    --ink:#1b2a3b;--ink-soft:#4a5a6a;--ink-faint:#8a9aaa;
+    --amber:#c17c2a;--amber-bg:#f5ede0;--amber-rule:#ddb882;
+    --teal:#0c5c52;--teal-light:#e8f5f3;
+    --rule:#ddd8cf;--surface:#ffffff;
+    --red:#b93a3a;--green:#2e7d5c;--radius:10px;
+    --shadow:0 2px 12px rgba(27,42,59,0.07);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh;}
+
+  /* BANNER */
+  .banner{background:var(--navy);height:44px;display:flex;align-items:center;padding:0 32px;justify-content:space-between;position:sticky;top:0;z-index:200;}
+  .banner-brand{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#7dd4cc;}
+  .banner-link{font-size:11px;color:#4a7a8a;text-decoration:none;letter-spacing:.06em;transition:color .15s;}
+  .banner-link:hover{color:#7dd4cc;}
+
+  /* PAGE HEADER */
+  .page-header{max-width:900px;margin:0 auto;padding:48px 32px 24px;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;}
+  .page-title{font-family:'DM Serif Display',serif;font-size:44px;color:var(--navy);line-height:1.1;margin-bottom:12px;}
+  .page-subtitle{font-size:14px;color:var(--ink-soft);max-width:580px;line-height:1.6;}
+
+  /* ── SCRIPT INDEX ── */
+  .script-index{max-width:900px;margin:0 auto;padding:24px 32px 0;}
+  .index-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px;}
+  .index-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:28px;}
+  .index-card{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;cursor:pointer;transition:all .15s;text-decoration:none;color:inherit;display:block;}
+  .index-card:hover,.index-card.active{border-color:var(--teal);background:var(--teal-light);}
+  .index-card.active .ic-title{color:var(--teal);}
+  .ic-icon{font-size:18px;margin-bottom:6px;line-height:1;}
+  .ic-title{font-size:13px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:3px;}
+  .ic-count{font-size:11px;color:var(--ink-faint);}
+
+  /* SEARCH */
+  .search-row{max-width:900px;margin:0 auto;padding:0 32px 20px;display:flex;gap:10px;align-items:center;}
+  .search-input{flex:1;max-width:360px;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:9px 14px 9px 36px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--ink);outline:none;transition:border-color .15s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Ccircle cx='6' cy='6' r='4.5' stroke='%238a9aaa' stroke-width='1.4'/%3E%3Cline x1='9.5' y1='9.5' x2='12.5' y2='12.5' stroke='%238a9aaa' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px 50%;}
+  .search-input:focus{border-color:var(--teal);}
+  .search-input::placeholder{color:var(--ink-faint);}
+  .search-clear{font-size:12px;color:var(--ink-faint);cursor:pointer;display:none;}
+  .search-clear:hover{color:var(--red);}
+
+  /* TOOLBAR */
+  .toolbar{max-width:900px;margin:0 auto;padding:10px 32px;display:flex;align-items:center;gap:12px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--cream);position:sticky;top:44px;z-index:100;}
+  .edit-toggle{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;user-select:none;}
+  .sw{width:36px;height:20px;background:var(--rule);border-radius:10px;position:relative;transition:background .2s;flex-shrink:0;}
+  .sw.on{background:var(--teal);}
+  .sw-knob{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .sw.on .sw-knob{left:19px;}
+  .edit-hint{font-size:11.5px;color:var(--ink-faint);font-style:italic;display:none;}
+  .tb-spacer{flex:1;}
+  .saved-msg{font-size:11.5px;color:var(--green);display:none;}
+  .tb-btn{background:none;border:1px solid var(--rule);border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--ink-soft);padding:5px 12px;transition:all .15s;}
+  .tb-btn:hover{border-color:var(--navy);color:var(--navy);}
+
+  /* MAIN */
+  .main{max-width:900px;margin:0 auto;padding:28px 32px 80px;}
+
+  /* GROUP */
+  .script-group{margin-bottom:44px;scroll-margin-top:120px;}
+  .group-header{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:22px 26px;margin-bottom:12px;box-shadow:var(--shadow);}
+  .group-title{font-size:17px;font-weight:600;color:var(--navy);margin-bottom:5px;outline:none;}
+  .group-desc{font-size:13.5px;color:var(--ink-soft);line-height:1.55;outline:none;}
+  body.edit .group-title,.edit .group-desc{border-bottom:1px dashed var(--amber-rule);}
+
+  /* STEP */
+  .step-card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:20px 22px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;gap:16px;align-items:flex-start;position:relative;}
+  .step-card.search-hide{display:none;}
+  .step-num{flex-shrink:0;width:30px;height:30px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;margin-top:1px;outline:none;}
+  .step-num.branch{background:var(--navy-soft);font-size:10.5px;}
+  body.edit .step-num{border:1px dashed var(--amber-rule);cursor:text;}
+  .step-body{flex:1;min-width:0;}
+  .step-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:4px;outline:none;}
+  .step-desc{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:10px;outline:none;}
+  body.edit .step-title,.edit .step-desc{border-bottom:1px dashed var(--amber-rule);}
+
+  /* QUOTE */
+  .script-quote{background:var(--amber-bg);border-left:3px solid var(--amber-rule);border-radius:0 6px 6px 0;padding:10px 14px;font-size:13.5px;font-style:italic;color:var(--navy-soft);line-height:1.6;white-space:pre-wrap;outline:none;}
+  body.edit .script-quote{background:#fff8ee;box-shadow:inset 0 0 0 1px var(--amber-rule);cursor:text;}
+
+  /* REMOVE */
+  .step-remove{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:var(--red);font-size:15px;padding:2px 6px;border-radius:4px;display:none;}
+  .step-remove:hover{background:#fdf0f0;}
+  body.edit .step-remove{display:block;}
+
+  /* ADD BTNS */
+  .add-step-btn,.add-group-btn{display:none;width:100%;background:#ede8df;border:1px dashed var(--rule);border-radius:var(--radius);padding:11px;text-align:center;font-size:13px;color:var(--ink-faint);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;margin-bottom:10px;}
+  .add-step-btn:hover,.add-group-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-bg);}
+  .add-group-btn{margin-top:8px;padding:14px;}
+  body.edit .add-step-btn,body.edit .add-group-btn{display:block;}
+
+  /* NO RESULTS */
+  .no-results{display:none;text-align:center;padding:48px 20px;color:var(--ink-faint);font-size:13.5px;}
+  .group-divider{border:none;border-top:1px solid var(--rule);margin:36px 0;}
+
+  /* HIGHLIGHT */
+  mark{background:#fff0cc;color:inherit;border-radius:2px;padding:0 1px;}
+
+  @media(max-width:640px){
+    .page-header,.script-index,.search-row,.toolbar,.main{padding-left:18px;padding-right:18px;}
+    .page-title{font-size:32px;}
+    .index-grid{grid-template-columns:1fr 1fr;}
+    .step-card{flex-direction:column;gap:10px;}
+  }
+  @media print{
+    .banner,.toolbar,.search-row,.script-index,.step-remove,.add-step-btn,.add-group-btn{display:none!important;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="banner-brand">Knowledgebase.business</div>
+  <a class="banner-link" href="sheridan-legal-index.html">← Back to Index</a>
+</div>
+
+<div class="page-header">
+  <div class="eyebrow">Operations</div>
+  <h1 class="page-title">Scripts</h1>
+  <p class="page-subtitle">Tested language for common interactions. Use these as a guide, not a word-for-word script — the goal is confidence, not robotic delivery.</p>
+</div>
+
+<!-- SCRIPT INDEX -->
+<div class="script-index">
+  <div class="index-label">Jump to a script</div>
+  <div class="index-grid" id="index-grid">
+    <!-- rendered by JS -->
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-row">
+  <input class="search-input" id="search-input" type="text" placeholder="Search scripts…" oninput="onSearch(this.value)"/>
+  <span class="search-clear" id="search-clear" onclick="clearSearch()">✕ Clear</span>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="edit-toggle" onclick="toggleEdit()">
+    <div class="sw" id="sw"><div class="sw-knob"></div></div>
+    <span>Edit mode</span>
+  </div>
+  <span class="edit-hint" id="edit-hint">Click any text or script to edit it</span>
+  <div class="tb-spacer"></div>
+  <span class="saved-msg" id="saved-msg">✓ Saved</span>
+  <button class="tb-btn" onclick="resetAll()">↺ Reset defaults</button>
+  <button class="tb-btn" onclick="window.print()">⎙ Print</button>
+</div>
+
+<div class="main" id="main"></div>
+
+<script>
+var KEY = 'sl-scripts-v1';
+var editOn = false;
+var saveTimer;
+
+var ICONS = ['📞','📝','😤','📅','📋','💬','📌','🔔'];
+
+var DEFAULTS = [
+  { id:'g1', icon:'📞', title:'Phone Answering — Incoming Calls', desc:'A simple process for answering the phone that finds out whether the caller is a new client, has an existing matter, or is associated with a matter — without disclosing office location.', steps:[
+    { id:'s1-1', num:'1', branch:false, title:'Answer and greet', desc:'Answer within three rings. Use the firm name and your own name.', script:'"Good morning, [Business Name], this is [your name] — how can I help you?"' },
+    { id:'s1-2', num:'2', branch:false, title:"Identify the caller's situation", desc:'Find out whether they are a new or existing client. This tells you which path to take.', script:'"Are you an existing client with us, or is this the first time you\'ve contacted Knowledgebase.business?"' },
+    { id:'s1-3', num:'3A', branch:true, title:'Existing client or associated party', desc:'Get their name and locate the matter in LEAP before transferring or taking a message.', script:'"Of course — can I get your name please? And do you know the matter reference, or would you like me to find it for you?"' },
+    { id:'s1-4', num:'3B', branch:true, title:'New enquiry', desc:'Capture name and number before discussing the matter, then establish the nature of the enquiry.', script:'"Welcome — before we go any further, can I grab your name and best contact number?\n\n[Take details]\n\nAnd could you give me a brief summary of what the matter involves?"' },
+    { id:'s1-5', num:'4', branch:false, title:'Transfer or take a message', desc:'Transfer if the lawyer is available. If not, take a message with a callback time.', script:'"Let me see if [lawyer\'s name] is available for you now.\n\n[If unavailable] [Lawyer\'s name] is in a matter at the moment. Can I take a message and have them call you back? What time works best for you?"' }
+  ]},
+  { id:'g2', icon:'📝', title:'New Enquiry — Scope and Booking', desc:'Used after identifying a new enquiry. Determines whether the matter is within scope and moves to booking without providing legal advice.', steps:[
+    { id:'s2-1', num:'1', branch:false, title:'Establish the matter type', desc:'Find out enough to know whether we can help — not enough to give advice.', script:'"And is this related to a property purchase, sale, or transfer? … Or is it something else?"' },
+    { id:'s2-2', num:'2A', branch:true, title:'Within scope — move to booking', desc:'Conveyancing or property-related — move straight to booking.', script:'"That\'s something we can definitely help with. The best next step would be a consultation with one of our team — are you able to come into the office, or would a phone or video call work better for you?"' },
+    { id:'s2-3', num:'2B', branch:true, title:'Outside scope — refer on', desc:'Outside the firm\'s practice areas — decline clearly and provide a referral.', script:'"Thank you for reaching out. Unfortunately this type of matter falls outside the areas we focus on — we specialise in conveyancing and property. I can suggest the Law Society of NSW referral service on 1800 422 713, or LawAccess NSW on 1300 888 529, who should be able to point you in the right direction."' },
+    { id:'s2-4', num:'3', branch:false, title:'Confirm the appointment', desc:'Confirm date, time, format, and what to bring before ending the call.', script:'"Great — I\'ve got you booked in with [lawyer\'s name] on [date] at [time]. You\'ll receive a confirmation shortly. If you can bring along any relevant documents — contracts, correspondence, or ID — that would be helpful. Is there anything else before I let you go?"' }
+  ]},
+  { id:'g3', icon:'😤', title:'Handling Difficult or Distressed Callers', desc:'Callers in legal situations can be anxious, upset, or frustrated. These scripts help de-escalate without making commitments the firm can\'t keep.', steps:[
+    { id:'s3-1', num:'1', branch:false, title:'Acknowledge without committing', desc:'Validate the concern without making promises about outcomes or timeframes.', script:'"I can hear this is a really stressful situation, and I want to make sure we get you to the right person. Let me take your details and have someone call you back today — would that work?"' },
+    { id:'s3-2', num:'2', branch:false, title:'Caller is angry or raising their voice', desc:'Stay calm, keep your tone level. Acknowledge frustration — do not apologise for firm decisions.', script:'"I understand you\'re frustrated, and I want to help. Can I take some details from you and make sure the right person calls you back as soon as possible?"' },
+    { id:'s3-3', num:'3', branch:false, title:'Caller pressing for legal advice', desc:'Redirect to a consultation without engaging with the legal question.', script:'"That\'s really a question for one of our lawyers rather than me — I wouldn\'t want to give you the wrong information. The best thing I can do is get you booked in so you can get proper advice. Can I do that for you?"' },
+    { id:'s3-4', num:'4', branch:false, title:'Caller in genuine distress', desc:'Slow down and be human first — for example, settlement failure or family breakdown.', script:'"I\'m really sorry you\'re going through this. Let me make sure we get someone on to this for you today. Can I get your name and number, and I\'ll have [lawyer\'s name] call you back within the hour?"' }
+  ]},
+  { id:'g4', icon:'📅', title:'Rescheduling and Cancellations', desc:'Handles appointment changes gracefully while keeping the matter moving forward.', steps:[
+    { id:'s4-1', num:'1', branch:false, title:'Client wants to reschedule', desc:'Confirm existing appointment first, then offer alternatives.', script:'"Of course — you\'ve got [date] at [time] with [lawyer\'s name]. Let me look at what else we have available. Would earlier or later in the week suit you better?"' },
+    { id:'s4-2', num:'2', branch:false, title:'Client cancels without rescheduling', desc:'Acknowledge the cancellation and leave the door open without being pushy.', script:'"No problem at all — I\'ll cancel that for you. If you\'d like to rebook at any point, just give us a call and we\'ll find a time that works. Is there anything else I can help with today?"' },
+    { id:'s4-3', num:'3', branch:false, title:'Reminder call — day before appointment', desc:'A brief, friendly reminder that reduces no-shows.', script:'"Hi, this is [your name] from Knowledgebase.business. I\'m just calling with a friendly reminder that you have an appointment with [lawyer\'s name] tomorrow at [time]. Please give us a call on [number] if you need to make any changes. We\'ll see you then."' }
+  ]}
+];
+
+var data;
+function load(){ try{ var s=localStorage.getItem(KEY); data=s?JSON.parse(s):clone(DEFAULTS); }catch(e){ data=clone(DEFAULTS); } }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){} showSaved(); }
+function clone(d){ return JSON.parse(JSON.stringify(d)); }
+function showSaved(){ var m=document.getElementById('saved-msg'); m.style.display='inline'; clearTimeout(saveTimer); saveTimer=setTimeout(function(){ m.style.display='none'; },2000); }
+function resetAll(){ if(!confirm('Reset all scripts to defaults? All edits will be lost.')) return; localStorage.removeItem(KEY); data=clone(DEFAULTS); render(); }
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── INDEX ─────────────────────────────────────────────────────────────────
+function renderIndex(){
+  var grid=document.getElementById('index-grid');
+  var html='';
+  data.forEach(function(g){
+    html+='<a class="index-card" href="#'+esc(g.id)+'" onclick="jumpTo(\''+esc(g.id)+'\')" id="ic-'+esc(g.id)+'">';
+    html+='<div class="ic-icon">'+(g.icon||'📋')+'</div>';
+    html+='<div class="ic-title">'+esc(g.title)+'</div>';
+    html+='<div class="ic-count">'+g.steps.length+' script'+(g.steps.length!==1?'s':'')+'</div>';
+    html+='</a>';
+  });
+  grid.innerHTML=html;
+}
+
+function jumpTo(gid){
+  // clear active
+  document.querySelectorAll('.index-card').forEach(function(c){ c.classList.remove('active'); });
+  var ic=document.getElementById('ic-'+gid);
+  if(ic) ic.classList.add('active');
+  var el=document.getElementById('grp-'+gid);
+  if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  setTimeout(function(){ document.querySelectorAll('.index-card').forEach(function(c){ c.classList.remove('active'); }); },1500);
+  return false;
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────
+function onSearch(q){
+  var clear=document.getElementById('search-clear');
+  clear.style.display=q?'inline':'none';
+  q=q.toLowerCase().trim();
+  if(!q){ clearHighlights(); showAll(); return; }
+  var anyVisible=false;
+  document.querySelectorAll('.script-group').forEach(function(gEl){
+    var groupVisible=false;
+    gEl.querySelectorAll('.step-card').forEach(function(sEl){
+      var title=sEl.querySelector('.step-title').textContent.toLowerCase();
+      var desc=sEl.querySelector('.step-desc').textContent.toLowerCase();
+      var script=sEl.querySelector('.script-quote').textContent.toLowerCase();
+      var match=title.includes(q)||desc.includes(q)||script.includes(q);
+      sEl.classList.toggle('search-hide',!match);
+      if(match) groupVisible=true;
+    });
+    gEl.style.display=groupVisible?'':'none';
+    if(groupVisible) anyVisible=true;
+  });
+  document.querySelector('.no-results').style.display=anyVisible?'none':'block';
+}
+
+function clearSearch(){
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').style.display='none';
+  clearHighlights(); showAll();
+}
+function showAll(){
+  document.querySelectorAll('.script-group').forEach(function(g){ g.style.display=''; });
+  document.querySelectorAll('.step-card').forEach(function(s){ s.classList.remove('search-hide'); });
+  document.querySelector('.no-results').style.display='none';
+}
+function clearHighlights(){ /* placeholder for future highlight pass */ }
+
+// ── EDIT ──────────────────────────────────────────────────────────────────
+function makeEditable(on){
+  var v=on?'true':'false';
+  document.querySelectorAll('.group-title,.group-desc,.step-num,.step-title,.step-desc,.script-quote').forEach(function(el){ el.setAttribute('contenteditable',v); });
+}
+function collect(){
+  document.querySelectorAll('.script-group').forEach(function(gEl){
+    var g=data.find(function(x){ return x.id===gEl.dataset.gid; }); if(!g) return;
+    g.title=gEl.querySelector('.group-title').innerText.trim();
+    g.desc=gEl.querySelector('.group-desc').innerText.trim();
+    g.steps=[];
+    gEl.querySelectorAll('.step-card').forEach(function(sEl){
+      g.steps.push({ id:sEl.dataset.sid, num:sEl.querySelector('.step-num').innerText.trim(), branch:sEl.querySelector('.step-num').classList.contains('branch'), title:sEl.querySelector('.step-title').innerText.trim(), desc:sEl.querySelector('.step-desc').innerText.trim(), script:sEl.querySelector('.script-quote').innerText });
+    });
+  });
+}
+function toggleEdit(){
+  if(editOn){ collect(); save(); }
+  editOn=!editOn;
+  document.getElementById('sw').classList.toggle('on',editOn);
+  document.body.classList.toggle('edit',editOn);
+  document.getElementById('edit-hint').style.display=editOn?'inline':'none';
+  makeEditable(editOn);
+  if(!editOn){ renderIndex(); }
+}
+function reEnterEdit(){ editOn=true; document.getElementById('sw').classList.add('on'); document.body.classList.add('edit'); document.getElementById('edit-hint').style.display='inline'; makeEditable(true); }
+
+function addStep(gid){
+  collect(); save();
+  var g=data.find(function(x){ return x.id===gid; }); if(!g) return;
+  g.steps.push({ id:'s'+Date.now(), num:String(g.steps.length+1), branch:false, title:'New step', desc:'Describe when to use this script.', script:'"[Script text here]"' });
+  save(); render(); reEnterEdit();
+}
+function removeStep(gid,sid){
+  collect(); save();
+  var g=data.find(function(x){ return x.id===gid; }); if(!g) return;
+  g.steps=g.steps.filter(function(s){ return s.id!==sid; });
+  save(); render(); reEnterEdit();
+}
+function addGroup(){
+  collect(); save();
+  data.push({ id:'g'+Date.now(), icon:'💬', title:'New Script Group', desc:'Describe when these scripts are used.', steps:[{ id:'s'+Date.now(), num:'1', branch:false, title:'First step', desc:'Describe this step.', script:'"[Script text here]"' }]});
+  save(); render(); reEnterEdit();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render(){
+  var html='';
+  data.forEach(function(g,gi){
+    if(gi>0) html+='<hr class="group-divider"/>';
+    html+='<div class="script-group" id="grp-'+esc(g.id)+'" data-gid="'+esc(g.id)+'">';
+    html+='<div class="group-header"><div class="group-title">'+esc(g.title)+'</div><div class="group-desc">'+esc(g.desc)+'</div></div>';
+    g.steps.forEach(function(s){
+      html+='<div class="step-card" data-sid="'+esc(s.id)+'">';
+      html+='<button class="step-remove" onclick="removeStep(\''+esc(g.id)+'\',\''+esc(s.id)+'\')" title="Remove">×</button>';
+      html+='<div class="step-num'+(s.branch?' branch':'')+'">' +esc(s.num)+'</div>';
+      html+='<div class="step-body"><div class="step-title">'+esc(s.title)+'</div><div class="step-desc">'+esc(s.desc)+'</div><div class="script-quote">'+esc(s.script)+'</div></div>';
+      html+='</div>';
+    });
+    html+='<button class="add-step-btn" onclick="addStep(\''+esc(g.id)+'\')">+ Add step</button>';
+    html+='</div>';
+  });
+  html+='<button class="add-group-btn" onclick="addGroup()">+ Add script group</button>';
+  html+='<div class="no-results">No scripts match your search.</div>';
+  document.getElementById('main').innerHTML=html;
+  renderIndex();
+  if(editOn) makeEditable(true);
+}
+
+load(); render();
+</script>
+
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) { window.location.href = "/login.html"; }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

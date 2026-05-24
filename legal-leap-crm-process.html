@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LEAP to CRM Process — Legal Knowledge Base</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal-50: #E1F5EE;
+    --teal-100: #9FE1CB;
+    --teal-200: #5DCAA5;
+    --teal-600: #0F6E56;
+    --teal-800: #085041;
+    --teal-900: #04342C;
+    --blue-50: #E6F1FB;
+    --blue-400: #378ADD;
+    --blue-800: #0C447C;
+    --amber-50: #FAEEDA;
+    --amber-600: #854F0B;
+    --amber-800: #633806;
+    --purple-50: #EEEDFE;
+    --purple-800: #3C3489;
+    --red-400: #E24B4A;
+    --gray-50: #F1EFE8;
+    --gray-200: #B4B2A9;
+    --gray-600: #5F5E5A;
+    --bg: #F7F8F6;
+    --surface: #FFFFFF;
+    --border: rgba(0,0,0,0.1);
+    --border-med: rgba(0,0,0,0.18);
+    --text-primary: #1A1A18;
+    --text-secondary: #5F5E5A;
+    --text-hint: #9A9994;
+    --font: 'DM Sans', system-ui, sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--teal-900);
+    padding: 32px 40px 28px;
+    border-bottom: 3px solid var(--teal-600);
+  }
+  .header-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .header-label { font-size: 11px; letter-spacing: 0.12em; color: var(--teal-200); text-transform: uppercase; margin-bottom: 8px; }
+  .header-title { font-size: 28px; font-weight: 600; color: #FFFFFF; line-height: 1.15; }
+  .header-sub { font-size: 14px; color: var(--teal-100); margin-top: 6px; font-weight: 300; }
+  .header-badge { background: var(--teal-800); border: 1px solid var(--teal-600); border-radius: 8px; padding: 10px 16px; text-align: center; flex-shrink: 0; }
+  .badge-num { font-size: 28px; font-weight: 600; color: var(--teal-200); line-height: 1; }
+  .badge-label { font-size: 10px; color: var(--teal-100); letter-spacing: 0.08em; margin-top: 3px; }
+
+  /* ── PROGRESS ── */
+  .progress-section { max-width: 820px; margin: 32px auto 0; padding: 0 40px; }
+  .progress-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; display: flex; align-items: center; gap: 24px; }
+  .progress-info { flex: 1; }
+  .progress-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+  .progress-track { height: 6px; background: var(--gray-50); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+  .progress-fill { height: 100%; background: var(--teal-600); border-radius: 4px; transition: width 0.4s ease; }
+  .progress-stat { text-align: right; flex-shrink: 0; }
+  .progress-num { font-size: 26px; font-weight: 600; color: var(--teal-600); line-height: 1; }
+  .progress-denom { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+
+  /* ── PHASES ── */
+  .phases-wrap { max-width: 820px; margin: 24px auto 0; padding: 0 40px; display: flex; flex-direction: column; gap: 10px; }
+
+  .phase { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+  .phase.open { border-color: var(--teal-200); }
+  .phase.complete { border-color: var(--teal-200); }
+
+  .phase-header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; cursor: pointer; user-select: none; transition: background 0.15s; }
+  .phase-header:hover { background: #FAFAF9; }
+
+  .phase-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1.5px solid var(--border-med);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    flex-shrink: 0; transition: all 0.2s;
+  }
+  .phase-num.complete { background: var(--teal-600); border-color: var(--teal-600); color: white; }
+  .phase-num.active { border-color: var(--teal-600); color: var(--teal-600); }
+
+  .phase-icon-wrap { width: 36px; height: 36px; border-radius: 8px; background: var(--gray-50); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+  .phase.open .phase-icon-wrap, .phase.complete .phase-icon-wrap { background: var(--teal-50); border-color: var(--teal-200); }
+  .phase-icon-wrap i { font-size: 17px; color: var(--text-secondary); transition: color 0.2s; }
+  .phase.open .phase-icon-wrap i, .phase.complete .phase-icon-wrap i { color: var(--teal-600); }
+
+  .phase-text { flex: 1; }
+  .phase-title { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+  .phase-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+  .phase-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--text-secondary); background: var(--bg); white-space: nowrap; flex-shrink: 0; transition: all 0.2s; }
+  .phase-badge.complete { background: var(--teal-50); color: var(--teal-800); border-color: var(--teal-200); }
+
+  .phase-chevron { font-size: 16px; color: var(--text-hint); transition: transform 0.25s; flex-shrink: 0; }
+  .phase.open .phase-chevron { transform: rotate(180deg); color: var(--teal-600); }
+
+  /* ── BODY ── */
+  .phase-body { display: none; border-top: 1px solid var(--border); padding: 20px; }
+  .phase.open .phase-body { display: block; }
+
+  .body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 620px) { .body-grid { grid-template-columns: 1fr; } .progress-section, .phases-wrap { padding: 0 16px; } .site-header { padding: 24px 20px; } }
+
+  .col-tasks {}
+  .col-preview {}
+
+  .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; color: var(--text-hint); text-transform: uppercase; margin-bottom: 10px; }
+
+  /* ── TASKS ── */
+  .task { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .task:last-child { border-bottom: none; }
+  .task input[type=checkbox] { margin-top: 2px; accent-color: var(--teal-600); flex-shrink: 0; width: 15px; height: 15px; cursor: pointer; }
+  .task-label { font-size: 13px; color: var(--text-primary); line-height: 1.5; cursor: pointer; transition: color 0.15s; }
+  .task-label.checked { color: var(--text-hint); text-decoration: line-through; }
+
+  /* ── TOOL CALLOUT ── */
+  .tool-callout { display: flex; gap: 10px; background: var(--teal-50); border: 1px solid var(--teal-200); border-radius: 8px; padding: 12px 14px; margin-top: 14px; }
+  .tool-callout i { font-size: 16px; color: var(--teal-600); margin-top: 1px; flex-shrink: 0; }
+  .tool-callout-text { font-size: 12px; color: var(--teal-800); line-height: 1.55; }
+  .tool-callout-text strong { font-weight: 500; }
+
+  /* ── DATA PREVIEW ── */
+  .data-preview { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .data-preview-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--gray-50); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+  .data-preview-header i { font-size: 14px; color: var(--teal-600); }
+  .data-note { font-size: 11px; color: var(--text-secondary); margin-top: 8px; line-height: 1.5; padding: 0 2px; }
+
+  .data-table { width: 100%; font-size: 11px; border-collapse: collapse; }
+  .data-table th { padding: 6px 10px; text-align: left; color: var(--text-secondary); font-weight: 500; border-bottom: 1px solid var(--border); background: var(--bg); font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; }
+  .data-table td { padding: 6px 10px; color: var(--text-primary); border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 11px; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr.dup-row td { background: #FFF8F0; color: var(--text-secondary); }
+  .data-table td.missing { color: var(--red-400); }
+
+  /* ── TAGS ── */
+  .tag-pill { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin: 1px 2px 1px 0; font-weight: 500; }
+  .tag-buyer { background: var(--blue-50); color: var(--blue-800); }
+  .tag-seller { background: var(--amber-50); color: var(--amber-800); }
+  .tag-ref { background: var(--purple-50); color: var(--purple-800); }
+  .tag-repeat { background: var(--teal-50); color: var(--teal-800); }
+  .tag-stale { background: var(--gray-50); color: var(--gray-600); }
+
+  /* ── TOOL CARDS ── */
+  .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tool-card { border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .tool-card.rec { border-color: var(--teal-200); background: var(--teal-50); }
+  .tool-name { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .rec-badge { font-size: 10px; padding: 1px 7px; border-radius: 20px; background: var(--teal-600); color: white; font-weight: 400; }
+  .tool-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* ── NEWSLETTER PREVIEW ── */
+  .nl-preview { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .nl-header { background: var(--teal-600); padding: 16px; }
+  .nl-brand { font-size: 11px; color: var(--teal-100); letter-spacing: 0.08em; margin-bottom: 4px; }
+  .nl-title { font-size: 16px; font-weight: 500; color: white; }
+  .nl-date { font-size: 11px; color: var(--teal-100); margin-top: 3px; }
+  .nl-body { padding: 14px 16px; }
+  .nl-section { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .nl-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .nl-section-label { font-size: 9px; font-weight: 500; letter-spacing: 0.12em; color: var(--teal-600); text-transform: uppercase; margin-bottom: 5px; }
+  .nl-section-text { font-size: 12px; color: var(--text-primary); line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  .site-footer { max-width: 820px; margin: 40px auto 0; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-label { font-size: 12px; color: var(--text-hint); }
+  .reset-btn { font-family: var(--font); font-size: 12px; color: var(--text-secondary); background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; cursor: pointer; transition: all 0.15s; }
+  .reset-btn:hover { border-color: var(--border-med); color: var(--text-primary); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="header-label">Repositioned · Client Marketing Setup</div>
+      <div class="header-title">LEAP to CRM<br>Process Guide</div>
+      <div class="header-sub">Extract, clean, tag and activate your client list for regular newsletters</div>
+    </div>
+    <div class="header-badge">
+      <div class="badge-num">6</div>
+      <div class="badge-label">Phases</div>
+    </div>
+  </div>
+</header>
+
+<section class="progress-section">
+  <div class="progress-card">
+    <div class="progress-info">
+      <div class="progress-label">Overall completion</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="progress-stat">
+      <div class="progress-num" id="prog-done">0</div>
+      <div class="progress-denom" id="prog-total">of 21 tasks</div>
+    </div>
+  </div>
+</section>
+
+<div class="phases-wrap" id="phases-container"></div>
+
+<footer class="site-footer">
+  <div class="footer-label">Repositioned · Knowledgebase.business · Legal marketing setup</div>
+  <button class="reset-btn" onclick="resetAll()">Reset all tasks</button>
+</footer>
+
+<script>
+var PHASES = [
+  {
+    icon: 'ti-database-export',
+    title: 'Extract client data from LEAP',
+    subtitle: 'Pull the raw client and matter records',
+    tasks: [
+      'Open LEAP and navigate to Reports → Contact/Matter Reports',
+      'Build a custom report: include full name, email, phone, suburb, postcode, matter type, matter status, date of last matter',
+      'Filter to contacts with at least one completed matter',
+      'Export the report as CSV to a shared folder'
+    ],
+    tool: { icon: 'ti-tool', text: '<strong>LEAP Report Builder</strong> — native export, no add-ons needed. Target fields: client name, email, phone, suburb, matter type, matter status, last matter date.' },
+    preview: 'raw'
+  },
+  {
+    icon: 'ti-filter',
+    title: 'Clean and deduplicate',
+    subtitle: 'Prepare the data for a reliable import',
+    tasks: [
+      'Open the CSV in Excel or Google Sheets',
+      'Remove duplicate contacts — keep the most recent email per person',
+      'Flag or remove contacts with no email address (keep as a separate list)',
+      'Separate genuine clients from referrers, agents and brokers',
+      'Standardise suburb and postcode formatting'
+    ],
+    tool: { icon: 'ti-table', text: '<strong>Excel or Google Sheets</strong> — use Remove Duplicates on the email column. Flag blanks with a conditional format (red fill on empty email cells).' },
+    preview: 'clean'
+  },
+  {
+    icon: 'ti-tag',
+    title: 'Tag and segment',
+    subtitle: 'Apply marketing intelligence before importing',
+    tasks: [
+      'Add a Tags column to the spreadsheet',
+      'Apply tags based on matter type: buyer, seller, investor, refinance',
+      'Flag repeat clients (more than one completed matter)',
+      'Mark referrers separately from clients',
+      'Mark stale contacts (last matter 3+ years ago, no confirmed email)'
+    ],
+    tool: { icon: 'ti-table', text: '<strong>Google Sheets</strong> — use an IF formula on matter type to auto-assign base tags, then review manually. One comma-separated tags column is fine for Mailchimp import.' },
+    preview: 'tagged'
+  },
+  {
+    icon: 'ti-mail',
+    title: 'Choose your platform',
+    subtitle: 'Select the right email / CRM tool',
+    tasks: [
+      'Confirm expected contact count (helps choose the right tier)',
+      'Sign up for chosen platform and verify the sender domain',
+      'Connect the sending email address (e.g. admin@sheridanconveyancing.com.au)'
+    ],
+    tool: null,
+    preview: 'tools'
+  },
+  {
+    icon: 'ti-upload',
+    title: 'Import and configure',
+    subtitle: 'Get the clean data into the platform',
+    tasks: [
+      'Import the cleaned, tagged CSV via the platform\u2019s import wizard',
+      'Map CSV columns to platform fields: name, email, phone, suburb, tags',
+      'Create saved segments: buyers last 2 years, all referrers, repeat clients',
+      'Set up a welcome email to fire automatically when a new contact is added'
+    ],
+    tool: { icon: 'ti-settings', text: '<strong>Mailchimp import wizard</strong> — use Tags as the primary segmentation field. Create one Audience with tag-based segments rather than multiple lists.' },
+    preview: null
+  },
+  {
+    icon: 'ti-send',
+    title: 'Newsletter setup and cadence',
+    subtitle: 'Configure the first campaign and schedule',
+    tasks: [
+      'Build the newsletter template (header, 3 content sections, CTA)',
+      'Schedule monthly sends — aim for the first week of each month',
+      'Define who owns the ongoing task of adding new clients post-matter close'
+    ],
+    tool: { icon: 'ti-layout-columns', text: '<strong>Mailchimp campaign builder</strong> — use a simple 3-section template: property tip, suburb spotlight, conveyancing insight. Soft CTA at the bottom.' },
+    preview: 'newsletter'
+  }
+];
+
+var RAW = [
+  { name: 'James & Sarah Hollis', email: 'jhollis@gmail.com', matter: 'Purchase', status: 'Completed', dup: false },
+  { name: 'James Hollis', email: 'jhollis@gmail.com', matter: 'Purchase', status: 'Completed', dup: true },
+  { name: 'Patricia Lim', email: '', matter: 'Sale', status: 'Completed', dup: false },
+  { name: 'Ray Donnelly', email: 'ray@donnellyre.com.au', matter: 'Referrer', status: '—', dup: false },
+];
+var CLEAN = [
+  { name: 'James & Sarah Hollis', email: 'jhollis@gmail.com', suburb: 'Penrith', last: 'Mar 2024' },
+  { name: 'Patricia Lim', email: null, suburb: 'Blacktown', last: 'Jan 2023' },
+  { name: 'Ray Donnelly', email: 'ray@donnellyre.com.au', suburb: 'Parramatta', last: 'Jun 2024' },
+];
+var TAGGED = [
+  { name: 'James & Sarah Hollis', email: 'jhollis@gmail.com', tags: ['buyer'] },
+  { name: 'Patricia Lim', email: '(no email — direct mail list)', tags: ['seller', 'stale'] },
+  { name: 'Ray Donnelly', email: 'ray@donnellyre.com.au', tags: ['ref'] },
+];
+var TOOLS = [
+  { name: 'Mailchimp', rec: true, desc: 'Free to 500 contacts. Simple tag segmentation, newsletter templates, basic automation. Best starting point.' },
+  { name: 'ActiveCampaign', rec: false, desc: 'Step up when automation sequences are needed — e.g. follow-up 2 years after a purchase settles.' },
+  { name: 'HubSpot Free CRM', rec: false, desc: 'Good if you want to track enquiries and referral sources too. Newsletters need a paid add-on eventually.' },
+  { name: 'MailerLite', rec: false, desc: 'Lightweight alternative to Mailchimp. Good template builder, free up to 1,000 contacts.' },
+];
+
+function rawPreview() {
+  var rows = RAW.map(function(r) {
+    return '<tr class="'+(r.dup?'dup-row':'')+'">' +
+      '<td>'+r.name+(r.dup?' <span style="font-size:10px;color:var(--red-400)">[duplicate]</span>':'')+'</td>' +
+      '<td class="'+(r.email?'':'missing')+'">'+(r.email||'(blank)')+'</td>' +
+      '<td>'+r.matter+'</td><td>'+r.status+'</td></tr>';
+  }).join('');
+  return '<div class="data-preview"><div class="data-preview-header"><i class="ti ti-file-spreadsheet"></i>LEAP export — raw CSV (sample)</div>' +
+    '<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Matter</th><th>Status</th></tr></thead><tbody>'+rows+'</tbody></table></div>' +
+    '<div class="data-note">Duplicate row and blank email are immediately visible — typical of a raw LEAP export.</div>';
+}
+function cleanPreview() {
+  var rows = CLEAN.map(function(r) {
+    return '<tr><td>'+r.name+(r.email===null?' <span style="font-size:10px;color:var(--amber-600)">[flagged]</span>':'')+'</td>' +
+      '<td class="'+(r.email===null?'missing':'')+'">'+(r.email===null?'no email':r.email)+'</td>' +
+      '<td>'+r.suburb+'</td><td>'+r.last+'</td></tr>';
+  }).join('');
+  return '<div class="data-preview"><div class="data-preview-header"><i class="ti ti-circle-check"></i>After cleaning — deduplicated</div>' +
+    '<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Suburb</th><th>Last matter</th></tr></thead><tbody>'+rows+'</tbody></table></div>' +
+    '<div class="data-note">Duplicate removed. No-email contact flagged for a direct-mail list. Referrer stays separate.</div>';
+}
+function taggedPreview() {
+  var tagClass = { buyer: 'tag-buyer', seller: 'tag-seller', ref: 'tag-ref', repeat: 'tag-repeat', stale: 'tag-stale' };
+  var tagLabel = { buyer: 'buyer', seller: 'seller', ref: 'referrer', repeat: 'repeat client', stale: 'stale' };
+  var rows = TAGGED.map(function(r) {
+    var pills = r.tags.map(function(t){ return '<span class="tag-pill '+(tagClass[t]||'')+'">'+(tagLabel[t]||t)+'</span>'; }).join('');
+    return '<tr><td>'+r.name+'</td><td style="font-size:10px">'+r.email+'</td><td>'+pills+'</td></tr>';
+  }).join('');
+  return '<div class="data-preview"><div class="data-preview-header"><i class="ti ti-tag"></i>After tagging — ready to import</div>' +
+    '<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Tags</th></tr></thead><tbody>'+rows+'</tbody></table></div>' +
+    '<div class="data-note">Tags drive all segmentation in Mailchimp. One comma-separated column — imports natively.</div>';
+}
+function toolsPreview() {
+  var cards = TOOLS.map(function(t) {
+    return '<div class="tool-card'+(t.rec?' rec':'')+'"><div class="tool-name">'+t.name+(t.rec?'<span class="rec-badge">recommended</span>':'')+'</div><div class="tool-desc">'+t.desc+'</div></div>';
+  }).join('');
+  return '<div class="section-label">Platform options</div><div class="tool-grid">'+cards+'</div>';
+}
+function newsletterPreview() {
+  return '<div class="nl-preview">' +
+    '<div class="nl-header"><div class="nl-brand">SHERIDAN CONVEYANCING</div><div class="nl-title">Property Matters</div><div class="nl-date">Monthly update · May 2025</div></div>' +
+    '<div class="nl-body">' +
+    '<div class="nl-section"><div class="nl-section-label">Property tip</div><div class="nl-section-text">Stamp duty thresholds in NSW changed in July 2024. If you\'re purchasing under $800K, you may now qualify for a full exemption — worth checking before you sign.</div></div>' +
+    '<div class="nl-section"><div class="nl-section-label">Suburb spotlight</div><div class="nl-section-text">Penrith continues to attract first-home buyers — median prices have stabilised after 18 months of rises, and stock is improving.</div></div>' +
+    '<div class="nl-section"><div class="nl-section-label">Did you know</div><div class="nl-section-text">Most conveyancing delays happen in the cooling-off period, not at settlement. Knowing what to expect at each stage removes a lot of stress.</div></div>' +
+    '</div></div>' +
+    '<div class="data-note">Buyers and referrers receive the same template with a different opening paragraph — no extra builds needed.</div>';
+}
+
+function buildPreview(type) {
+  if (!type) return '';
+  if (type === 'raw') return rawPreview();
+  if (type === 'clean') return cleanPreview();
+  if (type === 'tagged') return taggedPreview();
+  if (type === 'tools') return toolsPreview();
+  if (type === 'newsletter') return newsletterPreview();
+  return '';
+}
+
+var checkedState = {};
+var totalTasks = PHASES.reduce(function(s,p){ return s + p.tasks.length; }, 0);
+
+function updateProgress() {
+  var done = Object.values(checkedState).filter(Boolean).length;
+  document.getElementById('prog-fill').style.width = (done / totalTasks * 100) + '%';
+  document.getElementById('prog-done').textContent = done;
+  document.getElementById('prog-total').textContent = 'of ' + totalTasks + ' tasks';
+
+  PHASES.forEach(function(p, pi) {
+    var allDone = p.tasks.every(function(t, ti){ return checkedState[pi+'-'+ti]; });
+    var someDone = p.tasks.some(function(t, ti){ return checkedState[pi+'-'+ti]; });
+    var doneCount = p.tasks.filter(function(t, ti){ return checkedState[pi+'-'+ti]; }).length;
+
+    var numEl = document.getElementById('pnum-'+pi);
+    var badgeEl = document.getElementById('pbadge-'+pi);
+    var phaseEl = document.getElementById('phase-'+pi);
+
+    if (allDone) {
+      numEl.innerHTML = '<i class="ti ti-check" style="font-size:14px"></i>';
+      numEl.className = 'phase-num complete';
+      badgeEl.textContent = 'Complete';
+      badgeEl.className = 'phase-badge complete';
+      phaseEl.classList.add('complete');
+    } else {
+      numEl.textContent = pi + 1;
+      numEl.className = 'phase-num' + (someDone ? ' active' : '');
+      badgeEl.textContent = someDone ? doneCount + '/' + p.tasks.length + ' done' : p.tasks.length + ' tasks';
+      badgeEl.className = 'phase-badge';
+      phaseEl.classList.remove('complete');
+    }
+  });
+
+  try { localStorage.setItem('leapcrm_state', JSON.stringify(checkedState)); } catch(e) {}
+}
+
+function togglePhase(pi) {
+  var el = document.getElementById('phase-'+pi);
+  el.classList.toggle('open');
+}
+
+function resetAll() {
+  checkedState = {};
+  PHASES.forEach(function(p, pi) {
+    p.tasks.forEach(function(t, ti) {
+      var cb = document.getElementById('cb-'+pi+'-'+ti);
+      var lbl = document.getElementById('lbl-'+pi+'-'+ti);
+      if (cb) cb.checked = false;
+      if (lbl) lbl.classList.remove('checked');
+    });
+  });
+  updateProgress();
+}
+
+var container = document.getElementById('phases-container');
+
+PHASES.forEach(function(p, pi) {
+  var tasksHtml = p.tasks.map(function(t, ti) {
+    var key = pi + '-' + ti;
+    return '<div class="task">' +
+      '<input type="checkbox" id="cb-'+key+'" onchange="checkedState[\''+key+'\']=this.checked;document.getElementById(\'lbl-'+key+'\').classList.toggle(\'checked\',this.checked);updateProgress()">' +
+      '<label class="task-label" id="lbl-'+key+'" for="cb-'+key+'">'+t+'</label>' +
+      '</div>';
+  }).join('');
+
+  var toolHtml = p.tool ? '<div class="tool-callout"><i class="ti '+p.tool.icon+'"></i><div class="tool-callout-text">'+p.tool.text+'</div></div>' : '';
+  var previewHtml = buildPreview(p.preview);
+
+  var bodyContent = p.preview
+    ? '<div class="body-grid"><div class="col-tasks"><div class="section-label">Tasks</div><div>'+tasksHtml+'</div>'+toolHtml+'</div><div class="col-preview">'+previewHtml+'</div></div>'
+    : '<div><div class="section-label">Tasks</div><div>'+tasksHtml+'</div>'+toolHtml+'</div>';
+
+  var div = document.createElement('div');
+  div.className = 'phase' + (pi === 0 ? ' open' : '');
+  div.id = 'phase-' + pi;
+  div.innerHTML =
+    '<div class="phase-header" onclick="togglePhase('+pi+')">' +
+      '<div class="phase-num" id="pnum-'+pi+'">'+(pi+1)+'</div>' +
+      '<div class="phase-icon-wrap"><i class="ti '+p.icon+'"></i></div>' +
+      '<div class="phase-text"><div class="phase-title">'+p.title+'</div><div class="phase-subtitle">'+p.subtitle+'</div></div>' +
+      '<span class="phase-badge" id="pbadge-'+pi+'">'+p.tasks.length+' tasks</span>' +
+      '<i class="ti ti-chevron-down phase-chevron"></i>' +
+    '</div>' +
+    '<div class="phase-body">'+bodyContent+'</div>';
+
+  container.appendChild(div);
+});
+
+try {
+  var saved = JSON.parse(localStorage.getItem('leapcrm_state') || '{}');
+  Object.keys(saved).forEach(function(key) {
+    if (saved[key]) {
+      checkedState[key] = true;
+      var cb = document.getElementById('cb-'+key);
+      var lbl = document.getElementById('lbl-'+key);
+      if (cb) cb.checked = true;
+      if (lbl) lbl.classList.add('checked');
+    }
+  });
+} catch(e) {}
+
+updateProgress();
+</script>
+
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) { window.location.href = "/login.html"; }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

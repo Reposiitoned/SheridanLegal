@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Mind Map — Team Briefing</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2844;
+    --gold: #b07d3a;
+    --cream: #f4f2ec;
+    --gold-light: #e8d5b0;
+    --navy-light: #2a3d63;
+    --text: #1a2844;
+    --muted: #6b7280;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: white;
+    color: var(--text);
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 14mm 16mm 12mm;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 2.5px solid var(--navy);
+    margin-bottom: 14px;
+  }
+
+  .header-left .firm {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 9pt;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .header-left h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 18pt;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+
+  .header-left h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .header-right {
+    text-align: right;
+    padding-top: 2px;
+  }
+
+  .header-right .label {
+    font-size: 8pt;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .header-right .meta {
+    font-size: 9pt;
+    color: var(--navy);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  /* Intro */
+  .intro {
+    background: var(--cream);
+    border-left: 3px solid var(--gold);
+    padding: 9px 12px;
+    margin-bottom: 14px;
+    font-size: 10pt;
+    color: var(--navy);
+    line-height: 1.55;
+  }
+
+  .intro strong {
+    font-weight: 600;
+  }
+
+  /* Two-col layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  /* Section blocks */
+  .section {
+    margin-bottom: 13px;
+  }
+
+  .section-label {
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin-bottom: 5px;
+  }
+
+  .section h2 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  /* Steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .step {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 19px;
+    height: 19px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    font-size: 8pt;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .step-body {
+    font-size: 9.5pt;
+    line-height: 1.45;
+    color: var(--text);
+  }
+
+  .step-body strong {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  /* Type cards */
+  .type-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .type-card {
+    border: 1.5px solid var(--gold-light);
+    border-radius: 5px;
+    padding: 8px 10px;
+    background: white;
+  }
+
+  .type-card .type-tag {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+  }
+
+  .type-card .type-tag.type2 {
+    background: var(--gold);
+  }
+
+  .type-card .type-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+
+  .type-card p {
+    font-size: 9pt;
+    color: var(--text);
+    line-height: 1.45;
+    margin-bottom: 3px;
+  }
+
+  .type-card .ask {
+    font-size: 8.5pt;
+    color: var(--gold);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* Branch suggestions */
+  .branches {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .branch {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+
+  .branch-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  /* Prompts */
+  .prompts {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .prompt {
+    font-size: 9pt;
+    color: var(--text);
+    line-height: 1.4;
+    padding-left: 10px;
+    border-left: 2px solid var(--gold-light);
+  }
+
+  /* Session box */
+  .session-box {
+    background: var(--navy);
+    color: white;
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .session-box .session-col {
+    flex: 1;
+  }
+
+  .session-box .session-label {
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 3px;
+  }
+
+  .session-box .session-val {
+    font-size: 9.5pt;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer .ps-brand {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 8pt;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .footer .ps-tagline {
+    font-size: 7.5pt;
+    color: var(--muted);
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid #e5e2da;
+    margin: 12px 0;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; padding: 12mm 14mm 10mm; }
+    @page { size: A4; margin: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="firm">Knowledgebase.business &nbsp;·&nbsp; Practice Improvement</div>
+      <h1>Mapping <em>How We Work</em></h1>
+    </div>
+    <div class="header-right">
+      <div class="label">Session Type</div>
+      <div class="meta">Team Workshop</div>
+      <div class="label" style="margin-top:5px;">Duration</div>
+      <div class="meta">60 – 90 minutes</div>
+    </div>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro">
+    Before we can improve how the firm operates, we need a clear picture of <strong>everything we do</strong>. This session captures every process, task, and activity across the business — without filtering or judging. The output is a mind map that becomes our master inventory: the source of truth for what gets documented, in what format, and in what order.
+  </div>
+
+  <!-- Two column: Steps + Types -->
+  <div class="two-col">
+
+    <!-- Left: Steps -->
+    <div>
+      <div class="section-label">How to run the session</div>
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Set up the tool</strong>
+            Open Miro or Coggle in a browser. Create a central node: <em>Knowledgebase.business — How We Work.</em> One person drives; everyone contributes.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Create your main branches</strong>
+            Add a branch for each area of the firm (see suggestions below). These are starting points — reshape them as you go.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Brain dump — 20 minutes</strong>
+            Add every process, task, or activity you can think of. Use the prompt questions below. Do not filter. Quantity over quality at this stage.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Clean and consolidate</strong>
+            Remove duplicates. Split anything that is actually two processes. Flag gaps the group notices once everything is visible.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <strong>Label each process Type 1 or Type 2</strong>
+            Go through every item and tag it using the guide on the right. Some will be both — flag those as Type 1 + 2.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <strong>Export and share</strong>
+            Export as PDF or image. This becomes the master process inventory — nothing gets built until it is reviewed and agreed.
+          </div>
+        </div>
+
+      </div>
+
+      <hr class="divider">
+
+      <div class="section-label">Suggested branches</div>
+      <div class="branches">
+        <div class="branch"><div class="branch-dot"></div><span><strong>Client &amp; Matter Management</strong> — enquiries, file opening, conflict checks, closure</span></div>
+        <div class="branch"><div class="branch-dot"></div><span><strong>Conveyancing</strong> — contracts, searches, settlement, PEXA</span></div>
+        <div class="branch"><div class="branch-dot"></div><span><strong>Wills &amp; Estates</strong> — instructions, drafting, probate, administration</span></div>
+        <div class="branch"><div class="branch-dot"></div><span><strong>Family Law</strong> — initial consult, parenting, property</span></div>
+        <div class="branch"><div class="branch-dot"></div><span><strong>Financial Management</strong> — billing, trust accounting, WIP, disbursements</span></div>
+        <div class="branch"><div class="branch-dot"></div><span><strong>Office &amp; Administration</strong> — onboarding, correspondence, compliance, IT</span></div>
+      </div>
+
+    </div>
+
+    <!-- Right: Types + Prompts -->
+    <div>
+
+      <div class="section-label">Two types of process</div>
+      <div class="type-cards" style="margin-bottom: 13px;">
+
+        <div class="type-card">
+          <div class="type-tag">Type 1</div>
+          <div class="type-title">Procedure Recording</div>
+          <p>A screen capture with narration showing exactly how to complete a task in the system — what to click, what to enter, and why.</p>
+          <div class="ask">Ask: "Would I show someone this by recording my screen?"</div>
+        </div>
+
+        <div class="type-card">
+          <div class="type-tag type2">Type 2</div>
+          <div class="type-title">Process Flowchart</div>
+          <p>A visual map showing how work moves through the firm — roles, decisions, handoffs, and conditional paths.</p>
+          <div class="ask">Ask: "Does this involve more than one person or a decision point?"</div>
+        </div>
+
+      </div>
+
+      <div class="section-label">Prompt questions for the brain dump</div>
+      <div class="prompts">
+        <div class="prompt">What do you do when a new client calls or emails?</div>
+        <div class="prompt">What happens when a matter opens — and when it closes?</div>
+        <div class="prompt">What do you do every Monday, or at end of month?</div>
+        <div class="prompt">What would break if you weren't here this week?</div>
+        <div class="prompt">What do you have to explain to every new team member?</div>
+        <div class="prompt">What do you check before sending anything to a client?</div>
+        <div class="prompt">What do you do that nobody else knows how to do?</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Session format box -->
+  <div class="session-box">
+    <div class="session-col">
+      <div class="session-label">Format</div>
+      <div class="session-val">Whole team in a room or on a call. One person at the keyboard, everyone contributing.</div>
+    </div>
+    <div class="session-col">
+      <div class="session-label">Sequence</div>
+      <div class="session-val">Brain dump &rarr; Tidy &rarr; Label &rarr; Export</div>
+    </div>
+    <div class="session-col">
+      <div class="session-label">Output</div>
+      <div class="session-val">A complete process inventory, exported as PDF — ready for review before any build work begins.</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="ps-brand">Practice Smarts</div>
+    <div class="ps-tagline">The clever way to run your practice</div>
+  </div>
+
+</div>
+
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) { window.location.href = "/login.html"; }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Task Queue — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cream:#f5f1ea;--navy:#1b2a3b;--navy-mid:#243347;--navy-soft:#2e3f52;
+    --ink:#1b2a3b;--ink-soft:#4a5a6a;--ink-faint:#8a9aaa;
+    --amber:#c17c2a;--amber-bg:#f5ede0;--amber-rule:#ddb882;
+    --teal:#0c5c52;--teal-light:#e8f5f3;--teal-mid:#1a7a6e;
+    --rule:#ddd8cf;--surface:#ffffff;
+    --red:#b93a3a;--red-bg:#fdf0f0;--red-light:#f5d4d4;
+    --green:#2e7d5c;--green-bg:#edf7f2;--green-light:#d4eddf;
+    --orange:#b86a1a;--orange-bg:#fdf3e8;
+    --radius:10px;--shadow:0 2px 14px rgba(27,42,59,0.09);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh;}
+
+  /* PAGE HEADER */
+  .page-header{max-width:960px;margin:0 auto;padding:48px 32px 20px;}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;}
+  .page-title{font-family:'DM Serif Display',serif;font-size:44px;color:var(--navy);line-height:1.1;margin-bottom:10px;}
+  .page-subtitle{font-size:14px;color:var(--ink-soft);line-height:1.6;border-bottom:1px solid var(--rule);padding-bottom:20px;}
+
+  /* APP BAR */
+  .app-bar{max-width:960px;margin:20px auto 0;padding:0 32px;}
+  .app-bar-inner{background:var(--navy);border-radius:var(--radius);padding:0 24px;display:flex;align-items:center;height:54px;gap:0;}
+  .app-bar-brand{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;}
+  .app-bar-div{width:1px;height:24px;background:rgba(255,255,255,.15);margin:0 20px;}
+  .app-bar-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7dd4cc;}
+  .app-bar-spacer{flex:1;}
+  .iam-label{font-size:12px;color:#7dd4cc;margin-right:10px;white-space:nowrap;}
+  .iam-select{background:var(--navy-soft);border:1px solid rgba(255,255,255,.15);border-radius:7px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:6px 32px 6px 12px;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237dd4cc' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:160px;}
+  .iam-select:focus{outline:none;border-color:#7dd4cc;}
+
+  /* MY CAPACITY BAR */
+  .my-capacity-bar{max-width:960px;margin:10px auto 0;padding:0 32px;}
+  .my-capacity-inner{background:var(--navy-soft);border-radius:8px;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .my-cap-label{font-size:12px;color:#7dd4cc;font-weight:600;letter-spacing:.06em;white-space:nowrap;}
+  .my-cap-track{flex:1;min-width:120px;background:rgba(255,255,255,.1);border-radius:4px;height:6px;position:relative;}
+  .my-cap-fill{height:6px;border-radius:4px;background:#7dd4cc;transition:width .3s;}
+  .my-cap-fill.overloaded{background:#ff9a9a;}
+  .my-cap-stat{font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,.7);white-space:nowrap;}
+  .my-cap-stat.overloaded{color:#ff9a9a;font-weight:600;}
+  .my-cap-edit{display:flex;align-items:center;gap:8px;}
+  .my-cap-edit-label{font-size:12px;color:rgba(255,255,255,.5);}
+  .my-cap-input{width:54px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:3px 8px;font-family:'DM Mono',monospace;font-size:13px;color:#fff;outline:none;text-align:center;}
+  .my-cap-input:focus{border-color:#7dd4cc;}
+  .my-cap-unit{font-size:12px;color:rgba(255,255,255,.5);}
+  .my-cap-hidden{display:none;}
+
+  /* MAIN */
+  .main{max-width:960px;margin:0 auto;padding:20px 32px 80px;}
+
+  /* SEND FORM */
+  .send-panel{background:var(--navy-mid);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow);}
+  .send-panel-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:var(--navy);}
+  .send-panel-title{font-size:15px;font-weight:600;color:#fff;}
+  .hide-btn{background:none;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(255,255,255,.7);cursor:pointer;}
+  .hide-btn:hover{border-color:rgba(255,255,255,.5);color:#fff;}
+  .send-form{padding:20px 22px;display:flex;flex-direction:column;gap:16px;}
+  .send-form.hidden{display:none;}
+  .fl{font-size:13px;font-weight:500;color:rgba(255,255,255,.85);margin-bottom:5px;display:flex;align-items:center;gap:7px;}
+  .fl .req{color:#7dd4cc;font-weight:700;}
+  .fl .opt{font-size:11px;color:rgba(255,255,255,.4);font-weight:400;}
+  .fi,.fta,.fsel{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:14px;color:#fff;outline:none;transition:border-color .15s;}
+  .fi::placeholder,.fta::placeholder{color:rgba(255,255,255,.3);}
+  .fi:focus,.fta:focus,.fsel:focus{border-color:#7dd4cc;}
+  .fta{min-height:80px;resize:vertical;line-height:1.5;}
+  .fsel{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237dd4cc' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:rgba(255,255,255,.07);}
+  .fsel option{background:var(--navy-soft);color:#fff;}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-footer{display:flex;justify-content:flex-end;padding-top:4px;border-top:1px solid rgba(255,255,255,.08);}
+  .post-btn{background:var(--amber);color:#fff;border:none;border-radius:8px;padding:9px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;}
+  .post-btn:hover{background:var(--orange);}
+
+  /* TEAM CAPACITY */
+  .capacity-section{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);padding:18px 20px;margin-bottom:24px;box-shadow:var(--shadow);}
+  .capacity-header{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
+  .capacity-title{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);}
+  .capacity-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-faint);}
+  .capacity-grid{display:flex;gap:10px;flex-wrap:wrap;}
+
+  .cap-card{background:var(--cream);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;min-width:110px;flex:1;}
+  .cap-card.overloaded{background:var(--red-bg);border-color:var(--red-light);}
+  .cap-card.clear{background:var(--green-bg);border-color:var(--green-light);}
+  .cap-card.wm{background:#f3f0ff;border-color:#c9bfee;}
+  .cap-name{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;}
+  .cap-card.overloaded .cap-name{color:var(--red);}
+  .cap-card.wm .cap-name{color:#5a3a8a;}
+  .cap-hours-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+  .cap-used{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .cap-sep{font-size:11px;color:var(--ink-faint);}
+  .cap-limit-input{width:40px;border:1px solid var(--rule);border-radius:4px;padding:1px 4px;font-family:'DM Mono',monospace;font-size:12px;color:var(--ink);outline:none;text-align:center;background:var(--surface);}
+  .cap-limit-input:focus{border-color:var(--teal);}
+  .cap-card.overloaded .cap-limit-input{border-color:var(--red-light);}
+  .cap-limit-unit{font-size:11px;color:var(--ink-faint);}
+  .cap-bar-track{background:rgba(0,0,0,.07);border-radius:4px;height:5px;margin-bottom:5px;}
+  .cap-bar-fill{height:5px;border-radius:4px;background:var(--teal);transition:width .3s;}
+  .cap-card.overloaded .cap-bar-fill{background:var(--red);}
+  .cap-card.clear .cap-bar-fill{background:var(--green);}
+  .cap-card.wm .cap-bar-fill{background:#7b5ea7;}
+  .cap-status{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);}
+  .cap-card.overloaded .cap-status{color:var(--red);}
+  .cap-card.clear .cap-status{color:var(--green);}
+  .cap-card.wm .cap-status{color:#7b5ea7;}
+  .cap-card.wm-today{background:#f3f0ff;border-color:#c9bfee;}
+  .cap-card.wm-today .cap-name{color:#5a3a8a;}
+  .wm-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#7b5ea7;color:#fff;padding:2px 8px;border-radius:4px;margin-bottom:6px;}
+
+  /* WM NOMINATOR */
+  .wm-nominator{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f7f4ff;border-top:1px solid #e0d8f5;border-radius:0 0 8px 8px;flex-wrap:wrap;}
+  .wm-nom-label{font-size:11.5px;color:#5a3a8a;font-weight:600;white-space:nowrap;}
+  .wm-nom-select{background:var(--surface);border:1px solid #c9bfee;border-radius:6px;padding:5px 28px 5px 10px;font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--ink);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237b5ea7' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;}
+  .wm-nom-select:focus{border-color:#7b5ea7;}
+  .wm-nom-hint{font-size:11px;color:#9b89c4;}
+
+  /* QUEUE HEADER */
+  .queue-hd{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .queue-title-txt{font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy);margin-right:8px;}
+  .filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
+  .ftab{background:var(--surface);border:1px solid var(--rule);border-radius:20px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--ink-soft);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
+  .ftab.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .ftab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+  .ftab-count{border-radius:10px;padding:0 6px;font-size:11px;font-family:'DM Mono',monospace;background:rgba(255,255,255,.2);}
+  .ftab:not(.active) .ftab-count{background:var(--cream);color:var(--ink-faint);}
+  .sort-hint{font-size:12px;color:var(--ink-faint);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+
+  /* TASK CARDS */
+  .task-list{display:flex;flex-direction:column;gap:10px;}
+  .task-card-wrap{position:relative;}
+  .task-card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .15s;}
+  .task-card:hover{box-shadow:0 4px 20px rgba(27,42,59,0.13);}
+  .task-card.is-urgent{border-color:var(--red-light);background:#fffafa;}
+  .task-card.is-pinned{border-color:var(--amber-rule);border-width:2px;}
+  .task-card.is-done{opacity:.55;}
+  .pin-number{position:absolute;left:-1px;top:-1px;background:var(--amber);color:#fff;font-size:11px;font-weight:700;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius) 0 var(--radius) 0;z-index:2;}
+  .task-route{padding:10px 18px 0;font-size:12px;color:var(--ink-faint);display:flex;align-items:center;gap:6px;}
+  .task-route .from{color:var(--ink-soft);font-weight:500;}
+  .task-route .to{color:var(--navy);font-weight:600;}
+  .task-body{padding:10px 18px 0;}
+  .task-badges{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
+  .badge{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:4px;letter-spacing:.04em;text-transform:uppercase;}
+  .badge-urgent{background:var(--red-bg);color:var(--red);}
+  .badge-high{background:var(--orange-bg);color:var(--orange);}
+  .badge-routine{background:var(--teal-light);color:var(--teal);}
+  .badge-low{background:#f0f0f0;color:#888;}
+  .badge-carried{background:#fef3e2;color:#9a5a00;display:flex;align-items:center;gap:3px;}
+  .badge-posted{font-size:11px;color:var(--ink-faint);font-weight:400;letter-spacing:0;text-transform:none;}
+  .task-name{font-size:15.5px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:4px;}
+  .task-card.is-done .task-name{text-decoration:line-through;color:var(--ink-faint);}
+  .task-desc{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-bottom:8px;}
+  .task-footer{display:flex;align-items:center;gap:14px;padding:8px 18px 14px;flex-wrap:wrap;}
+  .task-time{font-size:12.5px;color:var(--ink-soft);display:flex;align-items:center;gap:5px;}
+  .task-due{font-size:12.5px;display:flex;align-items:center;gap:5px;}
+  .task-due.overdue{color:var(--red);font-weight:600;}
+  .task-due.due-soon{color:var(--orange);font-weight:500;}
+  .task-due.ok{color:var(--ink-faint);}
+  .task-actions{margin-left:auto;display:flex;gap:7px;align-items:center;}
+  .btn-pin{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--ink-soft);cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .btn-pin:hover{border-color:var(--amber);color:var(--amber);}
+  .btn-pin.pinned{background:var(--amber-bg);border-color:var(--amber-rule);color:var(--amber);}
+  .btn-complete{background:var(--green-bg);border:1px solid var(--green-light);border-radius:6px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--green);cursor:pointer;transition:all .15s;}
+  .btn-complete:hover{background:var(--green);color:#fff;}
+  .btn-remove{background:none;border:1px solid var(--rule);border-radius:6px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink-faint);cursor:pointer;transition:all .15s;}
+  .btn-remove:hover{border-color:var(--red);color:var(--red);}
+  .btn-reopen{background:none;border:1px solid var(--rule);border-radius:6px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink-faint);cursor:pointer;}
+  .btn-reopen:hover{color:var(--teal);border-color:var(--teal);}
+  .btn-reassign{background:none;border:1px solid var(--rule);border-radius:6px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink-soft);cursor:pointer;transition:all .15s;}
+  .btn-reassign:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* REASSIGN PANEL */
+  .reassign-panel{display:none;border-top:1px solid var(--rule);padding:12px 18px;background:var(--cream);align-items:center;gap:10px;flex-wrap:wrap;}
+  .reassign-panel.open{display:flex;}
+  .reassign-label{font-size:12.5px;color:var(--ink-soft);font-weight:500;white-space:nowrap;}
+  .reassign-select{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:6px 30px 6px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a9aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:160px;}
+  .reassign-select:focus{border-color:var(--teal);}
+  .reassign-confirm{background:var(--teal);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s;}
+  .reassign-confirm:hover{background:var(--teal-mid);}
+  .reassign-cancel{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink-faint);cursor:pointer;padding:6px 8px;}
+  .reassign-cancel:hover{color:var(--red);}
+
+  .section-divider{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);padding:16px 0 8px;}
+  .empty-state{text-align:center;padding:56px 20px;color:var(--ink-faint);font-size:14px;}
+  .empty-icon{font-size:32px;margin-bottom:10px;opacity:.5;}
+
+  @media(max-width:640px){
+    .page-header,.app-bar,.my-capacity-bar,.main{padding-left:18px;padding-right:18px;}
+    .page-title{font-size:32px;}
+    .frow{grid-template-columns:1fr;}
+    .app-bar-inner{padding:0 16px;}
+    .capacity-grid{flex-direction:column;}
+    .task-footer{flex-direction:column;align-items:flex-start;}
+    .task-actions{margin-left:0;}
+    .my-capacity-inner{flex-direction:column;align-items:flex-start;gap:10px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Operations</div>
+  <h1 class="page-title">Task Queue</h1>
+  <p class="page-subtitle">Live task queue for the team. Claim, complete, and track tasks in one place.</p>
+</div>
+
+<!-- APP BAR -->
+<div class="app-bar">
+  <div class="app-bar-inner">
+    <div class="app-bar-brand">Knowledgebase.business</div>
+    <div class="app-bar-div"></div>
+    <div class="app-bar-label">Task Queue</div>
+    <div class="app-bar-spacer"></div>
+    <span class="iam-label">I am</span>
+    <select class="iam-select" id="iam-select" onchange="onIamChange()">
+      <option value="">— select —</option>
+      <option value="Workflow Manager">Workflow Manager</option>
+      <option value="[Name]">[Name]</option>
+      <option value="Michelle">Michelle</option>
+      <option value="Emma">Emma</option>
+      <option value="Kristie">Kristie</option>
+      <option value="Tracy">Tracy</option>
+      <option value="Tara">Tara</option>
+      <option value="Jill">Jill</option>
+      <option value="Lyn">Lyn</option>
+      <option value="Jewell">Jewell</option>
+    </select>
+  </div>
+</div>
+
+<!-- MY CAPACITY BAR -->
+<div class="my-capacity-bar" id="my-capacity-bar" style="display:none">
+  <div class="my-capacity-inner">
+    <div class="my-cap-label" id="my-cap-name"></div>
+    <div class="my-cap-track">
+      <div class="my-cap-fill" id="my-cap-fill" style="width:0%"></div>
+    </div>
+    <div class="my-cap-stat" id="my-cap-stat"></div>
+    <div class="my-cap-edit">
+      <span class="my-cap-edit-label">My capacity today:</span>
+      <input class="my-cap-input" id="my-cap-input" type="number" min="0.5" max="16" step="0.5" value="6" onchange="updateMyCap(this.value)"/>
+      <span class="my-cap-unit">hrs</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SEND FORM -->
+  <div class="send-panel">
+    <div class="send-panel-hd">
+      <div class="send-panel-title">Send a task</div>
+      <button class="hide-btn" id="hide-btn" onclick="toggleForm()">Hide form</button>
+    </div>
+    <div class="send-form" id="send-form">
+      <div>
+        <div class="fl">Task <span class="req">*</span></div>
+        <input class="fi" id="f-task" type="text" placeholder="e.g. Update file notes for the Nguyen matter" maxlength="120"/>
+      </div>
+      <div>
+        <div class="fl">Description <span class="opt">— optional but helps</span></div>
+        <textarea class="fta" id="f-desc" placeholder="What needs doing and anything the person needs to know."></textarea>
+      </div>
+      <div class="frow">
+        <div>
+          <div class="fl">Assign to <span class="req">*</span></div>
+          <select class="fsel" id="f-assign">
+            <option value="">— select person —</option>
+            <option value="Workflow Manager">Workflow Manager</option>
+            <option value="[Name]">[Name]</option>
+            <option value="Michelle">Michelle</option>
+            <option value="Emma">Emma</option>
+            <option value="Kristie">Kristie</option>
+            <option value="Tracy">Tracy</option>
+            <option value="Tara">Tara</option>
+            <option value="Jill">Jill</option>
+            <option value="Lyn">Lyn</option>
+            <option value="Jewell">Jewell</option>
+            <option value="Anyone">Anyone</option>
+          </select>
+        </div>
+        <div>
+          <div class="fl">Priority <span class="req">*</span></div>
+          <select class="fsel" id="f-priority">
+            <option value="routine" selected>Routine</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+            <option value="low">Low — when time permits</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div>
+          <div class="fl">Time estimate <span class="opt">— hours</span></div>
+          <input class="fi" id="f-hours" type="number" min="0.25" max="24" step="0.25" placeholder="e.g. 1.5"/>
+        </div>
+        <div>
+          <div class="fl">Due date <span class="opt">— optional</span></div>
+          <input class="fi" id="f-due" type="date"/>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="post-btn" onclick="postTask()">Post to queue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEAM CAPACITY -->
+  <div class="capacity-section">
+    <div class="capacity-header">
+      <div class="capacity-title">Team Capacity Today</div>
+      <div class="capacity-date" id="cap-date"></div>
+    </div>
+    <div class="capacity-grid" id="capacity-grid"></div>
+    <div class="wm-nominator">
+      <span class="wm-nom-label">⬡ Today's Workflow Manager:</span>
+      <select class="wm-nom-select" id="wm-nom-select" onchange="setWMToday(this.value)">
+        <option value="">— not nominated —</option>
+        <option value="[Name]">[Name]</option>
+        <option value="Michelle">Michelle</option>
+        <option value="Emma">Emma</option>
+        <option value="Kristie">Kristie</option>
+        <option value="Tracy">Tracy</option>
+        <option value="Tara">Tara</option>
+        <option value="Jill">Jill</option>
+        <option value="Lyn">Lyn</option>
+        <option value="Jewell">Jewell</option>
+      </select>
+      <span class="wm-nom-hint" id="wm-nom-hint"></span>
+    </div>
+  </div>
+
+  <!-- QUEUE -->
+  <div class="queue-hd">
+    <div class="queue-title-txt">Task queue</div>
+    <div class="filter-tabs">
+      <button class="ftab active" id="ftab-active" onclick="setFilter('active')">Active <span class="ftab-count" id="cnt-active">0</span></button>
+      <button class="ftab" id="ftab-mine" onclick="setFilter('mine')">Mine <span class="ftab-count" id="cnt-mine">0</span></button>
+      <button class="ftab" id="ftab-done" onclick="setFilter('done')">Done <span class="ftab-count" id="cnt-done">0</span></button>
+      <button class="ftab" id="ftab-all" onclick="setFilter('all')">All</button>
+    </div>
+  </div>
+  <div class="sort-hint">⇅ Sorted by priority then deadline. Pinned task always appears first.</div>
+  <div class="task-list" id="task-list"></div>
+  <div class="empty-state" id="empty-state" style="display:none">
+    <div class="empty-icon">📋</div>
+    No tasks here yet.
+  </div>
+
+</div>
+
+<script>
+var KEY     = 'sl-tq-v3';
+var IAM_KEY = 'sl-tq-iam';
+var CAP_KEY = 'sl-tq-cap';
+var WM_KEY  = 'sl-tq-wm';  // {name, date} — resets each day
+var DEFAULT_CAP = 6;
+
+var PEOPLE = ['Workflow Manager','[Name]','Michelle','Emma','Kristie','Tracy','Tara','Jill','Lyn','Jewell'];
+var STAFF  = ['[Name]','Michelle','Emma','Kristie','Tracy','Tara','Jill','Lyn','Jewell']; // excludes WM role
+var PRI_ORDER = {urgent:0,high:1,routine:2,low:3};
+var PRI_LABEL = {urgent:'Urgent',high:'High',routine:'Routine',low:'Low'};
+
+var tasks = [];
+var capacities = {};
+var currentFilter = 'active';
+var currentUser = '';
+var wmToday = ''; // name of today's nominated WM
+
+// ── LOAD / SAVE ────────────────────────────────────────────────────────────
+function loadAll(){
+  try{ var s=localStorage.getItem(KEY); tasks=s?JSON.parse(s):[]; }catch(e){ tasks=[]; }
+  try{ var c=localStorage.getItem(CAP_KEY); capacities=c?JSON.parse(c):{}; }catch(e){ capacities={}; }
+  currentUser=localStorage.getItem(IAM_KEY)||'';
+  // Load WM — reset if it's a new day
+  try{
+    var wm=localStorage.getItem(WM_KEY);
+    if(wm){
+      var obj=JSON.parse(wm);
+      var today=new Date().toDateString();
+      wmToday=(obj.date===today)?obj.name:'';
+      if(obj.date!==today){ localStorage.removeItem(WM_KEY); }
+    }
+  }catch(e){ wmToday=''; }
+}
+function saveAll(){ try{ localStorage.setItem(KEY,JSON.stringify(tasks)); }catch(e){} }
+function saveCap(){ try{ localStorage.setItem(CAP_KEY,JSON.stringify(capacities)); }catch(e){} }
+function getCap(name){ return capacities[name]||DEFAULT_CAP; }
+function setCap(name,val){ capacities[name]=val; saveCap(); }
+function setWMToday(name){
+  wmToday=name;
+  try{ localStorage.setItem(WM_KEY,JSON.stringify({name:name,date:new Date().toDateString()})); }catch(e){}
+  render();
+}
+
+// ── IAM ───────────────────────────────────────────────────────────────────
+function onIamChange(){
+  currentUser=document.getElementById('iam-select').value;
+  localStorage.setItem(IAM_KEY,currentUser);
+  render();
+}
+
+// ── MY CAPACITY BAR ───────────────────────────────────────────────────────
+function updateMyCap(val){
+  var v=parseFloat(val);
+  if(!v||v<0.5) return;
+  setCap(currentUser,v);
+  render();
+}
+function renderMyCapBar(){
+  var bar=document.getElementById('my-capacity-bar');
+  if(!currentUser||currentUser==='Workflow Manager'){ bar.style.display='none'; return; }
+  bar.style.display='block';
+  var cap=getCap(currentUser);
+  var used=getUsedHours(currentUser);
+  var pct=Math.min(100,cap>0?Math.round((used/cap)*100):0);
+  var over=used>cap;
+  document.getElementById('my-cap-name').textContent=currentUser+"'s capacity today";
+  var fill=document.getElementById('my-cap-fill');
+  fill.style.width=pct+'%';
+  fill.className='my-cap-fill'+(over?' overloaded':'');
+  var stat=document.getElementById('my-cap-stat');
+  stat.textContent=used.toFixed(used%1===0?0:1)+'h used of '+cap+'h'+(over?' — OVERLOADED':'');
+  stat.className='my-cap-stat'+(over?' overloaded':'');
+  document.getElementById('my-cap-input').value=cap;
+}
+
+// ── FORM ──────────────────────────────────────────────────────────────────
+var formVisible=true;
+function toggleForm(){
+  formVisible=!formVisible;
+  document.getElementById('send-form').classList.toggle('hidden',!formVisible);
+  document.getElementById('hide-btn').textContent=formVisible?'Hide form':'Show form';
+}
+
+function postTask(){
+  var text=document.getElementById('f-task').value.trim();
+  var desc=document.getElementById('f-desc').value.trim();
+  var assign=document.getElementById('f-assign').value;
+  var priority=document.getElementById('f-priority').value;
+  var hours=parseFloat(document.getElementById('f-hours').value)||null;
+  var due=document.getElementById('f-due').value||null;
+  if(!text){ hl('f-task'); return; }
+  if(!assign){ hl('f-assign'); return; }
+  tasks.unshift({
+    id:'t'+Date.now(), text:text, desc:desc, assignTo:assign,
+    priority:priority, hours:hours, due:due,
+    from:currentUser||'Someone', pinned:false,
+    done:false, doneAt:null, createdAt:Date.now()
+  });
+  saveAll();
+  document.getElementById('f-task').value='';
+  document.getElementById('f-desc').value='';
+  document.getElementById('f-assign').value='';
+  document.getElementById('f-priority').value='routine';
+  document.getElementById('f-hours').value='';
+  document.getElementById('f-due').value='';
+  render();
+}
+function hl(id){ var el=document.getElementById(id); if(!el)return; el.style.borderColor='#ff9a9a'; setTimeout(function(){ el.style.borderColor=''; },1500); }
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────
+function setPinned(id,val){ tasks.forEach(function(x){ x.pinned=false; }); var t=find(id); if(t) t.pinned=val; saveAll(); render(); }
+function completeTask(id){ var t=find(id); if(!t)return; t.done=true; t.doneAt=Date.now(); t.pinned=false; saveAll(); render(); }
+function reopenTask(id){ var t=find(id); if(!t)return; t.done=false; t.doneAt=null; saveAll(); render(); }
+function removeTask(id){ if(!confirm('Remove this task?'))return; tasks=tasks.filter(function(x){ return x.id!==id; }); saveAll(); render(); }
+function find(id){ return tasks.find(function(x){ return x.id===id; }); }
+function toggleReassign(id){
+  var panel=document.getElementById('rp-'+id);
+  if(panel) panel.classList.toggle('open');
+}
+function confirmReassign(id){
+  var sel=document.getElementById('rs-'+id);
+  if(!sel||!sel.value) return;
+  var t=find(id);
+  if(!t) return;
+  t.assignTo=sel.value;
+  saveAll(); render();
+}
+
+// ── FILTER / SORT ─────────────────────────────────────────────────────────
+function setFilter(f){
+  currentFilter=f;
+  ['active','mine','done','all'].forEach(function(k){ var el=document.getElementById('ftab-'+k); if(el) el.classList.toggle('active',k===f); });
+  render();
+}
+function filteredTasks(){
+  return tasks.filter(function(t){
+    if(currentFilter==='active') return !t.done;
+    if(currentFilter==='mine') return !t.done&&(t.assignTo===currentUser||t.assignTo==='Anyone');
+    if(currentFilter==='done') return t.done;
+    return true;
+  });
+}
+function sortedTasks(arr){
+  return arr.slice().sort(function(a,b){
+    if(a.done!==b.done) return a.done?1:-1;
+    if(a.pinned!==b.pinned) return a.pinned?-1:1;
+    if(PRI_ORDER[a.priority]!==PRI_ORDER[b.priority]) return PRI_ORDER[a.priority]-PRI_ORDER[b.priority];
+    if(a.due&&b.due) return new Date(a.due)-new Date(b.due);
+    if(a.due) return -1; if(b.due) return 1;
+    return b.createdAt-a.createdAt;
+  });
+}
+function countF(f){ return tasks.filter(function(t){ if(f==='active')return !t.done; if(f==='mine')return !t.done&&(t.assignTo===currentUser||t.assignTo==='Anyone'); if(f==='done')return t.done; return true; }).length; }
+
+// ── CAPACITY ──────────────────────────────────────────────────────────────
+function getUsedHours(name){
+  return tasks.filter(function(t){ return !t.done&&(t.assignTo===name)&&t.hours; })
+    .reduce(function(s,t){ return s+t.hours; },0);
+}
+function renderCapacity(){
+  document.getElementById('cap-date').textContent=new Date().toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});
+  var html='';
+  PEOPLE.forEach(function(name){
+    var isWMRole=name==='Workflow Manager';
+    var isWMToday=!isWMRole&&name===wmToday;
+    var cap=getCap(name);
+    var used=isWMRole?0:getUsedHours(name);
+    var pct=isWMRole?0:Math.min(100,cap>0?Math.round((used/cap)*100):0);
+    var over=!isWMRole&&used>cap;
+    var clear=!isWMRole&&used===0;
+    var cls=isWMRole?'wm':isWMToday?'wm-today':over?'overloaded':clear?'clear':'';
+    html+='<div class="cap-card '+cls+'">';
+    if(isWMToday) html+='<div class="wm-badge">⬡ WM Today</div>';
+    html+='<div class="cap-name">'+esc(name)+'</div>';
+    if(isWMRole){
+      html+='<div class="cap-status">Rotating role — nominate below</div>';
+    } else {
+      html+='<div class="cap-hours-row">';
+      html+='<span class="cap-used">'+used.toFixed(used%1===0?0:1)+'h</span>';
+      html+='<span class="cap-sep">/</span>';
+      html+='<input class="cap-limit-input" type="number" min="0.5" max="16" step="0.5" value="'+cap+'" title="Set '+name+'\'s capacity" onchange="updateCap(\''+esc(name)+'\',this.value)"/>';
+      html+='<span class="cap-limit-unit">h</span>';
+      html+='</div>';
+      html+='<div class="cap-bar-track"><div class="cap-bar-fill" style="width:'+pct+'%"></div></div>';
+      html+='<div class="cap-status">'+(isWMToday?'WM TODAY':over?'OVERLOADED':clear?'Available':pct+'% allocated')+'</div>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('capacity-grid').innerHTML=html;
+  // Sync nominator dropdown
+  var sel=document.getElementById('wm-nom-select');
+  if(sel) sel.value=wmToday||'';
+  var hint=document.getElementById('wm-nom-hint');
+  if(hint) hint.textContent=wmToday?wmToday+' is managing the queue today. Resets tomorrow.':'Set each morning — resets daily.';
+}
+function updateCap(name,val){
+  var v=parseFloat(val);
+  if(!v||v<0.5) return;
+  setCap(name,v);
+  render();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtPosted(ts){ var d=new Date(ts); return d.toLocaleDateString('en-AU',{day:'numeric',month:'short'})+', '+d.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit',hour12:true}).toLowerCase(); }
+function fmtDue(s){
+  if(!s) return null;
+  var due=new Date(s+'T00:00:00'); var today=new Date(); today.setHours(0,0,0,0);
+  var diff=Math.round((due-today)/(864e5));
+  var label=due.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'});
+  if(diff<0) return {label:label+' — '+Math.abs(diff)+' day'+(Math.abs(diff)!==1?'s':'')+' overdue',cls:'overdue'};
+  if(diff===0) return {label:'Due today',cls:'due-soon'};
+  if(diff===1) return {label:'Due tomorrow',cls:'due-soon'};
+  return {label:label,cls:'ok'};
+}
+function isCarried(t){
+  if(t.done) return false;
+  var today=new Date(); today.setHours(0,0,0,0);
+  // Carried if due date has passed
+  if(t.due){ var due=new Date(t.due+'T00:00:00'); if(due<today) return true; }
+  // Carried if task was created on a previous day
+  var created=new Date(t.createdAt); created.setHours(0,0,0,0);
+  return created<today;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render(){
+  document.getElementById('iam-select').value=currentUser;
+  ['active','mine','done'].forEach(function(f){ var el=document.getElementById('cnt-'+f); if(el) el.textContent=countF(f); });
+  renderMyCapBar();
+  renderCapacity();
+
+  var list=sortedTasks(filteredTasks());
+  var listEl=document.getElementById('task-list');
+  var emptyEl=document.getElementById('empty-state');
+  if(list.length===0){ listEl.innerHTML=''; emptyEl.style.display='block'; return; }
+  emptyEl.style.display='none';
+
+  var pinned=list.filter(function(t){ return t.pinned; });
+  var open=list.filter(function(t){ return !t.done&&!t.pinned; });
+  var done=list.filter(function(t){ return t.done; });
+
+  var html=''; var pos=1;
+  function card(t){
+    var co=isCarried(t);
+    var due=fmtDue(t.due);
+    var isPinned=!!t.pinned;
+    var cls='task-card'+(t.priority==='urgent'?' is-urgent':'')+(isPinned?' is-pinned':'')+(t.done?' is-done':'');
+    var c='<div class="task-card-wrap"><div class="'+cls+'">';
+    if(isPinned) c+='<div class="pin-number">'+pos+'</div>';
+    c+='<div class="task-route">⇢ From: <span class="from">'+esc(t.from)+'</span> <span style="color:var(--ink-faint)">→</span> To: <span class="to">'+esc(t.assignTo)+'</span></div>';
+    c+='<div class="task-body">';
+    c+='<div class="task-badges"><span class="badge badge-'+t.priority+'">'+PRI_LABEL[t.priority]+'</span>';
+    if(co) c+='<span class="badge badge-carried">⇄ Carried over</span>';
+    c+='<span class="badge-posted">Posted '+fmtPosted(t.createdAt)+'</span></div>';
+    c+='<div class="task-name">'+esc(t.text)+'</div>';
+    if(t.desc) c+='<div class="task-desc">'+esc(t.desc)+'</div>';
+    c+='</div>';
+    c+='<div class="task-footer">';
+    if(t.hours) c+='<div class="task-time">⏱ '+t.hours+' hr'+(t.hours!==1?'s':'')+'</div>';
+    if(due) c+='<div class="task-due '+due.cls+'">📅 '+due.label+'</div>';
+    c+='<div class="task-actions">';
+    if(!t.done){
+      c+='<button class="btn-pin'+(isPinned?' pinned':'')+'" onclick="setPinned(\''+t.id+'\','+(isPinned?'false':'true')+')">'+( isPinned?'★ Pinned':'Pin as #1')+'</button>';
+      c+='<button class="btn-reassign" onclick="toggleReassign(\''+t.id+'\')">⇄ Reassign</button>';
+      c+='<button class="btn-complete" onclick="completeTask(\''+t.id+'\')">✓ Complete</button>';
+      c+='<button class="btn-remove" onclick="removeTask(\''+t.id+'\')">Remove</button>';
+    } else {
+      c+='<button class="btn-reopen" onclick="reopenTask(\''+t.id+'\')">Reopen</button>';
+      c+='<button class="btn-remove" onclick="removeTask(\''+t.id+'\')">Remove</button>';
+    }
+    c+='</div></div>';
+    // Reassign panel
+    if(!t.done){
+      var opts='<option value="">— select person —</option>';
+      PEOPLE.concat(['Anyone']).forEach(function(p){
+        if(p!==t.assignTo) opts+='<option value="'+esc(p)+'">'+esc(p)+'</option>';
+      });
+      c+='<div class="reassign-panel" id="rp-'+t.id+'">';
+      c+='<span class="reassign-label">Reassign to:</span>';
+      c+='<select class="reassign-select" id="rs-'+t.id+'">'+opts+'</select>';
+      c+='<button class="reassign-confirm" onclick="confirmReassign(\''+t.id+'\')">Reassign →</button>';
+      c+='<button class="reassign-cancel" onclick="toggleReassign(\''+t.id+'\')">Cancel</button>';
+      c+='</div>';
+    }
+    c+='</div></div>';
+    pos++;
+    return c;
+  }
+
+  pinned.forEach(function(t){ html+=card(t); });
+  open.forEach(function(t){ html+=card(t); });
+  if(done.length){ html+='<div class="section-divider">Completed — '+done.length+'</div>'; done.forEach(function(t){ html+=card(t); }); }
+  listEl.innerHTML=html;
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────
+loadAll();
+render();
+setInterval(function(){ render(); },60000);
+</script>
+
+  <script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var checkInterval = setInterval(function() {
+        if (window.$memberstackDom) {
+          clearInterval(checkInterval);
+          window.$memberstackDom.getCurrentMember().then(function(result) {
+            if (!result.data) { window.location.href = "/login.html"; }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>
