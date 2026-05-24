@@ -8,143 +8,93 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --forest:    #2d5a27;
-  --forest-dk: #1a3d16;
-  --forest-lt: #4a7c59;
-  --gold:      #c8a84b;
-  --gold-bg:   rgba(200,168,75,0.08);
-  --gold-dim:  rgba(200,168,75,0.25);
-  --bg:        #f0f5ef;
-  --white:     #ffffff;
-  --border:    #d4e8d1;
-  --text:      #1a3d16;
-  --text-mid:  #3d6b47;
-  --text-muted:#6b9a78;
-  --text-dim:  #a0c4a8;
-  --green-bg:  #eaf4ee;
-  --amber:     #854f0b;
-  --amber-bg:  #fdf3e3;
+  --forest:#2d5a27; --forest-dk:#1a3d16; --forest-lt:#4a7c59;
+  --gold:#c8a84b; --gold-bg:rgba(200,168,75,0.09); --gold-dim:rgba(200,168,75,0.3);
+  --bg:#f0f5ef; --white:#ffffff; --border:#d4e8d1;
+  --text:#1a3d16; --text-muted:#6b9a78; --text-dim:#a8c8b0;
+  --green-bg:#eaf4ee; --green:#1a6b45;
 }
 body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-
-/* NAV */
-nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:13px 32px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:12px 28px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
 .nav-brand { font-family:'Libre Baskerville',serif; font-size:14px; color:var(--gold); }
-.nav-right { display:flex; align-items:center; gap:14px; }
-.nav-member { font-size:12px; color:rgba(255,255,255,0.45); }
-.sign-out-btn { font-size:12px; padding:5px 14px; border:1px solid rgba(255,255,255,0.15); border-radius:5px; background:none; color:rgba(255,255,255,0.5); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
-.sign-out-btn:hover { border-color:rgba(255,255,255,0.35); color:#fff; }
-
-/* LAYOUT */
-.content { max-width:980px; margin:0 auto; padding:32px 24px 80px; }
-
-/* WELCOME */
-.welcome { margin-bottom:24px; }
-.welcome-title { font-size:20px; font-weight:500; color:var(--text); margin-bottom:2px; }
-.welcome-sub { font-size:13px; color:var(--text-muted); }
-
-/* JOURNEY BAR */
-.journey-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:20px; }
-.journey-label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.12em; color:var(--text-muted); margin-bottom:10px; }
-.journey-bar { display:flex; height:6px; border-radius:99px; overflow:hidden; gap:2px; margin-bottom:8px; }
-.jb-seg { flex:1; }
-.jb-seg.done { background:var(--forest); }
-.jb-seg.active { background:var(--gold); }
-.jb-seg.locked { background:var(--border); }
-.journey-milestones { display:flex; justify-content:space-between; }
-.jm-item { display:flex; flex-direction:column; align-items:center; gap:3px; }
-.jm-dot { width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; }
-.jm-dot.done { background:var(--forest); color:#fff; }
-.jm-dot.active { background:var(--gold); color:var(--forest-dk); }
-.jm-dot.locked { background:var(--white); border:1px solid var(--border); }
-.jm-label { font-size:10px; color:var(--text-muted); }
-.journey-stats { display:flex; gap:20px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
-.js-item { font-size:12px; color:var(--text-muted); }
-.js-item strong { color:var(--text); font-weight:500; }
-
-/* SECTION LABEL */
-.section-label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.12em; color:var(--text-muted); margin-bottom:10px; }
-
-/* ACTIVE TOOLS */
-.tools-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:24px; }
-.tool-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:16px; text-decoration:none; display:flex; flex-direction:column; transition:border-color .15s; }
-.tool-card:hover { border-color:var(--forest-lt); }
-.tool-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:12px; }
-.ic-t { background:#E1F5EE; }
-.ic-a { background:#FAEEDA; }
-.ic-b { background:#E6F1FB; }
-.ic-p { background:#EEEDFE; }
-.ic-g { background:#F1EFE8; }
-.ic-r { background:#FDEAEA; }
-.tool-name { font-size:13px; font-weight:500; color:var(--text); margin-bottom:4px; }
-.tool-desc { font-size:12px; color:var(--text-muted); line-height:1.5; flex:1; }
-.tool-footer { margin-top:12px; padding-top:10px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-.tool-active { font-size:11px; font-weight:500; color:var(--forest); }
-.tool-meta { font-size:11px; color:var(--text-muted); }
-
-/* VALUE CALLOUT */
-.value-callout { background:var(--gold-bg); border:1px solid var(--gold-dim); border-radius:10px; padding:14px 18px; margin-bottom:20px; display:flex; align-items:flex-start; gap:12px; }
-.vc-icon { font-size:20px; color:var(--gold); flex-shrink:0; margin-top:1px; }
-.vc-title { font-size:13px; font-weight:500; color:var(--text); margin-bottom:2px; }
-.vc-sub { font-size:12px; color:var(--text-muted); line-height:1.6; }
-.vc-sub strong { color:var(--gold); font-weight:500; }
-
-/* PREMIUM GRID */
-.premium-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
-.premium-card { background:var(--white); border:1px solid var(--border); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
-.pc-header { padding:14px 16px 12px; border-bottom:1px solid var(--border); }
-.pc-top { display:flex; align-items:flex-start; gap:10px; margin-bottom:6px; }
-.pc-icon { width:32px; height:32px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; background:var(--gold-bg); }
-.pc-name { font-size:13px; font-weight:500; color:var(--text); margin-bottom:2px; }
-.pc-desc { font-size:12px; color:var(--text-muted); line-height:1.5; }
-.pc-includes { padding:10px 16px; background:var(--bg); border-bottom:1px solid var(--border); }
-.pc-inc-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:.1em; color:var(--text-muted); margin-bottom:6px; }
-.pc-inc-item { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-muted); margin-bottom:4px; }
-.pc-inc-item:last-child { margin-bottom:0; }
-.inc-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); flex-shrink:0; }
-.pc-paths { padding:12px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
-.path-earn { background:var(--green-bg); border:1px solid rgba(45,90,39,0.2); border-radius:7px; padding:10px 12px; }
-.path-earn-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:.1em; color:var(--forest); margin-bottom:6px; }
-.path-progress { height:4px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:4px; }
-.path-progress-fill { height:100%; border-radius:99px; background:var(--forest); transition:width .4s; }
-.path-earn-sub { font-size:11px; color:var(--text-muted); }
-.path-or { display:flex; align-items:center; gap:8px; }
-.path-or-line { flex:1; height:1px; background:var(--border); }
-.path-or-text { font-size:11px; color:var(--text-muted); }
-.path-buy { background:var(--gold-bg); border:1px solid var(--gold-dim); border-radius:7px; padding:10px 12px; }
-.path-buy-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-.path-buy-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); }
-.path-buy-price { font-size:16px; font-weight:500; color:var(--text); }
-.path-buy-price span { font-size:11px; color:var(--text-muted); font-weight:400; }
-.btn-unlock { width:100%; padding:9px; border:none; border-radius:6px; background:var(--gold); color:var(--forest-dk); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; transition:opacity .15s; }
-.btn-unlock:hover { opacity:.85; }
-.path-buy-sub { font-size:11px; color:var(--text-muted); text-align:center; margin-top:5px; }
-
-/* MILESTONE MINI */
-.milestone-mini { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin-bottom:24px; }
-.mm-row { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid var(--border); }
-.mm-row:last-child { border-bottom:none; }
-.mm-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-.mm-dot.done { background:var(--forest); }
-.mm-dot.active { background:var(--gold); }
-.mm-dot.locked { background:var(--border); }
-.mm-label { font-size:13px; color:var(--text); flex:1; }
-.mm-status { font-size:11px; font-weight:500; }
-.mm-status.done { color:var(--forest); }
-.mm-status.active { color:var(--amber); }
-.mm-status.locked { color:var(--text-muted); }
-
-/* SUPPORT */
-.support-bar { background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; }
+.nav-right { display:flex; align-items:center; gap:12px; }
+.nav-member { font-size:12px; color:rgba(255,255,255,0.4); }
+.sign-out-btn { font-size:12px; padding:5px 13px; border:1px solid rgba(255,255,255,0.15); border-radius:5px; background:none; color:rgba(255,255,255,0.5); cursor:pointer; font-family:'DM Sans',sans-serif; }
+.sign-out-btn:hover { color:#fff; border-color:rgba(255,255,255,0.35); }
+.milestone-strip { background:var(--forest); padding:10px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.ms-left { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.ms-badge { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); background:rgba(200,168,75,0.15); border:1px solid var(--gold-dim); border-radius:99px; padding:3px 10px; }
+.ms-text { font-size:13px; color:rgba(255,255,255,0.7); }
+.ms-text strong { color:#fff; font-weight:500; }
+.ms-bar { width:100px; height:4px; background:rgba(255,255,255,0.15); border-radius:99px; overflow:hidden; display:inline-block; vertical-align:middle; margin:0 6px; }
+.ms-fill { height:100%; background:var(--gold); border-radius:99px; width:50%; }
+.ms-right { font-size:12px; color:rgba(255,255,255,0.4); }
+.content { max-width:1000px; margin:0 auto; padding:28px 24px 80px; }
+.layer-label { margin-bottom:12px; margin-top:28px; }
+.layer-label:first-of-type { margin-top:0; }
+.layer-tag { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:3px; }
+.layer-name { font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:var(--text); }
+.layer-sub { font-size:13px; color:var(--text-muted); margin-top:2px; }
+.engine-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px; }
+.area-card { background:var(--white); border:1px solid var(--border); border-radius:10px; overflow:hidden; cursor:pointer; transition:border-color .15s; }
+.area-card:hover { border-color:var(--forest-lt); }
+.area-card.open { border-color:var(--forest); }
+.area-card-header { padding:16px 18px; display:flex; align-items:center; gap:12px; }
+.area-icon { width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
+.ic-marketing { background:#fdeaea; }
+.ic-sales { background:#fdf3e3; }
+.ic-delivery { background:#eaf4ee; }
+.ic-admin { background:#e8f0fb; }
+.ic-management { background:rgba(200,168,75,0.12); }
+.ic-people { background:#f0eafb; }
+.area-title { font-size:14px; font-weight:500; color:var(--text); }
+.area-count { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.area-chevron { margin-left:auto; font-size:14px; color:var(--text-muted); transition:transform .2s; }
+.area-card.open .area-chevron { transform:rotate(180deg); }
+.area-tools { display:none; border-top:1px solid var(--border); padding:12px 14px; background:#fafcfa; }
+.area-card.open .area-tools { display:block; }
+.tool-row { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:7px; text-decoration:none; transition:background .1s; margin-bottom:4px; }
+.tool-row:last-child { margin-bottom:0; }
+.tool-row:hover { background:var(--bg); }
+.tool-row-icon { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.tool-row-name { font-size:13px; font-weight:500; color:var(--text); }
+.tool-row-desc { font-size:11px; color:var(--text-muted); margin-top:1px; line-height:1.4; }
+.tool-row-arrow { margin-left:auto; font-size:13px; color:var(--text-dim); }
+.industry-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:18px 20px; display:flex; align-items:center; gap:16px; margin-bottom:10px; }
+.industry-lock { width:44px; height:44px; border-radius:10px; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.industry-name { font-size:14px; font-weight:500; color:var(--text); margin-bottom:3px; }
+.industry-sub { font-size:12px; color:var(--text-muted); line-height:1.5; }
+.industry-badge { margin-left:auto; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; padding:3px 10px; border-radius:99px; background:var(--bg); border:1px solid var(--border); color:var(--text-muted); flex-shrink:0; }
+.scale-teaser { background:var(--white); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:10px; }
+.scale-teaser-header { background:var(--forest-dk); padding:18px 22px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.st-left { display:flex; align-items:flex-start; gap:12px; }
+.st-icon { font-size:20px; flex-shrink:0; }
+.st-title { font-size:14px; font-weight:500; color:#fff; margin-bottom:3px; }
+.st-sub { font-size:12px; color:rgba(255,255,255,0.45); line-height:1.5; }
+.st-meta { display:flex; align-items:center; gap:10px; margin-top:7px; flex-wrap:wrap; }
+.st-strike { font-size:11px; color:rgba(255,255,255,0.3); text-decoration:line-through; }
+.st-pill { font-size:11px; font-weight:500; color:var(--gold); background:rgba(200,168,75,0.15); padding:2px 10px; border-radius:99px; }
+.btn-scale { flex-shrink:0; padding:11px 22px; border:none; border-radius:7px; background:var(--gold); color:var(--forest-dk); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; text-decoration:none; display:inline-block; transition:opacity .15s; }
+.btn-scale:hover { opacity:.85; }
+.stage-icons { padding:14px 22px; display:grid; grid-template-columns:repeat(5,1fr); gap:8px; background:#fafcfa; }
+.stage-icon-card { text-align:center; padding:10px 6px; border:1px solid var(--border); border-radius:7px; background:var(--white); text-decoration:none; transition:border-color .15s; display:block; }
+.stage-icon-card:hover { border-color:var(--forest); }
+.stage-icon-card.coming { opacity:.65; }
+.si-emoji { font-size:18px; margin-bottom:4px; }
+.si-stage { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); margin-bottom:2px; }
+.si-name { font-size:12px; font-weight:500; color:var(--text); }
+.si-status { font-size:10px; color:var(--green); margin-top:2px; }
+.si-coming { font-size:10px; color:var(--text-muted); margin-top:2px; }
+.support-bar { background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:28px; }
 .support-text { font-size:13px; color:var(--text-muted); }
 .support-text strong { color:var(--text); font-weight:500; }
 .support-link { font-size:13px; color:var(--forest); text-decoration:none; }
 .support-link:hover { color:var(--gold); }
-
-@media(max-width:640px) {
-  .tools-grid { grid-template-columns:1fr; }
-  .premium-grid { grid-template-columns:1fr; }
+@media(max-width:700px) {
+  .engine-grid { grid-template-columns:1fr 1fr; }
+  .stage-icons { grid-template-columns:repeat(3,1fr); }
   .content { padding:20px 16px 60px; }
+  nav, .milestone-strip { padding-left:16px; padding-right:16px; }
 }
 </style>
 </head>
@@ -158,305 +108,266 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
   </div>
 </nav>
 
+<div class="milestone-strip">
+  <div class="ms-left">
+    <span class="ms-badge">Milestone 2</span>
+    <span class="ms-text"><strong>Strategic clarity</strong> — 3 of 6 tasks complete <div class="ms-bar"><div class="ms-fill"></div></div> 50%</span>
+  </div>
+  <div class="ms-right">~42 days to next unlock</div>
+</div>
+
 <div class="content">
 
-  <div class="welcome">
-    <div class="welcome-title" id="welcome-title">Welcome back</div>
-    <div class="welcome-sub" id="welcome-sub">Your knowledge base and tools are ready.</div>
+  <!-- LAYER 1 — THE ENGINE -->
+  <div class="layer-label">
+    <div class="layer-tag">Layer 1</div>
+    <div class="layer-name">The Engine</div>
+    <div class="layer-sub">Six areas of your business — everything your team needs from day one. Click any area to see your tools.</div>
   </div>
 
-  <!-- JOURNEY BAR -->
-  <div class="journey-card">
-    <div class="journey-label">Your 12-month program journey</div>
-    <div class="journey-bar">
-      <div class="jb-seg done"></div>
-      <div class="jb-seg active"></div>
-      <div class="jb-seg locked"></div>
-      <div class="jb-seg locked"></div>
-      <div class="jb-seg locked"></div>
-    </div>
-    <div class="journey-milestones">
-      <div class="jm-item"><div class="jm-dot done">✓</div><div class="jm-label">Start</div></div>
-      <div class="jm-item"><div class="jm-dot active">2</div><div class="jm-label">Unlock 1</div></div>
-      <div class="jm-item"><div class="jm-dot locked"></div><div class="jm-label">Unlock 2</div></div>
-      <div class="jm-item"><div class="jm-dot locked"></div><div class="jm-label">Unlock 3</div></div>
-      <div class="jm-item"><div class="jm-dot locked"></div><div class="jm-label">Unlock 4</div></div>
-      <div class="jm-item"><div class="jm-dot locked"></div><div class="jm-label">Unlock 5</div></div>
-    </div>
-    <div class="journey-stats">
-      <div class="js-item"><strong>1 of 5</strong> milestones complete</div>
-      <div class="js-item"><strong>1</strong> premium unlock earned</div>
-      <div class="js-item"><strong>3 of 6</strong> tasks toward next unlock</div>
-    </div>
-  </div>
+  <div class="engine-grid">
 
-  <!-- ACTIVE TOOLS -->
-  <div class="section-label">Your active tools</div>
-  <div class="tools-grid">
-    <a href="/transaction-coding-assistant.html" class="tool-card">
-      <div class="tool-icon ic-t">🧾</div>
-      <div class="tool-name">Transaction coding assistant</div>
-      <div class="tool-desc">Code receipts by typing, photo, or PDF. Applies your exact chart of accounts.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Accounting</span></div>
-    </a>
-    <a href="/myob-coa-checker.html" class="tool-card">
-      <div class="tool-icon ic-a">📋</div>
-      <div class="tool-name">Chart of accounts checker</div>
-      <div class="tool-desc">Audit your COA for GST errors, duplicates, and misclassifications.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Accounting</span></div>
-    </a>
-    <a href="/sale-readiness-assessment.html" class="tool-card">
-      <div class="tool-icon ic-b">📊</div>
-      <div class="tool-name">Sale readiness assessment</div>
-      <div class="tool-desc">Your operational assessment — processes mapped, risks identified.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Strategy</span></div>
-    </a>
-    <a href="/process-mapper.html" class="tool-card">
-      <div class="tool-icon ic-t">🗺️</div>
-      <div class="tool-name">Process mapper</div>
-      <div class="tool-desc">The foundation tool. Map all processes across your six business areas before documenting in detail.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Operations · Start here</span></div>
-    </a>
-    <a href="/process-form.html" class="tool-card">
-      <div class="tool-icon ic-a">📝</div>
-      <div class="tool-name">Process form</div>
-      <div class="tool-desc">Document each process in detail — steps, ownership, systems, handoffs.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Operations</span></div>
-    </a>
-    <a href="/task-queue.html" class="tool-card">
-      <div class="tool-icon ic-p">✅</div>
-      <div class="tool-name">Task queue</div>
-      <div class="tool-desc">Team workflow manager. Assign tasks, set daily capacity, keep everyone moving.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Team</span></div>
-    </a>
-    <a href="/script-library.html" class="tool-card">
-      <div class="tool-icon ic-b">💬</div>
-      <div class="tool-name">Script library</div>
-      <div class="tool-desc">Word-for-word scripts for your team — phone answering, enquiries, difficult conversations.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Team</span></div>
-    </a>
-    <a href="/contact-manager.html" class="tool-card">
-      <div class="tool-icon ic-g">👤</div>
-      <div class="tool-name">Contact manager</div>
-      <div class="tool-desc">Lite CRM — clients, referral partners, suppliers. Tag, search, and track key relationships.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Relationships</span></div>
-    </a>
-    <a href="/daily-planner.html" class="tool-card">
-      <div class="tool-icon ic-t">📅</div>
-      <div class="tool-name">Daily planner</div>
-      <div class="tool-desc">Start each day with intention. Three priorities, a task list, and space for notes.</div>
-      <div class="tool-footer"><span class="tool-active">● Active</span><span class="tool-meta">Productivity</span></div>
-    </a>
-  </div>
-
-  <!-- BUNDLE BANNER -->
-  <div style="background:var(--forest-dk);border-radius:10px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-    <div style="display:flex;align-items:flex-start;gap:14px;">
-      <div style="font-size:22px;flex-shrink:0;">🏆</div>
-      <div>
-        <div style="font-size:14px;font-weight:500;color:#fff;margin-bottom:3px;">Unlock all four premium sections — <span style="color:var(--gold);">$797</span></div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;">Four PDF guides + eight purpose-built tools. Buy the full program now and save $391 versus purchasing each section individually. Everything unlocks instantly.</div>
-        <div style="display:flex;align-items:center;gap:12px;margin-top:8px;">
-          <div style="font-size:11px;color:rgba(255,255,255,0.4);text-decoration:line-through;">$1,188 separately</div>
-          <div style="font-size:11px;font-weight:500;color:var(--gold);background:rgba(200,168,75,0.15);padding:2px 10px;border-radius:99px;">Save $391</div>
-        </div>
+    <div class="area-card" id="card-marketing" onclick="toggleArea('marketing')">
+      <div class="area-card-header">
+        <div class="area-icon ic-marketing">📣</div>
+        <div><div class="area-title">Marketing</div><div class="area-count">2 tools active</div></div>
+        <div class="area-chevron">▾</div>
+      </div>
+      <div class="area-tools">
+        <a href="/script-library.html" class="tool-row">
+          <div class="tool-row-icon ic-marketing">💬</div>
+          <div><div class="tool-row-name">Script library</div><div class="tool-row-desc">Word-for-word scripts for phone, enquiries, difficult conversations.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/contact-manager.html" class="tool-row">
+          <div class="tool-row-icon ic-marketing">👤</div>
+          <div><div class="tool-row-name">Contact manager</div><div class="tool-row-desc">Lite CRM — clients, referral partners, suppliers.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
       </div>
     </div>
-    <button onclick="alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock the full program now.')" style="flex-shrink:0;padding:11px 22px;border:none;border-radius:7px;background:var(--gold);color:var(--forest-dk);font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Unlock full program →</button>
+
+    <div class="area-card" id="card-sales" onclick="toggleArea('sales')">
+      <div class="area-card-header">
+        <div class="area-icon ic-sales">💼</div>
+        <div><div class="area-title">Sales</div><div class="area-count">1 tool active</div></div>
+        <div class="area-chevron">▾</div>
+      </div>
+      <div class="area-tools">
+        <a href="/sale-readiness-assessment.html" class="tool-row">
+          <div class="tool-row-icon ic-sales">📊</div>
+          <div><div class="tool-row-name">Sale readiness assessment</div><div class="tool-row-desc">Processes mapped, risks identified, value demonstrated.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="area-card" id="card-delivery" onclick="toggleArea('delivery')">
+      <div class="area-card-header">
+        <div class="area-icon ic-delivery">🗺️</div>
+        <div><div class="area-title">Delivery</div><div class="area-count">2 tools active</div></div>
+        <div class="area-chevron">▾</div>
+      </div>
+      <div class="area-tools">
+        <a href="/process-mapper.html" class="tool-row">
+          <div class="tool-row-icon ic-delivery">🗺️</div>
+          <div><div class="tool-row-name">Process mapper</div><div class="tool-row-desc">The foundation tool. Map all processes across six areas. Start here.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/process-form.html" class="tool-row">
+          <div class="tool-row-icon ic-delivery">📝</div>
+          <div><div class="tool-row-name">Process form</div><div class="tool-row-desc">Document each process — steps, ownership, systems, handoffs.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="area-card" id="card-admin" onclick="toggleArea('admin')">
+      <div class="area-card-header">
+        <div class="area-icon ic-admin">⚙️</div>
+        <div><div class="area-title">Admin</div><div class="area-count">3 tools active</div></div>
+        <div class="area-chevron">▾</div>
+      </div>
+      <div class="area-tools">
+        <a href="/transaction-coding-assistant.html" class="tool-row">
+          <div class="tool-row-icon ic-admin">🧾</div>
+          <div><div class="tool-row-name">Transaction coding assistant</div><div class="tool-row-desc">Code receipts by typing, photo, or PDF.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/myob-coa-checker.html" class="tool-row">
+          <div class="tool-row-icon ic-admin">📋</div>
+          <div><div class="tool-row-name">COA checker</div><div class="tool-row-desc">Audit your chart of accounts for GST errors and duplicates.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/holiday-calendar.html" class="tool-row">
+          <div class="tool-row-icon ic-admin">📅</div>
+          <div><div class="tool-row-name">Holiday calendar</div><div class="tool-row-desc">All Australian states and territories. Team leave tracking.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="area-card" id="card-management" onclick="toggleArea('management')">
+      <div class="area-card-header">
+        <div class="area-icon ic-management">📊</div>
+        <div><div class="area-title">Management</div><div class="area-count">3 tools active</div></div>
+        <div class="area-chevron">▾</div>
+      </div>
+      <div class="area-tools">
+        <a href="/daily-planner.html" class="tool-row">
+          <div class="tool-row-icon ic-management">🗓️</div>
+          <div><div class="tool-row-name">Daily planner</div><div class="tool-row-desc">Three priorities, a task list, and space for notes.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/review-cycle.html" class="tool-row">
+          <div class="tool-row-icon ic-management">🔄</div>
+          <div><div class="tool-row-name">Review cycle</div><div class="tool-row-desc">Fortnightly pulse and quarterly deep review.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/strategy-decision-audit.html" class="tool-row">
+          <div class="tool-row-icon ic-management">🧭</div>
+          <div><div class="tool-row-name">Strategy and decision audit</div><div class="tool-row-desc">Where is this business going and how does it decide?</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="area-card" id="card-people" onclick="toggleArea('people')">
+      <div class="area-card-header">
+        <div class="area-icon ic-people">👥</div>
+        <div><div class="area-title">People</div><div class="area-count">4 tools active</div></div>
+        <div class="area-chevron">▾</div>
+      </div>
+      <div class="area-tools">
+        <a href="/task-queue.html" class="tool-row">
+          <div class="tool-row-icon ic-people">✅</div>
+          <div><div class="tool-row-name">Task queue</div><div class="tool-row-desc">Assign tasks, set daily capacity, keep everyone moving.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/frustration-log.html" class="tool-row">
+          <div class="tool-row-icon ic-people">😤</div>
+          <div><div class="tool-row-name">Frustration log</div><div class="tool-row-desc">Team logs what slows them down. We turn it into solutions.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/change-log.html" class="tool-row">
+          <div class="tool-row-icon ic-people">📈</div>
+          <div><div class="tool-row-name">Change log</div><div class="tool-row-desc">Every improvement recorded — before, after, and what it saved.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+        <a href="/quarterly-update.html" class="tool-row">
+          <div class="tool-row-icon ic-people">📣</div>
+          <div><div class="tool-row-name">Quarterly update</div><div class="tool-row-desc">Build your quarterly progress report for the business owner.</div></div>
+          <div class="tool-row-arrow">→</div>
+        </a>
+      </div>
+    </div>
+
   </div>
 
-  <!-- PREMIUM -->
-  <div class="value-callout">
-    <div class="vc-icon">💡</div>
+  <!-- LAYER 2 — INDUSTRY -->
+  <div class="layer-label">
+    <div class="layer-tag">Layer 2</div>
+    <div class="layer-name">The Industry Layer</div>
+    <div class="layer-sub">Tools configured for your specific industry. Set up during onboarding.</div>
+  </div>
+
+  <div class="industry-card">
+    <div class="industry-lock">🔒</div>
     <div>
-      <div class="vc-title">Or unlock one section at a time</div>
-      <div class="vc-sub">Each section is <strong>$297</strong> individually. Earn access free by completing milestones — or buy any section immediately and skip straight to it.</div>
+      <div class="industry-name">Industry-specific tools</div>
+      <div class="industry-sub">Your industry tools are configured during your knowledge base onboarding session. Every business type has a different set — built for your specific processes, compliance requirements, and workflows.</div>
     </div>
+    <div class="industry-badge">Configured at onboarding</div>
   </div>
 
-  <div class="section-label">Premium sections</div>
-  <div class="premium-grid">
-
-    <div class="premium-card">
-      <div class="pc-header">
-        <div class="pc-top">
-          <div class="pc-icon">📘</div>
-          <div>
-            <div class="pc-name">The Pivot — Strategic clarity</div>
-            <div class="pc-desc">Build your One-Page Strategy Plan and run your first 90-day sprint.</div>
-          </div>
-        </div>
-      </div>
-      <div class="pc-includes">
-        <div class="pc-inc-label">What's included</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>PDF — Pivot, Pause, But Don't Panic</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — One-Page Strategy Plan</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — 90-Day Sprint Planner</div>
-      </div>
-      <div class="pc-paths">
-        <div class="path-earn">
-          <div class="path-earn-label">Earn access</div>
-          <div class="path-progress"><div class="path-progress-fill" style="width:50%;"></div></div>
-          <div class="path-earn-sub">3 of 6 milestone tasks complete</div>
-        </div>
-        <div class="path-or"><div class="path-or-line"></div><div class="path-or-text">or unlock now</div><div class="path-or-line"></div></div>
-        <div class="path-buy">
-          <div class="path-buy-top">
-            <div class="path-buy-label">One-off purchase</div>
-            <div class="path-buy-price">$297 <span>once</span></div>
-          </div>
-          <button class="btn-unlock" onclick="alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.')">Unlock immediately →</button>
-          <div class="path-buy-sub">Instant access · yours to keep · no subscription</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="premium-card">
-      <div class="pc-header">
-        <div class="pc-top">
-          <div class="pc-icon">👥</div>
-          <div>
-            <div class="pc-name">The People layer</div>
-            <div class="pc-desc">HR, performance conversations, and a team that runs without you.</div>
-          </div>
-        </div>
-      </div>
-      <div class="pc-includes">
-        <div class="pc-inc-label">What's included</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>PDF — People & Performance guide</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — Performance conversation framework</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — 1:1 meeting framework</div>
-      </div>
-      <div class="pc-paths">
-        <div class="path-earn">
-          <div class="path-earn-label">Earn access</div>
-          <div class="path-progress"><div class="path-progress-fill" style="width:0%;"></div></div>
-          <div class="path-earn-sub">Complete milestone 2 first</div>
-        </div>
-        <div class="path-or"><div class="path-or-line"></div><div class="path-or-text">or unlock now</div><div class="path-or-line"></div></div>
-        <div class="path-buy">
-          <div class="path-buy-top">
-            <div class="path-buy-label">One-off purchase</div>
-            <div class="path-buy-price">$297 <span>once</span></div>
-          </div>
-          <button class="btn-unlock" onclick="alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.')">Unlock immediately →</button>
-          <div class="path-buy-sub">Instant access · yours to keep · no subscription</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="premium-card">
-      <div class="pc-header">
-        <div class="pc-top">
-          <div class="pc-icon">📈</div>
-          <div>
-            <div class="pc-name">Financial mastery</div>
-            <div class="pc-desc">Read your numbers with confidence. Set KPIs that tell you if you're winning.</div>
-          </div>
-        </div>
-      </div>
-      <div class="pc-includes">
-        <div class="pc-inc-label">What's included</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>PDF — Financial clarity guide</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — Monthly financial health checker</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — KPI scorecard builder</div>
-      </div>
-      <div class="pc-paths">
-        <div class="path-earn">
-          <div class="path-earn-label">Earn access</div>
-          <div class="path-progress"><div class="path-progress-fill" style="width:0%;"></div></div>
-          <div class="path-earn-sub">Complete milestone 3 first</div>
-        </div>
-        <div class="path-or"><div class="path-or-line"></div><div class="path-or-text">or unlock now</div><div class="path-or-line"></div></div>
-        <div class="path-buy">
-          <div class="path-buy-top">
-            <div class="path-buy-label">One-off purchase</div>
-            <div class="path-buy-price">$297 <span>once</span></div>
-          </div>
-          <button class="btn-unlock" onclick="alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.')">Unlock immediately →</button>
-          <div class="path-buy-sub">Instant access · yours to keep · no subscription</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="premium-card">
-      <div class="pc-header">
-        <div class="pc-top">
-          <div class="pc-icon">🚀</div>
-          <div>
-            <div class="pc-name">Exit or scale</div>
-            <div class="pc-desc">Prepare for sale or build your growth roadmap. The decision that defines what's next.</div>
-          </div>
-        </div>
-      </div>
-      <div class="pc-includes">
-        <div class="pc-inc-label">What's included</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>PDF — Exit or scale blueprint</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — Sale readiness report (enhanced)</div>
-        <div class="pc-inc-item"><div class="inc-dot"></div>Tool — Growth roadmap planner</div>
-      </div>
-      <div class="pc-paths">
-        <div class="path-earn">
-          <div class="path-earn-label">Earn access</div>
-          <div class="path-progress"><div class="path-progress-fill" style="width:0%;"></div></div>
-          <div class="path-earn-sub">Complete all four milestones to earn this</div>
-        </div>
-        <div class="path-or"><div class="path-or-line"></div><div class="path-or-text">or unlock now</div><div class="path-or-line"></div></div>
-        <div class="path-buy">
-          <div class="path-buy-top">
-            <div class="path-buy-label">One-off purchase</div>
-            <div class="path-buy-price">$297 <span>once</span></div>
-          </div>
-          <button class="btn-unlock" onclick="alert('Payment integration coming soon. Contact hello@knowledgebase.business to unlock now.')">Unlock immediately →</button>
-          <div class="path-buy-sub">Instant access · yours to keep · no subscription</div>
-        </div>
-      </div>
-    </div>
-
+  <!-- LAYER 3 — SCALE -->
+  <div class="layer-label">
+    <div class="layer-tag">Layer 3</div>
+    <div class="layer-name">The Scale Layer</div>
+    <div class="layer-sub">Five stages of the business lifecycle — Start, Build, Survive, Scale, and Exit.</div>
   </div>
 
-  <!-- MILESTONE TRACKER -->
-  <div class="section-label">Milestone progress</div>
-  <div class="milestone-mini">
-    <div class="mm-row"><div class="mm-dot done"></div><div class="mm-label">Milestone 1 — Operational foundation</div><div class="mm-status done">Complete</div></div>
-    <div class="mm-row"><div class="mm-dot active"></div><div class="mm-label">Milestone 2 — Strategic clarity</div><div class="mm-status active">In progress · 3 of 6 tasks</div></div>
-    <div class="mm-row"><div class="mm-dot locked"></div><div class="mm-label">Milestone 3 — People layer</div><div class="mm-status locked">Locked</div></div>
-    <div class="mm-row"><div class="mm-dot locked"></div><div class="mm-label">Milestone 4 — Financial mastery</div><div class="mm-status locked">Locked</div></div>
-    <div class="mm-row"><div class="mm-dot locked"></div><div class="mm-label">Milestone 5 — Exit or scale</div><div class="mm-status locked">Locked</div></div>
+  <div class="scale-teaser">
+    <div class="scale-teaser-header">
+      <div class="st-left">
+        <div class="st-icon">🏆</div>
+        <div>
+          <div class="st-title">Lifetime access to all five stages — <span style="color:var(--gold);">$797</span></div>
+          <div class="st-sub">Every current section plus Start and Scale when they launch. One payment, locked in forever. The earlier you lock it in, the more valuable it becomes.</div>
+          <div class="st-meta">
+            <div class="st-strike">$1,782 if purchased separately</div>
+            <div class="st-pill">Includes Start and Scale on launch</div>
+          </div>
+        </div>
+      </div>
+      <a href="/scale-layer.html" class="btn-scale">Explore the Scale Layer →</a>
+    </div>
+    <div class="stage-icons">
+      <a href="/premium-start.html" class="stage-icon-card coming">
+        <div class="si-emoji">🌱</div>
+        <div class="si-stage">Stage 1</div>
+        <div class="si-name">Start</div>
+        <div class="si-coming">Coming soon</div>
+      </a>
+      <a href="/premium-strategic-clarity.html" class="stage-icon-card">
+        <div class="si-emoji">📘</div>
+        <div class="si-stage">Stage 2</div>
+        <div class="si-name">Build</div>
+        <div class="si-status">Available now</div>
+      </a>
+      <a href="/premium-survive.html" class="stage-icon-card">
+        <div class="si-emoji">⚡</div>
+        <div class="si-stage">Stage 3</div>
+        <div class="si-name">Survive</div>
+        <div class="si-status">Available now</div>
+      </a>
+      <a href="/premium-scale.html" class="stage-icon-card coming">
+        <div class="si-emoji">📈</div>
+        <div class="si-stage">Stage 4</div>
+        <div class="si-name">Scale</div>
+        <div class="si-coming">Coming soon</div>
+      </a>
+      <a href="/premium-exit.html" class="stage-icon-card">
+        <div class="si-emoji">🚪</div>
+        <div class="si-stage">Stage 5</div>
+        <div class="si-name">Exit</div>
+        <div class="si-status">Available now</div>
+      </a>
+    </div>
   </div>
 
   <div class="support-bar">
-    <div class="support-text"><strong>Questions or want to add a tool?</strong> &nbsp;We're here to help.</div>
+    <div class="support-text"><strong>Questions or want to add a tool?</strong> &nbsp;We are here to help.</div>
     <a href="mailto:hello@knowledgebase.business" class="support-link">hello@knowledgebase.business →</a>
   </div>
 
 </div>
 
-<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
 <script>
-const check = setInterval(function() {
+function toggleArea(name) {
+  const card = document.getElementById('card-' + name);
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.area-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+}
+const checkInterval = setInterval(function() {
   if (window.$memberstackDom) {
-    clearInterval(check);
+    clearInterval(checkInterval);
     window.$memberstackDom.getCurrentMember().then(function(result) {
-      if (!result.data) {
-        window.location.href = '/login.html';
-      } else {
+      if (!result.data) { window.location.href = '/login.html'; }
+      else {
         const email = result.data.auth.email || '';
         document.getElementById('member-email').textContent = email;
-        const name = email.split('@')[0];
-        document.getElementById('welcome-title').textContent = 'Welcome back' + (name ? ', ' + name : '');
       }
     });
   }
 }, 100);
-
 function signOut() {
   if (window.$memberstackDom) {
-    window.$memberstackDom.logout().then(function() {
-      window.location.href = '/login.html';
-    });
+    window.$memberstackDom.logout().then(function() { window.location.href = '/login.html'; });
   }
 }
 </script>
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
 </body>
 </html>
