@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Cycle — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --forest-lt: #4a7c59;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.09);
+  --gold-dim:  rgba(200,168,75,0.3);
+  --bg:        #f0f5ef;
+  --white:     #ffffff;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-mid:  #3d6b47;
+  --text-muted:#6b9a78;
+  --text-dim:  #a8c8b0;
+  --red:       #8b1f1f;
+  --red-bg:    #fdf0f0;
+  --amber:     #854f0b;
+  --amber-bg:  #fdf3e3;
+  --green:     #1a6b45;
+  --green-bg:  #e8f5ee;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── HEADER ── */
+.site-header { background: var(--forest-dk); border-bottom: 2px solid var(--gold); padding: 13px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.header-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.header-sub { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── HOME PAGE ── */
+.home-hero { background: var(--forest-dk); padding: 40px 32px 48px; position: relative; overflow: hidden; }
+.home-hero::before { content: '↻'; position: absolute; font-size: 260px; color: rgba(200,168,75,0.05); right: -20px; top: -30px; pointer-events: none; }
+.home-hero-inner { max-width: 860px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 500; }
+.hero-title { font-family: 'Libre Baskerville', serif; font-size: clamp(24px, 3.5vw, 36px); font-weight: 700; color: #fff; margin-bottom: 8px; }
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.5); max-width: 560px; line-height: 1.7; font-weight: 300; margin-bottom: 28px; }
+.hero-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 620px; }
+.hero-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px 20px; cursor: pointer; transition: all .15s; }
+.hero-card:hover { background: rgba(255,255,255,0.1); border-color: var(--gold-dim); }
+.hero-card-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+.hero-card-title { font-family: 'Libre Baskerville', serif; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+.hero-card-sub { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+.hero-card-time { font-size: 11px; color: var(--gold); margin-top: 10px; font-weight: 500; }
+
+/* ── BODY ── */
+.page-body { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+
+/* ── REVIEW FORM ── */
+.review-header { margin-bottom: 24px; }
+.review-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+.review-title { font-family: 'Libre Baskerville', serif; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.review-date { font-size: 13px; color: var(--text-muted); }
+
+/* STEP TABS */
+.step-tabs { display: flex; gap: 3px; margin-bottom: 20px; flex-wrap: wrap; }
+.step-tab { padding: 5px 14px; font-size: 12px; border: 1px solid var(--border); border-radius: 99px; cursor: pointer; color: var(--text-muted); background: var(--white); transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.step-tab.active { background: var(--forest); color: #fff; border-color: var(--forest); }
+.step-tab.done { background: var(--green-bg); color: var(--green); border-color: rgba(26,107,69,0.3); }
+
+/* PROGRESS */
+.progress-bar { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 20px; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width .3s ease; }
+
+/* STEP PANEL */
+.step-panel { display: none; }
+.step-panel.active { display: block; animation: fadeUp .2s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* STEP CONTENT */
+.step-num { font-size: 10px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.step-title { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.step-question { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+.callout { background: var(--gold-bg); border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 13px; color: var(--text-mid); margin-bottom: 16px; line-height: 1.6; }
+
+/* FIELDS */
+.fg { margin-bottom: 16px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fh { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-style: italic; }
+.fi { width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .15s; }
+.fi:focus { border-color: var(--forest); background: var(--white); }
+.fi::placeholder { color: var(--text-dim); }
+textarea.fi { resize: vertical; min-height: 80px; line-height: 1.6; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* SIGNAL BUTTONS */
+.signal-row { display: flex; gap: 8px; margin-top: 6px; }
+.signal-btn { flex: 1; padding: 10px 8px; border: 1px solid var(--border); border-radius: 7px; font-size: 12px; cursor: pointer; color: var(--text-muted); background: var(--white); text-align: center; transition: all .15s; font-family: 'DM Sans', sans-serif; line-height: 1.4; }
+.signal-btn:hover { border-color: var(--forest-lt); }
+.signal-btn.sel-green { background: var(--green-bg); color: var(--green); border-color: rgba(26,107,69,0.4); font-weight: 500; }
+.signal-btn.sel-amber { background: var(--amber-bg); color: var(--amber); border-color: rgba(133,79,11,0.4); font-weight: 500; }
+.signal-btn.sel-red { background: var(--red-bg); color: var(--red); border-color: rgba(139,31,31,0.4); font-weight: 500; }
+
+/* SCALE */
+.scale { display: flex; gap: 6px; margin-top: 6px; }
+.scale-btn { flex: 1; padding: 8px 4px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; cursor: pointer; color: var(--text-muted); background: var(--white); text-align: center; transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.scale-btn:hover { border-color: var(--forest-lt); }
+.scale-btn.sel { background: var(--forest); color: #fff; border-color: var(--forest); }
+.scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+/* ACTION ROWS */
+.action-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.action-row { display: grid; grid-template-columns: 1fr 140px 110px auto; gap: 8px; align-items: center; }
+.action-row input { padding: 7px 9px; border: 1px solid var(--border); border-radius: 5px; font-size: 13px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; width: 100%; }
+.action-row input:focus { border-color: var(--forest); }
+.btn-remove-row { padding: 7px 10px; border: 1px solid var(--border); border-radius: 5px; background: none; color: var(--text-muted); cursor: pointer; font-size: 13px; transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.btn-remove-row:hover { border-color: var(--red); color: var(--red); }
+.btn-add-action { font-size: 12px; color: var(--text-muted); border: 1px dashed var(--border); border-radius: 5px; padding: 6px 14px; cursor: pointer; background: none; transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.btn-add-action:hover { color: var(--forest); border-color: var(--forest); }
+
+/* NAV BUTTONS */
+.step-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); }
+.btn-back { padding: 9px 20px; border: 1px solid var(--border); border-radius: 6px; background: none; color: var(--text-muted); font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-back:hover { border-color: var(--forest-lt); color: var(--text); }
+.btn-next { padding: 9px 24px; border: none; border-radius: 6px; background: var(--forest); color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-next:hover { opacity: .85; }
+.btn-finish { padding: 9px 24px; border: none; border-radius: 6px; background: var(--gold); color: var(--forest-dk); font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-finish:hover { opacity: .85; }
+
+/* ── HISTORY PAGE ── */
+.history-filters { display: flex; gap: 8px; margin-bottom: 16px; }
+.filter-btn { padding: 5px 14px; border: 1px solid var(--border); border-radius: 99px; font-size: 12px; cursor: pointer; color: var(--text-muted); background: var(--white); transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.filter-btn.active { background: var(--forest); color: #fff; border-color: var(--forest); }
+.history-list { display: flex; flex-direction: column; gap: 10px; }
+.history-card { background: var(--white); border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+.hc-header { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.hc-left { display: flex; align-items: center; gap: 10px; }
+.hc-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; padding: 2px 8px; border-radius: 99px; }
+.hc-type.pulse { background: var(--gold-bg); color: var(--amber); border: 1px solid var(--gold-dim); }
+.hc-type.quarterly { background: var(--green-bg); color: var(--green); border: 1px solid rgba(26,107,69,0.2); }
+.hc-date { font-size: 13px; font-weight: 500; color: var(--text); }
+.hc-overall { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; }
+.hc-overall.green { background: var(--green-bg); color: var(--green); }
+.hc-overall.amber { background: var(--amber-bg); color: var(--amber); }
+.hc-overall.red { background: var(--red-bg); color: var(--red); }
+.hc-body { padding: 12px 16px; }
+.hc-summary { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
+.hc-actions { display: flex; flex-direction: column; gap: 4px; }
+.hc-action { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+.hc-action-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+.hc-del { font-size: 11px; color: var(--text-muted); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; background: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.hc-del:hover { border-color: var(--red); color: var(--red); }
+.empty-history { text-align: center; padding: 48px 24px; border: 1px dashed var(--border); border-radius: 10px; background: var(--white); }
+.empty-icon { font-size: 36px; margin-bottom: 10px; }
+.empty-title { font-family: 'Libre Baskerville', serif; font-size: 17px; color: var(--text); margin-bottom: 6px; }
+.empty-sub { font-size: 13px; color: var(--text-muted); max-width: 360px; margin: 0 auto; line-height: 1.6; }
+
+/* SUMMARY CARD */
+.summary-card { background: var(--forest-dk); border-radius: 10px; padding: 24px 28px; margin-bottom: 20px; }
+.sc-title { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.sc-date { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
+.sc-body { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; }
+.sc-actions { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
+.sc-actions-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--gold); margin-bottom: 8px; }
+.sc-action-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.6); padding: 4px 0; }
+.sc-action-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+/* NAV TABS */
+.nav-tabs { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; }
+.nav-tabs-inner { max-width: 720px; margin: 0 auto; display: flex; }
+.nav-tab { padding: 12px 18px; font-size: 14px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all .15s; background: none; border-top: none; border-left: none; border-right: none; font-family: 'DM Sans', sans-serif; }
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--forest); border-bottom-color: var(--gold); }
+
+/* SDIV */
+.sdiv { height: 1px; background: var(--border); margin: 20px 0; }
+
+@media (max-width: 600px) {
+  .hero-cards { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .action-row { grid-template-columns: 1fr 1fr; }
+  .page-body { padding: 20px 16px 60px; }
+  .site-header, .home-hero, .nav-tabs { padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="header-brand">Knowledgebase.business</div>
+    <div class="header-sub">Review Cycle — keeping your knowledge base alive</div>
+  </div>
+</header>
+
+<!-- ══════════ HOME ══════════ -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="home-hero-inner">
+      <div class="hero-eyebrow">Your review cadence</div>
+      <div class="hero-title">The <em>Review Cycle</em></div>
+      <div class="hero-sub">A knowledge base without a review cycle goes stale within months. The fortnightly pulse takes 10 minutes. The quarterly review takes 20. Both keep the business improving.</div>
+      <div class="hero-cards">
+        <div class="hero-card" onclick="startReview('pulse')">
+          <div class="hero-card-eyebrow">Fortnightly</div>
+          <div class="hero-card-title">Pulse Check</div>
+          <div class="hero-card-sub">Quick health check. Tools being used, frustrations logged, processes drifting, team confidence. 4 questions.</div>
+          <div class="hero-card-time">⏱ 10 minutes</div>
+        </div>
+        <div class="hero-card" onclick="startReview('quarterly')">
+          <div class="hero-card-eyebrow">Quarterly</div>
+          <div class="hero-card-title">Deep Review</div>
+          <div class="hero-card-sub">Full health check. Process accuracy, tool adoption, team capability, improvement velocity, and next quarter priorities. 7 questions.</div>
+          <div class="hero-card-time">⏱ 20 minutes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="nav-tabs-inner">
+      <button class="nav-tab active" onclick="showHomeTab('overview')">Overview</button>
+      <button class="nav-tab" onclick="showHomeTab('history')">Review history</button>
+      <button class="nav-tab" onclick="showHomeTab('actions')">Open actions</button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div id="home-overview">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;" id="home-stats"></div>
+      <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:10px;">Last review</div>
+      <div id="last-review-card"></div>
+    </div>
+    <div id="home-history" style="display:none;">
+      <div class="history-filters">
+        <button class="filter-btn active" onclick="filterHistory('all',this)">All</button>
+        <button class="filter-btn" onclick="filterHistory('pulse',this)">Pulse checks</button>
+        <button class="filter-btn" onclick="filterHistory('quarterly',this)">Quarterly reviews</button>
+      </div>
+      <div class="history-list" id="history-list"></div>
+    </div>
+    <div id="home-actions" style="display:none;">
+      <div id="actions-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PULSE REVIEW ══════════ -->
+<div class="page" id="page-pulse">
+  <div class="page-body">
+    <div class="review-header">
+      <div class="review-eyebrow">Fortnightly Pulse Check</div>
+      <div class="review-title">How is the knowledge base running?</div>
+      <div class="review-date" id="pulse-date"></div>
+    </div>
+    <div class="step-tabs" id="pulse-tabs"></div>
+    <div class="progress-bar"><div class="progress-fill" id="pulse-progress"></div></div>
+    <div id="pulse-steps"></div>
+  </div>
+</div>
+
+<!-- ══════════ QUARTERLY REVIEW ══════════ -->
+<div class="page" id="page-quarterly">
+  <div class="page-body">
+    <div class="review-header">
+      <div class="review-eyebrow">Quarterly Deep Review</div>
+      <div class="review-title">The full knowledge base health check</div>
+      <div class="review-date" id="quarterly-date"></div>
+    </div>
+    <div class="step-tabs" id="quarterly-tabs"></div>
+    <div class="progress-bar"><div class="progress-fill" id="quarterly-progress"></div></div>
+    <div id="quarterly-steps"></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+let reviews = [];
+let currentReview = {};
+let currentStep = 0;
+let reviewActions = [];
+
+const PULSE_STEPS = [
+  {
+    id: 'tools', label: 'Tools',
+    title: 'Tool adoption',
+    question: 'Are the tools being used consistently by the team? Which ones are getting traction and which are being ignored?',
+    fields: [
+      { id: 'tools-signal', type: 'signal', label: 'Overall tool adoption', options: ['✓ Strong — team uses tools daily', '~ Patchy — some use them, some don\'t', '✗ Weak — tools mostly ignored'] },
+      { id: 'tools-active', type: 'textarea', label: 'Which tools are being used well?', placeholder: 'e.g. Transaction coding assistant daily, script library referenced on calls…' },
+      { id: 'tools-ignored', type: 'textarea', label: 'Which tools are being underused — and why?', placeholder: 'e.g. Process form not being completed — team skipping the documentation step…' },
+    ]
+  },
+  {
+    id: 'processes', label: 'Processes',
+    title: 'Process accuracy',
+    question: 'Are the documented processes still accurate? Have any changed since they were last written?',
+    fields: [
+      { id: 'proc-signal', type: 'signal', label: 'Process accuracy', options: ['✓ Current — processes reflect how things are done', '~ Some drift — a few processes are outdated', '✗ Significant drift — multiple processes need updating'] },
+      { id: 'proc-changed', type: 'textarea', label: 'Which processes have changed since last documented?', placeholder: 'e.g. New client onboarding changed when we switched to online forms…' },
+      { id: 'proc-gaps', type: 'textarea', label: 'Any new processes that need documenting?', placeholder: 'e.g. We\'ve started doing monthly client check-ins — not documented yet…' },
+    ]
+  },
+  {
+    id: 'frustrations', label: 'Frustrations',
+    title: 'Frustration log activity',
+    question: 'Has the team been logging frustrations? Are there patterns in what\'s being raised?',
+    fields: [
+      { id: 'frust-signal', type: 'signal', label: 'Frustration log activity', options: ['✓ Active — team logging regularly', '~ Occasional — some logs, not consistent', '✗ Inactive — nothing logged recently'] },
+      { id: 'frust-themes', type: 'textarea', label: 'What are the main themes from recent frustration logs?', placeholder: 'e.g. Multiple logs about the trust reconciliation process — same issue surfacing from three people…' },
+      { id: 'frust-resolved', type: 'textarea', label: 'Any frustrations resolved or addressed since last review?', placeholder: 'e.g. The invoice coding issue from last fortnight — new script library entry added, resolved…' },
+    ]
+  },
+  {
+    id: 'team', label: 'Team',
+    title: 'Team confidence',
+    question: 'How confident is the team in using the knowledge base? Are they referring to it or still relying on asking colleagues?',
+    fields: [
+      { id: 'team-signal', type: 'signal', label: 'Team confidence', options: ['✓ High — team self-sufficient, using KB independently', '~ Growing — some rely on KB, others still ask colleagues', '✗ Low — team rarely refers to KB'] },
+      { id: 'team-notes', type: 'textarea', label: 'Any team feedback or observations worth noting?', placeholder: 'e.g. New staff member onboarded this fortnight — found the process library genuinely helpful…' },
+    ]
+  },
+  {
+    id: 'actions', label: 'Actions',
+    title: 'Actions from this review',
+    question: 'What needs to happen before the next pulse? Keep it to the essentials — maximum three actions, each with a clear owner and deadline.',
+    fields: [
+      { id: 'pulse-actions', type: 'actions', label: 'Actions' },
+      { id: 'pulse-notes', type: 'textarea', label: 'Any other notes or observations', placeholder: 'Context for the next review, things to watch, conversations that need to happen…' },
+    ]
+  },
+];
+
+const QUARTERLY_STEPS = [
+  {
+    id: 'health', label: 'Overall',
+    title: 'Overall knowledge base health',
+    question: 'Stand back and look at the whole system. Is the knowledge base making the business better, or has it become a maintenance burden nobody wants?',
+    fields: [
+      { id: 'health-signal', type: 'signal', label: 'Overall KB health', options: ['✓ Healthy — improving the business actively', '~ Stable — maintained but not driving improvement', '✗ Degrading — falling behind, needs intervention'] },
+      { id: 'health-wins', type: 'textarea', label: 'What are the biggest wins from the last quarter?', placeholder: 'e.g. Three frustrations resolved, two new tools deployed, onboarding time reduced by 40%…' },
+      { id: 'health-concerns', type: 'textarea', label: 'What is the biggest concern going into next quarter?', placeholder: 'e.g. Staff turnover risk — if the practice manager leaves, several undocumented processes go with them…' },
+    ]
+  },
+  {
+    id: 'processes-q', label: 'Processes',
+    title: 'Process inventory — full review',
+    question: 'Go through each area of the business. Which processes are fully documented and verified? Which have drifted? Which are missing entirely?',
+    fields: [
+      { id: 'proc-marketing', type: 'signal', label: 'Marketing & enquiry processes', options: ['✓ Current & verified', '~ Partially documented', '✗ Missing or outdated'] },
+      { id: 'proc-delivery', type: 'signal', label: 'Delivery & client work processes', options: ['✓ Current & verified', '~ Partially documented', '✗ Missing or outdated'] },
+      { id: 'proc-admin', type: 'signal', label: 'Admin & finance processes', options: ['✓ Current & verified', '~ Partially documented', '✗ Missing or outdated'] },
+      { id: 'proc-people', type: 'signal', label: 'People & HR processes', options: ['✓ Current & verified', '~ Partially documented', '✗ Missing or outdated'] },
+      { id: 'proc-mgmt', type: 'signal', label: 'Management & reporting processes', options: ['✓ Current & verified', '~ Partially documented', '✗ Missing or outdated'] },
+      { id: 'proc-quarterly-notes', type: 'textarea', label: 'Process gaps or priorities for next quarter', placeholder: 'Which processes need to be written, updated, or verified before the next quarterly review?…' },
+    ]
+  },
+  {
+    id: 'tools-q', label: 'Tools',
+    title: 'Tool adoption — full audit',
+    question: 'Which tools are embedded in the team\'s daily work? Which are being used occasionally? Which have been ignored?',
+    fields: [
+      { id: 'tools-embedded', type: 'textarea', label: 'Tools embedded in daily work', placeholder: 'e.g. Transaction coding assistant — used daily by admin. Script library — referenced on every new client call…' },
+      { id: 'tools-occasional', type: 'textarea', label: 'Tools used occasionally but not embedded', placeholder: 'e.g. Daily planner — some team members use it, others don\'t. Contact manager — data entry hasn\'t been kept up…' },
+      { id: 'tools-unused', type: 'textarea', label: 'Tools not being used — and why', placeholder: 'e.g. COA checker — team doesn\'t know it exists. Process form — feels like extra admin…' },
+      { id: 'tools-needed', type: 'textarea', label: 'Tools or processes the business needs but doesn\'t have yet', placeholder: 'e.g. Performance review framework. Monthly financial health check. Client feedback system…' },
+    ]
+  },
+  {
+    id: 'improvement', label: 'Improvement',
+    title: 'Improvement velocity',
+    question: 'Is the business actually getting better? Are frustrations being resolved? Are changes being recorded? Is the quarterly update showing real progress?',
+    fields: [
+      { id: 'imp-signal', type: 'signal', label: 'Improvement velocity', options: ['✓ Strong — real changes being made and recorded', '~ Slow — some improvement but not enough momentum', '✗ Stalled — no meaningful improvement this quarter'] },
+      { id: 'imp-frustrations', type: 'textarea', label: 'Frustrations resolved this quarter', placeholder: 'How many frustration logs were submitted, reviewed, and actioned?…' },
+      { id: 'imp-savings', type: 'textarea', label: 'Estimated savings or value generated', placeholder: 'Any quantified improvements — time saved, errors eliminated, cost reductions?…' },
+    ]
+  },
+  {
+    id: 'scale', label: 'Scale',
+    label2: 'Scale',
+    title: 'Owner dependency — are you less needed in the detail?',
+    question: 'The whole purpose of the knowledge base is to reduce owner dependency. Is that happening? Can the business run better without the owner in the room for everything?',
+    fields: [
+      { id: 'scale-signal', type: 'signal', label: 'Owner dependency trend', options: ['✓ Reducing — team more independent than 3 months ago', '~ Stable — same level of dependency as last quarter', '✗ Increasing — owner more involved in operations, not less'] },
+      { id: 'scale-examples', type: 'textarea', label: 'Examples of the team handling things independently', placeholder: 'e.g. Practice manager now handles all new client onboarding without involving the principal. Trust reconciliation done without supervision…' },
+      { id: 'scale-bottlenecks', type: 'textarea', label: 'Where is the owner still the bottleneck?', placeholder: 'e.g. Every client complaint still comes to the owner. Pricing decisions. Anything involving a relationship…' },
+    ]
+  },
+  {
+    id: 'milestones', label: 'Milestones',
+    title: 'Milestone progress',
+    question: 'Where are you in the 12-month program? What milestone is the business working toward? Are you on track?',
+    fields: [
+      { id: 'ms-current', type: 'textarea', label: 'Current milestone and progress', placeholder: 'e.g. Milestone 2 — Strategic clarity. 3 of 6 tasks complete. On track for unlock by end of quarter…' },
+      { id: 'ms-blockers', type: 'textarea', label: 'What is blocking progress toward the next milestone?', placeholder: 'e.g. Effort audit not completed. Business Uni Module 1 not started. Owner hasn\'t committed the 2 hours…' },
+      { id: 'ms-scale', type: 'scale', label: 'Rate overall program momentum (1–5)', min: 'No momentum', max: 'Strong momentum' },
+    ]
+  },
+  {
+    id: 'next-q', label: 'Next quarter',
+    title: 'Priorities for next quarter',
+    question: 'Based on everything reviewed today — what are the three most important things to achieve in the next 90 days?',
+    fields: [
+      { id: 'nq-priority-1', type: 'fi', label: 'Priority 1', placeholder: 'e.g. Complete process documentation for all six business areas…' },
+      { id: 'nq-priority-2', type: 'fi', label: 'Priority 2', placeholder: 'e.g. Get the team using the task queue consistently — target 80% adoption…' },
+      { id: 'nq-priority-3', type: 'fi', label: 'Priority 3', placeholder: 'e.g. Complete Milestone 2 tasks and unlock the One-Page Strategy Plan…' },
+      { id: 'q-actions', type: 'actions', label: 'Actions from this review' },
+      { id: 'q-notes', type: 'textarea', label: 'Overall quarterly summary notes', placeholder: 'Key observations, decisions made, context for the next quarterly review…' },
+    ]
+  },
+];
+
+// ── INIT ──
+window.onload = function() {
+  load();
+  renderHomeOverview();
+  renderHistoryList('all');
+  renderActionsList();
+};
+
+// ── NAVIGATION ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showHomeTab(tab) {
+  document.querySelectorAll('#page-home .nav-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('home-overview').style.display = tab === 'overview' ? 'block' : 'none';
+  document.getElementById('home-history').style.display = tab === 'history' ? 'block' : 'none';
+  document.getElementById('home-actions').style.display = tab === 'actions' ? 'block' : 'none';
+}
+
+// ── START REVIEW ──
+function startReview(type) {
+  currentStep = 0;
+  reviewActions = [];
+  currentReview = {
+    type,
+    date: stamp(),
+    dateFull: stampFull(),
+    data: {}
+  };
+
+  const steps = type === 'pulse' ? PULSE_STEPS : QUARTERLY_STEPS;
+  renderStepTabs(type, steps);
+  renderStep(type, steps, 0);
+  document.getElementById(`${type}-date`).textContent = stampFull();
+  showPage(type);
+}
+
+function stamp() { return new Date().toISOString().slice(0,10); }
+function stampFull() {
+  return new Date().toLocaleDateString('en-AU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
+
+// ── RENDER STEP TABS ──
+function renderStepTabs(type, steps) {
+  const container = document.getElementById(`${type}-tabs`);
+  container.innerHTML = steps.map((s, i) =>
+    `<button class="step-tab ${i===0?'active':''}" id="${type}-tab-${i}" onclick="goToStep('${type}',${i})">${s.label}</button>`
+  ).join('');
+}
+
+// ── RENDER STEP ──
+function renderStep(type, steps, idx) {
+  const steps_container = document.getElementById(`${type}-steps`);
+  const step = steps[idx];
+  const total = steps.length;
+  const progress = ((idx + 1) / total * 100) + '%';
+  document.getElementById(`${type}-progress`).style.width = progress;
+
+  const fieldsHTML = step.fields.map(f => renderField(f, type)).join('');
+  const isFirst = idx === 0;
+  const isLast = idx === total - 1;
+
+  steps_container.innerHTML = `
+    <div class="step-panel active">
+      <div class="step-num">Step ${idx+1} of ${total}</div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-question">${step.question}</div>
+      ${fieldsHTML}
+      <div class="step-nav">
+        <button class="btn-back" ${isFirst ? 'onclick="showPage(\'home\')"' : `onclick="navStep('${type}',${idx-1})"`}>
+          ${isFirst ? '← Back to home' : '← Back'}
+        </button>
+        ${isLast
+          ? `<button class="btn-finish" onclick="finishReview('${type}')">Save & complete →</button>`
+          : `<button class="btn-next" onclick="navStep('${type}',${idx+1})">Next →</button>`
+        }
+      </div>
+    </div>`;
+
+  // Re-attach action rows
+  if (step.fields.find(f => f.type === 'actions')) {
+    renderActionRows(type);
+  }
+}
+
+function renderField(f, type) {
+  if (f.type === 'signal') {
+    const opts = f.options.map((o, i) => {
+      const cls = i === 0 ? 'sel-green' : i === 1 ? 'sel-amber' : 'sel-red';
+      return `<button class="signal-btn" onclick="setSignal(this,'${f.id}','${cls}')">${o}</button>`;
+    }).join('');
+    return `<div class="fg"><label class="fl">${f.label}</label><div class="signal-row" id="${f.id}-row">${opts}</div></div>`;
+  }
+  if (f.type === 'textarea') {
+    return `<div class="fg"><label class="fl">${f.label}</label><textarea class="fi" id="${f.id}" rows="3" placeholder="${f.placeholder||''}" oninput="saveField('${f.id}',this.value)">${currentReview.data[f.id]||''}</textarea></div>`;
+  }
+  if (f.type === 'fi') {
+    return `<div class="fg"><label class="fl">${f.label}</label><input class="fi" id="${f.id}" type="text" placeholder="${f.placeholder||''}" value="${currentReview.data[f.id]||''}" oninput="saveField('${f.id}',this.value)" /></div>`;
+  }
+  if (f.type === 'actions') {
+    return `<div class="fg"><label class="fl">${f.label}</label><div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Maximum 3 actions. Each needs one owner and one date.</div><div class="action-rows" id="action-rows-${type}"></div><button class="btn-add-action" onclick="addActionRow('${type}')">+ Add action</button></div>`;
+  }
+  if (f.type === 'scale') {
+    const btns = [1,2,3,4,5].map(n => `<button class="scale-btn" onclick="setScale(this,'${f.id}',${n})">${n}</button>`).join('');
+    return `<div class="fg"><label class="fl">${f.label}</label><div class="scale" id="${f.id}-scale">${btns}</div><div class="scale-labels"><span>${f.min}</span><span>${f.max}</span></div></div>`;
+  }
+  return '';
+}
+
+function setSignal(el, id, cls) {
+  el.parentElement.querySelectorAll('.signal-btn').forEach(b => b.className = 'signal-btn');
+  el.classList.add(cls);
+  currentReview.data[id] = el.textContent.trim();
+}
+
+function setScale(el, id, val) {
+  const btns = el.closest('.scale').querySelectorAll('.scale-btn');
+  btns.forEach((b, i) => b.classList.toggle('sel', i < val));
+  currentReview.data[id] = val;
+}
+
+function saveField(id, val) { currentReview.data[id] = val; }
+
+function navStep(type, idx) {
+  currentStep = idx;
+  const steps = type === 'pulse' ? PULSE_STEPS : QUARTERLY_STEPS;
+  // Update tabs
+  document.querySelectorAll(`#${type}-tabs .step-tab`).forEach((t, i) => {
+    t.classList.remove('active', 'done');
+    if (i < idx) t.classList.add('done');
+    if (i === idx) t.classList.add('active');
+  });
+  renderStep(type, steps, idx);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToStep(type, idx) { navStep(type, idx); }
+
+// ── ACTIONS ──
+function addActionRow(type) {
+  if (reviewActions.length >= 3) { alert('Maximum 3 actions per review.'); return; }
+  reviewActions.push({ desc: '', owner: '', due: '' });
+  renderActionRows(type);
+}
+
+function renderActionRows(type) {
+  const container = document.getElementById(`action-rows-${type}`);
+  if (!container) return;
+  container.innerHTML = reviewActions.map((a, i) => `
+    <div class="action-row">
+      <input placeholder="Action description…" value="${esc(a.desc)}" oninput="reviewActions[${i}].desc=this.value" />
+      <input placeholder="Owner" value="${esc(a.owner)}" oninput="reviewActions[${i}].owner=this.value" />
+      <input type="date" value="${a.due}" oninput="reviewActions[${i}].due=this.value" />
+      <button class="btn-remove-row" onclick="removeAction(${i},'${type}')">×</button>
+    </div>`).join('');
+}
+
+function removeAction(i, type) { reviewActions.splice(i, 1); renderActionRows(type); }
+
+// ── FINISH REVIEW ──
+function finishReview(type) {
+  currentReview.actions = [...reviewActions];
+  currentReview.summary = generateSummary(type);
+  reviews.push({ ...currentReview, id: Date.now().toString() });
+  save();
+  showPage('home');
+  renderHomeOverview();
+  renderHistoryList('all');
+  renderActionsList();
+}
+
+function generateSummary(type) {
+  if (type === 'pulse') {
+    const tools = currentReview.data['tools-signal'] || '';
+    const proc = currentReview.data['proc-signal'] || '';
+    const frust = currentReview.data['frust-signal'] || '';
+    const team = currentReview.data['team-signal'] || '';
+    const wins = [tools, proc, frust, team].filter(s => s.startsWith('✓')).length;
+    const issues = [tools, proc, frust, team].filter(s => s.startsWith('✗')).length;
+    return `${wins} of 4 areas healthy. ${issues > 0 ? issues + ' area' + (issues>1?'s':'')+' need attention.' : 'No critical issues.'} ${currentReview.data['pulse-notes'] || ''}`;
+  } else {
+    const health = currentReview.data['health-signal'] || '';
+    const imp = currentReview.data['imp-signal'] || '';
+    const scale = currentReview.data['scale-signal'] || '';
+    const p1 = currentReview.data['nq-priority-1'] || '';
+    const p2 = currentReview.data['nq-priority-2'] || '';
+    const p3 = currentReview.data['nq-priority-3'] || '';
+    const priorities = [p1, p2, p3].filter(Boolean).join(' · ');
+    return `${health || 'Health not rated'}. ${imp || 'Improvement not rated'}. ${scale || 'Owner dependency not rated'}. Next quarter: ${priorities || 'No priorities set'}. ${currentReview.data['q-notes'] || ''}`.slice(0, 400);
+  }
+}
+
+function getOverallSignal(review) {
+  if (review.type === 'pulse') {
+    const signals = ['tools-signal','proc-signal','frust-signal','team-signal'].map(k => review.data[k] || '');
+    const reds = signals.filter(s => s.startsWith('✗')).length;
+    const ambers = signals.filter(s => s.startsWith('~')).length;
+    if (reds >= 2) return 'red';
+    if (reds >= 1 || ambers >= 2) return 'amber';
+    return 'green';
+  } else {
+    const sig = review.data['health-signal'] || '';
+    if (sig.startsWith('✓')) return 'green';
+    if (sig.startsWith('~')) return 'amber';
+    if (sig.startsWith('✗')) return 'red';
+    return 'amber';
+  }
+}
+
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── HOME OVERVIEW ──
+function renderHomeOverview() {
+  const total = reviews.length;
+  const pulses = reviews.filter(r => r.type === 'pulse').length;
+  const quarterlies = reviews.filter(r => r.type === 'quarterly').length;
+  const openActions = reviews.flatMap(r => r.actions || []).filter(a => a.desc).length;
+
+  const statsEl = document.getElementById('home-stats');
+  statsEl.innerHTML = [
+    { num: total, label: 'Reviews completed' },
+    { num: pulses, label: 'Pulse checks' },
+    { num: quarterlies, label: 'Quarterly reviews' },
+  ].map(s => `
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+      <div style="font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:var(--forest);">${s.num}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${s.label}</div>
+    </div>`).join('');
+
+  const lastReview = reviews.length ? reviews[reviews.length - 1] : null;
+  const lastEl = document.getElementById('last-review-card');
+  if (!lastReview) {
+    lastEl.innerHTML = `<div style="font-size:13px;color:var(--text-muted);padding:20px;border:1px dashed var(--border);border-radius:8px;text-align:center;">No reviews yet. Run your first pulse check or quarterly review above.</div>`;
+    return;
+  }
+  const sig = getOverallSignal(lastReview);
+  lastEl.innerHTML = `
+    <div class="summary-card">
+      <div class="sc-title">${lastReview.type === 'pulse' ? 'Fortnightly Pulse' : 'Quarterly Review'} · ${lastReview.dateFull}</div>
+      <div class="sc-date"><span class="hc-overall ${sig}" style="display:inline-block;margin-top:4px;">${sig === 'green' ? '✓ Healthy' : sig === 'amber' ? '~ Needs attention' : '✗ Intervention needed'}</span></div>
+      <div class="sc-body" style="margin-top:12px;">${esc(lastReview.summary)}</div>
+      ${lastReview.actions?.filter(a=>a.desc).length ? `
+      <div class="sc-actions">
+        <div class="sc-actions-label">Actions</div>
+        ${lastReview.actions.filter(a=>a.desc).map(a => `
+          <div class="sc-action-item">
+            <div class="sc-action-dot"></div>
+            ${esc(a.desc)}${a.owner ? ` — ${esc(a.owner)}` : ''}${a.due ? ` by ${a.due}` : ''}
+          </div>`).join('')}
+      </div>` : ''}
+    </div>`;
+}
+
+// ── HISTORY ──
+let historyFilter = 'all';
+function filterHistory(f, btn) {
+  historyFilter = f;
+  document.querySelectorAll('#home-history .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistoryList(f);
+}
+
+function renderHistoryList(filter) {
+  const list = document.getElementById('history-list');
+  const filtered = [...reviews].reverse().filter(r => filter === 'all' || r.type === filter);
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-history"><div class="empty-icon">📋</div><div class="empty-title">No reviews yet</div><div class="empty-sub">Run a pulse check or quarterly review to start building your review history.</div></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(r => {
+    const sig = getOverallSignal(r);
+    const actions = (r.actions || []).filter(a => a.desc);
+    return `
+    <div class="history-card">
+      <div class="hc-header">
+        <div class="hc-left">
+          <span class="hc-type ${r.type}">${r.type === 'pulse' ? 'Pulse' : 'Quarterly'}</span>
+          <span class="hc-date">${r.dateFull}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="hc-overall ${sig}">${sig === 'green' ? '✓ Healthy' : sig === 'amber' ? '~ Attention' : '✗ Critical'}</span>
+          <button class="hc-del" onclick="deleteReview('${r.id}')">Delete</button>
+        </div>
+      </div>
+      <div class="hc-body">
+        <div class="hc-summary">${esc(r.summary)}</div>
+        ${actions.length ? `<div class="hc-actions">${actions.map(a => `<div class="hc-action"><div class="hc-action-dot"></div>${esc(a.desc)}${a.owner?' — '+esc(a.owner):''}${a.due?' by '+a.due:''}</div>`).join('')}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteReview(id) {
+  if (!confirm('Delete this review record?')) return;
+  reviews = reviews.filter(r => r.id !== id);
+  save();
+  renderHomeOverview();
+  renderHistoryList(historyFilter);
+  renderActionsList();
+}
+
+// ── ACTIONS LIST ──
+function renderActionsList() {
+  const list = document.getElementById('actions-list');
+  const allActions = reviews.flatMap(r => (r.actions||[]).filter(a=>a.desc).map(a => ({...a, reviewDate: r.dateFull, reviewType: r.type})));
+  if (!allActions.length) {
+    list.innerHTML = `<div class="empty-history"><div class="empty-icon">✅</div><div class="empty-title">No open actions</div><div class="empty-sub">Actions from each review will appear here.</div></div>`;
+    return;
+  }
+  list.innerHTML = allActions.map(a => `
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;"></div>
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px;">${esc(a.desc)}</div>
+        <div style="font-size:12px;color:var(--text-muted);">${a.owner?'Owner: '+esc(a.owner)+' · ':''}${a.due?'Due: '+a.due+' · ':''}From ${a.reviewType} · ${a.reviewDate}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── SAVE / LOAD ──
+function save() {
+  try { localStorage.setItem('kb_review_cycle', JSON.stringify(reviews)); } catch(e) {}
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem('kb_review_cycle');
+    if (raw) reviews = JSON.parse(raw);
+  } catch(e) {}
+}
+</script>
+
+<!-- Memberstack protection -->
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var checkInterval = setInterval(function() {
+      if (window.$memberstackDom) {
+        clearInterval(checkInterval);
+        window.$memberstackDom.getCurrentMember().then(function(result) {
+          if (!result.data) { window.location.href = "/login.html"; }
+        });
+      }
+    }, 100);
+  });
+</script>
+
+</body>
+</html>

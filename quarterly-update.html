@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quarterly Update — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:    #2d5a27;
+  --forest-dk: #1a3d16;
+  --forest-lt: #4a7c59;
+  --gold:      #c8a84b;
+  --gold-bg:   rgba(200,168,75,0.09);
+  --gold-dim:  rgba(200,168,75,0.3);
+  --bg:        #f0f5ef;
+  --white:     #ffffff;
+  --border:    #d4e8d1;
+  --text:      #1a3d16;
+  --text-mid:  #3d6b47;
+  --text-muted:#6b9a78;
+  --text-dim:  #a8c8b0;
+  --green:     #1a6b45;
+  --green-bg:  #e8f5ee;
+  --red:       #8b1f1f;
+  --red-bg:    #fdf0f0;
+  --amber:     #854f0b;
+  --amber-bg:  #fdf3e3;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── MODES ── */
+.editor-only { display: block; }
+.report-only { display: none; }
+body.report-mode .editor-only { display: none; }
+body.report-mode .report-only { display: block; }
+
+/* ── HEADER ── */
+.site-header { background: var(--forest-dk); border-bottom: 3px solid var(--gold); padding: 13px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.header-brand { font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--gold); }
+.header-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.header-actions { display: flex; gap: 8px; }
+.btn-preview { padding: 7px 16px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; background: none; color: rgba(255,255,255,0.6); font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .15s; }
+.btn-preview:hover { border-color: var(--gold); color: var(--gold); }
+.btn-generate { padding: 7px 16px; border: none; border-radius: 6px; background: var(--gold); color: var(--forest-dk); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s; }
+.btn-generate:hover { opacity: .85; }
+
+/* ── EDITOR ── */
+.editor-body { max-width: 760px; margin: 0 auto; padding: 36px 24px 80px; }
+
+.editor-hero { margin-bottom: 32px; }
+.editor-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; font-weight: 500; }
+.editor-title { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.editor-sub { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+.editor-section { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 22px; margin-bottom: 16px; }
+.es-title { font-family: 'Libre Baskerville', serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; padding-bottom: 10px; border-bottom: 2px solid var(--forest); margin-bottom: 16px; }
+.es-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; margin-top: -8px; }
+
+/* FIELDS */
+.fg { margin-bottom: 16px; }
+.fl { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: block; }
+.fh { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-style: italic; }
+.fi { width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .15s; }
+.fi:focus { border-color: var(--forest); background: var(--white); }
+.fi::placeholder { color: var(--text-dim); }
+textarea.fi { resize: vertical; min-height: 80px; line-height: 1.6; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+
+/* NEW TOOLS TABLE */
+.new-tools-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.new-tool-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; }
+.new-tool-row input, .new-tool-row select { padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; }
+.new-tool-row input:focus, .new-tool-row select:focus { border-color: var(--forest); }
+.btn-add-row { font-size: 12px; color: var(--text-muted); border: 1px dashed var(--border); border-radius: 5px; padding: 6px 14px; cursor: pointer; background: none; transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.btn-add-row:hover { color: var(--forest); border-color: var(--forest); }
+.btn-remove { width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 4px; background: none; color: var(--text-muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .15s; font-family: 'DM Sans', sans-serif; }
+.btn-remove:hover { border-color: var(--red); color: var(--red); }
+
+/* COMING NEXT */
+.coming-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+.coming-row input { padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; background: #fafcfa; color: var(--text); font-family: 'DM Sans', sans-serif; outline: none; width: 100%; }
+.coming-row input:focus { border-color: var(--forest); }
+
+/* CALLOUT */
+.callout-info { background: var(--gold-bg); border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 13px; color: var(--text-mid); margin-bottom: 16px; line-height: 1.6; }
+.callout-info strong { color: var(--forest); font-weight: 500; }
+
+/* CHANGE LOG IMPORT */
+.cl-import { background: var(--green-bg); border: 1px solid rgba(26,107,69,0.2); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+.cl-import-title { font-size: 13px; font-weight: 500; color: var(--green); margin-bottom: 4px; }
+.cl-import-sub { font-size: 12px; color: var(--text-muted); }
+.cl-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 10px; }
+.cl-stat { background: var(--white); border-radius: 6px; padding: 10px 12px; text-align: center; }
+.cl-stat-num { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--forest); }
+.cl-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ══════════════════════════════
+   REPORT VIEW
+══════════════════════════════ */
+.report-wrap { max-width: 800px; margin: 0 auto; padding: 0; background: var(--white); min-height: 100vh; }
+
+.report-header { background: var(--forest-dk); padding: 48px 48px 56px; position: relative; overflow: hidden; }
+.report-header::before { content: 'Q'; position: absolute; font-family: 'Libre Baskerville', serif; font-size: 320px; font-weight: 700; color: rgba(200,168,75,0.06); right: -40px; top: -60px; line-height: 1; pointer-events: none; }
+.rh-eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-weight: 500; }
+.rh-biz { font-family: 'Libre Baskerville', serif; font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.rh-period { font-size: 16px; color: rgba(255,255,255,0.5); margin-bottom: 32px; font-weight: 300; }
+.rh-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+.rh-stat { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 16px 20px; min-width: 140px; }
+.rh-stat-num { font-family: 'Libre Baskerville', serif; font-size: 32px; font-weight: 700; color: var(--gold); line-height: 1; }
+.rh-stat-label { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; }
+
+.report-body { padding: 48px; }
+
+.r-section { margin-bottom: 44px; }
+.r-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.r-title { font-family: 'Libre Baskerville', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--forest); }
+.r-intro { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px; }
+
+/* IMPROVEMENT CARDS */
+.r-improvement { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 10px; }
+.r-imp-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 10px; }
+.r-before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.r-before { background: var(--red-bg); border: 1px solid #e8b4b4; border-radius: 6px; padding: 10px 12px; }
+.r-after { background: var(--green-bg); border: 1px solid rgba(26,107,69,0.2); border-radius: 6px; padding: 10px 12px; }
+.r-ba-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px; }
+.r-before .r-ba-label { color: var(--red); }
+.r-after .r-ba-label { color: var(--green); }
+.r-ba-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+.r-imp-saving { display: inline-flex; align-items: center; gap: 6px; background: var(--green-bg); border: 1px solid rgba(26,107,69,0.2); border-radius: 99px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--green); }
+
+/* NEW TOOLS */
+.r-tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.r-tool-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.r-tool-badge { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 5px; }
+.r-tool-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.r-tool-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+/* COMING NEXT */
+.r-coming-list { display: flex; flex-direction: column; gap: 8px; }
+.r-coming-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+.r-coming-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+.r-coming-text { font-size: 14px; color: var(--text); }
+
+/* MESSAGE */
+.r-message { background: var(--forest-dk); border-radius: 10px; padding: 28px 32px; position: relative; overflow: hidden; margin-bottom: 32px; }
+.r-message::before { content: '"'; position: absolute; font-family: 'Libre Baskerville', serif; font-size: 180px; color: rgba(200,168,75,0.08); top: -20px; left: 10px; line-height: 1; pointer-events: none; }
+.r-message-text { font-family: 'Libre Baskerville', serif; font-size: 17px; font-style: italic; color: rgba(255,255,255,0.85); line-height: 1.7; position: relative; margin-bottom: 16px; }
+.r-message-sig { font-size: 13px; color: rgba(255,255,255,0.45); }
+
+/* REPORT FOOTER */
+.report-footer { background: var(--forest-dk); padding: 28px 48px; border-top: 3px solid var(--gold); display: flex; align-items: center; justify-content: space-between; }
+.rf-brand { font-family: 'Libre Baskerville', serif; font-size: 14px; color: var(--gold); }
+.rf-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.rf-contact { font-size: 12px; color: rgba(255,255,255,0.4); text-align: right; }
+
+/* PRINT */
+.print-btn { position: fixed; bottom: 24px; right: 24px; padding: 12px 22px; border: none; border-radius: 8px; background: var(--forest); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: opacity .15s; z-index: 99; }
+.print-btn:hover { opacity: .85; }
+
+@media print {
+  .site-header, .print-btn { display: none !important; }
+  .report-wrap { box-shadow: none; }
+  body { background: white; }
+  .report-header, .report-footer, .r-message { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (max-width: 600px) {
+  .two-col, .three-col, .rh-stats, .r-before-after, .r-tools-grid, .cl-stats { grid-template-columns: 1fr; }
+  .editor-body, .report-body { padding: 20px 16px; }
+  .report-header { padding: 32px 20px 40px; }
+  .report-footer { padding: 20px; flex-direction: column; gap: 12px; text-align: center; }
+  .site-header { padding: 12px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="header-brand">Knowledgebase.business</div>
+    <div class="header-sub">Quarterly update builder</div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-preview editor-only" onclick="generateReport()">Preview report →</button>
+    <button class="btn-preview report-only" onclick="backToEditor()">← Edit</button>
+    <button class="btn-generate report-only" onclick="window.print()">Print / PDF</button>
+  </div>
+</header>
+
+<!-- ══════════════════
+     EDITOR
+══════════════════ -->
+<div class="editor-only">
+<div class="editor-body">
+
+  <div class="editor-hero">
+    <div class="editor-eyebrow">Quarterly update builder</div>
+    <div class="editor-title">Build your client's quarterly report</div>
+    <div class="editor-sub">Fill in each section — the report generates automatically. Send it as a PDF, share a link, or present it in your quarterly review session. Do this every 3 months without fail.</div>
+  </div>
+
+  <!-- SECTION 1 — CLIENT + PERIOD -->
+  <div class="editor-section">
+    <div class="es-title">Client & quarter details</div>
+    <div class="two-col">
+      <div class="fg">
+        <label class="fl">Client business name</label>
+        <input class="fi" id="e-biz" type="text" placeholder="e.g. Sheridan Legal" oninput="save()" />
+      </div>
+      <div class="fg">
+        <label class="fl">Quarter</label>
+        <select class="fi" id="e-quarter" onchange="save()">
+          <option value="Q1 2026">Q1 2026 — January to March</option>
+          <option value="Q2 2026">Q2 2026 — April to June</option>
+          <option value="Q3 2026">Q3 2026 — July to September</option>
+          <option value="Q4 2026">Q4 2026 — October to December</option>
+          <option value="Q1 2027">Q1 2027 — January to March</option>
+          <option value="Q2 2027">Q2 2027 — April to June</option>
+          <option value="Q3 2027">Q3 2027 — July to September</option>
+          <option value="Q4 2027">Q4 2027 — October to December</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Opening message from Roy</label>
+      <div class="fh">Personal note to the client — what stood out this quarter, what you're proud of, what's coming.</div>
+      <textarea class="fi" id="e-message" rows="4" placeholder="e.g. This quarter has been a significant one for Sheridan Legal. You've resolved four frustrations that were costing the business an estimated $14,000 per year — and your team is now using the task queue and script library daily. That's the platform working as it should…" oninput="save()"></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 2 — IMPROVEMENTS FROM CHANGE LOG -->
+  <div class="editor-section">
+    <div class="es-title">Improvements this quarter</div>
+    <div class="es-sub">Pulled from your Change Log — select which improvements to feature in this report.</div>
+
+    <div class="cl-import" id="cl-import">
+      <div class="cl-import-title">📊 Change log data</div>
+      <div class="cl-import-sub" id="cl-import-sub">Loading from your change log…</div>
+      <div class="cl-stats">
+        <div class="cl-stat"><div class="cl-stat-num" id="cl-total">0</div><div class="cl-stat-label">Total improvements</div></div>
+        <div class="cl-stat"><div class="cl-stat-num" id="cl-saving">$0</div><div class="cl-stat-label">Total annual saving</div></div>
+        <div class="cl-stat"><div class="cl-stat-num" id="cl-this-q">0</div><div class="cl-stat-label">This quarter</div></div>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Improvements to feature in this report</label>
+      <div class="fh">Add the key improvements from this quarter — pulled from the change log or entered manually.</div>
+      <div id="improvements-list"></div>
+      <button class="btn-add-row" onclick="addImprovement()">+ Add improvement</button>
+    </div>
+
+    <div class="three-col">
+      <div class="fg">
+        <label class="fl">Frustrations logged this quarter</label>
+        <input class="fi" id="e-frust-count" type="number" min="0" placeholder="0" oninput="save()" />
+      </div>
+      <div class="fg">
+        <label class="fl">Improvements completed</label>
+        <input class="fi" id="e-imp-count" type="number" min="0" placeholder="0" oninput="save()" />
+      </div>
+      <div class="fg">
+        <label class="fl">Estimated annual saving ($)</label>
+        <input class="fi" id="e-saving" type="number" min="0" placeholder="0" oninput="save()" />
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 — NEW PLATFORM TOOLS -->
+  <div class="editor-section">
+    <div class="es-title">New tools & content added to the platform</div>
+    <div class="es-sub">What's been added to Knowledgebase.business this quarter — not just for this client but for everyone. Shows the platform is growing.</div>
+
+    <div class="callout-info">
+      <strong>Tip:</strong> Include tools added to the platform globally — new industry templates, Business Uni modules, expert content, specialist panel additions. This is the network effect story.
+    </div>
+
+    <div class="new-tools-list" id="new-tools-list"></div>
+    <button class="btn-add-row" onclick="addTool()">+ Add tool or content</button>
+  </div>
+
+  <!-- SECTION 4 — COMING NEXT -->
+  <div class="editor-section">
+    <div class="es-title">Coming next quarter</div>
+    <div class="es-sub">Give the client a reason to look forward to next quarter. What's being built, what's being added, what milestone they're working toward.</div>
+
+    <div class="fg">
+      <label class="fl">What's coming next quarter</label>
+      <div id="coming-list"></div>
+      <button class="btn-add-row" onclick="addComing()">+ Add item</button>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Next milestone they're working toward</label>
+      <input class="fi" id="e-next-milestone" type="text" placeholder="e.g. Complete 3 more tasks to unlock The Pivot — One-Page Strategy Plan…" oninput="save()" />
+    </div>
+  </div>
+
+  <!-- SECTION 5 — PLATFORM STATS -->
+  <div class="editor-section">
+    <div class="es-title">Platform growth this quarter</div>
+    <div class="es-sub">Headline numbers that show the platform is expanding — for everyone's benefit.</div>
+
+    <div class="three-col">
+      <div class="fg">
+        <label class="fl">Total tools on platform</label>
+        <input class="fi" id="e-plat-tools" type="number" min="0" placeholder="e.g. 14" oninput="save()" />
+      </div>
+      <div class="fg">
+        <label class="fl">New tools added this quarter</label>
+        <input class="fi" id="e-plat-new" type="number" min="0" placeholder="e.g. 3" oninput="save()" />
+      </div>
+      <div class="fg">
+        <label class="fl">Businesses on the platform</label>
+        <input class="fi" id="e-plat-clients" type="number" min="0" placeholder="e.g. 7" oninput="save()" />
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding-top:8px;">
+    <button class="btn-generate" onclick="generateReport()" style="padding:12px 32px;font-size:14px;">Generate quarterly report →</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════
+     REPORT VIEW
+══════════════════ -->
+<div class="report-only">
+<div class="report-wrap">
+
+  <div class="report-header">
+    <div class="rh-eyebrow">Knowledgebase.business · Quarterly update</div>
+    <div class="rh-biz" id="r-biz">Business name</div>
+    <div class="rh-period" id="r-period">Quarter</div>
+    <div class="rh-stats">
+      <div class="rh-stat">
+        <div class="rh-stat-num" id="r-frust">0</div>
+        <div class="rh-stat-label">Frustrations logged</div>
+      </div>
+      <div class="rh-stat">
+        <div class="rh-stat-num" id="r-imp">0</div>
+        <div class="rh-stat-label">Improvements made</div>
+      </div>
+      <div class="rh-stat">
+        <div class="rh-stat-num" id="r-saving">$0</div>
+        <div class="rh-stat-label">Est. annual saving</div>
+      </div>
+      <div class="rh-stat">
+        <div class="rh-stat-num" id="r-plat-tools">0</div>
+        <div class="rh-stat-label">Tools on platform</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="report-body">
+
+    <!-- MESSAGE -->
+    <div class="r-message" id="r-message-block">
+      <div class="r-message-text" id="r-message"></div>
+      <div class="r-message-sig">— Roy West, Knowledgebase.business</div>
+    </div>
+
+    <!-- IMPROVEMENTS -->
+    <div class="r-section" id="r-improvements-section">
+      <div class="r-eyebrow">This quarter</div>
+      <div class="r-title">What we fixed — and what it saved</div>
+      <div class="r-intro">Every improvement below started as a frustration logged by your team. Here's what changed — and what it means for your business financially.</div>
+      <div id="r-improvements-list"></div>
+    </div>
+
+    <!-- NEW TOOLS -->
+    <div class="r-section" id="r-tools-section">
+      <div class="r-eyebrow">Platform growth</div>
+      <div class="r-title">New tools & content added this quarter</div>
+      <div class="r-intro" id="r-tools-intro"></div>
+      <div class="r-tools-grid" id="r-tools-grid"></div>
+    </div>
+
+    <!-- COMING NEXT -->
+    <div class="r-section" id="r-coming-section">
+      <div class="r-eyebrow">Looking ahead</div>
+      <div class="r-title">What's coming next quarter</div>
+      <div class="r-intro" id="r-next-milestone-text"></div>
+      <div class="r-coming-list" id="r-coming-list"></div>
+    </div>
+
+  </div>
+
+  <div class="report-footer">
+    <div>
+      <div class="rf-brand">Knowledgebase.business</div>
+      <div class="rf-sub">Building businesses that work without you</div>
+    </div>
+    <div class="rf-contact">
+      hello@knowledgebase.business<br>
+      <span id="r-footer-quarter"></span>
+    </div>
+  </div>
+
+</div>
+<button class="print-btn report-only" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<script>
+// ── STATE ──
+let improvements = [];
+let newTools = [];
+let comingItems = [];
+
+// ── INIT ──
+window.onload = function() {
+  loadEditor();
+  loadChangeLog();
+  setDefaultDate();
+  if (!improvements.length) addImprovement();
+  if (!newTools.length) { addTool(); addTool(); }
+  if (!comingItems.length) { addComing(); addComing(); addComing(); }
+};
+
+function setDefaultDate() {
+  const m = new Date().getMonth();
+  const q = m < 3 ? 0 : m < 6 ? 1 : m < 9 ? 2 : 3;
+  const y = new Date().getFullYear();
+  const opts = ['Q1','Q2','Q3','Q4'];
+  const val = opts[q] + ' ' + y;
+  const sel = document.getElementById('e-quarter');
+  for (let o of sel.options) { if (o.value.startsWith(opts[q] + ' ' + y)) { sel.value = o.value; break; } }
+}
+
+// ── CHANGE LOG IMPORT ──
+function loadChangeLog() {
+  try {
+    const raw = localStorage.getItem('kb_change_log');
+    if (!raw) { document.getElementById('cl-import-sub').textContent = 'No change log data found — enter improvements manually below.'; return; }
+    const data = JSON.parse(raw);
+    const total = data.length;
+    const saving = data.reduce((s,c) => s + Math.max(0,(c.costBefore||0)-(c.costAfter||0)),0);
+    const q = document.getElementById('e-quarter').value.split(' ')[0];
+    const y = parseInt(document.getElementById('e-quarter').value.split(' ')[1]);
+    const qMonths = { Q1:[0,1,2], Q2:[3,4,5], Q3:[6,7,8], Q4:[9,10,11] };
+    const thisQ = data.filter(c => {
+      if (!c.date) return false;
+      const d = new Date(c.date);
+      return d.getFullYear() === y && qMonths[q] && qMonths[q].includes(d.getMonth());
+    }).length;
+    document.getElementById('cl-total').textContent = total;
+    document.getElementById('cl-saving').textContent = '$' + saving.toLocaleString('en-AU');
+    document.getElementById('cl-this-q').textContent = thisQ;
+    document.getElementById('cl-import-sub').textContent = `${total} improvement${total !== 1 ? 's' : ''} found in your change log. Review and add the key ones below.`;
+    if (!document.getElementById('e-saving').value) document.getElementById('e-saving').value = saving;
+    if (!document.getElementById('e-imp-count').value) document.getElementById('e-imp-count').value = thisQ || total;
+  } catch(e) {}
+}
+
+// ── IMPROVEMENTS ──
+function addImprovement(data) {
+  const id = Date.now() + Math.random();
+  improvements.push({ id, name: data?.name||'', before: data?.before||'', after: data?.after||'', saving: data?.saving||'' });
+  renderImprovements();
+}
+
+function renderImprovements() {
+  const list = document.getElementById('improvements-list');
+  list.innerHTML = improvements.map((imp, i) => `
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:500;color:var(--text-muted);">Improvement ${i+1}</div>
+        <button class="btn-remove" onclick="removeImprovement(${i})">×</button>
+      </div>
+      <div class="fg">
+        <label class="fl">Name</label>
+        <input class="fi" placeholder="e.g. Trust reconciliation checklist…" value="${esc(imp.name)}" oninput="improvements[${i}].name=this.value;save()" />
+      </div>
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">Before</label>
+          <textarea class="fi" rows="2" placeholder="What was the frustration?" oninput="improvements[${i}].before=this.value;save()">${esc(imp.before)}</textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">After</label>
+          <textarea class="fi" rows="2" placeholder="What changed?" oninput="improvements[${i}].after=this.value;save()">${esc(imp.after)}</textarea>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Annual saving from this improvement ($)</label>
+        <input class="fi" type="number" placeholder="e.g. 2860" value="${imp.saving||''}" oninput="improvements[${i}].saving=this.value;save()" />
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeImprovement(i) { improvements.splice(i,1); renderImprovements(); save(); }
+
+// ── NEW TOOLS ──
+function addTool() {
+  const id = Date.now() + Math.random();
+  newTools.push({ id, name:'', desc:'', type:'New tool' });
+  renderTools();
+}
+
+function renderTools() {
+  const list = document.getElementById('new-tools-list');
+  list.innerHTML = newTools.map((t, i) => `
+    <div class="new-tool-row">
+      <input class="fi" placeholder="Tool or content name…" value="${esc(t.name)}" oninput="newTools[${i}].name=this.value;save()" style="padding:8px 10px;" />
+      <select oninput="newTools[${i}].type=this.value;save()" style="padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:#fafcfa;color:var(--text);font-family:'DM Sans',sans-serif;">
+        <option ${t.type==='New tool'?'selected':''}>New tool</option>
+        <option ${t.type==='Content'?'selected':''}>Content</option>
+        <option ${t.type==='Industry template'?'selected':''}>Industry template</option>
+        <option ${t.type==='Expert module'?'selected':''}>Expert module</option>
+        <option ${t.type==='Business Uni'?'selected':''}>Business Uni</option>
+      </select>
+      <button class="btn-remove" onclick="removeTool(${i})">×</button>
+    </div>
+    <div style="margin-bottom:8px;">
+      <input class="fi" placeholder="Short description…" value="${esc(t.desc)}" oninput="newTools[${i}].desc=this.value;save()" style="padding:7px 10px;font-size:12px;" />
+    </div>
+  `).join('');
+}
+
+function removeTool(i) { newTools.splice(i,1); renderTools(); save(); }
+
+// ── COMING NEXT ──
+function addComing() {
+  comingItems.push('');
+  renderComing();
+}
+
+function renderComing() {
+  const list = document.getElementById('coming-list');
+  list.innerHTML = comingItems.map((item, i) => `
+    <div class="coming-row">
+      <input placeholder="e.g. Business Uni — Module 2: Financial literacy…" value="${esc(item)}" oninput="comingItems[${i}]=this.value;save()" />
+      <button class="btn-remove" onclick="removeComing(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function removeComing(i) { comingItems.splice(i,1); renderComing(); save(); }
+
+// ── ESC ──
+function esc(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── SAVE / LOAD ──
+function save() {
+  try {
+    const data = {
+      biz: v('e-biz'), quarter: v('e-quarter'), message: v('e-message'),
+      frustCount: v('e-frust-count'), impCount: v('e-imp-count'), saving: v('e-saving'),
+      platTools: v('e-plat-tools'), platNew: v('e-plat-new'), platClients: v('e-plat-clients'),
+      nextMilestone: v('e-next-milestone'),
+      improvements, newTools, comingItems
+    };
+    localStorage.setItem('kb_quarterly', JSON.stringify(data));
+  } catch(e) {}
+}
+
+function loadEditor() {
+  try {
+    const raw = localStorage.getItem('kb_quarterly');
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    set('e-biz', d.biz); set('e-quarter', d.quarter); set('e-message', d.message);
+    set('e-frust-count', d.frustCount); set('e-imp-count', d.impCount); set('e-saving', d.saving);
+    set('e-plat-tools', d.platTools); set('e-plat-new', d.platNew); set('e-plat-clients', d.platClients);
+    set('e-next-milestone', d.nextMilestone);
+    if (d.improvements?.length) { improvements = d.improvements; renderImprovements(); }
+    if (d.newTools?.length) { newTools = d.newTools; renderTools(); }
+    if (d.comingItems?.length) { comingItems = d.comingItems; renderComing(); }
+  } catch(e) {}
+}
+
+function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+function set(id, val) { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; }
+
+// ── GENERATE REPORT ──
+function generateReport() {
+  save();
+
+  const biz = v('e-biz') || 'Your business';
+  const quarter = v('e-quarter') || 'This quarter';
+  const message = v('e-message');
+  const frust = v('e-frust-count') || '0';
+  const imp = v('e-imp-count') || '0';
+  const saving = parseInt(v('e-saving')) || 0;
+  const platTools = v('e-plat-tools') || '—';
+  const platNew = v('e-plat-new') || '0';
+  const platClients = v('e-plat-clients') || '—';
+  const nextMilestone = v('e-next-milestone');
+
+  // Header
+  document.getElementById('r-biz').textContent = biz;
+  document.getElementById('r-period').textContent = quarter;
+  document.getElementById('r-frust').textContent = frust;
+  document.getElementById('r-imp').textContent = imp;
+  document.getElementById('r-saving').textContent = saving > 0 ? '$' + saving.toLocaleString('en-AU') : '$0';
+  document.getElementById('r-plat-tools').textContent = platTools;
+  document.getElementById('r-footer-quarter').textContent = quarter;
+
+  // Message
+  if (message) {
+    document.getElementById('r-message').innerHTML = message.replace(/\n/g,'<br>');
+    document.getElementById('r-message-block').style.display = 'block';
+  } else {
+    document.getElementById('r-message-block').style.display = 'none';
+  }
+
+  // Improvements
+  const impList = improvements.filter(i => i.name.trim());
+  if (impList.length) {
+    document.getElementById('r-improvements-section').style.display = 'block';
+    document.getElementById('r-improvements-list').innerHTML = impList.map(imp => {
+      const s = parseInt(imp.saving) || 0;
+      return `
+      <div class="r-improvement">
+        <div class="r-imp-name">${esc(imp.name)}</div>
+        ${imp.before || imp.after ? `
+        <div class="r-before-after">
+          <div class="r-before"><div class="r-ba-label">Before</div><div class="r-ba-text">${esc(imp.before)||'—'}</div></div>
+          <div class="r-after"><div class="r-ba-label">After</div><div class="r-ba-text">${esc(imp.after)||'—'}</div></div>
+        </div>` : ''}
+        ${s > 0 ? `<div class="r-imp-saving">✓ Saving $${s.toLocaleString('en-AU')} per year</div>` : ''}
+      </div>`;
+    }).join('');
+  } else {
+    document.getElementById('r-improvements-section').style.display = 'none';
+  }
+
+  // New tools
+  const toolsList = newTools.filter(t => t.name.trim());
+  if (toolsList.length) {
+    document.getElementById('r-tools-section').style.display = 'block';
+    document.getElementById('r-tools-intro').textContent = `${platNew} new addition${parseInt(platNew)!==1?'s':''} to the platform this quarter — available to all Knowledgebase.business clients. The platform now has ${platTools} tools across ${platClients} businesses.`;
+    document.getElementById('r-tools-grid').innerHTML = toolsList.map(t => `
+      <div class="r-tool-card">
+        <div class="r-tool-badge">${esc(t.type)}</div>
+        <div class="r-tool-name">${esc(t.name)}</div>
+        <div class="r-tool-desc">${esc(t.desc)}</div>
+      </div>`).join('');
+  } else {
+    document.getElementById('r-tools-section').style.display = 'none';
+  }
+
+  // Coming next
+  const comingFiltered = comingItems.filter(c => c.trim());
+  if (comingFiltered.length || nextMilestone) {
+    document.getElementById('r-coming-section').style.display = 'block';
+    if (nextMilestone) {
+      document.getElementById('r-next-milestone-text').textContent = nextMilestone;
+    }
+    document.getElementById('r-coming-list').innerHTML = comingFiltered.map(item => `
+      <div class="r-coming-item">
+        <div class="r-coming-dot"></div>
+        <div class="r-coming-text">${esc(item)}</div>
+      </div>`).join('');
+  } else {
+    document.getElementById('r-coming-section').style.display = 'none';
+  }
+
+  document.body.classList.add('report-mode');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function backToEditor() {
+  document.body.classList.remove('report-mode');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Auto-save
+setInterval(save, 30000);
+document.addEventListener('input', save);
+document.addEventListener('change', save);
+</script>
+
+<!-- Memberstack protection -->
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var checkInterval = setInterval(function() {
+      if (window.$memberstackDom) {
+        clearInterval(checkInterval);
+        window.$memberstackDom.getCurrentMember().then(function(result) {
+          if (!result.data) { window.location.href = "/login.html"; }
+        });
+      }
+    }, 100);
+  });
+</script>
+
+</body>
+</html>
