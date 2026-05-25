@@ -120,53 +120,19 @@
   }
   .stage-card.coming { opacity: 0.45; cursor: default; }
 
-  /* Each stage gets its own active colour */
-  .stage-card.active-start {
-    background: #2a5c2a;
-    border-color: #7ecb7e;
-    box-shadow: 0 0 0 3px rgba(126,203,126,0.25);
+  /* Active stage — white card pops off dark background */
+  .stage-card.active {
+    background: #ffffff;
+    border-color: #ffffff;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
-  .stage-card.active-start .stage-num,
-  .stage-card.active-start .stage-avail { color: #7ecb7e; }
-
-  .stage-card.active-build {
-    background: #1a3a5c;
-    border-color: #6aaeee;
-    box-shadow: 0 0 0 3px rgba(106,174,238,0.25);
-  }
-  .stage-card.active-build .stage-num,
-  .stage-card.active-build .stage-avail { color: #6aaeee; }
-
-  .stage-card.active-survive {
-    background: #5c3a00;
-    border-color: #f0a830;
-    box-shadow: 0 0 0 3px rgba(240,168,48,0.25);
-  }
-  .stage-card.active-survive .stage-num,
-  .stage-card.active-survive .stage-avail { color: #f0a830; }
-
-  .stage-card.active-scale {
-    background: #3a1a5c;
-    border-color: #b07eee;
-    box-shadow: 0 0 0 3px rgba(176,126,238,0.25);
-  }
-  .stage-card.active-scale .stage-num,
-  .stage-card.active-scale .stage-avail { color: #b07eee; }
-
-  .stage-card.active-exit {
-    background: #5c1a1a;
-    border-color: #ee6a6a;
-    box-shadow: 0 0 0 3px rgba(238,106,106,0.25);
-  }
-  .stage-card.active-exit .stage-num,
-  .stage-card.active-exit .stage-avail { color: #ee6a6a; }
+  .stage-card.active .stage-num { color: var(--gold); }
+  .stage-card.active .stage-avail { color: var(--forest) !important; font-weight: 600; }
+  .stage-card.active .stage-name { color: var(--forest-dk); }
 
   .stage-icon { font-size: 24px; margin-bottom: 6px; display: block; transition: transform 0.2s; }
-  .stage-card.active-start .stage-icon,
-  .stage-card.active-build .stage-icon,
-  .stage-card.active-survive .stage-icon,
-  .stage-card.active-scale .stage-icon,
-  .stage-card.active-exit .stage-icon { transform: scale(1.2); }
+  .stage-card.active .stage-icon { transform: scale(1.2); }
 
   .stage-num {
     font-size: 10px;
@@ -444,42 +410,6 @@
   }
   .btn-interest:hover { background: var(--forest-lt); }
 
-  /* LIFETIME BANNER */
-  .lifetime-banner {
-    background: var(--forest-dk);
-    border-radius: 14px;
-    padding: 28px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-  }
-  .lb-left { flex: 1; min-width: 220px; }
-  .lb-eyebrow { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-  .lb-title { font-size: 20px; font-weight: normal; color: white; margin-bottom: 6px; line-height: 1.3; }
-  .lb-title .gold { color: var(--gold); }
-  .lb-sub { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; max-width: 380px; }
-  .lb-right { flex-shrink: 0; text-align: right; }
-  .lb-saving { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 4px; text-decoration: line-through; }
-  .lb-price { font-size: 36px; color: var(--gold); font-family: 'Georgia', serif; letter-spacing: -0.02em; }
-  .btn-lifetime {
-    display: block;
-    margin-top: 10px;
-    background: var(--gold);
-    color: var(--forest-dk);
-    font-size: 14px;
-    font-family: 'Georgia', serif;
-    padding: 10px 28px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    text-align: center;
-    white-space: nowrap;
-  }
-  .btn-lifetime:hover { background: #d4b250; }
-
   /* FAQ */
   .faq-section { margin-bottom: 40px; }
   .faq-title { font-size: 20px; font-weight: normal; color: var(--text); margin-bottom: 20px; }
@@ -507,7 +437,6 @@
     .stage-price-box { text-align: left; }
     .includes-grid { grid-template-columns: 1fr; }
     .unlock-row { grid-template-columns: 1fr; }
-    .lifetime-banner { flex-direction: column; }
     .lb-right { text-align: left; }
     .stage-body { padding: 20px 20px; }
     .stage-header { padding: 20px 20px 18px; }
@@ -549,10 +478,10 @@
       <div class="stage-name">Build</div>
       <div class="stage-avail now">Available now</div>
     </div>
-    <div class="stage-card" onclick="scrollToStage('survive')">
-      <span class="stage-icon">⚡</span>
+    <div class="stage-card" onclick="scrollToStage('ceiling')">
+      <span class="stage-icon">🔝</span>
       <div class="stage-num">Stage 3</div>
-      <div class="stage-name">Survive</div>
+      <div class="stage-name">Ceiling</div>
       <div class="stage-avail now">Available now</div>
     </div>
     <div class="stage-card coming" onclick="scrollToStage('scale')">
@@ -571,20 +500,6 @@
   <div class="strip-hint">Select your stage — this bar stays with you as you scroll</div>
 </div>
 <div class="page-body">
-
-  <!-- LIFETIME BANNER -->
-  <div class="lifetime-banner">
-    <div class="lb-left">
-      <div class="lb-eyebrow">Best value</div>
-      <div class="lb-title">Lifetime access to all five stages — <span class="gold">$797</span></div>
-      <div class="lb-sub">Every current stage plus Start and Scale when they launch. One payment. The earlier you lock it in, the more valuable it becomes.</div>
-    </div>
-    <div class="lb-right">
-      <div class="lb-saving">$1,782 if purchased separately</div>
-      <div class="lb-price">$797</div>
-      <button class="btn-lifetime" onclick="handlePayment('lifetime', 797)">Lock in lifetime access →</button>
-    </div>
-  </div>
 
   <!-- FOUNDATION -->
   <div class="foundation-section">
@@ -617,7 +532,7 @@
       <div class="coming-icon-big">🌱</div>
       <div class="coming-text">
         <h3>Built from Roy's book — "I wish I had this 30 years ago"</h3>
-        <p>The Start stage is built for business owners in their first three years. The tools, the decisions, and the frameworks that most people only learn the hard way — distilled into a practical program you can use from day one.</p>
+        <p>The Start stage is built for business owners in their first three years. The tools, the decisions, and the frameworks that most people only learn the hard way — distilled into a practical program you can use from day one. When it launches, Start will be available as a monthly subscription at <strong>$59/month</strong>.</p>
         <button class="btn-interest" onclick="registerInterest('Start')">Register interest — get notified first →</button>
       </div>
     </div>
@@ -632,9 +547,9 @@
         <div class="stage-tagline">The strategic tools to grow a business that doesn't depend entirely on you.</div>
       </div>
       <div class="stage-price-box">
-        <div class="price-label">Unlock for</div>
-        <div class="price-amount">$297</div>
-        <div class="price-note">or earn through milestones</div>
+        <div class="price-label">From</div>
+        <div class="price-amount">$79</div>
+        <div class="price-note">per month</div>
       </div>
     </div>
     <div class="stage-body">
@@ -672,38 +587,35 @@
         </div>
       </div>
 
-      <div class="unlock-row">
-        <div class="unlock-card earn-card">
-          <div class="unlock-label">Earn free</div>
-          <div class="unlock-title">Complete your milestones</div>
-          <div class="unlock-desc">Reach the Build milestone in your knowledge base journey and this section unlocks automatically — no payment needed.</div>
+      <div style="background:var(--forest);border-radius:10px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">Monthly subscription</div>
+          <div style="font-size:15px;color:white;font-family:Georgia,serif;margin-bottom:4px;">Start at $59 · Upgrade to Build at $79</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.5;">Includes the Knowledge Engine foundation tools plus the full Build program. Cancel or upgrade anytime.</div>
         </div>
-        <div class="unlock-card buy-card">
-          <div class="unlock-label">Unlock immediately</div>
-          <div class="unlock-title">Skip ahead now</div>
-          <div class="unlock-desc">Ready to dive in today? Unlock the Build stage instantly and start working through the strategy tools right now.</div>
-          <button class="btn-unlock" onclick="handlePayment('build', 297)">Unlock Build — $297 →</button>
+        <div style="flex-shrink:0;">
+          <button class="btn-unlock" style="background:var(--gold);padding:10px 28px;font-size:14px;" onclick="handleSignup('build')">Subscribe — $79/month →</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- STAGE 3: SURVIVE -->
-  <div class="stage-section" id="stage-survive">
+  <!-- STAGE 3: CEILING -->
+  <div class="stage-section" id="stage-ceiling">
     <div class="stage-header">
       <div class="stage-header-left">
         <div class="stage-badge">Stage 3 &nbsp;·&nbsp; Available now</div>
-        <h2>⚡ Survive</h2>
-        <div class="stage-tagline">Most business programs pretend crisis doesn't exist. This one was built for it.</div>
+        <h2>🔝 Ceiling</h2>
+        <div class="stage-tagline">You're working hard. The business runs. But something is blocking you — and you can't quite see what it is.</div>
       </div>
       <div class="stage-price-box">
-        <div class="price-label">Unlock for</div>
-        <div class="price-amount">$297</div>
-        <div class="price-note">or earn through milestones</div>
+        <div class="price-label">From</div>
+        <div class="price-amount">$99</div>
+        <div class="price-note">per month</div>
       </div>
     </div>
     <div class="stage-body">
-      <p class="stage-desc">Business crises don't wait for the right moment — and they don't care what stage of the journey you're at. Survive is not an upgrade. It is a separate landing spot for business owners who are in the middle of something hard right now. Cash pressure, a key person walking out, a client disaster, a revenue collapse. Roy has been there. Don't Do Nothing exists because he lived it. This is the real version of a business program — not the Disneyland one.</p>
+      <p class="stage-desc">Every business owner knows the feeling — you're working hard, the business is running, but you've stopped moving forward. Something is blocking you and you can't quite see what it is. Ceiling is not an upgrade. It is a separate landing spot for business owners who are in the middle of something hard right now. Ceiling is the program for business owners who have hit that wall. It is diagnostic and honest — built to find what's actually blocking you, not to tell you everything is fine. Most business programs pretend the plateau doesn't exist. This one was built for it.</p>
 
       <div class="includes-label">What's inside</div>
       <div class="includes-grid">
@@ -711,14 +623,14 @@
           <div class="include-icon book">📙</div>
           <div class="include-text">
             <strong>Don't Do Nothing</strong>
-            <span>Roy's survival manual — decisive action under pressure</span>
+            <span>Roy's book on breaking through — decisions for business owners at the wall</span>
           </div>
         </div>
         <div class="include-item">
           <div class="include-icon tool">🛠</div>
           <div class="include-text">
-            <strong>Crisis Decision Framework</strong>
-            <span>The five-step process for making good decisions fast</span>
+            <strong>Ceiling Diagnostic Tool</strong>
+            <span>Find what's actually blocking you — structured, honest, actionable</span>
           </div>
         </div>
         <div class="include-item">
@@ -731,17 +643,21 @@
         <div class="include-item">
           <div class="include-icon guide">📋</div>
           <div class="include-text">
-            <strong>Survive video series</strong>
+            <strong>Ceiling video series</strong>
             <span>Roy on what to do first — and what to stop doing immediately</span>
           </div>
         </div>
       </div>
 
-      <div style="background:#5c3a00;border-radius:10px;padding:20px 22px;margin-top:4px;">
-        <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">If your business needs this right now</div>
-        <div style="font-size:15px;color:white;font-family:Georgia,serif;margin-bottom:6px;">Don't wait. Access it today.</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.55;margin-bottom:14px;">Survive has no milestone requirement and no earning path. If you're in the middle of something hard right now, you get access immediately. That's the point.</div>
-        <button class="btn-unlock" style="background:var(--gold);" onclick="handlePayment('survive', 297)">Get access now — $297 →</button>
+      <div style="background:#3d2200;border-radius:10px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Monthly subscription — no milestone required</div>
+          <div style="font-size:15px;color:white;font-family:Georgia,serif;margin-bottom:4px;">If you've hit the wall, start today at $99/month</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;">Enter directly at Ceiling — no prior stages needed. Includes the Knowledge Engine plus the full Ceiling program. Cancel or upgrade anytime.</div>
+        </div>
+        <div style="flex-shrink:0;">
+          <button class="btn-unlock" style="background:var(--gold);padding:10px 28px;font-size:14px;" onclick="handleSignup('ceiling')">Subscribe — $99/month →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -759,7 +675,7 @@
       <div class="coming-icon-big">📈</div>
       <div class="coming-text">
         <h3>The Scale Blueprint — in development</h3>
-        <p>Most businesses plateau before they reach their potential. Scale gives you the systems, the team structure, and the strategic decisions that push past the ceiling. Built from Roy's work with businesses that have made that transition successfully.</p>
+        <p>Most businesses plateau before they reach their potential. Scale gives you the systems, the team structure, and the strategic decisions that push past the ceiling. Built from Roy's work with businesses that have made that transition successfully. Scale will be available at <strong>$159/month</strong> — and clients already on the platform will be first to access it.</p>
         <button class="btn-interest" onclick="registerInterest('Scale')">Register interest — get notified first →</button>
       </div>
     </div>
@@ -832,31 +748,31 @@
         What's the difference between the foundation tools and the premium stages?
         <span class="faq-chevron">⌄</span>
       </div>
-      <div class="faq-a">The foundation tools are the operational engine — processes, coding assistant, audit tools, and tracking. They're included with every account and cover how your business runs day to day. The premium stages are the strategic programs — each one built around a published book, interactive tools, and video content for a specific phase of your business journey. The foundation keeps the engine running. The stages help you grow, survive, and eventually exit well.</div>
+      <div class="faq-a">The foundation tools are the operational engine — processes, coding assistant, audit tools, and tracking. They're included with every account and cover how your business runs day to day. The premium stages are the strategic programs — each one built around a published book, interactive tools, and video content for a specific phase of your business journey. The foundation keeps the engine running. The stages help you grow, break through the ceiling, and eventually exit well.</div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        Is the $797 lifetime access genuinely lifetime?
+        Is there a lock-in period or minimum commitment?
         <span class="faq-chevron">⌄</span>
       </div>
-      <div class="faq-a">Yes. One payment, permanent access. Every current stage plus Start and Scale when they launch. The price never changes for you regardless of what we add to the platform. Clients who lock in lifetime access in the early days of the platform benefit most — they get everything that comes later at no additional cost.</div>
+      <div class="faq-a">No lock-in. Monthly subscriptions can be cancelled at any time. If you cancel, you keep access until the end of the billing period. There are no cancellation fees and no minimum term — the program works because it delivers value, not because we make it hard to leave.</div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        Can I be in more than one stage at the same time?
+        Can I enter any program directly, or do I have to start at the beginning?
         <span class="faq-chevron">⌄</span>
       </div>
-      <div class="faq-a">Absolutely. Business doesn't follow a neat sequence. A business that's growing fast (Build) might also hit a cash crisis (Survive). A business preparing to sell (Exit) might also be scaling (Scale). You unlock what's relevant now — and access everything you've unlocked whenever you need it.</div>
+      <div class="faq-a">Yes. You subscribe at the tier that matches where you are right now — and upgrade when you're ready to move to the next program. Each tier includes everything below it, so upgrading never loses you access to what you already have. Ceiling and Exit are direct-entry programs — you don't need to work through Start or Build to access them.</div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">
-        How does earning a stage through milestones work?
+        What happens if I want to upgrade from one program to the next?
         <span class="faq-chevron">⌄</span>
       </div>
-      <div class="faq-a">Every client works through a milestone journey — completing their knowledge base sections, using the tools, documenting their processes. As you hit the milestones for a stage, that stage unlocks automatically at no cost. It's designed so engaged clients who do the work get rewarded. If you want to skip ahead, you can unlock any stage immediately for $297.</div>
+      <div class="faq-a">Upgrading is straightforward — your subscription moves to the next tier and you get immediate access to the new program content. You keep everything from your current tier. The price difference is what you pay going forward. There are no lock-in periods — you can upgrade, downgrade, or cancel at any time.</div>
     </div>
 
     <div class="faq-item">
@@ -889,19 +805,27 @@ function scrollToStage(stage) {
   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   document.querySelectorAll('.stage-section').forEach(s => s.classList.remove('highlighted'));
   el.classList.add('highlighted');
-  const stageNames = ['start','build','survive','scale','exit'];
+  const stageNames = ['start','build','ceiling','scale','exit'];
   const cards = document.querySelectorAll('.stage-card');
-  cards.forEach((c, i) => {
-    c.classList.remove('active-start','active-build','active-survive','active-scale','active-exit');
-  });
+  cards.forEach(c => c.classList.remove('active'));
   const idx = stageNames.indexOf(stage);
-  if (idx >= 0) cards[idx].classList.add('active-' + stage);
+  if (idx >= 0 && !cards[idx].classList.contains('coming')) cards[idx].classList.add('active');
   setTimeout(() => el.classList.remove('highlighted'), 2500);
 }
 
 function toggleFaq(el) {
   const item = el.parentElement;
   item.classList.toggle('open');
+}
+
+function handleSignup(tier) {
+  const urls = {
+    start: 'https://knowledgebase-business.netlify.app/signup.html?plan=start',
+    build: 'https://knowledgebase-business.netlify.app/signup.html?plan=build',
+    ceiling: 'https://knowledgebase-business.netlify.app/signup.html?plan=ceiling',
+    scale: 'https://knowledgebase-business.netlify.app/signup.html?plan=scale'
+  };
+  window.location.href = urls[tier] || '/signup.html';
 }
 
 function handlePayment(stage, amount) {
