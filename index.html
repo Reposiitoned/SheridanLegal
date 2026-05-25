@@ -1,58 +1,676 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    body {background-color: #efeadf}
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Georgia; color: #ffffff; -webkit-text-stroke: #ffffff}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px 'Courier New'; color: #2e5464; -webkit-text-stroke: #2e5464}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #a15519; -webkit-text-stroke: #a15519}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px 'Helvetica Neue'; color: #2c3745; -webkit-text-stroke: #2c3745}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 28.0px Georgia; color: #111722; -webkit-text-stroke: #111722}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'; color: #657588; -webkit-text-stroke: #657588}
-    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #0f3b32; -webkit-text-stroke: #0f3b32; background-color: #ddf0ec}
-    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 36.0px 'Apple Color Emoji'; color: #111722; -webkit-text-stroke: #111722}
-    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 18.0px 'Helvetica Neue'; color: #111722; -webkit-text-stroke: #111722}
-    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 14.0px 'Helvetica Neue'; color: #2c3745; -webkit-text-stroke: #2c3745}
-    p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 15.0px 'Helvetica Neue'; color: #111722; -webkit-text-stroke: #111722; background-color: #ffffff; min-height: 17.0px}
-    p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 15.0px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; background-color: #0f3b32}
-    p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px 'Helvetica Neue'; color: #361864; -webkit-text-stroke: #361864; background-color: #ece5ff}
-    p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 15.0px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; background-color: #361864}
-    p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 15.0px 'Helvetica Neue'; color: #ffffff; -webkit-text-stroke: #ffffff; background-color: #361864; min-height: 17.0px}
-    span.s1 {font-kerning: none; background-color: #111722}
-    span.s2 {font-kerning: none}
-    span.s3 {font: 11.0px 'Apple Color Emoji'; font-kerning: none}
-    span.s4 {font-kerning: none; background-color: #ffffff}
-    span.s5 {font: 15.0px 'Lucida Grande'; font-kerning: none}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledgebase.business — The platform built for every stage of your business</title>
+<meta name="description" content="Tools, frameworks and programs for business owners — whether you're starting out, building, hitting a ceiling, scaling, or preparing to exit.">
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --forest-mid: #3d7a35;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Georgia, serif;
+    background: var(--white);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-size: 16px;
+    color: var(--forest-dk);
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-link { font-size: 14px; color: var(--muted); text-decoration: none; }
+  .nav-link:hover { color: var(--forest); }
+  .btn-nav {
+    background: var(--forest);
+    color: white;
+    font-size: 14px;
+    font-family: Georgia, serif;
+    padding: 8px 20px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-nav:hover { background: var(--forest-mid); }
+
+  /* HERO */
+  .hero {
+    background: var(--forest-dk);
+    padding: 72px 24px 64px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 4.5vw, 48px);
+    font-weight: normal;
+    color: white;
+    line-height: 1.2;
+    max-width: 680px;
+    margin: 0 auto 20px;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.62);
+    max-width: 520px;
+    margin: 0 auto 40px;
+    line-height: 1.65;
+  }
+  .hero-paths {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 15px;
+    font-family: Georgia, serif;
+    padding: 13px 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { background: #d4b250; }
+  .btn-secondary {
+    background: transparent;
+    color: white;
+    font-size: 15px;
+    font-family: Georgia, serif;
+    padding: 13px 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
+  .hero-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 16px;
+    letter-spacing: 0.03em;
+  }
+
+  /* STAGE STRIP */
+  .stage-bar {
+    background: var(--forest-dk);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 20px 16px 16px;
+  }
+  .stage-bar-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 14px;
+  }
+  .stage-strip {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .stage-card {
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px 18px 12px;
+    min-width: 116px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: block;
+  }
+  .stage-card:hover:not(.coming) {
+    background: white;
+    border-color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+  .stage-card:hover:not(.coming) .stage-num { color: var(--gold); }
+  .stage-card:hover:not(.coming) .stage-name { color: var(--forest-dk); }
+  .stage-card:hover:not(.coming) .stage-avail { color: var(--forest) !important; }
+  .stage-card.coming { opacity: 0.45; cursor: default; }
+  .stage-icon { font-size: 20px; margin-bottom: 5px; display: block; }
+  .stage-num {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2px;
+  }
+  .stage-name { font-size: 14px; color: white; }
+  .stage-avail { font-size: 11px; margin-top: 4px; color: rgba(255,255,255,0.35); }
+  .stage-avail.now { color: var(--gold) !important; }
+
+  /* BODY */
+  .section { padding: 72px 24px; }
+  .section-inner { max-width: 860px; margin: 0 auto; }
+  .section-alt { background: var(--bg); }
+
+  .section-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: normal;
+    color: var(--forest-dk);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    line-height: 1.25;
+  }
+  .section-body {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  /* WHAT YOU GET */
+  .engine-story {
+    max-width: 640px;
+    margin-bottom: 36px;
+  }
+  .engine-story p {
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 20px;
+  }
+  .engine-story p:last-child { margin-bottom: 0; }
+  .engine-tools-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    margin-top: 36px;
+  }
+  .engine-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .engine-tag {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  /* WHAT YOU GET OLD GRID - kept for reference */
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .price-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: box-shadow 0.2s;
+  }
+  .price-card:hover { box-shadow: 0 4px 16px rgba(45,90,39,0.1); }
+  .price-card.featured {
+    border-color: var(--forest);
+    border-width: 2px;
+  }
+  .price-card.coming-card { opacity: 0.6; }
+  .price-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .price-stage {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .price-name {
+    font-size: 18px;
+    color: var(--forest-dk);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .price-amount {
+    font-size: 32px;
+    color: var(--forest);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .price-period { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .price-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 18px; }
+  .price-coming {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 4px 14px;
+    display: inline-block;
+  }
+  .btn-price {
+    display: block;
+    background: var(--forest);
+    color: white;
+    font-size: 13px;
+    font-family: Georgia, serif;
+    padding: 9px 16px;
+    border-radius: 7px;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  .btn-price:hover { background: var(--forest-mid); }
+  .btn-price.outline {
+    background: transparent;
+    color: var(--forest);
+    border: 1px solid var(--forest);
+  }
+  .btn-price.outline:hover { background: var(--forest-lt); }
+
+  /* EXIT BANNER */
+  .exit-banner {
+    background: var(--forest-dk);
+    border-radius: 14px;
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .exit-banner-left { flex: 1; min-width: 240px; }
+  .exit-banner-eyebrow { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .exit-banner-title { font-size: 20px; color: white; margin-bottom: 6px; line-height: 1.3; }
+  .exit-banner-body { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 420px; }
+  .btn-exit {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 14px;
+    font-family: Georgia, serif;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn-exit:hover { background: #d4b250; }
+
+  /* HOW IT WORKS */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; }
+  .step { text-align: center; }
+  .step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--forest-lt);
+    color: var(--forest);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    font-family: Georgia, serif;
+  }
+  .step h3 { font-size: 16px; font-weight: normal; color: var(--text); margin-bottom: 6px; }
+  .step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ROY STRIP */
+  .roy-strip {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 24px;
+  }
+  .roy-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .roy-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: Georgia, serif;
+  }
+  .roy-text { flex: 1; min-width: 200px; }
+  .roy-name { font-size: 15px; color: var(--text); margin-bottom: 4px; }
+  .roy-bio { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .roy-books { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .book-tag {
+    font-size: 12px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    color: var(--text);
+  }
+
+  /* BOTTOM CTA */
+  .bottom-cta {
+    background: var(--forest-dk);
+    padding: 72px 24px;
+    text-align: center;
+  }
+  .bottom-cta h2 {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: normal;
+    color: white;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .bottom-cta p { font-size: 17px; color: rgba(255,255,255,0.55); margin-bottom: 36px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .bottom-paths { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer {
+    background: var(--forest-dk);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo { font-size: 14px; color: rgba(255,255,255,0.5); }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+  @media (max-width: 600px) {
+    .nav { padding: 0 16px; }
+    .section { padding: 48px 20px; }
+    .exit-banner { padding: 24px 20px; }
+    .pricing-grid { grid-template-columns: 1fr 1fr; }
+    .roy-inner { flex-direction: column; text-align: center; }
+    .roy-books { justify-content: center; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
 </head>
 <body>
-<p class="p1"><span class="s1">Sheridan Legal</span></p>
-<p class="p2"><span class="s1">Knowledge Base · Internal</span></p>
-<p class="p3"><span class="s2"><b>SHERIDAN LEGAL</b><b></b></span></p>
-<h1 style="margin: 0.0px 0.0px 12.0px 0.0px; font: 46.0px Georgia; color: #111722; -webkit-text-stroke: #111722"><span class="s2"><b>Knowledge Base</b><b></b></span></h1>
-<p class="p5"><span class="s2">Standard operating procedures, scripts, tools, and reference guides for the firm. Select a section and enter your access code to continue.</span></p>
-<p class="p6"><span class="s2">Operations</span></p>
-<p class="p7"><span class="s2">Day-to-day tools for the team — accounts, workflow, process, and marketing.</span></p>
-<p class="p8"><span class="s3">🔒</span><span class="s2"><b> ENTER ACCESS CODE</b><b></b></span></p>
-<p class="p9"><span class="s4">🔒</span></p>
-<p class="p10"><span class="s4"><b>Operations — Access Required</b><b></b></span></p>
-<p class="p11"><span class="s4">Enter the team access code to view operations tools.</span></p>
-<p class="p12"><span class="s2"></span><br></p>
-<p class="p13"><span class="s2"><b>Unlock </b></span><span class="s5"><b>→</b><b></b></span></p>
-<p class="p6"><span class="s2">Patrick · Sheridan</span></p>
-<p class="p7"><span class="s2">Strategic planning, firm modelling, and principal-level reference documents.</span></p>
-<p class="p14"><span class="s3">🔒</span><span class="s2"><b> ENTER ACCESS CODE</b><b></b></span></p>
-<p class="p9"><span class="s4">🔒</span></p>
-<p class="p10"><span class="s4"><b>Patrick · Sheridan — Access Required</b><b></b></span></p>
-<p class="p11"><span class="s4">This section contains strategic and commercially sensitive documents.</span></p>
-<p class="p12"><span class="s2"></span><br></p>
-<p class="p15"><span class="s2"><b>Unlock </b></span><span class="s5"><b>→</b><b></b></span></p>
-<p class="p16"><span class="s2"></span><br></p>
-<p class="p16"><span class="s2"></span><br></p>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">Knowledgebase<span>.business</span></a>
+  <div class="nav-right">
+    <a href="/scale-layer-sales.html" class="nav-link">Programs</a>
+    <a href="/dashboard.html" class="nav-link">Dashboard</a>
+    <a href="/login.html" class="nav-link">Log in</a>
+    <a href="/scale-layer-sales.html" class="btn-nav">Get started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Built for every stage of business</div>
+  <h1>The tools and programs your business actually <em>needs right now</em></h1>
+  <p class="hero-sub">Most business programs are built for one type of business owner. This one is built for wherever you actually are — starting out, growing, stuck, scaling, or ready to sell.</p>
+  <div class="hero-paths">
+    <a href="/scale-layer-sales.html" class="btn-primary">See the five programs →</a>
+    <a href="mailto:hello@knowledgebase.business?subject=I'd like to know more about Knowledgebase.business" class="btn-secondary">Talk to Roy</a>
+  </div>
+  <div class="hero-note">Monthly subscription · 14-day money-back guarantee · Cancel anytime</div>
+</div>
+
+<!-- STAGE STRIP -->
+<div class="stage-bar">
+  <div class="stage-bar-label">Where are you right now?</div>
+  <div class="stage-strip">
+    <a class="stage-card coming" href="/scale-layer-sales.html#stage-start">
+      <span class="stage-icon">🌱</span>
+      <div class="stage-num">Stage 1</div>
+      <div class="stage-name">Start</div>
+      <div class="stage-avail">Coming soon</div>
+    </a>
+    <a class="stage-card" href="/scale-layer-sales.html#stage-build">
+      <span class="stage-icon">📘</span>
+      <div class="stage-num">Stage 2</div>
+      <div class="stage-name">Build</div>
+      <div class="stage-avail now">$79 / month</div>
+    </a>
+    <a class="stage-card" href="/scale-layer-sales.html#stage-ceiling">
+      <span class="stage-icon">🔝</span>
+      <div class="stage-num">Stage 3</div>
+      <div class="stage-name">Ceiling</div>
+      <div class="stage-avail now">$99 / month</div>
+    </a>
+    <a class="stage-card coming" href="/scale-layer-sales.html#stage-scale">
+      <span class="stage-icon">📈</span>
+      <div class="stage-num">Stage 4</div>
+      <div class="stage-name">Scale</div>
+      <div class="stage-avail">Coming soon</div>
+    </a>
+    <a class="stage-card" href="/scale-layer-sales.html#stage-exit">
+      <span class="stage-icon">🏁</span>
+      <div class="stage-num">Stage 5</div>
+      <div class="stage-name">Exit</div>
+      <div class="stage-avail now">Talk to Roy</div>
+    </a>
+  </div>
+</div>
+
+<!-- WHAT YOU GET -->
+<div class="section section-alt">
+  <div class="section-inner">
+    <div class="section-eyebrow">The Knowledge Engine</div>
+    <div class="section-title">The foundation every business needs — and most don't have</div>
+    <div class="engine-story">
+      <p>Every day, issues are crippling productivity and frustrating others. The real cost to you is frightening.</p>
+      <p>Right now, somewhere in your business, someone is asking a question that's already been answered — they just don't know where to find it. They waste time, interrupt others, and scramble to achieve priorities. Work feels hard.</p>
+      <p>Our Knowledgebase doesn't patch the problem. It eliminates it. When your processes and tools are built into the way your business runs, your team stops asking and starts doing — better, quicker, and smarter. The time you get back doesn't just feel good. It changes what's possible.</p>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">How it works</div>
+    <div class="section-title">Simple to start, built to grow with you</div>
+    <div class="section-body">You don't need to work through every stage. You start where you are, use what's relevant now, and move when you're ready.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Choose your program</h3>
+        <p>Select the stage that matches where your business is right now. Not where you want to be — where you are.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Get the tools and content</h3>
+        <p>Your Knowledge Engine foundation plus the program built specifically for your stage — tools, frameworks, and Roy's published guides.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Upgrade when you're ready</h3>
+        <p>Move to the next program when the time is right. Each tier includes everything below it — you never lose access to what you already have.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section section-alt">
+  <div class="section-inner">
+    <div class="section-eyebrow">Pricing</div>
+    <div class="section-title">One monthly subscription. Everything included.</div>
+    <div class="section-body">No lock-in. No hidden costs. Cancel or upgrade anytime. Every subscription includes a 14-day money-back guarantee — if it's not right for your business, we'll refund you in full.</div>
+
+    <div class="pricing-grid">
+      <div class="price-card coming-card">
+        <span class="price-icon">🌱</span>
+        <div class="price-stage">Stage 1</div>
+        <div class="price-name">Start</div>
+        <div class="price-amount">$59</div>
+        <div class="price-period">per month</div>
+        <div class="price-desc">Your idea turned into a business. That's great. Now you're busy working it all out. Start gives you the tools, frameworks and decisions that most business owners only learn the hard way — and usually too late. Build the foundations right now so you don't have to rebuild them later.</div>
+        <span class="price-coming">Coming soon</span>
+      </div>
+
+      <div class="price-card">
+        <span class="price-icon">📘</span>
+        <div class="price-stage">Stage 2</div>
+        <div class="price-name">Build</div>
+        <div class="price-amount">$79</div>
+        <div class="price-period">per month</div>
+        <div class="price-desc">Your business is running, but it's consuming you. Every decision, every problem, every question comes straight back. Build gives you the systems, the strategy and the tools to change that — so the business grows without you being the bottleneck for everything that matters.</div>
+        <a href="/signup.html?plan=build" class="btn-price">Get started</a>
+      </div>
+
+      <div class="price-card featured">
+        <span class="price-icon">🔝</span>
+        <div class="price-stage">Stage 3</div>
+        <div class="price-name">Ceiling</div>
+        <div class="price-amount">$99</div>
+        <div class="price-period">per month</div>
+        <div class="price-desc">You're working hard but not moving forward. It might even feel backwards. The business runs, but something is blocking you, and you can't quite see what it is. Ceiling is the diagnostic program that finds what's actually holding you back — and gives you the tools and frameworks to break through it.</div>
+        <a href="/signup.html?plan=ceiling" class="btn-price">Get started</a>
+      </div>
+
+      <div class="price-card coming-card">
+        <span class="price-icon">📈</span>
+        <div class="price-stage">Stage 4</div>
+        <div class="price-name">Scale</div>
+        <div class="price-amount">$159</div>
+        <div class="price-period">per month</div>
+        <div class="price-desc">You know exactly where you want to go. You've got the team, the clients, and the ambition. What you need now are the systems and structure to get there without everything falling over. Scale gives you the blueprint to grow past your dreams.</div>
+        <span class="price-coming">Coming soon</span>
+      </div>
+    </div>
+
+    <div class="exit-banner">
+      <div class="exit-banner-left">
+        <div class="exit-banner-eyebrow">Stage 5 — Exit</div>
+        <div class="exit-banner-title">Preparing to sell? Start the conversation.</div>
+        <div class="exit-banner-body">You've decided to sell. It's time. Now you want your payday. Most business owners leave money on the table because they weren't prepared. Exit gets your business ready to hand over — closing the gaps buyers find, building the value they pay for, and making sure you sell well.</div>
+      </div>
+      <a href="mailto:hello@knowledgebase.business?subject=Exit program enquiry&body=I'm interested in the Exit program and would like to have a conversation with Roy." class="btn-exit">Talk to Roy about Exit →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT STRIP -->
+<div class="roy-strip">
+  <div class="section-inner" style="max-width:860px;margin:0 auto;">
+    <div class="section-eyebrow">About</div>
+    <div style="max-width:640px;">
+      <p style="font-size:17px;color:var(--text);line-height:1.75;margin-bottom:18px;">Our knowledgebase has been built by a team of business experts — people who work every day alongside business owners, helping them grow, navigate challenges, and get the most out of every stage of their business journey.</p>
+      <p style="font-size:17px;color:var(--text);line-height:1.75;">It's built for the ever-changing world of business — designed to grow, adapt and add value alongside you, not as a static one-off "this is how you do it" model.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <h2>Start where you are.</h2>
+  <p>Not where you think you should be. The right program is the one that matches your business right now.</p>
+  <div class="bottom-paths">
+    <a href="/scale-layer-sales.html" class="btn-primary">See the five programs →</a>
+    <a href="mailto:hello@knowledgebase.business" class="btn-secondary">Talk to Roy</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Knowledgebase<span>.business</span> &nbsp;·&nbsp; Built by Roy West</div>
+  <div class="footer-links">
+    <a href="/scale-layer-sales.html">Programs</a>
+    <a href="/login.html">Log in</a>
+    <a href="mailto:hello@knowledgebase.business">hello@knowledgebase.business</a>
+  </div>
+</footer>
+
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+var ci = setInterval(function() {
+  if (window.$memberstackDom) {
+    clearInterval(ci);
+    window.$memberstackDom.getCurrentMember().then(function(r) {
+      if (r.data) {
+        document.querySelector('.btn-nav').textContent = 'Dashboard →';
+        document.querySelector('.btn-nav').href = '/dashboard.html';
+        document.querySelectorAll('.nav-link').forEach(function(l) {
+          if (l.textContent === 'Log in') l.style.display = 'none';
+        });
+      }
+    });
+  }
+}, 100);
+</script>
 </body>
 </html>
