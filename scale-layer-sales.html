@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Five Stages — Knowledgebase.business</title>
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+    --tool-bg: #e8f0fb;
+    --tool-text: #1a4a8a;
+    --card-shadow: 0 2px 12px rgba(45,90,39,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  a { color: var(--forest); text-decoration: none; }
+
+  /* NAV */
+  .top-nav {
+    background: var(--forest-dk);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top-nav .logo {
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .top-nav .logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 20px; align-items: center; }
+  .nav-links a { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .nav-links a:hover { color: white; }
+  .btn-login {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .btn-login:hover { background: rgba(255,255,255,0.1); }
+
+  /* HERO */
+  .hero {
+    background: var(--forest-dk);
+    padding: 52px 24px 40px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-family: 'Georgia', serif;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: normal;
+    color: white;
+    line-height: 1.25;
+    max-width: 640px;
+    margin: 0 auto 16px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em {
+    color: var(--gold);
+    font-style: normal;
+  }
+  .hero-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    margin: 0 auto 36px;
+    line-height: 1.6;
+  }
+
+  /* STAGE STRIP */
+  .stage-strip {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 16px;
+  }
+  .stage-card {
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 16px 20px 14px;
+    min-width: 120px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .stage-card:hover { background: rgba(255,255,255,0.11); border-color: rgba(200,168,75,0.4); }
+  .stage-card.active {
+    background: rgba(200,168,75,0.15);
+    border-color: var(--gold);
+  }
+  .stage-card.coming { opacity: 0.55; cursor: default; }
+  .stage-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+  .stage-num {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 3px;
+    font-family: 'Georgia', serif;
+  }
+  .stage-card.active .stage-num { color: var(--gold); }
+  .stage-name {
+    font-size: 15px;
+    font-weight: normal;
+    color: white;
+    font-family: 'Georgia', serif;
+  }
+  .stage-avail {
+    font-size: 11px;
+    margin-top: 5px;
+    color: rgba(255,255,255,0.4);
+  }
+  .stage-card.active .stage-avail,
+  .stage-avail.now { color: var(--gold) !important; }
+
+  /* STRIP INDICATOR */
+  .strip-hint {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    padding: 14px 0 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* BODY */
+  .page-body { max-width: 860px; margin: 0 auto; padding: 48px 20px 80px; }
+
+  /* FOUNDATION */
+  .foundation-section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: normal;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .section-body {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.65;
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .tool-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--tool-bg);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--tool-text);
+    font-family: 'Georgia', serif;
+  }
+  .tool-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tool-text); opacity: 0.5; flex-shrink: 0; }
+
+  /* STAGE SECTIONS */
+  .stage-section {
+    margin-bottom: 32px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--white);
+    transition: box-shadow 0.2s;
+    scroll-margin-top: 20px;
+  }
+  .stage-section.highlighted { box-shadow: 0 0 0 2px var(--gold), var(--card-shadow); }
+  .stage-header {
+    padding: 28px 32px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .stage-header-left { flex: 1; }
+  .stage-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--forest-lt);
+    color: var(--forest);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    font-family: 'Georgia', serif;
+  }
+  .stage-badge.coming-badge { background: #ece9e0; color: #7a6f5a; }
+  .stage-header h2 {
+    font-size: 24px;
+    font-weight: normal;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .stage-tagline {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .stage-price-box {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .price-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .price-amount {
+    font-size: 28px;
+    font-weight: normal;
+    color: var(--forest);
+    font-family: 'Georgia', serif;
+    letter-spacing: -0.02em;
+  }
+  .price-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .stage-body { padding: 28px 32px; }
+  .stage-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+
+  .includes-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .includes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .include-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .include-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .include-icon.book { background: var(--forest-lt); color: var(--forest); }
+  .include-icon.tool { background: var(--tool-bg); color: var(--tool-text); }
+  .include-icon.guide { background: #fdf3e0; color: #a06c00; }
+
+  .include-text strong { display: block; font-size: 13px; font-weight: normal; color: var(--text); }
+  .include-text span { font-size: 12px; color: var(--muted); }
+
+  /* EARN / BUY */
+  .unlock-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 0;
+  }
+  .unlock-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .unlock-card.earn-card { background: var(--bg); }
+  .unlock-card.buy-card { background: var(--forest); }
+  .unlock-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .buy-card .unlock-label { color: rgba(255,255,255,0.55); }
+  .unlock-title {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-family: 'Georgia', serif;
+  }
+  .buy-card .unlock-title { color: white; }
+  .unlock-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .buy-card .unlock-desc { color: rgba(255,255,255,0.6); }
+  .btn-unlock {
+    display: inline-block;
+    margin-top: 12px;
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 13px;
+    font-family: 'Georgia', serif;
+    padding: 8px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: none;
+    font-weight: normal;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 0.01em;
+  }
+  .btn-unlock:hover { background: #d4b250; }
+
+  /* COMING SOON STAGE */
+  .stage-coming-body {
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .coming-icon-big {
+    width: 64px;
+    height: 64px;
+    background: var(--bg);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+  .coming-text h3 { font-size: 16px; font-weight: normal; color: var(--text); margin-bottom: 6px; }
+  .coming-text p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .btn-interest {
+    display: inline-block;
+    margin-top: 12px;
+    background: transparent;
+    color: var(--forest);
+    font-size: 13px;
+    padding: 7px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    border: 1px solid var(--forest);
+    font-family: 'Georgia', serif;
+  }
+  .btn-interest:hover { background: var(--forest-lt); }
+
+  /* LIFETIME BANNER */
+  .lifetime-banner {
+    background: var(--forest-dk);
+    border-radius: 14px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .lb-left { flex: 1; min-width: 220px; }
+  .lb-eyebrow { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .lb-title { font-size: 20px; font-weight: normal; color: white; margin-bottom: 6px; line-height: 1.3; }
+  .lb-title .gold { color: var(--gold); }
+  .lb-sub { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; max-width: 380px; }
+  .lb-right { flex-shrink: 0; text-align: right; }
+  .lb-saving { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 4px; text-decoration: line-through; }
+  .lb-price { font-size: 36px; color: var(--gold); font-family: 'Georgia', serif; letter-spacing: -0.02em; }
+  .btn-lifetime {
+    display: block;
+    margin-top: 10px;
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 14px;
+    font-family: 'Georgia', serif;
+    padding: 10px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .btn-lifetime:hover { background: #d4b250; }
+
+  /* FAQ */
+  .faq-section { margin-bottom: 40px; }
+  .faq-title { font-size: 20px; font-weight: normal; color: var(--text); margin-bottom: 20px; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 16px 0; }
+  .faq-q { font-size: 15px; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .faq-q:hover { color: var(--forest); }
+  .faq-chevron { font-size: 18px; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+  .faq-a { font-size: 14px; color: var(--muted); line-height: 1.65; padding-top: 10px; display: none; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+  /* FOOTER */
+  .ps-footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  .ps-footer strong { color: var(--forest); font-weight: normal; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .stage-header { flex-direction: column; }
+    .stage-price-box { text-align: left; }
+    .includes-grid { grid-template-columns: 1fr; }
+    .unlock-row { grid-template-columns: 1fr; }
+    .lifetime-banner { flex-direction: column; }
+    .lb-right { text-align: left; }
+    .stage-body { padding: 20px 20px; }
+    .stage-header { padding: 20px 20px 18px; }
+    .foundation-section { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="logo">Knowledgebase<span>.business</span></div>
+  <div class="nav-links">
+    <a href="/dashboard.html">Dashboard</a>
+    <button class="btn-login" onclick="window.location.href='/login.html'">Log in</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">The complete business owner program</div>
+  <h1>Where are you in your <em>business journey</em> right now?</h1>
+  <p class="hero-sub">Every business owner is at a different stage. Select yours below and we'll show you exactly what's inside — the tools, the frameworks, and the expertise built for where you are today.</p>
+
+  <!-- STAGE STRIP -->
+  <div class="stage-strip">
+    <div class="stage-card coming" onclick="scrollToStage('start')">
+      <span class="stage-icon">🌱</span>
+      <div class="stage-num">Stage 1</div>
+      <div class="stage-name">Start</div>
+      <div class="stage-avail">Coming soon</div>
+    </div>
+    <div class="stage-card" onclick="scrollToStage('build')">
+      <span class="stage-icon">📘</span>
+      <div class="stage-num">Stage 2</div>
+      <div class="stage-name">Build</div>
+      <div class="stage-avail now">Available now</div>
+    </div>
+    <div class="stage-card" onclick="scrollToStage('survive')">
+      <span class="stage-icon">⚡</span>
+      <div class="stage-num">Stage 3</div>
+      <div class="stage-name">Survive</div>
+      <div class="stage-avail now">Available now</div>
+    </div>
+    <div class="stage-card coming" onclick="scrollToStage('scale')">
+      <span class="stage-icon">📈</span>
+      <div class="stage-num">Stage 4</div>
+      <div class="stage-name">Scale</div>
+      <div class="stage-avail">Coming soon</div>
+    </div>
+    <div class="stage-card" onclick="scrollToStage('exit')">
+      <span class="stage-icon">🏁</span>
+      <div class="stage-num">Stage 5</div>
+      <div class="stage-name">Exit</div>
+      <div class="stage-avail now">Available now</div>
+    </div>
+  </div>
+  <div class="strip-hint">Select your stage to jump straight to what's relevant for you</div>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+
+  <!-- LIFETIME BANNER -->
+  <div class="lifetime-banner">
+    <div class="lb-left">
+      <div class="lb-eyebrow">Best value</div>
+      <div class="lb-title">Lifetime access to all five stages — <span class="gold">$797</span></div>
+      <div class="lb-sub">Every current stage plus Start and Scale when they launch. One payment. The earlier you lock it in, the more valuable it becomes.</div>
+    </div>
+    <div class="lb-right">
+      <div class="lb-saving">$1,782 if purchased separately</div>
+      <div class="lb-price">$797</div>
+      <button class="btn-lifetime" onclick="handlePayment('lifetime', 797)">Lock in lifetime access →</button>
+    </div>
+  </div>
+
+  <!-- FOUNDATION -->
+  <div class="foundation-section">
+    <div class="section-eyebrow">Included with every account</div>
+    <div class="section-title">Your foundation — from day one</div>
+    <div class="section-body">Every Knowledgebase.business client gets these tools the moment they join — regardless of which stage they're in. These are the operational engine that keeps your business running clearly.</div>
+    <div class="tools-grid">
+      <div class="tool-badge"><span class="dot"></span>Process library</div>
+      <div class="tool-badge"><span class="dot"></span>Operations toolkit</div>
+      <div class="tool-badge"><span class="dot"></span>Transaction coding assistant</div>
+      <div class="tool-badge"><span class="dot"></span>Chart of accounts checker</div>
+      <div class="tool-badge"><span class="dot"></span>Strategy &amp; decision audit</div>
+      <div class="tool-badge"><span class="dot"></span>Sale readiness assessment</div>
+      <div class="tool-badge"><span class="dot"></span>Holiday &amp; leave calendar</div>
+      <div class="tool-badge"><span class="dot"></span>Performance review cycle</div>
+      <div class="tool-badge"><span class="dot"></span>Milestone journey tracker</div>
+    </div>
+  </div>
+
+  <!-- STAGE 1: START -->
+  <div class="stage-section" id="stage-start">
+    <div class="stage-header">
+      <div class="stage-header-left">
+        <div class="stage-badge coming-badge">Stage 1 &nbsp;·&nbsp; Coming soon</div>
+        <h2>🌱 Start</h2>
+        <div class="stage-tagline">Everything you wish someone had told you before you began.</div>
+      </div>
+    </div>
+    <div class="stage-coming-body">
+      <div class="coming-icon-big">🌱</div>
+      <div class="coming-text">
+        <h3>Built from Roy's book — "I wish I had this 30 years ago"</h3>
+        <p>The Start stage is built for business owners in their first three years. The tools, the decisions, and the frameworks that most people only learn the hard way — distilled into a practical program you can use from day one.</p>
+        <button class="btn-interest" onclick="registerInterest('Start')">Register interest — get notified first →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2: BUILD -->
+  <div class="stage-section" id="stage-build">
+    <div class="stage-header">
+      <div class="stage-header-left">
+        <div class="stage-badge">Stage 2 &nbsp;·&nbsp; Available now</div>
+        <h2>📘 Build</h2>
+        <div class="stage-tagline">The strategic tools to grow a business that doesn't depend entirely on you.</div>
+      </div>
+      <div class="stage-price-box">
+        <div class="price-label">Unlock for</div>
+        <div class="price-amount">$297</div>
+        <div class="price-note">or earn through milestones</div>
+      </div>
+    </div>
+    <div class="stage-body">
+      <p class="stage-desc">Most business owners build their business around themselves without realising it. Build gives you the frameworks to change that — so the business grows, the team performs, and you're not the bottleneck for everything that matters.</p>
+
+      <div class="includes-label">What's inside</div>
+      <div class="includes-grid">
+        <div class="include-item">
+          <div class="include-icon book">📘</div>
+          <div class="include-text">
+            <strong>Pivot, Pause, But Don't Panic</strong>
+            <span>Roy's published book — strategic decisions for growing businesses</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon tool">🛠</div>
+          <div class="include-text">
+            <strong>One-Page Strategy Plan</strong>
+            <span>Interactive tool — your business strategy on a single page</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon tool">🛠</div>
+          <div class="include-text">
+            <strong>90-Day Sprint Planner</strong>
+            <span>Quarterly execution tool — focus the team, move the needle</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon guide">📋</div>
+          <div class="include-text">
+            <strong>Video guide series</strong>
+            <span>Roy walks through the key frameworks from the book</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="unlock-row">
+        <div class="unlock-card earn-card">
+          <div class="unlock-label">Earn free</div>
+          <div class="unlock-title">Complete your milestones</div>
+          <div class="unlock-desc">Reach the Build milestone in your knowledge base journey and this section unlocks automatically — no payment needed.</div>
+        </div>
+        <div class="unlock-card buy-card">
+          <div class="unlock-label">Unlock immediately</div>
+          <div class="unlock-title">Skip ahead now</div>
+          <div class="unlock-desc">Ready to dive in today? Unlock the Build stage instantly and start working through the strategy tools right now.</div>
+          <button class="btn-unlock" onclick="handlePayment('build', 297)">Unlock Build — $297 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: SURVIVE -->
+  <div class="stage-section" id="stage-survive">
+    <div class="stage-header">
+      <div class="stage-header-left">
+        <div class="stage-badge">Stage 3 &nbsp;·&nbsp; Available now</div>
+        <h2>⚡ Survive</h2>
+        <div class="stage-tagline">For when the business is in crisis and you need to act — not overthink.</div>
+      </div>
+      <div class="stage-price-box">
+        <div class="price-label">Unlock for</div>
+        <div class="price-amount">$297</div>
+        <div class="price-note">or earn through milestones</div>
+      </div>
+    </div>
+    <div class="stage-body">
+      <p class="stage-desc">Business crises don't wait for the right moment. Survive is built for the business owner who is in the middle of something hard right now — cash pressure, a client crisis, a key team member walking out. The frameworks here are for action, not analysis.</p>
+
+      <div class="includes-label">What's inside</div>
+      <div class="includes-grid">
+        <div class="include-item">
+          <div class="include-icon book">📙</div>
+          <div class="include-text">
+            <strong>Don't Do Nothing</strong>
+            <span>Roy's survival manual — decisive action under pressure</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon tool">🛠</div>
+          <div class="include-text">
+            <strong>Crisis Decision Framework</strong>
+            <span>The five-step process for making good decisions fast</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon tool">🛠</div>
+          <div class="include-text">
+            <strong>ABCD Client Ranking Tool</strong>
+            <span>Know exactly where to cut and where to protect</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon guide">📋</div>
+          <div class="include-text">
+            <strong>Survive video series</strong>
+            <span>Roy on what to do first — and what to stop doing immediately</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="unlock-row">
+        <div class="unlock-card earn-card">
+          <div class="unlock-label">Earn free</div>
+          <div class="unlock-title">Complete your milestones</div>
+          <div class="unlock-desc">Reach the Survive milestone in your journey and this section unlocks automatically — no payment needed.</div>
+        </div>
+        <div class="unlock-card buy-card">
+          <div class="unlock-label">Unlock immediately</div>
+          <div class="unlock-title">If you're in crisis now</div>
+          <div class="unlock-desc">Don't wait. If your business needs this right now, unlock it immediately and start working through the framework today.</div>
+          <button class="btn-unlock" onclick="handlePayment('survive', 297)">Unlock Survive — $297 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 4: SCALE -->
+  <div class="stage-section" id="stage-scale">
+    <div class="stage-header">
+      <div class="stage-header-left">
+        <div class="stage-badge coming-badge">Stage 4 &nbsp;·&nbsp; Coming soon</div>
+        <h2>📈 Scale</h2>
+        <div class="stage-tagline">The strategic blueprint for growing past the ceiling most businesses hit.</div>
+      </div>
+    </div>
+    <div class="stage-coming-body">
+      <div class="coming-icon-big">📈</div>
+      <div class="coming-text">
+        <h3>The Scale Blueprint — in development</h3>
+        <p>Most businesses plateau before they reach their potential. Scale gives you the systems, the team structure, and the strategic decisions that push past the ceiling. Built from Roy's work with businesses that have made that transition successfully.</p>
+        <button class="btn-interest" onclick="registerInterest('Scale')">Register interest — get notified first →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 5: EXIT -->
+  <div class="stage-section" id="stage-exit">
+    <div class="stage-header">
+      <div class="stage-header-left">
+        <div class="stage-badge">Stage 5 &nbsp;·&nbsp; Available now</div>
+        <h2>🏁 Exit</h2>
+        <div class="stage-tagline">Sell well. On your terms. At a price that reflects what you've actually built.</div>
+      </div>
+      <div class="stage-price-box">
+        <div class="price-label">Unlock for</div>
+        <div class="price-amount">$297</div>
+        <div class="price-note">or earn through milestones</div>
+      </div>
+    </div>
+    <div class="stage-body">
+      <p class="stage-desc">Most business owners leave money on the table when they sell — not because their business isn't valuable, but because they haven't prepared it properly. Exit gives you the tools to get sale-ready, understand what buyers are actually looking for, and present your business at its best.</p>
+
+      <div class="includes-label">What's inside</div>
+      <div class="includes-grid">
+        <div class="include-item">
+          <div class="include-icon book">📕</div>
+          <div class="include-text">
+            <strong>Exit or Scale Blueprint</strong>
+            <span>The strategic guide to preparing your business for sale</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon tool">🛠</div>
+          <div class="include-text">
+            <strong>Enhanced Sale Readiness Assessment</strong>
+            <span>Deep dive — know exactly what buyers will find before they do</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon tool">🛠</div>
+          <div class="include-text">
+            <strong>Business Growth Roadmap</strong>
+            <span>Close the gaps between where you are and what buyers want to see</span>
+          </div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon guide">📋</div>
+          <div class="include-text">
+            <strong>Exit video series</strong>
+            <span>Roy on the mistakes sellers make — and how to avoid every one</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="unlock-row">
+        <div class="unlock-card earn-card">
+          <div class="unlock-label">Earn free</div>
+          <div class="unlock-title">Complete your milestones</div>
+          <div class="unlock-desc">Reach the Exit milestone in your knowledge base journey and this section unlocks — no payment needed.</div>
+        </div>
+        <div class="unlock-card buy-card">
+          <div class="unlock-label">Unlock immediately</div>
+          <div class="unlock-title">Start preparing now</div>
+          <div class="unlock-desc">The best time to prepare for sale is three years before you plan to. Don't wait until you're ready to list.</div>
+          <button class="btn-unlock" onclick="handlePayment('exit', 297)">Unlock Exit — $297 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div class="faq-title">Common questions</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        What's the difference between the foundation tools and the premium stages?
+        <span class="faq-chevron">⌄</span>
+      </div>
+      <div class="faq-a">The foundation tools are the operational engine — processes, coding assistant, audit tools, and tracking. They're included with every account and cover how your business runs day to day. The premium stages are the strategic programs — each one built around a published book, interactive tools, and video content for a specific phase of your business journey. The foundation keeps the engine running. The stages help you grow, survive, and eventually exit well.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Is the $797 lifetime access genuinely lifetime?
+        <span class="faq-chevron">⌄</span>
+      </div>
+      <div class="faq-a">Yes. One payment, permanent access. Every current stage plus Start and Scale when they launch. The price never changes for you regardless of what we add to the platform. Clients who lock in lifetime access in the early days of the platform benefit most — they get everything that comes later at no additional cost.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Can I be in more than one stage at the same time?
+        <span class="faq-chevron">⌄</span>
+      </div>
+      <div class="faq-a">Absolutely. Business doesn't follow a neat sequence. A business that's growing fast (Build) might also hit a cash crisis (Survive). A business preparing to sell (Exit) might also be scaling (Scale). You unlock what's relevant now — and access everything you've unlocked whenever you need it.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        How does earning a stage through milestones work?
+        <span class="faq-chevron">⌄</span>
+      </div>
+      <div class="faq-a">Every client works through a milestone journey — completing their knowledge base sections, using the tools, documenting their processes. As you hit the milestones for a stage, that stage unlocks automatically at no cost. It's designed so engaged clients who do the work get rewarded. If you want to skip ahead, you can unlock any stage immediately for $297.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        What's Practice Smarts and how does it relate to Knowledgebase.business?
+        <span class="faq-chevron">⌄</span>
+      </div>
+      <div class="faq-a">Practice Smarts is the done-for-you consulting option for businesses that want Roy in the room — bespoke engagements, fortnightly check-ins, and a fully built knowledge base delivered for you. Knowledgebase.business is the done-with-you platform — the tools, the frameworks, and the support to build it yourself with Roy's guidance. Same methodology, different levels of involvement. Some clients start on the platform and later engage Practice Smarts for a deeper engagement. Others do Practice Smarts first and use the platform for the ongoing rhythm afterwards.</div>
+    </div>
+  </div>
+
+  <!-- PRACTICE SMARTS NOTE -->
+  <div style="background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; text-align: center;">
+    <div style="font-size: 13px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.08em; text-transform: uppercase;">Need more than tools?</div>
+    <div style="font-size: 19px; color: var(--text); margin-bottom: 8px; font-family: Georgia, serif;">Practice Smarts — done for you</div>
+    <div style="font-size: 14px; color: var(--muted); max-width: 480px; margin: 0 auto 18px; line-height: 1.6;">Bespoke consulting engagements for businesses that want Roy working alongside them — not just the tools. The 130-item methodology, fortnightly rhythms, and a fully built knowledge base delivered end to end.</div>
+    <a href="mailto:hello@knowledgebase.business" style="display: inline-block; background: var(--forest); color: white; font-size: 14px; padding: 10px 28px; border-radius: 8px; font-family: Georgia, serif;">Talk to Roy about Practice Smarts →</a>
+  </div>
+
+</div>
+
+<div class="ps-footer">
+  <strong>Knowledgebase.business</strong> — built by <strong>Roy West</strong> · <a href="mailto:hello@knowledgebase.business">hello@knowledgebase.business</a>
+</div>
+
+<script>
+function scrollToStage(stage) {
+  const el = document.getElementById('stage-' + stage);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.stage-section').forEach(s => s.classList.remove('highlighted'));
+  el.classList.add('highlighted');
+  document.querySelectorAll('.stage-card').forEach(c => c.classList.remove('active'));
+  const stageNames = ['start','build','survive','scale','exit'];
+  const idx = stageNames.indexOf(stage);
+  if (idx >= 0) document.querySelectorAll('.stage-card')[idx].classList.add('active');
+  setTimeout(() => el.classList.remove('highlighted'), 2500);
+}
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+function handlePayment(stage, amount) {
+  alert('Payment integration coming soon.\n\nContact hello@knowledgebase.business to unlock the ' + stage.charAt(0).toUpperCase() + stage.slice(1) + ' stage now.\n\nWe\'ll have you set up within 24 hours.');
+}
+
+function registerInterest(stage) {
+  window.location.href = 'mailto:hello@knowledgebase.business?subject=Register interest — ' + stage + ' stage&body=I\'d like to be notified when the ' + stage + ' stage launches on Knowledgebase.business.';
+}
+</script>
+
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+var ci = setInterval(function() {
+  if (window.$memberstackDom) {
+    clearInterval(ci);
+    window.$memberstackDom.getCurrentMember().then(function(r) {
+      if (r.data) {
+        document.querySelector('.btn-login').textContent = 'Dashboard →';
+        document.querySelector('.btn-login').onclick = function() { window.location.href = '/dashboard.html'; };
+        document.querySelector('.nav-links a').style.display = 'none';
+      }
+    });
+  }
+}, 100);
+</script>
+</body>
+</html>
