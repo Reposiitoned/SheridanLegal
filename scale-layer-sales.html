@@ -110,16 +110,64 @@
     min-width: 120px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
     position: relative;
   }
-  .stage-card:hover { background: rgba(255,255,255,0.11); border-color: rgba(200,168,75,0.4); }
-  .stage-card.active {
-    background: rgba(200,168,75,0.15);
-    border-color: var(--gold);
+  .stage-card:hover:not(.coming) {
+    background: rgba(255,255,255,0.13);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
   }
-  .stage-card.coming { opacity: 0.55; cursor: default; }
-  .stage-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+  .stage-card.coming { opacity: 0.45; cursor: default; }
+
+  /* Each stage gets its own active colour */
+  .stage-card.active-start {
+    background: #2a5c2a;
+    border-color: #7ecb7e;
+    box-shadow: 0 0 0 3px rgba(126,203,126,0.25);
+  }
+  .stage-card.active-start .stage-num,
+  .stage-card.active-start .stage-avail { color: #7ecb7e; }
+
+  .stage-card.active-build {
+    background: #1a3a5c;
+    border-color: #6aaeee;
+    box-shadow: 0 0 0 3px rgba(106,174,238,0.25);
+  }
+  .stage-card.active-build .stage-num,
+  .stage-card.active-build .stage-avail { color: #6aaeee; }
+
+  .stage-card.active-survive {
+    background: #5c3a00;
+    border-color: #f0a830;
+    box-shadow: 0 0 0 3px rgba(240,168,48,0.25);
+  }
+  .stage-card.active-survive .stage-num,
+  .stage-card.active-survive .stage-avail { color: #f0a830; }
+
+  .stage-card.active-scale {
+    background: #3a1a5c;
+    border-color: #b07eee;
+    box-shadow: 0 0 0 3px rgba(176,126,238,0.25);
+  }
+  .stage-card.active-scale .stage-num,
+  .stage-card.active-scale .stage-avail { color: #b07eee; }
+
+  .stage-card.active-exit {
+    background: #5c1a1a;
+    border-color: #ee6a6a;
+    box-shadow: 0 0 0 3px rgba(238,106,106,0.25);
+  }
+  .stage-card.active-exit .stage-num,
+  .stage-card.active-exit .stage-avail { color: #ee6a6a; }
+
+  .stage-icon { font-size: 24px; margin-bottom: 6px; display: block; transition: transform 0.2s; }
+  .stage-card.active-start .stage-icon,
+  .stage-card.active-build .stage-icon,
+  .stage-card.active-survive .stage-icon,
+  .stage-card.active-scale .stage-icon,
+  .stage-card.active-exit .stage-icon { transform: scale(1.2); }
+
   .stage-num {
     font-size: 10px;
     letter-spacing: 0.12em;
@@ -127,8 +175,8 @@
     color: rgba(255,255,255,0.45);
     margin-bottom: 3px;
     font-family: 'Georgia', serif;
+    transition: color 0.2s;
   }
-  .stage-card.active .stage-num { color: var(--gold); }
   .stage-name {
     font-size: 15px;
     font-weight: normal;
@@ -139,16 +187,24 @@
     font-size: 11px;
     margin-top: 5px;
     color: rgba(255,255,255,0.4);
+    transition: color 0.2s;
   }
-  .stage-card.active .stage-avail,
-  .stage-avail.now { color: var(--gold) !important; }
+  .stage-avail.now { color: var(--gold); }
 
-  /* STRIP INDICATOR */
+  /* STICKY STRIP BAR */
+  .sticky-strip {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--forest-dk);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px 8px;
+  }
   .strip-hint {
     text-align: center;
-    font-size: 12px;
-    color: rgba(255,255,255,0.35);
-    padding: 14px 0 0;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    padding: 6px 0 0;
     letter-spacing: 0.04em;
   }
 
@@ -476,7 +532,10 @@
   <h1>Where are you in your <em>business journey</em> right now?</h1>
   <p class="hero-sub">Every business owner is at a different stage. Select yours below and we'll show you exactly what's inside — the tools, the frameworks, and the expertise built for where you are today.</p>
 
-  <!-- STAGE STRIP -->
+</div>
+
+<!-- STICKY STAGE STRIP -->
+<div class="sticky-strip">
   <div class="stage-strip">
     <div class="stage-card coming" onclick="scrollToStage('start')">
       <span class="stage-icon">🌱</span>
@@ -509,10 +568,8 @@
       <div class="stage-avail now">Available now</div>
     </div>
   </div>
-  <div class="strip-hint">Select your stage to jump straight to what's relevant for you</div>
+  <div class="strip-hint">Select your stage — this bar stays with you as you scroll</div>
 </div>
-
-<!-- PAGE BODY -->
 <div class="page-body">
 
   <!-- LIFETIME BANNER -->
@@ -637,7 +694,7 @@
       <div class="stage-header-left">
         <div class="stage-badge">Stage 3 &nbsp;·&nbsp; Available now</div>
         <h2>⚡ Survive</h2>
-        <div class="stage-tagline">For when the business is in crisis and you need to act — not overthink.</div>
+        <div class="stage-tagline">Most business programs pretend crisis doesn't exist. This one was built for it.</div>
       </div>
       <div class="stage-price-box">
         <div class="price-label">Unlock for</div>
@@ -646,7 +703,7 @@
       </div>
     </div>
     <div class="stage-body">
-      <p class="stage-desc">Business crises don't wait for the right moment. Survive is built for the business owner who is in the middle of something hard right now — cash pressure, a client crisis, a key team member walking out. The frameworks here are for action, not analysis.</p>
+      <p class="stage-desc">Business crises don't wait for the right moment — and they don't care what stage of the journey you're at. Survive is not an upgrade. It is a separate landing spot for business owners who are in the middle of something hard right now. Cash pressure, a key person walking out, a client disaster, a revenue collapse. Roy has been there. Don't Do Nothing exists because he lived it. This is the real version of a business program — not the Disneyland one.</p>
 
       <div class="includes-label">What's inside</div>
       <div class="includes-grid">
@@ -680,18 +737,11 @@
         </div>
       </div>
 
-      <div class="unlock-row">
-        <div class="unlock-card earn-card">
-          <div class="unlock-label">Earn free</div>
-          <div class="unlock-title">Complete your milestones</div>
-          <div class="unlock-desc">Reach the Survive milestone in your journey and this section unlocks automatically — no payment needed.</div>
-        </div>
-        <div class="unlock-card buy-card">
-          <div class="unlock-label">Unlock immediately</div>
-          <div class="unlock-title">If you're in crisis now</div>
-          <div class="unlock-desc">Don't wait. If your business needs this right now, unlock it immediately and start working through the framework today.</div>
-          <button class="btn-unlock" onclick="handlePayment('survive', 297)">Unlock Survive — $297 →</button>
-        </div>
+      <div style="background:#5c3a00;border-radius:10px;padding:20px 22px;margin-top:4px;">
+        <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">If your business needs this right now</div>
+        <div style="font-size:15px;color:white;font-family:Georgia,serif;margin-bottom:6px;">Don't wait. Access it today.</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.55;margin-bottom:14px;">Survive has no milestone requirement and no earning path. If you're in the middle of something hard right now, you get access immediately. That's the point.</div>
+        <button class="btn-unlock" style="background:var(--gold);" onclick="handlePayment('survive', 297)">Get access now — $297 →</button>
       </div>
     </div>
   </div>
@@ -723,14 +773,9 @@
         <h2>🏁 Exit</h2>
         <div class="stage-tagline">Sell well. On your terms. At a price that reflects what you've actually built.</div>
       </div>
-      <div class="stage-price-box">
-        <div class="price-label">Unlock for</div>
-        <div class="price-amount">$297</div>
-        <div class="price-note">or earn through milestones</div>
-      </div>
     </div>
     <div class="stage-body">
-      <p class="stage-desc">Most business owners leave money on the table when they sell — not because their business isn't valuable, but because they haven't prepared it properly. Exit gives you the tools to get sale-ready, understand what buyers are actually looking for, and present your business at its best.</p>
+      <p class="stage-desc">Exit is not an upgrade — it is a new program you enter when you have made the decision to sell. That decision can happen at any point: a client mid-Build, a brand new client, or a business owner referred by their broker. The trigger is the decision itself, not any prior achievement. The best time to start preparing is three years before you plan to list — most sellers leave money on the table because they started too late.</p>
 
       <div class="includes-label">What's inside</div>
       <div class="includes-grid">
@@ -764,17 +809,15 @@
         </div>
       </div>
 
-      <div class="unlock-row">
-        <div class="unlock-card earn-card">
-          <div class="unlock-label">Earn free</div>
-          <div class="unlock-title">Complete your milestones</div>
-          <div class="unlock-desc">Reach the Exit milestone in your knowledge base journey and this section unlocks — no payment needed.</div>
+      <div style="background:var(--forest-dk);border-radius:10px;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">How to enter Exit</div>
+          <div style="font-size:15px;color:white;font-family:Georgia,serif;margin-bottom:8px;">Start with a conversation</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.6);max-width:400px;line-height:1.6;">Exit is application-based — not a checkout flow. The first step is a conversation with Roy to scope the engagement and make sure the timing is right for your business.</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:10px;">Referred by a business broker? Mention it — there is a dedicated pathway for broker-referred clients.</div>
         </div>
-        <div class="unlock-card buy-card">
-          <div class="unlock-label">Unlock immediately</div>
-          <div class="unlock-title">Start preparing now</div>
-          <div class="unlock-desc">The best time to prepare for sale is three years before you plan to. Don't wait until you're ready to list.</div>
-          <button class="btn-unlock" onclick="handlePayment('exit', 297)">Unlock Exit — $297 →</button>
+        <div style="flex-shrink:0;">
+          <a href="mailto:hello@knowledgebase.business?subject=Exit program enquiry&body=I'm interested in the Exit program and would like to have a conversation with Roy." style="display:inline-block;background:var(--gold);color:var(--forest-dk);font-size:14px;font-family:Georgia,serif;padding:12px 24px;border-radius:8px;white-space:nowrap;text-decoration:none;">Talk to Roy about Exit →</a>
         </div>
       </div>
     </div>
@@ -846,10 +889,13 @@ function scrollToStage(stage) {
   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   document.querySelectorAll('.stage-section').forEach(s => s.classList.remove('highlighted'));
   el.classList.add('highlighted');
-  document.querySelectorAll('.stage-card').forEach(c => c.classList.remove('active'));
   const stageNames = ['start','build','survive','scale','exit'];
+  const cards = document.querySelectorAll('.stage-card');
+  cards.forEach((c, i) => {
+    c.classList.remove('active-start','active-build','active-survive','active-scale','active-exit');
+  });
   const idx = stageNames.indexOf(stage);
-  if (idx >= 0) document.querySelectorAll('.stage-card')[idx].classList.add('active');
+  if (idx >= 0) cards[idx].classList.add('active-' + stage);
   setTimeout(() => el.classList.remove('highlighted'), 2500);
 }
 

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Architecture — Knowledgebase.business</title>
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 40px 24px 80px;
+  }
+  .doc { max-width: 740px; margin: 0 auto; }
+
+  .doc-header {
+    border-bottom: 2px solid var(--forest);
+    padding-bottom: 20px;
+    margin-bottom: 36px;
+  }
+  .doc-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-size: 28px;
+    font-weight: normal;
+    color: var(--forest-dk);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .doc-meta { font-size: 13px; color: var(--muted); }
+
+  h2 {
+    font-size: 18px;
+    font-weight: normal;
+    color: var(--forest-dk);
+    border-left: 3px solid var(--gold);
+    padding-left: 14px;
+    margin: 36px 0 16px;
+    letter-spacing: -0.01em;
+  }
+  p { margin-bottom: 14px; color: var(--text); }
+
+  /* PROGRAM CARDS */
+  .program-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 8px; }
+  .program-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .program-card-header {
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .program-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .icon-engine { background: var(--forest-lt); }
+  .icon-growth { background: #e8f0fb; }
+  .icon-survive { background: #fff3e0; }
+  .icon-exit { background: #f3e8fb; }
+  .program-header-text h3 {
+    font-size: 17px;
+    font-weight: normal;
+    color: var(--forest-dk);
+    margin-bottom: 3px;
+  }
+  .program-header-text .tagline { font-size: 13px; color: var(--muted); }
+  .program-card-body { padding: 18px 24px; }
+
+  .detail-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px 20px;
+    font-size: 13.5px;
+    margin-bottom: 10px;
+    align-items: baseline;
+  }
+  .detail-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 2px;
+  }
+  .detail-value { color: var(--text); line-height: 1.5; }
+
+  /* PATH DIAGRAM */
+  .path-diagram {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 16px 0 8px;
+  }
+  .path-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .path-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .path-box {
+    background: var(--forest);
+    color: white;
+    font-size: 13px;
+    font-family: Georgia, serif;
+    padding: 8px 18px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .path-box.coming {
+    background: transparent;
+    border: 1.5px dashed var(--border);
+    color: var(--muted);
+  }
+  .path-note { font-size: 11px; color: var(--muted); text-align: center; }
+  .path-arrow { font-size: 18px; color: var(--muted); flex-shrink: 0; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-right: 4px;
+  }
+  .badge-green { background: var(--forest-lt); color: var(--forest); }
+  .badge-blue { background: #e8f0fb; color: #1a4a8a; }
+  .badge-amber { background: #fff3e0; color: #7a4a00; }
+  .badge-purple { background: #f3e8fb; color: #5a1a8a; }
+
+  /* ACQUISITION TABLE */
+  .acq-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 12px; }
+  .acq-table th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: normal;
+    padding: 6px 12px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .acq-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .acq-table tr:last-child td { border-bottom: none; }
+  .acq-table td:first-child { font-family: Georgia, serif; color: var(--forest-dk); white-space: nowrap; }
+
+  /* KEY DECISIONS */
+  .decision-box {
+    background: var(--forest-dk);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-top: 16px;
+  }
+  .decision-box h3 {
+    font-size: 15px;
+    font-weight: normal;
+    color: white;
+    margin-bottom: 16px;
+    letter-spacing: 0.01em;
+  }
+  .decision-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .decision-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: Georgia, serif;
+  }
+  .decision-text { font-size: 13.5px; color: rgba(255,255,255,0.8); line-height: 1.55; }
+  .decision-text strong { color: white; font-weight: normal; font-family: Georgia, serif; }
+
+  .doc-footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  @media print {
+    body { background: white; padding: 20px; }
+    .program-card, .path-diagram { box-shadow: none; }
+  }
+  @media (max-width: 600px) {
+    .detail-row { grid-template-columns: 1fr; gap: 2px; }
+    .path-row { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">Strategic reference — Knowledgebase.business</div>
+    <div class="doc-title">Program Architecture</div>
+    <div class="doc-meta">Decided: 25 May 2026 &nbsp;·&nbsp; Roy West &nbsp;·&nbsp; For Evernote reference</div>
+  </div>
+
+  <h2>The core insight</h2>
+  <p>Knowledgebase.business is not one program. It is three distinct programs sharing a common foundation. Each has a different entry trigger, a different acquisition channel, and a different commercial mechanism. Treating them as a single linear journey was the wrong model.</p>
+  <p>The old model assumed every client started at Stage 1 and worked through to Stage 5. The new model recognises that business owners enter at the stage they actually need — and some stages are not upgrades at all, they are separate programs.</p>
+
+  <h2>The three programs</h2>
+  <div class="program-grid">
+
+    <!-- ENGINE -->
+    <div class="program-card">
+      <div class="program-card-header">
+        <div class="program-icon icon-engine">⚙️</div>
+        <div class="program-header-text">
+          <h3>The Knowledge Engine</h3>
+          <div class="tagline">Foundation — included with every account, every program</div>
+        </div>
+      </div>
+      <div class="program-card-body">
+        <div class="detail-row">
+          <div class="detail-label">What it is</div>
+          <div class="detail-value">The operational core — process library, operations toolkit, transaction coding assistant, chart of accounts checker, strategy and decision audit, sale readiness assessment, holiday calendar, performance review cycle, milestone tracker.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Who gets it</div>
+          <div class="detail-value">Every client, regardless of which program they entered through. It is not a stage — it is the platform.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Entry</div>
+          <div class="detail-value">Automatic on signup.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GROWTH PATH -->
+    <div class="program-card">
+      <div class="program-card-header">
+        <div class="program-icon icon-growth">📈</div>
+        <div class="program-header-text">
+          <h3>The Growth Path</h3>
+          <div class="tagline">Start → Build → Scale &nbsp;·&nbsp; Sequential, milestone-based</div>
+        </div>
+      </div>
+      <div class="program-card-body">
+        <div class="detail-row">
+          <div class="detail-label">What it is</div>
+          <div class="detail-value">The linear upgrade path for ambitious business owners who want to grow systematically. Each stage builds on the previous. Roy's published books anchor each stage.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">The path</div>
+          <div class="detail-value">
+            <div class="path-diagram">
+              <div class="path-row">
+                <div class="path-node">
+                  <div class="path-box coming">🌱 Start</div>
+                  <div class="path-note">Coming soon</div>
+                </div>
+                <div class="path-arrow">→</div>
+                <div class="path-node">
+                  <div class="path-box">📘 Build</div>
+                  <div class="path-note">Available now</div>
+                </div>
+                <div class="path-arrow">→</div>
+                <div class="path-node">
+                  <div class="path-box coming">📈 Scale</div>
+                  <div class="path-note">Coming soon</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Entry points</div>
+          <div class="detail-value">Start at Start (new businesses), or self-select directly into Scale (established businesses already at the ceiling who want to break through). Scale is both the destination of the path and a direct entry for ambitious established businesses.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Unlock mechanism</div>
+          <div class="detail-value">Earn free through milestones, or buy immediately at $297 per stage. Lifetime bundle $797 covers all five programs.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">CTA on sales page</div>
+          <div class="detail-value"><span class="badge badge-green">Earn through milestones</span> <span class="badge badge-blue">Unlock now — $297</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SURVIVE -->
+    <div class="program-card">
+      <div class="program-card-header">
+        <div class="program-icon icon-survive">⚡</div>
+        <div class="program-header-text">
+          <h3>Survive</h3>
+          <div class="tagline">Crisis landing spot — not an upgrade, not a milestone</div>
+        </div>
+      </div>
+      <div class="program-card-body">
+        <div class="detail-row">
+          <div class="detail-label">What it is</div>
+          <div class="detail-value">A standalone program for business owners in crisis right now. Built from Don't Do Nothing. No milestone logic, no upgrade path — you arrive here because you need it, not because you earned it.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">The positioning</div>
+          <div class="detail-value">Most business coaching pretends crisis doesn't exist. We don't. Survive is the program for business owners who want real answers, not Disneyland optimism. Roy has been there. The book exists because he lived it. That's the differentiator.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Entry trigger</div>
+          <div class="detail-value">A business owner in crisis — cash pressure, key person lost, client disaster, revenue collapse. They find us because they're searching for someone who gets it.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Entry mechanism</div>
+          <div class="detail-value">Direct. Immediate. No milestones. No waiting. If you need it, you get it now.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">CTA on sales page</div>
+          <div class="detail-value"><span class="badge badge-amber">Get access now</span> — no milestone language anywhere on this section.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXIT -->
+    <div class="program-card">
+      <div class="program-card-header">
+        <div class="program-icon icon-exit">🏁</div>
+        <div class="program-header-text">
+          <h3>Exit</h3>
+          <div class="tagline">New program on application — not an upgrade, not a buy button</div>
+        </div>
+      </div>
+      <div class="program-card-body">
+        <div class="detail-row">
+          <div class="detail-label">What it is</div>
+          <div class="detail-value">A dedicated sale preparation program entered by choice, not by achievement. The decision to sell is a separate moment in a business owner's life — it warrants a conversation with Roy, not a checkout flow.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Entry trigger</div>
+          <div class="detail-value">The business owner decides they want to prepare for sale. Could happen at any point — a client mid-Build, a client who has just joined, or a business owner referred by a broker.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Entry mechanism</div>
+          <div class="detail-value">Application-based. Talk to Roy. No automated buy button — the first step is a conversation that scopes the engagement properly.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Primary acquisition channel</div>
+          <div class="detail-value">Business brokers. Brokers refer vendors who need to get sale-ready. The client joins Exit, prepares their business properly, and the broker ends up with a better-prepared, higher-value listing. Both sides win. This is a big push channel — brokers should be actively recruited as referral partners.</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">CTA on sales page</div>
+          <div class="detail-value"><span class="badge badge-purple">Talk to Roy about Exit →</span> — mailto link, no price displayed.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2>Acquisition channels by program</h2>
+  <table class="acq-table">
+    <thead>
+      <tr>
+        <th>Program</th>
+        <th>Primary channel</th>
+        <th>Secondary channel</th>
+        <th>What they're searching for</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Growth Path</td>
+        <td>Direct — KB marketing, LinkedIn, word of mouth</td>
+        <td>Practice Smarts alumni transitioning to self-serve</td>
+        <td>How to grow my business, business systems, strategic planning</td>
+      </tr>
+      <tr>
+        <td>Survive</td>
+        <td>Direct search — business owners in crisis</td>
+        <td>Don't Do Nothing readers</td>
+        <td>Business in trouble, cash flow crisis, what to do when business is failing</td>
+      </tr>
+      <tr>
+        <td>Exit</td>
+        <td>Business broker referrals</td>
+        <td>Direct — business owners who have decided to sell</td>
+        <td>How to prepare my business for sale, increase business value before selling</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>What this is not</h2>
+  <p>Survive is not something you upgrade to. A business in crisis does not need to earn access through milestones. The milestone language anywhere near the Survive section undermines the positioning entirely.</p>
+  <p>Exit is not something you advance to. No one completes their Build milestones and graduates to Exit. The decision to sell is separate from the journey of building. A business owner can enter Exit on day one if they have already decided they want to sell — the Growth Path is irrelevant to that decision.</p>
+  <p>Scale is not only a destination. An established business that has never been on the Growth Path can enter directly at Scale. The ambition is the entry trigger, not the prior stages.</p>
+
+  <div class="decision-box">
+    <h3>Key decisions made — 25 May 2026</h3>
+    <div class="decision-item">
+      <div class="decision-num">1</div>
+      <div class="decision-text"><strong>The upgrade path is Start → Build → Scale only.</strong> Sequential, milestone-based, earn or buy. Survive and Exit are not on this path.</div>
+    </div>
+    <div class="decision-item">
+      <div class="decision-num">2</div>
+      <div class="decision-text"><strong>Survive has no milestone language.</strong> Immediate access, direct entry, any stage. CTA is "Get access now" — not "unlock" or "earn".</div>
+    </div>
+    <div class="decision-item">
+      <div class="decision-num">3</div>
+      <div class="decision-text"><strong>Exit has no buy button.</strong> Application-based, conversation with Roy, scoped engagement. CTA is "Talk to Roy about Exit".</div>
+    </div>
+    <div class="decision-item">
+      <div class="decision-num">4</div>
+      <div class="decision-text"><strong>Scale is a dual-entry stage.</strong> Natural destination of the Growth Path AND direct entry for ambitious established businesses.</div>
+    </div>
+    <div class="decision-item">
+      <div class="decision-num">5</div>
+      <div class="decision-text"><strong>Business brokers are the primary Exit acquisition channel.</strong> Active recruitment of broker referral partners is a strategic priority — not an afterthought.</div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span>Knowledgebase.business — Program Architecture</span>
+    <span>Roy West · 25 May 2026</span>
+  </div>
+
+</div>
+</body>
+</html>
