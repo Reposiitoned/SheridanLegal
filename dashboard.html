@@ -13,28 +13,103 @@
   --bg:#f0f5ef; --white:#ffffff; --border:#d4e8d1;
   --text:#1a3d16; --text-muted:#6b9a78; --text-dim:#a8c8b0;
   --green-bg:#eaf4ee; --green:#1a6b45;
+  --sos:#c0392b;
 }
 body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+/* NAV */
 nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:12px 28px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
 .nav-brand { font-family:'Libre Baskerville',serif; font-size:14px; color:var(--gold); }
 .nav-right { display:flex; align-items:center; gap:12px; }
 .nav-member { font-size:12px; color:rgba(255,255,255,0.4); }
 .sign-out-btn { font-size:12px; padding:5px 13px; border:1px solid rgba(255,255,255,0.15); border-radius:5px; background:none; color:rgba(255,255,255,0.5); cursor:pointer; font-family:'DM Sans',sans-serif; }
 .sign-out-btn:hover { color:#fff; border-color:rgba(255,255,255,0.35); }
-.milestone-strip { background:var(--forest); padding:10px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
-.ms-left { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-.ms-badge { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); background:rgba(200,168,75,0.15); border:1px solid var(--gold-dim); border-radius:99px; padding:3px 10px; }
-.ms-text { font-size:13px; color:rgba(255,255,255,0.7); }
-.ms-text strong { color:#fff; font-weight:500; }
-.ms-bar { width:100px; height:4px; background:rgba(255,255,255,0.15); border-radius:99px; overflow:hidden; display:inline-block; vertical-align:middle; margin:0 6px; }
-.ms-fill { height:100%; background:var(--gold); border-radius:99px; width:50%; }
-.ms-right { font-size:12px; color:rgba(255,255,255,0.4); }
+
+/* SOS BUTTON IN NAV */
+.sos-btn { display:flex; align-items:center; gap:7px; background:var(--sos); color:white; border:none; border-radius:6px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; letter-spacing:0.04em; transition:all 0.2s; }
+.sos-btn:hover { background:#a93226; transform:scale(1.03); }
+.sos-signal { width:10px; height:10px; border-radius:50%; background:white; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+/* SOS OVERLAY */
+.sos-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; align-items:flex-start; justify-content:flex-end; }
+.sos-overlay.open { display:flex; }
+.sos-panel { background:var(--white); width:100%; max-width:420px; height:100vh; padding:32px 28px; overflow-y:auto; display:flex; flex-direction:column; gap:20px; }
+.sos-header { display:flex; align-items:center; justify-content:space-between; }
+.sos-title { font-family:'Libre Baskerville',serif; font-size:20px; color:var(--text); }
+.sos-close { background:none; border:none; font-size:22px; cursor:pointer; color:var(--text-muted); }
+.sos-eyebrow { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--sos); margin-bottom:4px; }
+.sos-intro { font-size:14px; color:var(--text-muted); line-height:1.6; }
+.sos-field { display:flex; flex-direction:column; gap:6px; }
+.sos-label { font-size:12px; font-weight:600; color:var(--text); letter-spacing:0.04em; text-transform:uppercase; }
+.sos-field textarea { padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text); resize:vertical; min-height:90px; background:var(--bg); }
+.sos-field textarea:focus { outline:none; border-color:var(--forest); }
+.sos-options { display:flex; flex-direction:column; gap:8px; }
+.sos-option { display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:14px; color:var(--text); transition:all 0.15s; }
+.sos-option:hover { border-color:var(--forest); background:var(--bg); }
+.sos-option.selected { border-color:var(--sos); background:#fff5f5; color:var(--sos); }
+.sos-option input { display:none; }
+.btn-sos-send { background:var(--sos); color:white; border:none; border-radius:8px; padding:13px; font-size:15px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; width:100%; transition:background 0.2s; }
+.btn-sos-send:hover { background:#a93226; }
+.sos-confirm { text-align:center; padding:32px 0; }
+.sos-confirm-icon { font-size:48px; margin-bottom:12px; }
+.sos-confirm-title { font-family:'Libre Baskerville',serif; font-size:18px; color:var(--text); margin-bottom:8px; }
+.sos-confirm-body { font-size:14px; color:var(--text-muted); line-height:1.6; }
+
+/* CONTENT */
 .content { max-width:1000px; margin:0 auto; padding:28px 24px 80px; }
-.layer-label { margin-bottom:12px; margin-top:28px; }
-.layer-label:first-of-type { margin-top:0; }
+
+/* WELCOME SECTION */
+.welcome-section { margin-bottom:32px; }
+.welcome-greeting { font-family:'Libre Baskerville',serif; font-size:22px; color:var(--text); margin-bottom:4px; }
+.welcome-sub { font-size:14px; color:var(--text-muted); margin-bottom:20px; }
+
+.video-card { background:var(--forest-dk); border-radius:12px; overflow:hidden; margin-bottom:8px; }
+.video-placeholder { display:flex; align-items:center; justify-content:center; min-height:220px; cursor:pointer; position:relative; background:linear-gradient(135deg, var(--forest-dk) 0%, #0d2410 100%); }
+.vp-play { width:64px; height:64px; border-radius:50%; background:rgba(200,168,75,0.9); display:flex; align-items:center; justify-content:center; transition:transform 0.2s; }
+.vp-play:hover { transform:scale(1.08); }
+.vp-icon { width:0; height:0; border-style:solid; border-width:12px 0 12px 22px; border-color:transparent transparent transparent #1a3d16; margin-left:4px; }
+.vp-text { position:absolute; bottom:20px; left:24px; }
+.vp-title { font-family:'Libre Baskerville',serif; font-size:16px; color:white; margin-bottom:3px; }
+.vp-sub { font-size:12px; color:rgba(255,255,255,0.45); }
+.vp-badge { display:inline-block; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; background:rgba(200,168,75,0.2); color:var(--gold); padding:3px 10px; border-radius:20px; margin-top:4px; }
+.video-footer { padding:14px 20px; display:flex; align-items:center; justify-content:space-between; }
+.vf-label { font-size:12px; color:rgba(255,255,255,0.45); }
+
+/* 90 DAY SEQUENCE */
+.sequence-section { margin-bottom:32px; }
+.section-header { margin-bottom:16px; }
+.section-tag { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:3px; }
+.section-title { font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:var(--text); }
+.section-sub { font-size:13px; color:var(--text-muted); margin-top:2px; }
+
+.steps-track { display:flex; flex-direction:column; gap:0; }
+.step-item { display:flex; gap:0; position:relative; }
+.step-item:not(:last-child)::before { content:''; position:absolute; left:19px; top:42px; bottom:0; width:2px; background:var(--border); z-index:0; }
+.step-left { display:flex; flex-direction:column; align-items:center; flex-shrink:0; z-index:1; }
+.step-num { width:40px; height:40px; border-radius:50%; background:var(--white); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; color:var(--text-muted); flex-shrink:0; }
+.step-item.active .step-num { background:var(--forest); border-color:var(--forest); color:white; }
+.step-item.done .step-num { background:var(--green-bg); border-color:var(--green); color:var(--green); }
+.step-right { flex:1; padding:8px 0 24px 16px; }
+.step-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:16px 18px; transition:border-color 0.15s; }
+.step-item.active .step-card { border-color:var(--forest); box-shadow:0 2px 10px rgba(45,90,39,0.08); }
+.step-name { font-size:14px; font-weight:600; color:var(--text); margin-bottom:3px; }
+.step-desc { font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px; }
+.step-action { display:inline-flex; align-items:center; gap:6px; background:var(--forest); color:white; font-size:12px; font-weight:600; padding:7px 16px; border-radius:6px; text-decoration:none; cursor:pointer; border:none; font-family:'DM Sans',sans-serif; transition:opacity 0.15s; }
+.step-action:hover { opacity:0.85; }
+.step-action.outline { background:transparent; color:var(--forest); border:1px solid var(--forest); }
+.step-action.outline:hover { background:var(--bg); }
+.step-tag { display:inline-block; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; padding:2px 8px; border-radius:20px; }
+.step-tag.start-now { background:rgba(200,168,75,0.15); color:var(--gold); }
+.step-tag.done { background:var(--green-bg); color:var(--green); }
+
+/* LAYER LABELS */
+.layer-label { margin-bottom:12px; margin-top:32px; }
 .layer-tag { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin-bottom:3px; }
 .layer-name { font-family:'Libre Baskerville',serif; font-size:16px; font-weight:700; color:var(--text); }
 .layer-sub { font-size:13px; color:var(--text-muted); margin-top:2px; }
+
+/* ENGINE GRID */
 .engine-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px; }
 .area-card { background:var(--white); border:1px solid var(--border); border-radius:10px; overflow:hidden; cursor:pointer; transition:border-color .15s; }
 .area-card:hover { border-color:var(--forest-lt); }
@@ -60,69 +135,243 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
 .tool-row-name { font-size:13px; font-weight:500; color:var(--text); }
 .tool-row-desc { font-size:11px; color:var(--text-muted); margin-top:1px; line-height:1.4; }
 .tool-row-arrow { margin-left:auto; font-size:13px; color:var(--text-dim); }
+
+/* INDUSTRY */
 .industry-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:18px 20px; display:flex; align-items:center; gap:16px; margin-bottom:10px; }
 .industry-lock { width:44px; height:44px; border-radius:10px; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
 .industry-name { font-size:14px; font-weight:500; color:var(--text); margin-bottom:3px; }
 .industry-sub { font-size:12px; color:var(--text-muted); line-height:1.5; }
 .industry-badge { margin-left:auto; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; padding:3px 10px; border-radius:99px; background:var(--bg); border:1px solid var(--border); color:var(--text-muted); flex-shrink:0; }
-.scale-teaser { background:var(--white); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:10px; }
-.scale-teaser-header { background:var(--forest-dk); padding:18px 22px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
-.st-left { display:flex; align-items:flex-start; gap:12px; }
-.st-icon { font-size:20px; flex-shrink:0; }
-.st-title { font-size:14px; font-weight:500; color:#fff; margin-bottom:3px; }
-.st-sub { font-size:12px; color:rgba(255,255,255,0.45); line-height:1.5; }
-.st-meta { display:flex; align-items:center; gap:10px; margin-top:7px; flex-wrap:wrap; }
-.st-strike { font-size:11px; color:rgba(255,255,255,0.3); text-decoration:line-through; }
-.st-pill { font-size:11px; font-weight:500; color:var(--gold); background:rgba(200,168,75,0.15); padding:2px 10px; border-radius:99px; }
-.btn-scale { flex-shrink:0; padding:11px 22px; border:none; border-radius:7px; background:var(--gold); color:var(--forest-dk); font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; text-decoration:none; display:inline-block; transition:opacity .15s; }
-.btn-scale:hover { opacity:.85; }
-.stage-icons { padding:14px 22px; display:grid; grid-template-columns:repeat(5,1fr); gap:8px; background:#fafcfa; }
-.stage-icon-card { text-align:center; padding:10px 6px; border:1px solid var(--border); border-radius:7px; background:var(--white); text-decoration:none; transition:border-color .15s; display:block; }
-.stage-icon-card:hover { border-color:var(--forest); }
-.stage-icon-card.coming { opacity:.65; }
-.si-emoji { font-size:18px; margin-bottom:4px; }
-.si-stage { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); margin-bottom:2px; }
-.si-name { font-size:12px; font-weight:500; color:var(--text); }
-.si-status { font-size:10px; color:var(--green); margin-top:2px; }
-.si-coming { font-size:10px; color:var(--text-muted); margin-top:2px; }
+
+/* PROGRAMS */
+.programs-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:10px; }
+.prog-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:14px 10px; text-align:center; text-decoration:none; display:block; transition:border-color 0.15s; }
+.prog-card:hover { border-color:var(--forest); }
+.prog-card.coming { opacity:0.55; }
+.prog-emoji { font-size:22px; margin-bottom:6px; }
+.prog-stage { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); margin-bottom:3px; }
+.prog-name { font-size:13px; font-weight:500; color:var(--text); margin-bottom:4px; }
+.prog-price { font-size:11px; color:var(--green); font-weight:500; }
+.prog-coming { font-size:10px; color:var(--text-muted); }
+
+/* SUPPORT */
 .support-bar { background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:28px; }
 .support-text { font-size:13px; color:var(--text-muted); }
 .support-text strong { color:var(--text); font-weight:500; }
 .support-link { font-size:13px; color:var(--forest); text-decoration:none; }
 .support-link:hover { color:var(--gold); }
+
+.upgrade-box { background:var(--forest-dk); border-radius:12px; padding:24px 28px; display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:28px; flex-wrap:wrap; }
+.upgrade-left { flex:1; min-width:220px; }
+.upgrade-title { font-family:'Libre Baskerville',serif; font-size:17px; color:white; margin-bottom:6px; }
+.upgrade-body { font-size:13px; color:rgba(255,255,255,0.55); line-height:1.6; }
+.btn-upgrade { flex-shrink:0; background:var(--gold); color:var(--forest-dk); font-size:13px; font-weight:600; padding:11px 22px; border-radius:7px; text-decoration:none; white-space:nowrap; font-family:'DM Sans',sans-serif; }
+.btn-upgrade:hover { opacity:0.88; }
+
+
+.tab-row { display:flex; gap:0; border-bottom:1px solid var(--border); padding:0 14px; background:#fafcfa; }
+.tab-btn { font-size:12px; font-weight:600; color:var(--text-muted); padding:10px 14px; cursor:pointer; border-bottom:2px solid transparent; background:none; border-top:none; border-left:none; border-right:none; font-family:'DM Sans',sans-serif; transition:all 0.15s; }
+.tab-btn.active { color:var(--forest); border-bottom-color:var(--forest); }
+.tab-content { display:none; padding:14px; background:#fafcfa; }
+.tab-content.active { display:block; }
+.gs-step { display:flex; gap:12px; margin-bottom:14px; align-items:flex-start; }
+.gs-step:last-child { margin-bottom:0; }
+.gs-week { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); background:rgba(200,168,75,0.12); border-radius:20px; padding:3px 8px; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+.gs-text { font-size:12px; color:var(--text-muted); line-height:1.55; }
+.gs-link { display:inline-flex; align-items:center; gap:4px; font-size:11px; color:var(--forest); text-decoration:none; margin-top:4px; font-weight:500; }
+.gs-link:hover { color:var(--gold); }
+
 @media(max-width:700px) {
   .engine-grid { grid-template-columns:1fr 1fr; }
-  .stage-icons { grid-template-columns:repeat(3,1fr); }
+  .programs-grid { grid-template-columns:repeat(3,1fr); }
   .content { padding:20px 16px 60px; }
-  nav, .milestone-strip { padding-left:16px; padding-right:16px; }
+  nav { padding-left:16px; padding-right:16px; }
+  .sos-panel { max-width:100%; }
 }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="nav-brand">Knowledgebase.business</div>
   <div class="nav-right">
     <span class="nav-member" id="member-email"></span>
+    <button class="sos-btn" onclick="openSOS()">
+      <div class="sos-signal"></div>
+      SOS
+    </button>
     <button class="sign-out-btn" onclick="signOut()">Sign out</button>
   </div>
 </nav>
 
-<div class="milestone-strip">
-  <div class="ms-left">
-    <span class="ms-badge">Milestone 2</span>
-    <span class="ms-text"><strong>Strategic clarity</strong> — 3 of 6 tasks complete <div class="ms-bar"><div class="ms-fill"></div></div> 50%</span>
+<!-- SOS PANEL -->
+<div class="sos-overlay" id="sos-overlay" onclick="closeSOS(event)">
+  <div class="sos-panel">
+    <div class="sos-header">
+      <div>
+        <div class="sos-eyebrow">🚨 SOS — Help is coming</div>
+        <div class="sos-title">Tell us what's going on</div>
+      </div>
+      <button class="sos-close" onclick="closeSOS()">✕</button>
+    </div>
+    <div class="sos-intro">Roy will be notified immediately. Tell us what's happening and we'll be in touch as fast as we can.</div>
+
+    <div id="sos-form">
+      <div class="sos-field">
+        <div class="sos-label">What's going on?</div>
+        <textarea id="sos-issue" placeholder="Describe what's happening in your business right now — as much or as little as you like..."></textarea>
+      </div>
+
+      <div class="sos-field">
+        <div class="sos-label">Your name & phone number</div>
+        <textarea id="sos-contact-details" placeholder="e.g. Sarah Jones — 0412 345 678" style="min-height:48px;resize:none;"></textarea>
+      </div>
+
+      <div class="sos-field">
+        <div class="sos-label">How urgent is this?</div>
+        <div class="sos-options">
+          <label class="sos-option" id="opt-today" onclick="selectUrgency('today')">
+            <input type="radio" name="urgency" value="today"> 🔴 &nbsp;Today — I need help now
+          </label>
+          <label class="sos-option" id="opt-week" onclick="selectUrgency('week')">
+            <input type="radio" name="urgency" value="week"> 🟡 &nbsp;This week — it's pressing
+          </label>
+          <label class="sos-option" id="opt-month" onclick="selectUrgency('month')">
+            <input type="radio" name="urgency" value="month"> 🟢 &nbsp;This month — important but not urgent
+          </label>
+        </div>
+      </div>
+
+      <div class="sos-field">
+        <div class="sos-label">Best way to reach you?</div>
+        <div class="sos-options">
+          <label class="sos-option" id="opt-phone" onclick="selectContact('phone')">
+            <input type="radio" name="contact" value="phone"> 📞 &nbsp;Call me
+          </label>
+          <label class="sos-option" id="opt-email" onclick="selectContact('email')">
+            <input type="radio" name="contact" value="email"> 📧 &nbsp;Email me
+          </label>
+          <label class="sos-option" id="opt-either" onclick="selectContact('either')">
+            <input type="radio" name="contact" value="either"> 👍 &nbsp;Either — whatever's fastest
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-sos-send" onclick="sendSOS()">Send SOS to Roy →</button>
+    </div>
+
+    <div id="sos-confirm" style="display:none;">
+      <div class="sos-confirm">
+        <div class="sos-confirm-icon">🦇</div>
+        <div class="sos-confirm-title">Roy has been notified.</div>
+        <div class="sos-confirm-body">Your SOS has been sent. Expect to hear back within a few hours — sooner if it's urgent. You're not in this alone.</div>
+      </div>
+    </div>
   </div>
-  <div class="ms-right">~42 days to next unlock</div>
 </div>
 
+<!-- CONTENT -->
 <div class="content">
+
+  <!-- WELCOME -->
+  <div class="welcome-section">
+    <div class="welcome-greeting">Welcome to your Knowledgebase</div>
+    <div class="welcome-sub">Here's everything you need — watch our introduction, then follow your 90-day getting started sequence below.</div>
+
+    <div class="video-card">
+      <div class="video-placeholder" onclick="playVideo()">
+        <div class="vp-play"><div class="vp-icon"></div></div>
+        <div class="vp-text">
+          <div class="vp-title">Welcome to Knowledgebase.business — Roy West</div>
+          <div class="vp-sub">What's here, where to start, and what the next 90 days looks like</div>
+          <div class="vp-badge">Coming soon on Vimeo · approx. 5 min</div>
+        </div>
+      </div>
+      <div class="video-footer">
+        <div class="vf-label">Roy walks you through your knowledge base and your first 90 days</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 90 DAY SEQUENCE -->
+  <div class="sequence-section">
+    <div class="section-header">
+      <div class="section-tag">Your first 90 days</div>
+      <div class="section-title">Getting started — follow these four steps</div>
+      <div class="section-sub">Most people start here. Detail your frustrations, better understand how work flows through your business, then start mapping your processes and share the results with your team.</div>
+    </div>
+
+    <div class="steps-track">
+
+      <div class="step-item active">
+        <div class="step-left">
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-right">
+          <div class="step-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div class="step-name">😤 Frustration log</div>
+              <span class="step-tag start-now">Start here</span>
+            </div>
+            <div class="step-desc">Get everything out of your head and onto the page. What's slowing you down? What breaks every week? What do you wish worked differently? This is the raw material everything else is built from.</div>
+            <a href="/frustration-log.html" class="step-action">Open frustration log →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-left">
+          <div class="step-num">2</div>
+        </div>
+        <div class="step-right">
+          <div class="step-card">
+            <div class="step-name" style="margin-bottom:6px;">🗺️ Mind map your business</div>
+            <div class="step-desc">Turn your frustrations into a picture of how your business actually runs. A mind map makes the invisible visible — you'll see connections, gaps, and priorities you couldn't see before. We use Coggle for this.</div>
+            <a href="https://coggle.it" target="_blank" class="step-action outline">Open Coggle →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-left">
+          <div class="step-num">3</div>
+        </div>
+        <div class="step-right">
+          <div class="step-card">
+            <div class="step-name" style="margin-bottom:6px;">📝 Start documenting your processes</div>
+            <div class="step-desc">Take what came out of your mind map and start writing it down properly. One process at a time. Use the process mapper to structure each one — steps, ownership, systems, and handoffs. This is where your knowledge base gets built.</div>
+            <a href="/process-mapper.html" class="step-action outline">Open process mapper →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-left">
+          <div class="step-num">4</div>
+        </div>
+        <div class="step-right">
+          <div class="step-card">
+            <div class="step-name" style="margin-bottom:6px;">🚀 Get your team using it</div>
+            <div class="step-desc">Your knowledge base only delivers value when your team uses it every day. Introduce them to the tools, share the relevant processes, and make it the place everyone goes first when they have a question. That's when work stops feeling hard.</div>
+            <a href="/platform-process-guide.html" class="step-action outline">Read the setup guide →</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- LAYER 1 — THE ENGINE -->
   <div class="layer-label">
     <div class="layer-tag">Layer 1</div>
     <div class="layer-name">The Engine</div>
     <div class="layer-sub">Six areas of your business — everything your team needs from day one. Click any area to see your tools.</div>
+  </div>
+
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:14px;border-left:3px solid var(--gold);">
+    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">One plan. One action. One result.</div>
+    <div style="font-size:13px;color:var(--text-muted);line-height:1.65;">The biggest mistake most business owners make is starting everything at once. A new system here, a new process there, a tool for this, a meeting about that. Six weeks later nothing is finished and the business is more complicated than when you started.<br><br>Pick one area. Work through the steps. Finish it before you move to the next one. When your team is ready to take on more, add another area. Not before.</div>
   </div>
 
   <div class="engine-grid">
@@ -133,17 +382,31 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
         <div><div class="area-title">Marketing</div><div class="area-count">2 tools active</div></div>
         <div class="area-chevron">▾</div>
       </div>
-      <div class="area-tools">
-        <a href="/script-library.html" class="tool-row">
-          <div class="tool-row-icon ic-marketing">💬</div>
-          <div><div class="tool-row-name">Script library</div><div class="tool-row-desc">Word-for-word scripts for phone, enquiries, difficult conversations.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/contact-manager.html" class="tool-row">
-          <div class="tool-row-icon ic-marketing">👤</div>
-          <div><div class="tool-row-name">Contact manager</div><div class="tool-row-desc">Lite CRM — clients, referral partners, suppliers.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
+      <div class="area-tools" style="padding:0;">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab(event,'tools-marketing','gs-marketing')">Tools</button>
+          <button class="tab-btn" onclick="switchTab(event,'gs-marketing','tools-marketing')">Getting started</button>
+        </div>
+        <div class="tab-content active" id="tools-marketing" style="padding:12px 14px;">
+          <a href="/script-library.html" class="tool-row">
+            <div class="tool-row-icon ic-marketing">💬</div>
+            <div><div class="tool-row-name">Script library</div><div class="tool-row-desc">Word-for-word scripts for phone, enquiries, difficult conversations.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/contact-manager.html" class="tool-row">
+            <div class="tool-row-icon ic-marketing">👤</div>
+            <div><div class="tool-row-name">Contact manager</div><div class="tool-row-desc">Lite CRM — clients, referral partners, suppliers.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+        </div>
+        <div class="tab-content" id="gs-marketing">
+          <div class="gs-step"><span class="gs-week">Wk 1–2</span><div class="gs-text">Write down who your ideal client actually is. Not who you'd like — who actually buys from you and refers you.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 3–4</span><div class="gs-text">Document how a new enquiry currently gets handled. From first contact to first meeting.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 5–6</span><div class="gs-text">Build your script library — phone scripts, email responses, difficult conversations.<br><a href="/script-library.html" class="gs-link">Open script library</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 7–8</span><div class="gs-text">Map your referral sources. Who sends you work and what do you do to stay front of mind?</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 9–10</span><div class="gs-text">Review your pricing. Does it reflect the value you deliver?</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 11–13</span><div class="gs-text">Build a simple 90-day marketing plan — three channels, three messages, one goal.</div></div>
+        </div>
       </div>
     </div>
 
@@ -153,12 +416,26 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
         <div><div class="area-title">Sales</div><div class="area-count">1 tool active</div></div>
         <div class="area-chevron">▾</div>
       </div>
-      <div class="area-tools">
-        <a href="/sale-readiness-assessment.html" class="tool-row">
-          <div class="tool-row-icon ic-sales">📊</div>
-          <div><div class="tool-row-name">Sale readiness assessment</div><div class="tool-row-desc">Processes mapped, risks identified, value demonstrated.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
+      <div class="area-tools" style="padding:0;">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab(event,'tools-sales','gs-sales')">Tools</button>
+          <button class="tab-btn" onclick="switchTab(event,'gs-sales','tools-sales')">Getting started</button>
+        </div>
+        <div class="tab-content active" id="tools-sales" style="padding:12px 14px;">
+          <a href="/sale-readiness-assessment.html" class="tool-row">
+            <div class="tool-row-icon ic-sales">📊</div>
+            <div><div class="tool-row-name">Sale readiness assessment</div><div class="tool-row-desc">Processes mapped, risks identified, value demonstrated.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+        </div>
+        <div class="tab-content" id="gs-sales">
+          <div class="gs-step"><span class="gs-week">Wk 1–2</span><div class="gs-text">Map your current sales process — from first conversation to signed client. Write down every step as it actually happens, not how it should happen.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 3–4</span><div class="gs-text">Identify where you're losing deals. At what point do prospects go quiet? That's where the process is broken.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 5–6</span><div class="gs-text">Document your follow-up process. How many times do you follow up, how, and when? Most businesses lose sales here.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 7–8</span><div class="gs-text">Build your proposal or quote template — consistent, professional, and easy to produce every time.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 9–10</span><div class="gs-text">Define what a good client looks like and what a bad one costs you. Start saying no to the wrong ones.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 11–13</span><div class="gs-text">Set a simple sales target and a weekly number to hit it. Revenue doesn't manage itself.</div></div>
+        </div>
       </div>
     </div>
 
@@ -168,17 +445,31 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
         <div><div class="area-title">Delivery</div><div class="area-count">2 tools active</div></div>
         <div class="area-chevron">▾</div>
       </div>
-      <div class="area-tools">
-        <a href="/process-mapper.html" class="tool-row">
-          <div class="tool-row-icon ic-delivery">🗺️</div>
-          <div><div class="tool-row-name">Process mapper</div><div class="tool-row-desc">The foundation tool. Map all processes across six areas. Start here.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/process-form.html" class="tool-row">
-          <div class="tool-row-icon ic-delivery">📝</div>
-          <div><div class="tool-row-name">Process form</div><div class="tool-row-desc">Document each process — steps, ownership, systems, handoffs.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
+      <div class="area-tools" style="padding:0;">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab(event,'tools-delivery','gs-delivery')">Tools</button>
+          <button class="tab-btn" onclick="switchTab(event,'gs-delivery','tools-delivery')">Getting started</button>
+        </div>
+        <div class="tab-content active" id="tools-delivery" style="padding:12px 14px;">
+          <a href="/process-mapper.html" class="tool-row">
+            <div class="tool-row-icon ic-delivery">🗺️</div>
+            <div><div class="tool-row-name">Process mapper</div><div class="tool-row-desc">The foundation tool. Map all processes across six areas. Start here.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/process-form.html" class="tool-row">
+            <div class="tool-row-icon ic-delivery">📝</div>
+            <div><div class="tool-row-name">Process form</div><div class="tool-row-desc">Document each process — steps, ownership, systems, handoffs.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+        </div>
+        <div class="tab-content" id="gs-delivery">
+          <div class="gs-step"><span class="gs-week">Wk 1–2</span><div class="gs-text">List every service or product you deliver — all of them, including the occasional ones.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 3–4</span><div class="gs-text">Pick your most important delivery process and document it properly.<br><a href="/process-form.html" class="gs-link">Open process form</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 5–6</span><div class="gs-text">Identify the handoff points — where does work move between people? That's where things get dropped.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 7–8</span><div class="gs-text">Document your quality check process. How do you know the work is right before it leaves?</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 9–10</span><div class="gs-text">Build a client communication template — how you update clients, how often, and who owns it.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 11–13</span><div class="gs-text">Review your delivery capacity. Can you deliver what you're selling without burning people out?</div></div>
+        </div>
       </div>
     </div>
 
@@ -188,22 +479,36 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
         <div><div class="area-title">Admin</div><div class="area-count">3 tools active</div></div>
         <div class="area-chevron">▾</div>
       </div>
-      <div class="area-tools">
-        <a href="/transaction-coding-assistant.html" class="tool-row">
-          <div class="tool-row-icon ic-admin">🧾</div>
-          <div><div class="tool-row-name">Transaction coding assistant</div><div class="tool-row-desc">Code receipts by typing, photo, or PDF.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/myob-coa-checker.html" class="tool-row">
-          <div class="tool-row-icon ic-admin">📋</div>
-          <div><div class="tool-row-name">COA checker</div><div class="tool-row-desc">Audit your chart of accounts for GST errors and duplicates.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/holiday-calendar.html" class="tool-row">
-          <div class="tool-row-icon ic-admin">📅</div>
-          <div><div class="tool-row-name">Holiday calendar</div><div class="tool-row-desc">All Australian states and territories. Team leave tracking.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
+      <div class="area-tools" style="padding:0;">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab(event,'tools-admin','gs-admin')">Tools</button>
+          <button class="tab-btn" onclick="switchTab(event,'gs-admin','tools-admin')">Getting started</button>
+        </div>
+        <div class="tab-content active" id="tools-admin" style="padding:12px 14px;">
+          <a href="/transaction-coding-assistant.html" class="tool-row">
+            <div class="tool-row-icon ic-admin">🧾</div>
+            <div><div class="tool-row-name">Transaction coding assistant</div><div class="tool-row-desc">Code receipts by typing, photo, or PDF.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/myob-coa-checker.html" class="tool-row">
+            <div class="tool-row-icon ic-admin">📋</div>
+            <div><div class="tool-row-name">COA checker</div><div class="tool-row-desc">Audit your chart of accounts for GST errors and duplicates.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/holiday-calendar.html" class="tool-row">
+            <div class="tool-row-icon ic-admin">📅</div>
+            <div><div class="tool-row-name">Holiday calendar</div><div class="tool-row-desc">All Australian states and territories. Team leave tracking.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+        </div>
+        <div class="tab-content" id="gs-admin">
+          <div class="gs-step"><span class="gs-week">Wk 1–2</span><div class="gs-text">Review your chart of accounts. Are things coded consistently? Run the COA checker now.<br><a href="/myob-coa-checker.html" class="gs-link">Open COA checker</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 3–4</span><div class="gs-text">Document your invoicing process — who raises it, when, how, and what happens when it's not paid.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 5–6</span><div class="gs-text">Set up your holiday and leave calendar. Get every team member's leave visible in one place.<br><a href="/holiday-calendar.html" class="gs-link">Open holiday calendar</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 7–8</span><div class="gs-text">Document your payroll process — every step, every deadline, who owns it.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 9–10</span><div class="gs-text">Map your compliance obligations — licences, registrations, renewals. Nothing should be a surprise.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 11–13</span><div class="gs-text">Build a simple cash flow tracker. Know your numbers every week, not just at tax time.</div></div>
+        </div>
       </div>
     </div>
 
@@ -213,22 +518,36 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
         <div><div class="area-title">Management</div><div class="area-count">3 tools active</div></div>
         <div class="area-chevron">▾</div>
       </div>
-      <div class="area-tools">
-        <a href="/daily-planner.html" class="tool-row">
-          <div class="tool-row-icon ic-management">🗓️</div>
-          <div><div class="tool-row-name">Daily planner</div><div class="tool-row-desc">Three priorities, a task list, and space for notes.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/review-cycle.html" class="tool-row">
-          <div class="tool-row-icon ic-management">🔄</div>
-          <div><div class="tool-row-name">Review cycle</div><div class="tool-row-desc">Fortnightly pulse and quarterly deep review.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/strategy-decision-audit.html" class="tool-row">
-          <div class="tool-row-icon ic-management">🧭</div>
-          <div><div class="tool-row-name">Strategy and decision audit</div><div class="tool-row-desc">Where is this business going and how does it decide?</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
+      <div class="area-tools" style="padding:0;">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab(event,'tools-management','gs-management')">Tools</button>
+          <button class="tab-btn" onclick="switchTab(event,'gs-management','tools-management')">Getting started</button>
+        </div>
+        <div class="tab-content active" id="tools-management" style="padding:12px 14px;">
+          <a href="/daily-planner.html" class="tool-row">
+            <div class="tool-row-icon ic-management">🗓️</div>
+            <div><div class="tool-row-name">Daily planner</div><div class="tool-row-desc">Three priorities, a task list, and space for notes.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/review-cycle.html" class="tool-row">
+            <div class="tool-row-icon ic-management">🔄</div>
+            <div><div class="tool-row-name">Review cycle</div><div class="tool-row-desc">Fortnightly pulse and quarterly deep review.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/strategy-decision-audit.html" class="tool-row">
+            <div class="tool-row-icon ic-management">🧭</div>
+            <div><div class="tool-row-name">Strategy and decision audit</div><div class="tool-row-desc">Where is this business going and how does it decide?</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+        </div>
+        <div class="tab-content" id="gs-management">
+          <div class="gs-step"><span class="gs-week">Wk 1–2</span><div class="gs-text">Run the strategy and decision audit. Understand where the business is and how decisions actually get made.<br><a href="/strategy-decision-audit.html" class="gs-link">Open strategy audit</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 3–4</span><div class="gs-text">Document your weekly rhythm — what meetings happen, who attends, what gets decided.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 5–6</span><div class="gs-text">Set your 90-day priorities. Three things that matter most. Everything else is secondary.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 7–8</span><div class="gs-text">Build your daily planner habit. Start every day with three priorities, not an inbox.<br><a href="/daily-planner.html" class="gs-link">Open daily planner</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 9–10</span><div class="gs-text">Define how performance is measured in your business. What does good look like?</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 11–13</span><div class="gs-text">Run your first quarterly review. What worked, what didn't, what changes next quarter.<br><a href="/review-cycle.html" class="gs-link">Open review cycle</a></div></div>
+        </div>
       </div>
     </div>
 
@@ -238,27 +557,41 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
         <div><div class="area-title">People</div><div class="area-count">4 tools active</div></div>
         <div class="area-chevron">▾</div>
       </div>
-      <div class="area-tools">
-        <a href="/task-queue.html" class="tool-row">
-          <div class="tool-row-icon ic-people">✅</div>
-          <div><div class="tool-row-name">Task queue</div><div class="tool-row-desc">Assign tasks, set daily capacity, keep everyone moving.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/frustration-log.html" class="tool-row">
-          <div class="tool-row-icon ic-people">😤</div>
-          <div><div class="tool-row-name">Frustration log</div><div class="tool-row-desc">Team logs what slows them down. We turn it into solutions.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/change-log.html" class="tool-row">
-          <div class="tool-row-icon ic-people">📈</div>
-          <div><div class="tool-row-name">Change log</div><div class="tool-row-desc">Every improvement recorded — before, after, and what it saved.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
-        <a href="/quarterly-update.html" class="tool-row">
-          <div class="tool-row-icon ic-people">📣</div>
-          <div><div class="tool-row-name">Quarterly update</div><div class="tool-row-desc">Build your quarterly progress report for the business owner.</div></div>
-          <div class="tool-row-arrow">→</div>
-        </a>
+      <div class="area-tools" style="padding:0;">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab(event,'tools-people','gs-people')">Tools</button>
+          <button class="tab-btn" onclick="switchTab(event,'gs-people','tools-people')">Getting started</button>
+        </div>
+        <div class="tab-content active" id="tools-people" style="padding:12px 14px;">
+          <a href="/task-queue.html" class="tool-row">
+            <div class="tool-row-icon ic-people">✅</div>
+            <div><div class="tool-row-name">Task queue</div><div class="tool-row-desc">Assign tasks, set daily capacity, keep everyone moving.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/frustration-log.html" class="tool-row">
+            <div class="tool-row-icon ic-people">😤</div>
+            <div><div class="tool-row-name">Frustration log</div><div class="tool-row-desc">Team logs what slows them down. We turn it into solutions.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/change-log.html" class="tool-row">
+            <div class="tool-row-icon ic-people">📈</div>
+            <div><div class="tool-row-name">Change log</div><div class="tool-row-desc">Every improvement recorded — before, after, and what it saved.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+          <a href="/quarterly-update.html" class="tool-row">
+            <div class="tool-row-icon ic-people">📣</div>
+            <div><div class="tool-row-name">Quarterly update</div><div class="tool-row-desc">Build your quarterly progress report for the business owner.</div></div>
+            <div class="tool-row-arrow">→</div>
+          </a>
+        </div>
+        <div class="tab-content" id="gs-people">
+          <div class="gs-step"><span class="gs-week">Wk 1–2</span><div class="gs-text">Mind map every activity in the business. Everything that happens — big, small, daily, occasional. Get it all visible before you try to organise it.<br><a href="https://coggle.it" target="_blank" class="gs-link">Open Coggle</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 3–4</span><div class="gs-text">Document every role — what each person owns and what they're accountable for. Use the mind map to make sure nothing falls through the gaps.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 5–6</span><div class="gs-text">Start the frustration log. Get the team logging what slows them down every day.<br><a href="/frustration-log.html" class="gs-link">Open frustration log</a></div></div>
+          <div class="gs-step"><span class="gs-week">Wk 7–8</span><div class="gs-text">Set up your 1:1 rhythm. Every direct report, fortnightly minimum.</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 9–10</span><div class="gs-text">Document your onboarding process. How does a new person become useful in your business?</div></div>
+          <div class="gs-step"><span class="gs-week">Wk 11–13</span><div class="gs-text">Run your first performance conversation and build a simple people plan — who do you need in the next 12 months and what does it cost?<br><a href="/review-cycle.html" class="gs-link">Open review cycle</a></div></div>
+        </div>
       </div>
     </div>
 
@@ -272,84 +605,135 @@ nav { background:var(--forest-dk); border-bottom:2px solid var(--gold); padding:
   </div>
 
   <div class="industry-card">
-    <div class="industry-lock">🔒</div>
+    <div class="industry-lock">🛠</div>
     <div>
       <div class="industry-name">Industry-specific tools</div>
-      <div class="industry-sub">Your industry tools are configured during your knowledge base onboarding session. Every business type has a different set — built for your specific processes, compliance requirements, and workflows.</div>
+      <div class="industry-sub">Your industry tools are being built and will appear here when they're ready. If you have a specific tool or process in mind, <a href="mailto:hello@knowledgebase.business?subject=Tool suggestion&body=I'd like to suggest a tool for my industry knowledge base." style="color:var(--forest);text-decoration:none;font-weight:500;">let us know</a> — we'll prioritise it.</div>
     </div>
-    <div class="industry-badge">Configured at onboarding</div>
+    <div class="industry-badge" style="background:rgba(200,168,75,0.12);border-color:var(--gold-dim);color:var(--gold);">In progress</div>
   </div>
 
-  <!-- LAYER 3 — SCALE -->
+  <!-- LAYER 3 — PROGRAMS -->
   <div class="layer-label">
     <div class="layer-tag">Layer 3</div>
-    <div class="layer-name">The Scale Layer</div>
-    <div class="layer-sub">Five stages of the business lifecycle — Start, Build, Survive, Scale, and Exit.</div>
+    <div class="layer-name">Your Program</div>
+    <div class="layer-sub">Five stages of the business lifecycle — each a dedicated program built for where you are right now.</div>
   </div>
 
-  <div class="scale-teaser">
-    <div class="scale-teaser-header">
-      <div class="st-left">
-        <div class="st-icon">🏆</div>
-        <div>
-          <div class="st-title">Lifetime access to all five stages — <span style="color:var(--gold);">$797</span></div>
-          <div class="st-sub">Every current section plus Start and Scale when they launch. One payment, locked in forever. The earlier you lock it in, the more valuable it becomes.</div>
-          <div class="st-meta">
-            <div class="st-strike">$1,782 if purchased separately</div>
-            <div class="st-pill">Includes Start and Scale on launch</div>
-          </div>
-        </div>
-      </div>
-      <a href="/scale-layer.html" class="btn-scale">Explore the Scale Layer →</a>
-    </div>
-    <div class="stage-icons">
-      <a href="/premium-start.html" class="stage-icon-card coming">
-        <div class="si-emoji">🌱</div>
-        <div class="si-stage">Stage 1</div>
-        <div class="si-name">Start</div>
-        <div class="si-coming">Coming soon</div>
-      </a>
-      <a href="/premium-strategic-clarity.html" class="stage-icon-card">
-        <div class="si-emoji">📘</div>
-        <div class="si-stage">Stage 2</div>
-        <div class="si-name">Build</div>
-        <div class="si-status">Available now</div>
-      </a>
-      <a href="/premium-survive.html" class="stage-icon-card">
-        <div class="si-emoji">⚡</div>
-        <div class="si-stage">Stage 3</div>
-        <div class="si-name">Survive</div>
-        <div class="si-status">Available now</div>
-      </a>
-      <a href="/premium-scale.html" class="stage-icon-card coming">
-        <div class="si-emoji">📈</div>
-        <div class="si-stage">Stage 4</div>
-        <div class="si-name">Scale</div>
-        <div class="si-coming">Coming soon</div>
-      </a>
-      <a href="/premium-exit.html" class="stage-icon-card">
-        <div class="si-emoji">🚪</div>
-        <div class="si-stage">Stage 5</div>
-        <div class="si-name">Exit</div>
-        <div class="si-status">Available now</div>
-      </a>
-    </div>
+  <div class="programs-grid">
+    <a href="/scale-layer-sales.html#stage-start" class="prog-card coming">
+      <div class="prog-emoji">🌱</div>
+      <div class="prog-stage">Stage 1</div>
+      <div class="prog-name">Start</div>
+      <div class="prog-coming">Coming soon</div>
+    </a>
+    <a href="/scale-layer-sales.html#stage-build" class="prog-card">
+      <div class="prog-emoji">📘</div>
+      <div class="prog-stage">Stage 2</div>
+      <div class="prog-name">Build</div>
+      <div class="prog-price">$79 / month</div>
+    </a>
+    <a href="/scale-layer-sales.html#stage-ceiling" class="prog-card">
+      <div class="prog-emoji">🔝</div>
+      <div class="prog-stage">Stage 3</div>
+      <div class="prog-name">Ceiling</div>
+      <div class="prog-price">$99 / month</div>
+    </a>
+    <a href="/scale-layer-sales.html#stage-scale" class="prog-card coming">
+      <div class="prog-emoji">📈</div>
+      <div class="prog-stage">Stage 4</div>
+      <div class="prog-name">Scale</div>
+      <div class="prog-coming">Coming soon</div>
+    </a>
+    <a href="/scale-layer-sales.html#stage-exit" class="prog-card">
+      <div class="prog-emoji">🏁</div>
+      <div class="prog-stage">Stage 5</div>
+      <div class="prog-name">Exit</div>
+      <div class="prog-price">Talk to Roy</div>
+    </a>
   </div>
 
-  <div class="support-bar">
-    <div class="support-text"><strong>Questions or want to add a tool?</strong> &nbsp;We are here to help.</div>
-    <a href="mailto:hello@knowledgebase.business" class="support-link">hello@knowledgebase.business →</a>
+  <div class="upgrade-box">
+    <div class="upgrade-left">
+      <div class="upgrade-title">Ready to move up?</div>
+      <div class="upgrade-body">If the business is moving forward and you want more from your Knowledgebase, the next program is one conversation away. Let us know and we'll take care of the rest.</div>
+    </div>
+    <a href="mailto:hello@knowledgebase.business?subject=Upgrade request&body=Hi, I'd like to discuss upgrading my Knowledgebase program." class="btn-upgrade">Request an upgrade →</a>
   </div>
 
 </div>
 
 <script>
+function switchTab(e, showId, hideId) {
+  e.stopPropagation();
+  document.getElementById(showId).classList.add('active');
+  document.getElementById(hideId).classList.remove('active');
+  var btns = e.target.parentElement.querySelectorAll('.tab-btn');
+  btns.forEach(function(b) { b.classList.remove('active'); });
+  e.target.classList.add('active');
+}
+
 function toggleArea(name) {
   const card = document.getElementById('card-' + name);
   const isOpen = card.classList.contains('open');
   document.querySelectorAll('.area-card').forEach(c => c.classList.remove('open'));
   if (!isOpen) card.classList.add('open');
 }
+
+function playVideo() {
+  alert('This welcome video is coming soon. Check back once it has been recorded by Roy.');
+}
+
+function openSOS() {
+  document.getElementById('sos-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSOS(e) {
+  if (!e || e.target === document.getElementById('sos-overlay')) {
+    document.getElementById('sos-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+var selectedUrgency = '';
+var selectedContact = '';
+
+function selectUrgency(val) {
+  selectedUrgency = val;
+  document.querySelectorAll('[id^="opt-"]').forEach(function(el) {
+    if (['opt-today','opt-week','opt-month'].includes(el.id)) el.classList.remove('selected');
+  });
+  document.getElementById('opt-' + val).classList.add('selected');
+}
+
+function selectContact(val) {
+  selectedContact = val;
+  document.querySelectorAll('[id^="opt-"]').forEach(function(el) {
+    if (['opt-phone','opt-email','opt-either'].includes(el.id)) el.classList.remove('selected');
+  });
+  document.getElementById('opt-' + val).classList.add('selected');
+}
+
+function sendSOS() {
+  var issue = document.getElementById('sos-issue').value.trim();
+  var member = document.getElementById('member-email').textContent;
+  if (!issue) { alert('Please describe what\'s going on before sending.'); return; }
+  var urgencyLabel = selectedUrgency === 'today' ? 'TODAY — needs help now' : selectedUrgency === 'week' ? 'This week' : selectedUrgency === 'month' ? 'This month' : 'Not specified';
+  var contactLabel = selectedContact === 'phone' ? 'Call me' : selectedContact === 'email' ? 'Email me' : selectedContact === 'either' ? 'Either — whatever is fastest' : 'Not specified';
+  var contactDetails = document.getElementById('sos-contact-details').value.trim();
+  var body = '🚨 SOS RECEIVED\n\n' +
+    'FROM: ' + member + '\n' +
+    'NAME & PHONE: ' + (contactDetails || 'Not provided') + '\n\n' +
+    'WHAT\'S GOING ON:\n' + issue + '\n\n' +
+    'URGENCY: ' + urgencyLabel + '\n' +
+    'BEST CONTACT: ' + contactLabel + '\n\n' +
+    'Sent: ' + new Date().toLocaleString('en-AU');
+  window.location.href = 'mailto:hello@knowledgebase.business?subject=🚨 SOS — ' + encodeURIComponent(member) + '&body=' + encodeURIComponent(body);
+  document.getElementById('sos-form').style.display = 'none';
+  document.getElementById('sos-confirm').style.display = 'block';
+}
+
 const checkInterval = setInterval(function() {
   if (window.$memberstackDom) {
     clearInterval(checkInterval);
@@ -362,6 +746,7 @@ const checkInterval = setInterval(function() {
     });
   }
 }, 100);
+
 function signOut() {
   if (window.$memberstackDom) {
     window.$memberstackDom.logout().then(function() { window.location.href = '/login.html'; });
