@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collection Script Generator — Knowledgebase.business</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forest:    #2d5a27;
+      --forest-dk: #1a3d16;
+      --gold:      #c8a84b;
+      --bg:        #f0f5ef;
+      --white:     #ffffff;
+      --text:      #1c2b1a;
+      --text-mid:  #4a5e47;
+      --text-muted:#7a8f77;
+      --border:    #d6e4d3;
+      --process-bg:#d4e8d1;
+      --tool-bg:   #e8f0fb;
+      --tool-text: #1a4a8a;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 14px;
+      color: var(--forest-dk);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-back {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-back:hover { color: var(--forest); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: var(--forest-dk);
+      padding: 36px 24px 32px;
+    }
+    .page-header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(200,168,75,0.15);
+      border: 1px solid rgba(200,168,75,0.3);
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .page-header h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 28px;
+      color: var(--white);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── FORM PANEL ── */
+    .form-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .panel-header {
+      background: var(--forest);
+      padding: 14px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+    .panel-body { padding: 20px; }
+
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    label span {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--forest);
+      background: var(--white);
+    }
+
+    /* Option buttons */
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+    }
+    .option-btn:hover { border-color: var(--forest); background: var(--process-bg); }
+    .option-btn.selected {
+      border-color: var(--forest);
+      background: var(--process-bg);
+      box-shadow: inset 2px 0 0 var(--forest);
+    }
+    .option-btn input { display: none; }
+    .option-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .option-btn.selected .option-dot {
+      border-color: var(--forest);
+      background: var(--forest);
+    }
+    .option-btn.selected .option-dot::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: white;
+    }
+    .option-label { font-size: 13px; color: var(--text); line-height: 1.4; }
+    .option-sublabel { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    /* Mode selector */
+    .mode-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .mode-btn {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+    }
+    .mode-btn:hover { border-color: var(--forest); }
+    .mode-btn.active {
+      background: var(--forest);
+      border-color: var(--forest);
+      color: var(--white);
+    }
+    .mode-btn .mode-icon { font-size: 16px; display: block; margin-bottom: 3px; }
+
+    /* Generate button */
+    .btn-generate {
+      width: 100%;
+      padding: 12px;
+      background: var(--forest);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-generate:hover { background: var(--forest-dk); }
+    .btn-generate:disabled { opacity: 0.6; cursor: default; }
+
+    /* ── OUTPUT PANEL ── */
+    .output-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      position: sticky;
+      top: 72px;
+    }
+    .output-header {
+      background: var(--forest-dk);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .output-header-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .btn-copy {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold);
+      background: none;
+      border: 1px solid rgba(200,168,75,0.4);
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: none;
+    }
+    .btn-copy:hover { background: rgba(200,168,75,0.15); }
+    .btn-copy.visible { display: block; }
+
+    .output-body { padding: 20px; min-height: 300px; }
+
+    /* Empty state */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      text-align: center;
+      gap: 12px;
+    }
+    .empty-icon { font-size: 36px; opacity: 0.3; }
+    .empty-title { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+    .empty-sub { font-size: 12px; color: var(--text-muted); max-width: 200px; line-height: 1.5; }
+
+    /* Loading state */
+    .loading-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      gap: 16px;
+    }
+    .loading-state.visible { display: flex; }
+    .loading-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .loading-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--forest);
+      border-radius: 50%;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .loading-text { font-size: 13px; color: var(--text-muted); }
+
+    /* Script output */
+    .script-output { display: none; }
+    .script-output.visible { display: block; }
+
+    .relationship-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .tag-good { background: var(--process-bg); color: var(--forest); }
+    .tag-sensitive { background: #fef3cd; color: #856404; }
+    .tag-difficult { background: #fde8e8; color: #9b1c1c; }
+    .tag-new { background: var(--tool-bg); color: var(--tool-text); }
+
+    .script-subject {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .script-subject-line {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--forest-dk);
+      padding: 8px 12px;
+      background: var(--bg);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .script-body {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.8;
+      white-space: pre-wrap;
+      border-left: 3px solid var(--forest);
+      padding-left: 14px;
+    }
+
+    .script-tip {
+      margin-top: 16px;
+      padding: 10px 14px;
+      background: var(--tool-bg);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--tool-text);
+      line-height: 1.5;
+    }
+    .script-tip strong { display: block; margin-bottom: 2px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .main { grid-template-columns: 1fr; }
+      .output-panel { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Knowledgebase<span>.</span>business</a>
+    <a href="/ar-collections.html" class="nav-back">← AR Collections</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="tool-badge">💬 Finance Tool</div>
+    <h1>Collection Script Generator</h1>
+    <p>Answer four questions. Get the exact words to use — by email or phone — matched to the situation.</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+    <div class="panel-header">About this invoice</div>
+    <div class="panel-body">
+
+      <!-- Client name -->
+      <div class="field">
+        <label>Client name <span>— first name or company, your choice</span></label>
+        <input type="text" id="client-name" placeholder="e.g. Sarah or Acme Group" />
+      </div>
+
+      <!-- Days overdue -->
+      <div class="field">
+        <label>How many days overdue?</label>
+        <div class="option-group" id="days-group">
+          <label class="option-btn" onclick="selectOption('days-group', this, '1-7')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">1–7 days</div>
+              <div class="option-sublabel">Just past due — might be an oversight</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('days-group', this, '8-30')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">8–30 days</div>
+              <div class="option-sublabel">Needs a direct follow-up</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('days-group', this, '31-60')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">31–60 days</div>
+              <div class="option-sublabel">Becoming a problem</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('days-group', this, '60+')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">60+ days</div>
+              <div class="option-sublabel">Serious — needs escalation language</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Payment history -->
+      <div class="field">
+        <label>Have they paid late before?</label>
+        <div class="option-group" id="history-group">
+          <label class="option-btn" onclick="selectOption('history-group', this, 'never')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Never — always pays on time</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('history-group', this, 'once')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Once or twice</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('history-group', this, 'regularly')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Regularly — it's a pattern</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Last contact response -->
+      <div class="field">
+        <label>Last time you contacted them about this invoice?</label>
+        <div class="option-group" id="contact-group">
+          <label class="option-btn" onclick="selectOption('contact-group', this, 'not-yet')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Haven't contacted them yet</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('contact-group', this, 'responded')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Responded promptly</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('contact-group', this, 'slow')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Slow to respond</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('contact-group', this, 'no-response')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">No response at all</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Relationship importance -->
+      <div class="field">
+        <label>How important is this client to the business?</label>
+        <div class="option-group" id="importance-group">
+          <label class="option-btn" onclick="selectOption('importance-group', this, 'key')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Key client — significant ongoing work</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('importance-group', this, 'regular')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">Regular client</div>
+            </div>
+          </label>
+          <label class="option-btn" onclick="selectOption('importance-group', this, 'oneoff')">
+            <div class="option-dot"></div>
+            <div>
+              <div class="option-label">One-off or occasional</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Mode selector -->
+      <label style="margin-bottom:8px; margin-top:4px;">Generate script for</label>
+      <div class="mode-row">
+        <div class="mode-btn active" id="mode-email" onclick="setMode('email')">
+          <span class="mode-icon">✉️</span>
+          Email
+        </div>
+        <div class="mode-btn" id="mode-phone" onclick="setMode('phone')">
+          <span class="mode-icon">📞</span>
+          Phone call
+        </div>
+      </div>
+
+      <button class="btn-generate" id="generate-btn" onclick="generateScript()">
+        Generate script →
+      </button>
+
+    </div>
+  </div>
+
+  <!-- OUTPUT PANEL -->
+  <div class="output-panel">
+    <div class="output-header">
+      <span class="output-header-label">Your script</span>
+      <button class="btn-copy" id="copy-btn" onclick="copyScript()">Copy</button>
+    </div>
+    <div class="output-body">
+
+      <!-- Empty state -->
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">💬</div>
+        <div class="empty-title">Your script will appear here</div>
+        <div class="empty-sub">Fill in the details and click Generate</div>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-state" id="loading-state">
+        <div class="loading-dots">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+        </div>
+        <div class="loading-text">Writing your script...</div>
+      </div>
+
+      <!-- Script output -->
+      <div class="script-output" id="script-output">
+        <div class="relationship-tag" id="relationship-tag"></div>
+        <div id="subject-row" style="display:none;">
+          <div class="script-subject">Subject line</div>
+          <div class="script-subject-line" id="script-subject"></div>
+        </div>
+        <div class="script-body" id="script-body"></div>
+        <div class="script-tip" id="script-tip"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── STATE ──
+  const selections = {
+    'days-group': null,
+    'history-group': null,
+    'contact-group': null,
+    'importance-group': null
+  };
+  let mode = 'email';
+  let scriptText = '';
+
+  function selectOption(groupId, el, value) {
+    document.querySelectorAll(`#${groupId} .option-btn`).forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selections[groupId] = value;
+  }
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('mode-email').classList.toggle('active', m === 'email');
+    document.getElementById('mode-phone').classList.toggle('active', m === 'phone');
+  }
+
+  function determineRelationship() {
+    const { 'days-group': days, 'history-group': history, 'contact-group': contact, 'importance-group': importance } = selections;
+    let score = 0;
+
+    if (history === 'regularly') score += 3;
+    else if (history === 'once') score += 1;
+
+    if (contact === 'no-response') score += 3;
+    else if (contact === 'slow') score += 1;
+
+    if (days === '60+') score += 2;
+    else if (days === '31-60') score += 1;
+
+    if (importance === 'key') score -= 2;
+    if (history === 'never') score -= 1;
+
+    if (score <= 0) return 'good';
+    if (score <= 2) return 'sensitive';
+    if (score <= 4) return 'difficult';
+    return 'difficult';
+  }
+
+  async function generateScript() {
+    const clientName = document.getElementById('client-name').value.trim() || 'the client';
+
+    if (!selections['days-group'] || !selections['history-group'] || !selections['contact-group'] || !selections['importance-group']) {
+      alert('Please answer all four questions before generating.');
+      return;
+    }
+
+    const relationship = determineRelationship();
+    const { 'days-group': days, 'history-group': history, 'contact-group': contact, 'importance-group': importance } = selections;
+
+    // Show loading
+    document.getElementById('empty-state').style.display = 'none';
+    document.getElementById('script-output').classList.remove('visible');
+    document.getElementById('loading-state').classList.add('visible');
+    document.getElementById('generate-btn').disabled = true;
+    document.getElementById('copy-btn').classList.remove('visible');
+
+    const systemPrompt = `You are an expert in business accounts receivable and client communication for Australian small businesses (revenue $500k–$2M). You write collection scripts that are professional, direct, and firm — without being aggressive or apologetic. The tone is always confident and business-like. You never waffle. You always give the person reading the script the exact words to use.
+
+You write for the person doing the collections work — not the business owner. Your scripts give them confidence that they are following the right process and saying the right thing.
+
+Always respond with ONLY the script content — no preamble, no explanation, no "Here is your script:". Just the script itself, ready to use.`;
+
+    const relationshipDescriptions = {
+      good: 'good standing client who generally pays well',
+      sensitive: 'valued client relationship that needs careful handling',
+      difficult: 'client with a pattern of late payment who needs firm, clear communication',
+      new: 'new or occasional client'
+    };
+
+    const daysText = { '1-7': '1 to 7', '8-30': '8 to 30', '31-60': '31 to 60', '60+': 'more than 60' };
+    const historyText = { 'never': 'never paid late before', 'once': 'paid late once or twice previously', 'regularly': 'regularly pays late — it is a pattern' };
+    const contactText = { 'not-yet': 'this is the first contact about this invoice', 'responded': 'they responded promptly when last contacted', 'slow': 'they were slow to respond last time', 'no-response': 'they have not responded to previous contact' };
+    const importanceText = { 'key': 'a key client with significant ongoing work', 'regular': 'a regular client', 'oneoff': 'a one-off or occasional client' };
+
+    const modeInstruction = mode === 'email'
+      ? `Write an email script. Include:
+- A subject line (label it "Subject:" on the first line)
+- The full email body, ready to send
+- Sign off with [Your name] as a placeholder`
+      : `Write a phone call script. Include:
+- An opening line when they answer
+- The core message
+- How to handle if they say they will pay soon
+- How to handle if they go to voicemail (label it "If voicemail:")
+- Keep it conversational but firm`;
+
+    const userPrompt = `Write a collection ${mode === 'email' ? 'email' : 'phone call'} script for the following situation:
+
+Client name: ${clientName}
+Invoice overdue by: ${daysText[days]} days
+Payment history: ${historyText[history]}
+Previous contact about this invoice: ${contactText[contact]}
+Client importance: ${importanceText[importance]}
+Relationship type (determined by the system): ${relationshipDescriptions[relationship]}
+
+${modeInstruction}
+
+The script should:
+- Sound like it was written by a professional, not a debt collector
+- Be direct about the overdue invoice without being aggressive
+- Give the reader confidence they are saying the right thing
+- Match the tone to the relationship type — firmer for difficult, warmer for good standing
+- Reference ${clientName} by name
+- Be ready to use with no editing required beyond filling in the invoice number and amount`;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: "user", content: userPrompt }]
+        })
+      });
+
+      const data = await response.json();
+      const text = data.content.map(b => b.text || '').join('');
+
+      // Parse subject line if email
+      let subject = '';
+      let body = text;
+
+      if (mode === 'email') {
+        const subjectMatch = text.match(/^Subject:\s*(.+)/m);
+        if (subjectMatch) {
+          subject = subjectMatch[1].trim();
+          body = text.replace(/^Subject:\s*.+\n?/m, '').trim();
+        }
+      }
+
+      scriptText = text;
+
+      // Relationship tag
+      const tagConfig = {
+        good: { label: '✓ Good standing', cls: 'tag-good' },
+        sensitive: { label: '◆ Handle with care', cls: 'tag-sensitive' },
+        difficult: { label: '⚠ Firm approach', cls: 'tag-difficult' },
+        new: { label: '◇ New client', cls: 'tag-new' }
+      };
+      const tag = document.getElementById('relationship-tag');
+      tag.textContent = tagConfig[relationship].label;
+      tag.className = `relationship-tag ${tagConfig[relationship].cls}`;
+
+      // Subject
+      const subjectRow = document.getElementById('subject-row');
+      if (mode === 'email' && subject) {
+        document.getElementById('script-subject').textContent = subject;
+        subjectRow.style.display = 'block';
+      } else {
+        subjectRow.style.display = 'none';
+      }
+
+      // Body
+      document.getElementById('script-body').textContent = body;
+
+      // Tip
+      const tips = {
+        good: '💡 Tip: Keep the tone warm. This client has a good record — they likely just need a nudge.',
+        sensitive: '💡 Tip: Stay professional and firm, but preserve the relationship. Avoid ultimatums on first contact.',
+        difficult: '💡 Tip: Be direct and clear about consequences. Document this contact in your AR tracker.',
+      };
+      document.getElementById('script-tip').innerHTML = `<strong>Coaching note</strong>${tips[relationship] || ''}`;
+
+      // Show output
+      document.getElementById('loading-state').classList.remove('visible');
+      document.getElementById('script-output').classList.add('visible');
+      document.getElementById('copy-btn').classList.add('visible');
+
+    } catch (err) {
+      document.getElementById('loading-state').classList.remove('visible');
+      document.getElementById('empty-state').style.display = 'flex';
+      document.getElementById('empty-state').querySelector('.empty-title').textContent = 'Something went wrong';
+      document.getElementById('empty-state').querySelector('.empty-sub').textContent = 'Please try again';
+    }
+
+    document.getElementById('generate-btn').disabled = false;
+  }
+
+  function copyScript() {
+    navigator.clipboard.writeText(scriptText).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
