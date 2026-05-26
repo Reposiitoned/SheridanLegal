@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Definitive AR Collections System — Knowledgebase</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --forest-mid: #4a7c59;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+    --amber: #e8a020;
+    --red: #c0392b;
+    --process-bg: #d4e8d1;
+    --process-text: #2d5a27;
+    --tool-bg: #e8f0fb;
+    --tool-text: #1a4a8a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--forest-dk);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-back { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; font-family: 'DM Sans', sans-serif; }
+  .nav-back:hover { color: rgba(255,255,255,0.8); }
+  .nav-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.15); }
+  .nav-title { font-size: 13px; color: var(--gold); font-family: 'Libre Baskerville', serif; font-style: italic; }
+  .nav-badge {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--forest-dk);
+    background: var(--gold);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+
+  /* ROLE JUMP NAV */
+  .role-nav {
+    position: sticky;
+    top: 56px;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 2px solid var(--border);
+    padding: 0 32px;
+  }
+  .role-nav-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .role-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 20px;
+    white-space: nowrap;
+  }
+  .role-btn {
+    padding: 14px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .role-btn:hover { color: var(--forest); border-bottom-color: var(--forest-lt); }
+  .role-btn.owner:hover, .role-btn.owner.active { color: var(--forest); border-bottom-color: var(--forest); }
+  .role-btn.billing:hover, .role-btn.billing.active { color: var(--amber); border-bottom-color: var(--amber); }
+  .role-btn.cfo:hover, .role-btn.cfo.active { color: var(--tool-text); border-bottom-color: var(--tool-text); }
+
+  /* PAGE HEADER */
+  .page-header {
+    background: var(--forest-dk);
+    padding: 48px 32px 40px;
+  }
+  .page-header-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .page-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .page-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 400;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .page-title em { color: var(--gold); font-style: italic; }
+  .page-subtitle {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    max-width: 640px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  .page-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
+  .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+  /* MAIN LAYOUT */
+  .main { max-width: 1000px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* SECTION ANCHORS */
+  .section-anchor { scroll-margin-top: 120px; }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .section-icon.owner { background: var(--process-bg); }
+  .section-icon.billing { background: #fef3cd; }
+  .section-icon.cfo { background: var(--tool-bg); }
+  .section-header-text h2 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--forest-dk);
+    margin-bottom: 2px;
+  }
+  .section-header-text p { font-size: 13px; color: var(--muted); }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--forest-dk);
+    margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  /* LAYER CHECKLIST */
+  .layer-list { list-style: none; }
+  .layer-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .layer-item:last-child { border-bottom: none; }
+  .layer-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .layer-check.done { background: var(--forest); border-color: var(--forest); }
+  .layer-check.done::after { content: '✓'; color: white; font-size: 13px; font-weight: 700; }
+  .layer-num {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-weight: 500;
+    min-width: 20px;
+    padding-top: 3px;
+  }
+  .layer-text h4 { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .layer-text p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* HEALTH METER */
+  .health-bar-wrap {
+    background: var(--bg);
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+    margin: 8px 0 4px;
+  }
+  .health-bar {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--forest), var(--gold));
+    transition: width 0.4s ease;
+  }
+  .health-label { font-size: 12px; color: var(--muted); }
+
+  /* ESCALATION TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -26px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    box-shadow: 0 0 0 2px var(--border);
+  }
+  .timeline-dot.green { background: var(--forest); box-shadow: 0 0 0 2px var(--forest); }
+  .timeline-dot.amber { background: var(--amber); box-shadow: 0 0 0 2px var(--amber); }
+  .timeline-dot.red { background: var(--red); box-shadow: 0 0 0 2px var(--red); }
+  .timeline-day {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .timeline-action {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .timeline-detail { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  /* SCRIPTS */
+  .script-block {
+    background: var(--bg);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--forest-dk);
+    line-height: 1.7;
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    position: relative;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { background: var(--forest); color: white; border-color: var(--forest); }
+
+  /* OBJECTION CARDS */
+  .objection {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .objection-q {
+    background: var(--forest-dk);
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+  }
+  .objection-a {
+    background: var(--white);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .objection-a strong { color: var(--forest); }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 640px) { .kpi-grid { grid-template-columns: 1fr; } }
+  .kpi-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .kpi-card.primary { background: var(--forest); border-color: var(--forest); }
+  .kpi-card.accent { background: var(--gold); border-color: var(--gold); }
+  .kpi-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .kpi-card.primary .kpi-label { color: rgba(255,255,255,0.6); }
+  .kpi-card.accent .kpi-label { color: rgba(26,61,22,0.7); }
+  .kpi-value {
+    font-size: 32px;
+    font-family: 'Libre Baskerville', serif;
+    color: var(--forest-dk);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-card.primary .kpi-value { color: white; }
+  .kpi-card.accent .kpi-value { color: var(--forest-dk); }
+  .kpi-input {
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Libre Baskerville', serif;
+    color: var(--forest-dk);
+    border: none;
+    background: transparent;
+    outline: none;
+    border-bottom: 2px solid var(--border);
+    padding: 4px 0;
+    margin-bottom: 4px;
+  }
+  .kpi-card.primary .kpi-input { color: white; border-bottom-color: rgba(255,255,255,0.3); }
+  .kpi-card.accent .kpi-input { color: var(--forest-dk); border-bottom-color: rgba(26,61,22,0.2); }
+  .kpi-target { font-size: 11px; color: var(--muted); }
+  .kpi-card.primary .kpi-target { color: rgba(255,255,255,0.5); }
+  .kpi-card.accent .kpi-target { color: rgba(26,61,22,0.6); }
+
+  /* AGING BUCKETS */
+  .aging-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 640px) { .aging-grid { grid-template-columns: repeat(2, 1fr); } }
+  .aging-bucket {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .aging-bucket.danger { border-color: var(--red); background: #fdf2f2; }
+  .aging-bucket.warning { border-color: var(--amber); background: #fffbf0; }
+  .aging-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .aging-bucket.danger .aging-label { color: var(--red); }
+  .aging-bucket.warning .aging-label { color: var(--amber); }
+  .aging-input {
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-family: 'Libre Baskerville', serif;
+    color: var(--text);
+    border: none;
+    background: transparent;
+    outline: none;
+    border-bottom: 2px solid var(--border);
+    padding: 2px 0 4px;
+  }
+  .aging-bucket.danger .aging-input { color: var(--red); border-bottom-color: var(--red); }
+  .aging-bucket.warning .aging-input { color: var(--amber); border-bottom-color: var(--amber); }
+  .aging-note { font-size: 10px; color: var(--muted); margin-top: 6px; }
+
+  /* SESSION QUESTIONS */
+  .question-list { list-style: none; }
+  .question-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .question-item:last-child { border-bottom: none; }
+  .q-num {
+    min-width: 24px;
+    height: 24px;
+    background: var(--tool-bg);
+    color: var(--tool-text);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .q-text { font-size: 14px; color: var(--text); line-height: 1.55; }
+  .q-note { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  /* RED FLAGS */
+  .flag-list { list-style: none; }
+  .flag-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #fdf2f2;
+    border: 1px solid #f5c6c6;
+  }
+  .flag-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .flag-text { font-size: 13px; color: #8b1f1f; line-height: 1.55; }
+  .flag-text strong { display: block; margin-bottom: 2px; color: var(--red); }
+
+  /* ROLE BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+  .badge.owner { background: var(--process-bg); color: var(--process-text); }
+  .badge.billing { background: #fef3cd; color: #7a4f00; }
+  .badge.cfo { background: var(--tool-bg); color: var(--tool-text); }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--tool-bg);
+    border: 1px solid #c5d8f5;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .info-box-title { font-size: 13px; font-weight: 600; color: var(--tool-text); margin-bottom: 6px; }
+  .info-box p { font-size: 13px; color: #2a4a7a; line-height: 1.6; }
+
+  /* GOOD COP BAD COP */
+  .role-table { width: 100%; border-collapse: collapse; }
+  .role-table th {
+    background: var(--forest);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 10px 14px;
+    text-align: left;
+    letter-spacing: 0.04em;
+  }
+  .role-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .role-table tr:nth-child(even) td { background: var(--bg); }
+  .role-table td:first-child { font-weight: 500; color: var(--forest-dk); }
+
+  /* PROCESS BADGE */
+  .process-badge {
+    display: inline-block;
+    background: var(--process-bg);
+    color: var(--process-text);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="/dashboard.html" class="nav-back">← Dashboard</a>
+    <div class="nav-divider"></div>
+    <span class="nav-title">AR Collections</span>
+  </div>
+  <span class="nav-badge">Definitive Solution™</span>
+</nav>
+
+<!-- ROLE JUMP NAV -->
+<div class="role-nav">
+  <div class="role-nav-inner">
+    <span class="role-label">Jump to:</span>
+    <button class="role-btn owner active" onclick="scrollTo('owner-section')">👤 Owner</button>
+    <button class="role-btn billing" onclick="scrollTo('billing-section')">📋 Billing Admin</button>
+    <button class="role-btn cfo" onclick="scrollTo('cfo-section')">📊 CFO / Coach</button>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Finance section &nbsp;·&nbsp; Cash flow management</div>
+    <h1 class="page-title">The <em>Definitive</em> AR Collections System</h1>
+    <p class="page-subtitle">The complete seven-layer system for managing accounts receivable — from client onboarding through to collections, measurement, and succession. Built to run without depending on any single person.</p>
+    <div class="page-meta">
+      <div class="meta-item"><div class="meta-dot"></div>Seven layers complete</div>
+      <div class="meta-item"><div class="meta-dot"></div>Passes the Monday morning test</div>
+      <div class="meta-item"><div class="meta-dot"></div>Three roles supported</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- VIDEO PLACEHOLDER -->
+  <div style="background:var(--white); border:1px solid var(--border); border-radius:12px; padding:32px; margin-bottom:36px; text-align:center;">
+    <div style="background:var(--forest-dk); border-radius:10px; aspect-ratio:16/9; max-width:640px; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px;">
+      <div style="width:56px; height:56px; border-radius:50%; background:rgba(200,168,75,0.2); border:2px solid var(--gold); display:flex; align-items:center; justify-content:center;">
+        <div style="width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-left:18px solid var(--gold); margin-left:4px;"></div>
+      </div>
+      <div style="font-size:13px; color:rgba(255,255,255,0.5); font-family:'DM Sans',sans-serif;">Watch before you start — 90 seconds</div>
+    </div>
+    <div style="font-family:'Libre Baskerville',serif; font-size:16px; color:var(--forest-dk); margin-bottom:6px;">Understanding the seven-layer <em>Definitive</em> standard</div>
+    <div style="font-size:13px; color:var(--muted);">Roy explains why every solution is built to this standard — and what the Monday morning test means for your business.</div>
+  </div>
+  <div id="owner-section" class="section-anchor">
+    <div class="section-header">
+      <div class="section-icon owner">👤</div>
+      <div class="section-header-text">
+        <h2>Owner view</h2>
+        <p>Setup, system health, and seven-layer completion status</p>
+      </div>
+    </div>
+
+    <!-- YOUR BUSINESS RULES -->
+    <div class="card" style="border-color:var(--gold); border-width:2px;">
+      <div class="card-title" style="color:var(--forest-dk);">Your business rules</div>
+      <div class="card-sub">Added by Knowledgebase after reviewing your Process Builder submission — your specific ALWAYS/NEVER rules for AR Collections in your business</div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:4px;">
+        <div>
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:var(--forest-lt); color:var(--forest-dk); padding:8px 14px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">✓ Always — your rules</div>
+          <div style="font-size:13px; color:var(--muted); font-style:italic; padding:12px 14px; border:1px dashed var(--border); border-radius:8px; line-height:1.7;">
+            Your ALWAYS rules will appear here once your Process Builder submission has been reviewed by Knowledgebase. These sit alongside the standard KB rules and reflect how your specific business runs this process.
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:#fdecea; color:var(--red); padding:8px 14px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">✕ Never — your rules</div>
+          <div style="font-size:13px; color:var(--muted); font-style:italic; padding:12px 14px; border:1px dashed var(--border); border-radius:8px; line-height:1.7;">
+            Your NEVER rules will appear here once your Process Builder submission has been reviewed by Knowledgebase.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px; padding:12px 16px; background:var(--bg); border-radius:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div style="flex:1; font-size:13px; color:var(--muted);">
+          Haven't submitted your Process Builder form yet? Fill it in and email it to <strong style="color:var(--forest);">hello@knowledgebase.business</strong> — we'll personalise this section for your business.
+        </div>
+        <a href="/process-builder.html" style="font-size:13px; font-weight:500; color:var(--forest); text-decoration:none; border:1.5px solid var(--forest); padding:8px 18px; border-radius:7px; white-space:nowrap; font-family:'DM Sans',sans-serif;">Open Process Builder →</a>
+      </div>
+    </div>
+
+    <!-- System Health -->
+    <div class="card">
+      <div class="card-title">System health</div>
+      <div class="card-sub">Tick each layer as you complete the setup</div>
+      <div class="health-bar-wrap">
+        <div class="health-bar" id="health-bar" style="width:0%"></div>
+      </div>
+      <div class="health-label" id="health-label">0 of 8 layers complete</div>
+    </div>
+
+    <!-- Seven Layer Checklist -->
+    <div class="card">
+      <div class="card-title">Seven-layer setup checklist</div>
+      <div class="card-sub">Every layer must be complete before this system is Definitive in your business</div>
+      <ul class="layer-list">
+        <li class="layer-item" onclick="toggleLayer(0)">
+          <div class="layer-check" id="layer-0"></div>
+          <div class="layer-num">0</div>
+          <div class="layer-text">
+            <h4>Setup — The upfront contract</h4>
+            <p>Billing contact verified, payment method on file, credit gate policy documented</p>
+          </div>
+        </li>
+        <li class="layer-item" onclick="toggleLayer(1)">
+          <div class="layer-check" id="layer-1"></div>
+          <div class="layer-num">1</div>
+          <div class="layer-text">
+            <h4>Mindset — The reframe</h4>
+            <p>Team understands an invoice is a promise, not a request. Trained on the mindset shift.</p>
+          </div>
+        </li>
+        <li class="layer-item" onclick="toggleLayer(2)">
+          <div class="layer-check" id="layer-2"></div>
+          <div class="layer-num">2</div>
+          <div class="layer-text">
+            <h4>Roles — Good cop / bad cop</h4>
+            <p>Account manager and billing admin roles separated. Billing alias set up.</p>
+          </div>
+        </li>
+        <li class="layer-item" onclick="toggleLayer(3)">
+          <div class="layer-check" id="layer-3"></div>
+          <div class="layer-num">3</div>
+          <div class="layer-text">
+            <h4>Process — Day 0 to Day 45 timeline</h4>
+            <p>Escalation sequence live. Automated reminders set up. Stop-work trigger defined.</p>
+          </div>
+        </li>
+        <li class="layer-item" onclick="toggleLayer(4)">
+          <div class="layer-check" id="layer-4"></div>
+          <div class="layer-num">4</div>
+          <div class="layer-text">
+            <h4>Scripts — Word for word</h4>
+            <p>Day 21 call script and Day 30 email reviewed and customised for your business.</p>
+          </div>
+        </li>
+        <li class="layer-item" onclick="toggleLayer(5)">
+          <div class="layer-check" id="layer-5"></div>
+          <div class="layer-num">5</div>
+          <div class="layer-text">
+            <h4>Follow-up strategy — When the process meets resistance</h4>
+            <p>Three common objections handled. Escalation channels defined. Paper trail process set.</p>
+          </div>
+        </li>
+        <li class="layer-item" onclick="toggleLayer(6)">
+          <div class="layer-check" id="layer-6"></div>
+          <div class="layer-num">6</div>
+          <div class="layer-text">
+            <h4>KPI and measurement — AR Days, CEI, aging buckets</h4>
+            <p>KPI targets set with CFO. Review cadence agreed. Tracking live.</p>
+          </div>
+        </li>
+        <li class="layer-item" onclick="toggleLayer(7)">
+          <div class="layer-check" id="layer-7"></div>
+          <div class="layer-num">7</div>
+          <div class="layer-text">
+            <h4>Training and succession — The Monday morning test</h4>
+            <p>Billing admin trained. Handover checklist complete. New person can run this from day one.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Setup Requirements -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Before the first invoice</div>
+        <div class="card-sub">Layer 0 — Setup requirements</div>
+        <ul style="list-style:none; font-size:13px; color:var(--text);">
+          <li style="padding:8px 0; border-bottom:1px solid var(--border); display:flex; gap:10px;"><span style="color:var(--forest);">✓</span> Billing contact name and email confirmed</li>
+          <li style="padding:8px 0; border-bottom:1px solid var(--border); display:flex; gap:10px;"><span style="color:var(--forest);">✓</span> Invoice requirements documented (POs, references)</li>
+          <li style="padding:8px 0; border-bottom:1px solid var(--border); display:flex; gap:10px;"><span style="color:var(--forest);">✓</span> Payment terms agreed and documented in writing</li>
+          <li style="padding:8px 0; border-bottom:1px solid var(--border); display:flex; gap:10px;"><span style="color:var(--forest);">✓</span> Payment method on file before work begins</li>
+          <li style="padding:8px 0; border-bottom:1px solid var(--border); display:flex; gap:10px;"><span style="color:var(--forest);">✓</span> One-click payment link active on all invoices</li>
+          <li style="padding:8px 0; display:flex; gap:10px;"><span style="color:var(--forest);">✓</span> Credit gate policy applied for new clients</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Credit gate policy</div>
+        <div class="card-sub">Layer 0 — Risk management</div>
+        <div style="font-size:13px; color:var(--text); line-height:1.7;">
+          <p style="margin-bottom:12px;">New clients over <strong>$10,000/month</strong> scope: 100% upfront for first 3 months.</p>
+          <p style="margin-bottom:12px;">Large scopes on 30-day terms: credit check before offering terms.</p>
+          <p style="color:var(--muted); font-size:12px; font-style:italic;">Offering 30-day terms is offering interest-free credit. Treat it like a lending decision.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mindset Card -->
+    <div class="card">
+      <div class="card-title">The mindset reframe</div>
+      <div class="card-sub">Layer 1 — Read this with your team before the system goes live</div>
+      <div class="info-box" style="margin-bottom:16px; background:var(--process-bg); border-color:var(--forest-lt);">
+        <div class="info-box-title" style="color:var(--forest);">The reframe that makes everything else work</div>
+        <p style="color:var(--forest-dk);">Most businesses treat collecting money as awkward. It feels like chasing. It damages relationships. So they delay, soften the language, and hope the client pays without being asked. This is the single biggest reason AR processes fail.</p>
+      </div>
+      <div style="list-style:none; font-size:14px; color:var(--text); line-height:1.75;">
+        <div style="padding:14px 0; border-bottom:1px solid var(--border); display:flex; gap:14px; align-items:flex-start;">
+          <span style="color:var(--gold); font-size:18px; flex-shrink:0;">→</span>
+          <div><strong>An invoice is not a request.</strong> It is a promise your client made when they agreed to the work. You are not asking them for a favour — you are holding them to their commitment.</div>
+        </div>
+        <div style="padding:14px 0; border-bottom:1px solid var(--border); display:flex; gap:14px; align-items:flex-start;">
+          <span style="color:var(--gold); font-size:18px; flex-shrink:0;">→</span>
+          <div><strong>Following up is not chasing.</strong> It is a professional obligation. A client who does not pay on time is using your business as an interest-free overdraft. That is not acceptable — and it is not personal.</div>
+        </div>
+        <div style="padding:14px 0; border-bottom:1px solid var(--border); display:flex; gap:14px; align-items:flex-start;">
+          <span style="color:var(--gold); font-size:18px; flex-shrink:0;">→</span>
+          <div><strong>The billing admin runs a system, not a conversation.</strong> The system follows the rules. The billing admin does not negotiate, apologise, or delay. They follow the timeline.</div>
+        </div>
+        <div style="padding:14px 0; display:flex; gap:14px; align-items:flex-start;">
+          <span style="color:var(--gold); font-size:18px; flex-shrink:0;">→</span>
+          <div><strong>The Good Cop stays clean.</strong> The account manager never chases money. This protects the relationship — and it works because the billing admin holds the line.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ========== BILLING ADMIN SECTION ========== -->
+  <div id="billing-section" class="section-anchor">
+    <div class="section-header">
+      <div class="section-icon billing">📋</div>
+      <div class="section-header-text">
+        <h2>Billing admin view</h2>
+        <p>Your daily actions, the escalation timeline, scripts, and objection handling</p>
+      </div>
+    </div>
+
+    <!-- Roles -->
+    <div class="card">
+      <div class="card-title">The good cop / bad cop split</div>
+      <div class="card-sub">Layer 2 — Roles. The most common reason AR processes fail: the wrong person is chasing the money.</div>
+      <div class="info-box" style="margin-bottom:16px;">
+        <div class="info-box-title">The rule</div>
+        <p>The account manager, delivery lead, or Office Manager <strong>never</strong> chases money. Ever. That's your job — and it's a feature, not a bug.</p>
+      </div>
+      <table class="role-table">
+        <tr>
+          <th>Role</th>
+          <th>Responsible for</th>
+          <th>Never does</th>
+        </tr>
+        <tr>
+          <td>Account Manager / CFO</td>
+          <td>Protects the client relationship. Escalates if client raises billing directly.</td>
+          <td style="color:var(--muted);">Chases invoices, negotiates payment, issues reminders</td>
+        </tr>
+        <tr>
+          <td>Billing Admin (you)</td>
+          <td>Runs the entire AR process. Issues reminders. Makes Day 21 calls. Escalates at Day 45.</td>
+          <td style="color:var(--muted);">Makes delivery decisions, contacts clients about project matters</td>
+        </tr>
+      </table>
+      <div class="script-block" style="margin-top:16px;">
+        <button class="copy-btn" onclick="copyText(this)">Copy</button>
+        When a client complains to the Account Manager about a reminder: "Ah yes, our finance system locks things down automatically at Day 45 — I can't override it. Let me get billing@ on this so we can get it sorted and keep things moving."
+      </div>
+    </div>
+
+    <!-- Escalation Timeline -->
+    <div class="card">
+      <div class="card-title">The escalation timeline</div>
+      <div class="card-sub">Layer 3 — Process. Day 0 to Day 45. Follow this exactly.</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot green"></div>
+          <div class="timeline-day">Day 0</div>
+          <div class="timeline-action">Invoice issued</div>
+          <div class="timeline-detail">Same day as delivery or milestone. Includes all required details and a one-click payment link. 14-day terms stated clearly.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot green"></div>
+          <div class="timeline-day">Day 7</div>
+          <div class="timeline-action">Automated reminder</div>
+          <div class="timeline-detail">Friendly tone. Includes payment link. No action required if already paid.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot green"></div>
+          <div class="timeline-day">Day 14</div>
+          <div class="timeline-action">Due date email</div>
+          <div class="timeline-detail">Invoice now due. Direct payment link. Sent from billing alias — not the account manager.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot amber"></div>
+          <div class="timeline-day">Day 21 ⚠️</div>
+          <div class="timeline-action">Personal phone call — you make this call</div>
+          <div class="timeline-detail">Use the Day 21 script below. Goal: a payment date commitment. Follow up with email same day.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot red"></div>
+          <div class="timeline-day">Day 30 🔴</div>
+          <div class="timeline-action">Formal written notice</div>
+          <div class="timeline-detail">Interest clause invoked. New work paused. Payment plan offered. Written only — no phone call. Create a paper trail.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot red"></div>
+          <div class="timeline-day">Day 45 🔴 STOP WORK</div>
+          <div class="timeline-action">Escalate to debt collector or solicitor</div>
+          <div class="timeline-detail">All work stopped. No further direct contact from billing admin. Account manager notified.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <div class="card">
+      <div class="card-title">Scripts — word for word</div>
+      <div class="card-sub">Layer 4 — Use these as your framework. Adapt the tone, not the structure.</div>
+
+      <div class="process-badge">Day 21 — Phone call</div>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:8px;">Opening:</p>
+      <div class="script-block">
+        <button class="copy-btn" onclick="copyText(this)">Copy</button>
+        "Hi [Name], it's [your name] from [Business]. I'm just following up on invoice [number] for $[amount] — it was due on [date] and I haven't seen it come through yet. Is there anything on your end that's holding it up?"
+      </div>
+
+      <p style="font-size:13px; color:var(--muted); margin-bottom:8px; margin-top:16px;">If they haven't received it:</p>
+      <div class="script-block">
+        <button class="copy-btn" onclick="copyText(this)">Copy</button>
+        "No problem at all — I'll resend it right now while we're on the phone. Can you confirm the best email address to send it to?"
+      </div>
+
+      <p style="font-size:13px; color:var(--muted); margin-bottom:8px; margin-top:16px;">If they say they'll pay next week:</p>
+      <div class="script-block">
+        <button class="copy-btn" onclick="copyText(this)">Copy</button>
+        "Great — what day next week should I expect it? I'll make a note so I know when to look for it."
+      </div>
+
+      <p style="font-size:13px; color:var(--muted); margin-bottom:8px; margin-top:16px;">If they push back on the amount:</p>
+      <div class="script-block">
+        <button class="copy-btn" onclick="copyText(this)">Copy</button>
+        "I'll flag that with [Account Manager] and get back to you today. In the meantime, is the undisputed portion something we can get processed?"
+      </div>
+
+      <div class="process-badge" style="margin-top:24px;">Day 30 — Formal email</div>
+      <div class="script-block">
+        <button class="copy-btn" onclick="copyText(this)">Copy</button>
+        "Dear [Name], Invoice [number] for $[amount] remains outstanding at 30 days. As per our payment terms, interest at [X]% per month has now been applied. New work on your account has been paused pending payment. To arrange immediate payment or discuss a payment plan, please contact me directly at billing@[yourbusiness] or on [phone]. We're keen to resolve this and get things moving again."
+      </div>
+    </div>
+
+    <!-- Objections -->
+    <div class="card">
+      <div class="card-title">When the process meets resistance</div>
+      <div class="card-sub">Layer 5 — Follow-up strategy. The three most common objections and exactly what to do.</div>
+
+      <div class="objection">
+        <div class="objection-q">"We've got cash flow issues right now."</div>
+        <div class="objection-a">
+          Offer a payment plan: <strong>50% now, 50% in 14 days.</strong> Get it in writing. Do not extend terms informally — a verbal agreement is not an agreement. Note in the system: this client is a credit risk. Flag for the credit gate on next engagement.
+        </div>
+      </div>
+
+      <div class="objection">
+        <div class="objection-q">"We're disputing the invoice."</div>
+        <div class="objection-a">
+          Escalate immediately to Account Manager for the disputed portion only. <strong>Request payment of the undisputed portion within 48 hours.</strong> Document the dispute. Do not pause the process on the undisputed amount.
+        </div>
+      </div>
+
+      <div class="objection">
+        <div class="objection-q">"The person who handles invoices is on leave."</div>
+        <div class="objection-a">
+          Ask who is covering and get their direct contact. <strong>Send the invoice directly to the cover person.</strong> Do not accept "they'll deal with it when they're back" as a response.
+        </div>
+      </div>
+
+      <div style="margin-top:16px; padding:14px 16px; background:var(--bg); border-radius:8px; font-size:12px; color:var(--muted);">
+        <strong style="color:var(--text); display:block; margin-bottom:4px;">Channel sequence as days increase:</strong>
+        Day 7–14: Email only, friendly tone. &nbsp;·&nbsp; Day 21: Phone first, follow up with email same day. &nbsp;·&nbsp; Day 30: Written notice only — no phone call, create a paper trail. &nbsp;·&nbsp; Day 45: Solicitor or debt collector. No further direct contact.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ========== CFO / COACH SECTION ========== -->
+  <div id="cfo-section" class="section-anchor">
+    <div class="section-header">
+      <div class="section-icon cfo">📊</div>
+      <div class="section-header-text">
+        <h2>CFO / Accountability coach view</h2>
+        <p>KPI dashboard, session review questions, and red flags to watch for</p>
+      </div>
+    </div>
+
+    <!-- KPI Dashboard -->
+    <div class="card">
+      <div class="card-title">KPI dashboard</div>
+      <div class="card-sub">Layer 6 — Pull these figures from your accounting system before each session.</div>
+      <div style="background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:20px 24px; margin-bottom:20px;">
+        <div style="font-size:13px; font-weight:600; color:var(--forest-dk); margin-bottom:12px;">Before this session — pull these three numbers from your accounting system</div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+          <div style="background:var(--forest); border-radius:8px; padding:16px; text-align:center;">
+            <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:8px;">AR Days</div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.9); margin-bottom:6px;">Average days to collect from invoice date</div>
+            <div style="font-size:11px; color:var(--gold);">Target: under 21 days</div>
+          </div>
+          <div style="background:var(--gold); border-radius:8px; padding:16px; text-align:center;">
+            <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(26,61,22,0.7); margin-bottom:8px;">CEI %</div>
+            <div style="font-size:13px; color:var(--forest-dk); margin-bottom:6px;">% of collectable AR actually collected</div>
+            <div style="font-size:11px; color:var(--forest-dk); font-weight:600;">Target: above 90%</div>
+          </div>
+          <div style="background:var(--white); border:1px solid var(--border); border-radius:8px; padding:16px; text-align:center;">
+            <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Current bucket</div>
+            <div style="font-size:13px; color:var(--text); margin-bottom:6px;">% of AR sitting in the current 0–14 day bucket</div>
+            <div style="font-size:11px; color:var(--muted);">Target: 90%+</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:16px; padding:10px 14px; background:var(--bg); border-radius:8px;">
+        <strong style="color:var(--text);">CEI vs AR Days:</strong> AR days tells you how slow collection is on average. CEI tells you whether your process is working — it separates "the client is slow" from "our process broke down." A CFO looking at CEI knows immediately whether the problem is external or internal.
+      </div>
+
+      <div class="card-title" style="margin-bottom:8px;">Aging buckets ($)</div>
+      <div class="card-sub">Track the trend across sessions — movement into 30+ days is a process signal</div>
+      <div style="background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:20px 24px; margin-bottom:20px;">
+        <div style="font-size:13px; font-weight:600; color:var(--forest-dk); margin-bottom:6px;">Pull your aging report from your accounting system and note the $ value in each bucket</div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:16px;">Movement into the 30+ day bucket between sessions is a process signal — not just a client signal.</div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px;">
+          <div style="background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:6px;">Current</div>
+            <div style="font-size:13px; color:var(--forest); font-weight:600;">0–14 days</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:4px;">Target: 90%+ of total AR</div>
+          </div>
+          <div style="background:#fffbf0; border:1px solid var(--amber); border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--amber); margin-bottom:6px;">30 days</div>
+            <div style="font-size:13px; color:var(--amber); font-weight:600;">Watch this</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:4px;">Rising trend = process issue</div>
+          </div>
+          <div style="background:#fdf2f2; border:1px solid #f5c6c6; border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--red); margin-bottom:6px;">60 days</div>
+            <div style="font-size:13px; color:var(--red); font-weight:600;">Action needed</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:4px;">Review each invoice individually</div>
+          </div>
+          <div style="background:#fdf2f2; border:1px solid #f5c6c6; border-radius:8px; padding:14px; text-align:center;">
+            <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--red); margin-bottom:6px;">90+ days</div>
+            <div style="font-size:13px; color:var(--red); font-weight:600;">Escalate now</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:4px;">Debt collector or solicitor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Questions -->
+    <div class="card">
+      <div class="card-title">Session review questions</div>
+      <div class="card-sub">Ask these at every session. The answers tell you whether the system is running or just documented.</div>
+      <ul class="question-list">
+        <li class="question-item">
+          <div class="q-num">1</div>
+          <div>
+            <div class="q-text">What's your current AR days figure, and how has it moved since last session?</div>
+            <div class="q-note">A rising AR days number with a high CEI means clients are slow. A rising number with a low CEI means your process broke down.</div>
+          </div>
+        </li>
+        <li class="question-item">
+          <div class="q-num">2</div>
+          <div>
+            <div class="q-text">Are there any invoices currently at Day 21 or beyond? What's the status?</div>
+            <div class="q-note">This should be on the tip of the billing admin's tongue. If they have to look it up, the process isn't embedded yet.</div>
+          </div>
+        </li>
+        <li class="question-item">
+          <div class="q-num">3</div>
+          <div>
+            <div class="q-text">Has the Good Cop / Bad Cop separation held since last session?</div>
+            <div class="q-note">Watch for signs the account manager has been drawn into chasing. It always starts small — "I'll just send them a quick message."</div>
+          </div>
+        </li>
+        <li class="question-item">
+          <div class="q-num">4</div>
+          <div>
+            <div class="q-text">Are all new clients going through the upfront contract process before work begins?</div>
+            <div class="q-note">The most common shortcut is skipping Layer 0 for "good" clients. This is where most overdue invoices start.</div>
+          </div>
+        </li>
+        <li class="question-item">
+          <div class="q-num">5</div>
+          <div>
+            <div class="q-text">If the billing admin left today, could someone else run this process from Monday?</div>
+            <div class="q-note">This is the succession test. If the answer is no, Layer 7 isn't complete.</div>
+          </div>
+        </li>
+        <li class="question-item">
+          <div class="q-num">6</div>
+          <div>
+            <div class="q-text">What's your biggest cash flow constraint right now, and is AR part of it?</div>
+            <div class="q-note">Connects the KPI to the business outcome. AR improvement should be visible in the cash position within 30–60 days of implementing this system.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Red Flags -->
+    <div class="card">
+      <div class="card-title">Red flags — act on these immediately</div>
+      <div class="card-sub">If you see any of these at a session, don't move on until they're addressed.</div>
+      <ul class="flag-list">
+        <li class="flag-item">
+          <div class="flag-icon">🚩</div>
+          <div class="flag-text">
+            <strong>AR days above 30 and rising</strong>
+            The process has broken down somewhere between Day 7 and Day 21. Review whether reminders are going out and whether the Day 21 call is being made.
+          </div>
+        </li>
+        <li class="flag-item">
+          <div class="flag-icon">🚩</div>
+          <div class="flag-text">
+            <strong>More than 15% of AR in the 60+ day bucket</strong>
+            This indicates systematic process failure, not just slow clients. Trace each invoice and find where the escalation stopped.
+          </div>
+        </li>
+        <li class="flag-item">
+          <div class="flag-icon">🚩</div>
+          <div class="flag-text">
+            <strong>Account manager is chasing invoices</strong>
+            The Good Cop / Bad Cop separation has collapsed. This always damages the client relationship and always needs to be reset immediately.
+          </div>
+        </li>
+        <li class="flag-item">
+          <div class="flag-icon">🚩</div>
+          <div class="flag-text">
+            <strong>New clients starting without Layer 0 complete</strong>
+            The upfront contract process was skipped. The next overdue invoice from this client is almost certain. Address before work continues.
+          </div>
+        </li>
+        <li class="flag-item">
+          <div class="flag-icon">🚩</div>
+          <div class="flag-text">
+            <strong>CEI below 80%</strong>
+            Less than 80% of collectable AR is being collected in the period. This is a serious process failure requiring immediate review of every overdue account.
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Succession test -->
+    <div class="card" style="border-color:var(--forest); border-width:2px;">
+      <div class="card-title" style="color:var(--forest);">The Monday morning succession test</div>
+      <div class="card-sub">Layer 7 — Ask this at every quarterly review</div>
+      <p style="font-size:15px; color:var(--text); line-height:1.75; margin-bottom:16px; font-family:'Libre Baskerville',serif; font-style:italic;">
+        "If the billing admin resigned today and a new person started Monday with only this system and the handover checklist — could they run the full AR Collections process without asking anyone for help?"
+      </p>
+      <p style="font-size:13px; color:var(--muted);">If the answer is no, the system is not complete. Layer 7 needs more work before this solution is truly <em>Definitive</em> in this business.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer style="background:var(--forest-dk); border-top:1px solid rgba(255,255,255,0.08); padding:20px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+  <div style="font-size:13px; color:rgba(255,255,255,0.4); font-family:'Libre Baskerville',serif;">
+    Knowledgebase<span style="color:var(--gold);">.business</span> &nbsp;·&nbsp; <em>Definitive Solutions™</em> &nbsp;·&nbsp; Finance section
+  </div>
+  <div style="font-size:12px; color:rgba(255,255,255,0.3);">AR Collections &nbsp;·&nbsp; Seven layers complete</div>
+</footer>
+
+<script>
+// Layer checklist
+const layerState = Array(8).fill(false);
+
+function toggleLayer(i) {
+  layerState[i] = !layerState[i];
+  const el = document.getElementById('layer-' + i);
+  el.classList.toggle('done', layerState[i]);
+  updateHealth();
+}
+
+function updateHealth() {
+  const done = layerState.filter(Boolean).length;
+  const pct = Math.round((done / 8) * 100);
+  document.getElementById('health-bar').style.width = pct + '%';
+  document.getElementById('health-label').textContent = done + ' of 8 layers complete — ' + pct + '% ready';
+}
+
+// Role nav scroll
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  const map = { 'owner-section': 'owner', 'billing-section': 'billing', 'cfo-section': 'cfo' };
+  document.querySelector('.role-btn.' + map[id]).classList.add('active');
+}
+
+// Active state on scroll
+const sections = ['owner-section', 'billing-section', 'cfo-section'];
+const roleMap = { 'owner-section': 'owner', 'billing-section': 'billing', 'cfo-section': 'cfo' };
+
+window.addEventListener('scroll', () => {
+  let current = 'owner-section';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 160) current = id;
+  });
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.role-btn.' + roleMap[current]).classList.add('active');
+});
+
+// Copy script buttons
+function copyText(btn) {
+  const block = btn.parentElement;
+  const text = block.textContent.replace('Copy', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied ✓';
+    btn.style.background = 'var(--forest)';
+    btn.style.color = 'white';
+    setTimeout(() => { btn.textContent = 'Copy'; btn.style.background = ''; btn.style.color = ''; }, 2000);
+  });
+}
+</script>
+</body>
+</html>

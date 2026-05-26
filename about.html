@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Roy West — Knowledgebase</title>
+<meta name="description" content="Roy West is the founder of Knowledgebase — a business advisor with over 20 years experience, embedded in the daily reality of running real businesses.">
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --forest-mid: #3d7a35;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Georgia, serif;
+    background: var(--white);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo { font-size: 16px; color: var(--forest-dk); letter-spacing: 0.01em; text-decoration: none; }
+  .nav-logo span { color: var(--gold); }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-link { font-size: 14px; color: var(--muted); text-decoration: none; }
+  .nav-link:hover { color: var(--forest); }
+  .btn-nav {
+    background: var(--forest);
+    color: white;
+    font-size: 14px;
+    font-family: Georgia, serif;
+    padding: 8px 20px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-nav:hover { background: var(--forest-mid); }
+
+  /* HERO */
+  .about-hero {
+    background: var(--forest-dk);
+    padding: 80px 24px 72px;
+  }
+  .about-hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 64px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .about-photo-wrap {
+    flex-shrink: 0;
+  }
+  .about-photo {
+    width: 220px;
+    height: 260px;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 12px;
+    border: 3px solid rgba(200,168,75,0.4);
+    display: block;
+  }
+  .about-hero-text { flex: 1; min-width: 280px; }
+  .about-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .about-hero-text h1 {
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: normal;
+    color: white;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .about-hero-text h1 em { color: var(--gold); font-style: normal; }
+  .about-title {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+  .about-hero-text p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.8;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    background: var(--forest);
+    padding: 32px 24px;
+  }
+  .stats-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .stat {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 16px 24px;
+    border-right: 1px solid rgba(255,255,255,0.12);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-size: 36px;
+    color: var(--gold);
+    font-family: Georgia, serif;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: Georgia, serif;
+  }
+
+  /* SECTIONS */
+  .section { padding: 72px 24px; }
+  .section-alt { background: var(--bg); }
+  .section-inner { max-width: 860px; margin: 0 auto; }
+  .section-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-family: Georgia, serif;
+  }
+  .section-title {
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: normal;
+    color: var(--forest-dk);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  /* ROY'S STORY */
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  @media (max-width: 680px) { .story-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .story-body p {
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .story-body p:last-child { margin-bottom: 0; }
+
+  /* QUOTE */
+  .pull-quote {
+    border-left: 4px solid var(--gold);
+    padding: 8px 0 8px 24px;
+    margin: 32px 0;
+  }
+  .pull-quote p {
+    font-size: 22px;
+    color: var(--forest-dk);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* CREDENTIALS */
+  .cred-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .cred-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .cred-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .cred-title {
+    font-size: 15px;
+    font-weight: normal;
+    color: var(--forest-dk);
+    margin-bottom: 6px;
+    font-family: Georgia, serif;
+  }
+  .cred-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-family: Georgia, serif;
+  }
+
+  /* THE APPROACH */
+  .approach-list {
+    list-style: none;
+    margin-top: 32px;
+  }
+  .approach-list li {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .approach-list li:first-child { border-top: 1px solid var(--border); }
+  .approach-num {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-family: Georgia, serif;
+    min-width: 32px;
+    padding-top: 3px;
+  }
+  .approach-text h3 {
+    font-size: 16px;
+    font-weight: normal;
+    color: var(--forest-dk);
+    margin-bottom: 4px;
+  }
+  .approach-text p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* CTA */
+  .about-cta {
+    background: var(--forest-dk);
+    padding: 72px 24px;
+    text-align: center;
+  }
+  .about-cta h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: normal;
+    color: white;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .about-cta p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    margin: 0 auto 36px;
+    line-height: 1.75;
+  }
+  .cta-paths { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 15px;
+    font-family: Georgia, serif;
+    padding: 13px 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #d4b250; }
+  .btn-secondary {
+    background: transparent;
+    color: white;
+    font-size: 15px;
+    font-family: Georgia, serif;
+    padding: 13px 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+
+  /* FOOTER */
+  footer {
+    background: var(--forest-dk);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-logo { font-size: 14px; color: rgba(255,255,255,0.5); font-family: Georgia, serif; }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; font-family: Georgia, serif; }
+  .footer-links a:hover { color: rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">Knowledgebase<span>.business</span></a>
+  <div class="nav-right">
+    <a href="/scale-layer-sales.html" class="nav-link">Programs</a>
+    <a href="/login.html" class="nav-link">Log in</a>
+    <a href="/scale-layer-sales.html" class="btn-nav">Get started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div class="about-hero-inner">
+    <div class="about-photo-wrap">
+      <img src="/roy-west.jpg" alt="Roy West — Knowledgebase founder" class="about-photo">
+    </div>
+    <div class="about-hero-text">
+      <div class="about-eyebrow">Founder</div>
+      <h1>Roy <em>West.</em></h1>
+      <div class="about-title">Founder, Knowledgebase &nbsp;·&nbsp; Business advisor &nbsp;·&nbsp; Brisbane, Australia</div>
+      <p>Twenty years working inside businesses — not consulting from a distance. Embedded in the decisions, the problems, and the daily reality of what it actually takes to build something that lasts.</p>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num">20+</div>
+      <div class="stat-label">Years experience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$10M</div>
+      <div class="stat-label">Start-up built and scaled</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100+</div>
+      <div class="stat-label">Businesses advised</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">7</div>
+      <div class="stat-label">Layers. Every solution.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ROY'S STORY -->
+<div class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">The story</div>
+    <div class="story-grid">
+      <div class="story-body">
+        <p>I started where most business owners start — with an idea, a lot of energy, and very little idea of what I was getting into. I built that start-up into a $10 million business. Not easily, and not without making almost every mistake in the book first.</p>
+        <p>What I learned along the way — about systems, about people, about what actually makes a business work — became the foundation for everything I've done since.</p>
+        <p>For the last twenty years I've been working alongside business owners at every stage. Helping them build what I built, faster and with less pain than I experienced. Not as a consultant who visits once a quarter with a slide deck. As someone embedded in the problems.</p>
+      </div>
+      <div class="story-body">
+        <div class="pull-quote">
+          <p>The advice is never the problem. The gap between hearing it and building it into the way the business actually runs — that's where most businesses stall.</p>
+        </div>
+        <p>Knowledgebase was built to close that gap. Every <em>Definitive Solution</em> inside represents a problem I've solved dozens of times in real businesses — packaged so your team can implement it without needing to invent anything.</p>
+        <p>This is not a library of templates. It is a Knowledge Engine. And every solution in it is built to a standard that makes it genuinely irreplaceable.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREDENTIALS -->
+<div class="section section-alt">
+  <div class="section-inner">
+    <div class="section-eyebrow">Experience</div>
+    <div class="section-title">Built from the inside, not the outside.</div>
+    <div class="cred-grid">
+      <div class="cred-card">
+        <span class="cred-icon">📈</span>
+        <div class="cred-title">Founder and builder</div>
+        <div class="cred-body">Grew a start-up from zero to $10 million. Knows what the early years feel like — and what it takes to get through them.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">🤝</span>
+        <div class="cred-title">Business advisor</div>
+        <div class="cred-body">Over twenty years advising business owners at every stage — Build, Ceiling, Scale, and Exit. Embedded in the daily reality, not visiting once a year.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">📚</span>
+        <div class="cred-title">Systems builder</div>
+        <div class="cred-body">The seven-layer <em>Definitive Solutions</em> standard was built from twenty years of watching what works and what doesn't in real businesses under real pressure.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">🏁</span>
+        <div class="cred-title">Exit specialist</div>
+        <div class="cred-body">Helps business owners prepare for sale properly — closing the gaps buyers find, building the value they pay for, and making sure you sell well.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THE APPROACH -->
+<div class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">How we work</div>
+    <div class="section-title">Not consultants. Not coaches. Something different.</div>
+    <ul class="approach-list">
+      <li>
+        <div class="approach-num">01</div>
+        <div class="approach-text">
+          <h3>Embedded, not visiting</h3>
+          <p>We work inside the business, not above it. The problems we solve are the ones you're dealing with right now — not the ones that look good in a case study.</p>
+        </div>
+      </li>
+      <li>
+        <div class="approach-num">02</div>
+        <div class="approach-text">
+          <h3>Systems, not sessions</h3>
+          <p>Advice without a system evaporates. Every engagement builds something permanent — documented, transferable, and running whether you're in the room or not.</p>
+        </div>
+      </li>
+      <li>
+        <div class="approach-num">03</div>
+        <div class="approach-text">
+          <h3>Definitive, not approximate</h3>
+          <p>Every solution we build is complete. Seven layers. Nothing left to figure out. Your team can run it from day one without needing to invent anything.</p>
+        </div>
+      </li>
+      <li>
+        <div class="approach-num">04</div>
+        <div class="approach-text">
+          <h3>Continuous, not one-off</h3>
+          <p>Continuous Improvement accelerates your journey. Photocopied years slow it to a halt. We build the cycle into your business so it compounds over time.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="about-cta">
+  <h2>Ready to close the gap?</h2>
+  <p>Find the program that matches where your business is right now. Every <em style="font-style:normal; color:var(--gold);">Definitive Solution</em> inside is ready to implement today.</p>
+  <div class="cta-paths">
+    <a href="/scale-layer-sales.html" class="btn-primary">See the programs →</a>
+    <a href="mailto:hello@knowledgebase.business" class="btn-secondary">Talk to us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Knowledgebase<span>.business</span> &nbsp;·&nbsp; Built by Roy West</div>
+  <div class="footer-links">
+    <a href="/scale-layer-sales.html">Programs</a>
+    <a href="/login.html">Log in</a>
+    <a href="mailto:hello@knowledgebase.business">hello@knowledgebase.business</a>
+  </div>
+</footer>
+
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
+<script>
+var ci = setInterval(function() {
+  if (window.$memberstackDom) {
+    clearInterval(ci);
+    window.$memberstackDom.getCurrentMember().then(function(r) {
+      if (r.data) {
+        document.querySelector('.btn-nav').textContent = 'Dashboard →';
+        document.querySelector('.btn-nav').href = '/dashboard.html';
+        document.querySelectorAll('.nav-link').forEach(function(l) {
+          if (l.textContent === 'Log in') l.style.display = 'none';
+        });
+      }
+    });
+  }
+}, 100);
+</script>
+</body>
+</html>
