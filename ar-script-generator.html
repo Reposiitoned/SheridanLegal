@@ -620,6 +620,10 @@
         </div>
         <div class="script-body" id="script-body"></div>
         <div class="script-tip" id="script-tip"></div>
+        <div id="log-actions" style="display:none; margin-top:14px; display:none;">
+          <button onclick="openLogModal()" style="width:100%; padding:10px; background:var(--forest-dk); color:var(--white); border:none; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; margin-bottom:6px;">📋 Log this contact →</button>
+          <a href="/ar-tracker.html" style="display:block; text-align:center; font-size:12px; color:var(--text-muted); text-decoration:none;">View full AR tracker</a>
+        </div>
       </div>
 
     </div>
@@ -803,6 +807,7 @@ The script should:
       document.getElementById('loading-state').classList.remove('visible');
       document.getElementById('script-output').classList.add('visible');
       document.getElementById('copy-btn').classList.add('visible');
+      document.getElementById('log-actions').style.display = 'block';
 
     } catch (err) {
       document.getElementById('loading-state').classList.remove('visible');
@@ -820,6 +825,106 @@ The script should:
       btn.textContent = 'Copied ✓';
       setTimeout(() => btn.textContent = 'Copy', 2000);
     });
+  }
+</script>
+
+<!-- LOG CONTACT MODAL -->
+<div id="log-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200; align-items:center; justify-content:center; padding:24px;">
+  <div style="background:var(--white); border-radius:12px; width:100%; max-width:420px; overflow:hidden;">
+    <div style="background:var(--forest-dk); padding:14px 20px; display:flex; align-items:center; justify-content:space-between;">
+      <span style="font-size:14px; font-weight:600; color:var(--white);">Log this contact</span>
+      <button onclick="closeLogModal()" style="background:none; border:none; color:rgba(255,255,255,0.6); font-size:18px; cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:18px;">
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text); display:block; margin-bottom:4px;">Client name</label>
+        <input type="text" id="log-client" style="width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--bg); color:var(--text);" />
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text); display:block; margin-bottom:4px;">Date</label>
+        <input type="date" id="log-date" style="width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--bg); color:var(--text);" />
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text); display:block; margin-bottom:4px;">Method</label>
+        <select id="log-method" style="width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--bg); color:var(--text);">
+          <option>Email</option><option>Phone</option><option>Voicemail</option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text); display:block; margin-bottom:4px;">Outcome</label>
+        <select id="log-outcome" onchange="toggleLogPromise()" style="width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--bg); color:var(--text);">
+          <option>No response</option><option>Responded</option><option>Payment promised</option><option>Dispute raised</option><option>Paid</option>
+        </select>
+      </div>
+      <div id="log-promise-wrap" style="display:none; margin-bottom:12px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text); display:block; margin-bottom:4px;">Payment promised by</label>
+        <input type="date" id="log-promise" style="width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--bg); color:var(--text);" />
+      </div>
+      <div style="margin-bottom:4px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text); display:block; margin-bottom:4px;">Note <span style="font-weight:400; color:var(--text-muted);">— optional</span></label>
+        <input type="text" id="log-note" placeholder="e.g. Said they'd transfer Thursday morning" style="width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:7px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--bg); color:var(--text);" />
+      </div>
+    </div>
+    <div style="padding:14px 18px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end;">
+      <button onclick="closeLogModal()" style="background:none; border:1px solid var(--border); color:var(--text-mid); padding:8px 14px; border-radius:7px; font-size:13px; cursor:pointer;">Cancel</button>
+      <button onclick="saveLog()" style="background:var(--forest); color:var(--white); border:none; padding:8px 18px; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer;">Save log →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openLogModal() {
+    const clientName = document.getElementById('client-name').value.trim();
+    document.getElementById('log-client').value = clientName;
+    document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('log-method').value = mode === 'phone' ? 'Phone' : 'Email';
+    document.getElementById('log-outcome').value = 'No response';
+    document.getElementById('log-promise').value = '';
+    document.getElementById('log-note').value = '';
+    document.getElementById('log-promise-wrap').style.display = 'none';
+    document.getElementById('log-modal').style.display = 'flex';
+  }
+
+  function closeLogModal() {
+    document.getElementById('log-modal').style.display = 'none';
+  }
+
+  function toggleLogPromise() {
+    const outcome = document.getElementById('log-outcome').value;
+    document.getElementById('log-promise-wrap').style.display = outcome === 'Payment promised' ? 'block' : 'none';
+  }
+
+  async function saveLog() {
+    const client = document.getElementById('log-client').value.trim();
+    if (!client) { alert('Please enter a client name.'); return; }
+
+    const contact = {
+      action: 'save',
+      clientName: client,
+      date: document.getElementById('log-date').value,
+      method: document.getElementById('log-method').value,
+      outcome: document.getElementById('log-outcome').value,
+      promiseDate: document.getElementById('log-promise').value || null,
+      note: document.getElementById('log-note').value.trim()
+    };
+
+    try {
+      const res = await fetch('/.netlify/functions/ar-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contact)
+      });
+      const data = await res.json();
+      if (data.success) {
+        closeLogModal();
+        const btn = document.querySelector('#log-actions button');
+        btn.textContent = '✓ Contact logged';
+        btn.style.background = '#2d5a27';
+        btn.disabled = true;
+      }
+    } catch(e) {
+      alert('Could not save. Please try again.');
+    }
   }
 </script>
 

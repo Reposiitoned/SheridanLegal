@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR Contact Tracker — Knowledgebase.business</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --forest: #2d5a27; --forest-dk: #1a3d16; --gold: #c8a84b;
+      --bg: #f0f5ef; --white: #ffffff; --text: #1c2b1a;
+      --text-mid: #4a5e47; --text-muted: #7a8f77; --border: #d6e4d3;
+      --process-bg: #d4e8d1; --tool-bg: #e8f0fb; --tool-text: #1a4a8a;
+      --red: #fde8e8; --red-text: #9b1c1c;
+      --amber: #fef3cd; --amber-text: #7d5a00;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    nav { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 1000px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Libre Baskerville', serif; font-size: 14px; color: var(--forest-dk); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 12px; }
+    .nav-link { font-size: 12px; color: var(--text-muted); text-decoration: none; }
+    .nav-link:hover { color: var(--forest); }
+
+    .page-header { background: var(--forest-dk); padding: 32px 24px 28px; }
+    .page-header-inner { max-width: 1000px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .tool-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: rgba(200,168,75,0.15); border: 1px solid rgba(200,168,75,0.3); padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
+    .page-header h1 { font-family: 'Libre Baskerville', serif; font-size: 24px; color: var(--white); margin-bottom: 4px; }
+    .page-header p { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .btn-new { background: var(--gold); color: var(--forest-dk); font-size: 13px; font-weight: 600; padding: 10px 18px; border-radius: 7px; text-decoration: none; white-space: nowrap; border: none; cursor: pointer; }
+    .btn-new:hover { background: #b8942e; }
+
+    .main { max-width: 1000px; margin: 0 auto; padding: 28px 24px 64px; }
+
+    .alerts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+    .alert-broken { background: var(--red); color: var(--red-text); border: 1px solid #f5c6c6; }
+    .alert-followup { background: var(--amber); color: var(--amber-text); border: 1px solid #f5e4a0; }
+
+    .filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--white); color: var(--text-mid); cursor: pointer; }
+    .filter-btn.active { background: var(--forest); border-color: var(--forest); color: var(--white); }
+
+    .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+
+    .contact-list { display: flex; flex-direction: column; gap: 8px; }
+    .contact-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; }
+    .contact-card.broken { border-left: 3px solid #e53e3e; }
+    .contact-card.paid { opacity: 0.5; }
+    .contact-card.paid .client-name { text-decoration: line-through; }
+
+    .client-name { font-size: 14px; font-weight: 600; color: var(--forest-dk); margin-bottom: 4px; }
+    .contact-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .meta-tag { font-size: 11px; padding: 2px 8px; border-radius: 5px; font-weight: 500; }
+    .tag-email { background: var(--tool-bg); color: var(--tool-text); }
+    .tag-phone { background: var(--process-bg); color: var(--forest); }
+    .tag-voicemail { background: #f5f0ff; color: #6b46c1; }
+    .tag-responded { background: var(--process-bg); color: var(--forest); }
+    .tag-no-response { background: var(--red); color: var(--red-text); }
+    .tag-promised { background: var(--amber); color: var(--amber-text); }
+    .tag-dispute { background: var(--red); color: var(--red-text); }
+    .tag-paid { background: var(--process-bg); color: var(--forest); }
+
+    .contact-date { font-size: 12px; color: var(--text-muted); }
+    .contact-note { font-size: 12px; color: var(--text-mid); margin-top: 4px; font-style: italic; }
+    .promise-date { font-size: 12px; color: var(--amber-text); margin-top: 4px; font-weight: 500; }
+    .promise-date.broken { color: var(--red-text); }
+
+    .contact-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .btn-paid { font-size: 11px; background: var(--forest); color: var(--white); border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; white-space: nowrap; }
+    .btn-paid:hover { background: var(--forest-dk); }
+    .btn-delete { font-size: 11px; background: none; color: var(--text-muted); border: 1px solid var(--border); padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+    .btn-delete:hover { color: var(--red-text); border-color: var(--red-text); }
+
+    .empty { text-align: center; padding: 60px 24px; color: var(--text-muted); }
+    .empty-icon { font-size: 40px; opacity: 0.3; margin-bottom: 12px; }
+    .empty-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .empty-sub { font-size: 13px; }
+
+    .loading { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; padding: 24px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 480px; overflow: hidden; }
+    .modal-header { background: var(--forest-dk); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-size: 15px; font-weight: 600; color: var(--white); }
+    .modal-close { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 18px; cursor: pointer; }
+    .modal-body { padding: 20px; }
+    .modal-field { margin-bottom: 14px; }
+    .modal-label { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 5px; display: block; }
+    .modal-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); background: var(--bg); }
+    .modal-input:focus { outline: none; border-color: var(--forest); background: var(--white); }
+    .modal-select { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); background: var(--bg); }
+    .modal-footer { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+    .btn-save { background: var(--forest); color: var(--white); border: none; padding: 9px 20px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-cancel { background: none; border: 1px solid var(--border); color: var(--text-mid); padding: 9px 16px; border-radius: 7px; font-size: 13px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Knowledgebase<span>.</span>business</a>
+    <div class="nav-links">
+      <a href="/ar-collections.html" class="nav-link">← AR Collections</a>
+      <a href="/ar-script-generator.html" class="nav-link">Script Generator</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div>
+      <div class="tool-badge">📋 Finance Tool</div>
+      <h1>AR Contact Tracker</h1>
+      <p>Every conversation logged. Nothing falls through the cracks.</p>
+    </div>
+    <button class="btn-new" onclick="openModal()">+ Log a contact</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="alerts" id="alerts"></div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter('active', this)">Active</button>
+    <button class="filter-btn" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('promised', this)">Payment promised</button>
+    <button class="filter-btn" onclick="setFilter('paid', this)">Paid</button>
+  </div>
+
+  <div class="section-title" id="list-label">Active contacts</div>
+  <div class="contact-list" id="contact-list">
+    <div class="loading">Loading contacts...</div>
+  </div>
+</div>
+
+<!-- LOG CONTACT MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Log a contact</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label class="modal-label">Client name</label>
+        <input type="text" class="modal-input" id="m-client" placeholder="e.g. Sarah Jones or Acme Group" />
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Date of contact</label>
+        <input type="date" class="modal-input" id="m-date" />
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Method</label>
+        <select class="modal-select" id="m-method">
+          <option value="Email">Email</option>
+          <option value="Phone">Phone</option>
+          <option value="Voicemail">Voicemail</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Outcome</label>
+        <select class="modal-select" id="m-outcome" onchange="togglePromise()">
+          <option value="No response">No response</option>
+          <option value="Responded">Responded</option>
+          <option value="Payment promised">Payment promised</option>
+          <option value="Dispute raised">Dispute raised</option>
+          <option value="Paid">Paid</option>
+        </select>
+      </div>
+      <div class="modal-field" id="promise-field" style="display:none;">
+        <label class="modal-label">Payment promised by</label>
+        <input type="date" class="modal-input" id="m-promise" />
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Note <span style="font-weight:400; color:var(--text-muted);">— optional</span></label>
+        <input type="text" class="modal-input" id="m-note" placeholder="e.g. Said they'd transfer Thursday morning" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveContact()">Save contact</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let allContacts = [];
+let currentFilter = 'active';
+
+// Set today's date as default
+document.getElementById('m-date').value = new Date().toISOString().split('T')[0];
+
+async function loadContacts() {
+  try {
+    const res = await fetch('/.netlify/functions/ar-store');
+    allContacts = await res.json();
+    renderContacts();
+    renderAlerts();
+  } catch(e) {
+    document.getElementById('contact-list').innerHTML = '<div class="loading">Unable to load contacts. Please refresh.</div>';
+  }
+}
+
+function isToday(dateStr) {
+  if (!dateStr) return false;
+  return new Date(dateStr).toDateString() === new Date().toDateString();
+}
+
+function isPast(dateStr) {
+  if (!dateStr) return false;
+  return new Date(dateStr) < new Date() && !isToday(dateStr);
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function renderAlerts() {
+  const broken = allContacts.filter(c => !c.paid && c.outcome === 'Payment promised' && c.promiseDate && isPast(c.promiseDate));
+  const followup = allContacts.filter(c => !c.paid && c.outcome === 'No response');
+  const alertEl = document.getElementById('alerts');
+  let html = '';
+  if (broken.length) html += `<div class="alert alert-broken">⚠ ${broken.length} broken payment promise${broken.length > 1 ? 's' : ''} — payment was due and hasn't been confirmed. Check these first.</div>`;
+  if (followup.length) html += `<div class="alert alert-followup">◆ ${followup.length} contact${followup.length > 1 ? 's' : ''} with no response — may need a follow-up.</div>`;
+  alertEl.innerHTML = html;
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const labels = { active: 'Active contacts', all: 'All contacts', promised: 'Payment promised', paid: 'Paid' };
+  document.getElementById('list-label').textContent = labels[f];
+  renderContacts();
+}
+
+function renderContacts() {
+  let filtered = allContacts;
+  if (currentFilter === 'active') filtered = allContacts.filter(c => !c.paid);
+  if (currentFilter === 'promised') filtered = allContacts.filter(c => c.outcome === 'Payment promised' && !c.paid);
+  if (currentFilter === 'paid') filtered = allContacts.filter(c => c.paid);
+
+  const el = document.getElementById('contact-list');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">No contacts here yet</div><div class="empty-sub">Click "+ Log a contact" to add one</div></div>`;
+    return;
+  }
+
+  el.innerHTML = filtered.map(c => {
+    const broken = c.outcome === 'Payment promised' && c.promiseDate && isPast(c.promiseDate) && !c.paid;
+    const methodClass = { Email: 'tag-email', Phone: 'tag-phone', Voicemail: 'tag-voicemail' }[c.method] || 'tag-email';
+    const outcomeClass = {
+      'Responded': 'tag-responded', 'No response': 'tag-no-response',
+      'Payment promised': 'tag-promised', 'Dispute raised': 'tag-dispute', 'Paid': 'tag-paid'
+    }[c.outcome] || 'tag-no-response';
+
+    return `
+      <div class="contact-card ${broken ? 'broken' : ''} ${c.paid ? 'paid' : ''}">
+        <div>
+          <div class="client-name">${c.clientName}</div>
+          <div class="contact-meta">
+            <span class="meta-tag ${methodClass}">${c.method}</span>
+            <span class="meta-tag ${outcomeClass}">${c.outcome}</span>
+          </div>
+          <div class="contact-date">${formatDate(c.date)}</div>
+          ${c.promiseDate ? `<div class="promise-date ${broken ? 'broken' : ''}">Payment promised by ${formatDate(c.promiseDate)}${broken ? ' — overdue' : ''}</div>` : ''}
+          ${c.note ? `<div class="contact-note">"${c.note}"</div>` : ''}
+        </div>
+        <div class="contact-actions">
+          ${!c.paid ? `<button class="btn-paid" onclick="markPaid('${c.id}')">Mark paid ✓</button>` : '<span style="font-size:11px;color:var(--forest);font-weight:600;">Paid ✓</span>'}
+          <button class="btn-delete" onclick="deleteContact('${c.id}')">Delete</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function togglePromise() {
+  const outcome = document.getElementById('m-outcome').value;
+  document.getElementById('promise-field').style.display = outcome === 'Payment promised' ? 'block' : 'none';
+}
+
+function openModal(prefill) {
+  document.getElementById('m-client').value = prefill || '';
+  document.getElementById('m-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('m-method').value = 'Email';
+  document.getElementById('m-outcome').value = 'No response';
+  document.getElementById('m-promise').value = '';
+  document.getElementById('m-note').value = '';
+  document.getElementById('promise-field').style.display = 'none';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+async function saveContact() {
+  const client = document.getElementById('m-client').value.trim();
+  if (!client) { alert('Please enter a client name.'); return; }
+
+  const contact = {
+    action: 'save',
+    clientName: client,
+    date: document.getElementById('m-date').value,
+    method: document.getElementById('m-method').value,
+    outcome: document.getElementById('m-outcome').value,
+    promiseDate: document.getElementById('m-promise').value || null,
+    note: document.getElementById('m-note').value.trim()
+  };
+
+  try {
+    const res = await fetch('/.netlify/functions/ar-store', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(contact)
+    });
+    const data = await res.json();
+    if (data.success) {
+      closeModal();
+      await loadContacts();
+    }
+  } catch(e) {
+    alert('Could not save. Please try again.');
+  }
+}
+
+async function markPaid(id) {
+  try {
+    await fetch('/.netlify/functions/ar-store', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'markPaid', id })
+    });
+    await loadContacts();
+  } catch(e) { alert('Could not update. Please try again.'); }
+}
+
+async function deleteContact(id) {
+  if (!confirm('Delete this contact log?')) return;
+  try {
+    await fetch('/.netlify/functions/ar-store', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', id })
+    });
+    await loadContacts();
+  } catch(e) { alert('Could not delete. Please try again.'); }
+}
+
+loadContacts();
+</script>
+</body>
+</html>
