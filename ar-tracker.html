@@ -82,6 +82,13 @@
     .empty-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
     .empty-sub { font-size: 13px; }
 
+    .today-strip { background: var(--forest-dk); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
+    .today-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .today-list { display: flex; flex-direction: column; gap: 6px; }
+    .today-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white); }
+    .today-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .today-empty { font-size: 13px; color: rgba(255,255,255,0.45); font-style: italic; }
+
     .loading { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; }
 
     /* Modal */
@@ -126,6 +133,7 @@
 </div>
 
 <div class="main">
+  <div id="today-strip"></div>
   <div class="alerts" id="alerts"></div>
 
   <div class="filter-row">
@@ -180,6 +188,10 @@
         <input type="date" class="modal-input" id="m-promise" />
       </div>
       <div class="modal-field">
+        <label class="modal-label">Follow up by <span style="font-weight:400; color:var(--text-muted);">— optional</span></label>
+        <input type="date" class="modal-input" id="m-followup" />
+      </div>
+      <div class="modal-field">
         <label class="modal-label">Note <span style="font-weight:400; color:var(--text-muted);">— optional</span></label>
         <input type="text" class="modal-input" id="m-note" placeholder="e.g. Said they'd transfer Thursday morning" />
       </div>
@@ -201,9 +213,11 @@ document.getElementById('m-date').value = new Date().toISOString().split('T')[0]
 async function loadContacts() {
   try {
     const res = await fetch('/.netlify/functions/ar-store');
-    allContacts = await res.json();
+    const data = await res.json();
+    allContacts = Array.isArray(data) ? data : (data.contacts || []);
     renderContacts();
     renderAlerts();
+    renderToday();
   } catch(e) {
     document.getElementById('contact-list').innerHTML = '<div class="loading">Unable to load contacts. Please refresh.</div>';
   }
@@ -275,6 +289,7 @@ function renderContacts() {
           </div>
           <div class="contact-date">${formatDate(c.date)}</div>
           ${c.promiseDate ? `<div class="promise-date ${broken ? 'broken' : ''}">Payment promised by ${formatDate(c.promiseDate)}${broken ? ' — overdue' : ''}</div>` : ''}
+          ${c.followUpDate ? `<div class="promise-date">Follow up by ${formatDate(c.followUpDate)}</div>` : ''}
           ${c.note ? `<div class="contact-note">"${c.note}"</div>` : ''}
         </div>
         <div class="contact-actions">
@@ -285,7 +300,24 @@ function renderContacts() {
   }).join('');
 }
 
-function togglePromise() {
+function renderToday() {
+  const todayStr = new Date().toISOString().split('T')[0];
+  const due = allContacts.filter(c => !c.paid && (
+    (c.followUpDate && c.followUpDate === todayStr) ||
+    (c.promiseDate && c.promiseDate === todayStr) ||
+    (c.outcome === 'No response' && c.date === todayStr)
+  ));
+  const el = document.getElementById('today-strip');
+  if (!due.length) {
+    el.innerHTML = `<div class="today-strip"><div class="today-title">Today's follow-ups</div><div class="today-empty">No follow-ups scheduled for today — good position to be in.</div></div>`;
+  } else {
+    el.innerHTML = `<div class="today-strip"><div class="today-title">Today's follow-ups — ${due.length} due</div><div class="today-list">${
+      due.map(c => `<div class="today-item"><div class="today-dot"></div>${c.clientName} <span style="color:rgba(255,255,255,0.5);margin-left:4px;">· ${c.outcome}</span></div>`).join('')
+    }</div></div>`;
+  }
+}
+
+
   const outcome = document.getElementById('m-outcome').value;
   document.getElementById('promise-field').style.display = outcome === 'Payment promised' ? 'block' : 'none';
 }
@@ -296,6 +328,7 @@ function openModal(prefill) {
   document.getElementById('m-method').value = 'Email';
   document.getElementById('m-outcome').value = 'No response';
   document.getElementById('m-promise').value = '';
+  document.getElementById('m-followup').value = '';
   document.getElementById('m-note').value = '';
   document.getElementById('promise-field').style.display = 'none';
   document.getElementById('modal').classList.add('open');
@@ -316,6 +349,7 @@ async function saveContact() {
     method: document.getElementById('m-method').value,
     outcome: document.getElementById('m-outcome').value,
     promiseDate: document.getElementById('m-promise').value || null,
+    followUpDate: document.getElementById('m-followup').value || null,
     note: document.getElementById('m-note').value.trim()
   };
 
