@@ -918,9 +918,9 @@ The script should:
       if (data.success) {
         closeLogModal();
         const btn = document.querySelector('#log-actions button');
-        btn.textContent = '✓ Contact logged';
-        btn.style.background = '#2d5a27';
-        btn.disabled = true;
+        window.location.href = 'ar-tracker.html';
+        
+        
       }
     } catch(e) {
       alert('Could not save. Please try again.');
