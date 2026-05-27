@@ -22,8 +22,8 @@ function makeRequest(method, path, data) {
       let body = '';
       res.on('data', chunk => body += chunk);
       res.on('end', () => {
-        try { resolve(JSON.parse(body)); }
-        catch(e) { resolve(body); }
+        try { resolve({ status: res.statusCode, data: JSON.parse(body) }); }
+        catch(e) { resolve({ status: res.statusCode, data: body }); }
       });
     });
     req.on('error', reject);
@@ -47,8 +47,12 @@ exports.handler = async function(event) {
   try {
     if (event.httpMethod === 'GET') {
       const result = await makeRequest('GET', `/v3/b/${BIN_ID}/latest`, null);
-      const contacts = Array.isArray(result.record) ? result.record : 
-                       (result.record && Array.isArray(result.record.contacts) ? result.record.contacts : []);
+      if (result.status !== 200) {
+        return { statusCode: 200, headers, body: JSON.stringify([]) };
+      }
+      const record = result.data.record;
+      const contacts = Array.isArray(record) ? record :
+                       (record && Array.isArray(record.contacts) ? record.contacts : []);
       contacts.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
       return { statusCode: 200, headers, body: JSON.stringify(contacts) };
     }
@@ -59,8 +63,9 @@ exports.handler = async function(event) {
 
       // Load current contacts
       const current = await makeRequest('GET', `/v3/b/${BIN_ID}/latest`, null);
-      let contacts = Array.isArray(current.record) ? current.record :
-                     (current.record && Array.isArray(current.record.contacts) ? current.record.contacts : []);
+      const record = current.data && current.data.record;
+      let contacts = Array.isArray(record) ? record :
+                     (record && Array.isArray(record.contacts) ? record.contacts : []);
 
       if (action === 'save') {
         const contact = {
@@ -76,7 +81,10 @@ exports.handler = async function(event) {
           createdAt: new Date().toISOString()
         };
         contacts.push(contact);
-        await makeRequest('PUT', `/v3/b/${BIN_ID}`, contacts);
+        const putResult = await makeRequest('PUT', `/v3/b/${BIN_ID}`, contacts);
+        if (putResult.status !== 200) {
+          return { statusCode: 500, headers, body: JSON.stringify({ error: 'Failed to save', detail: putResult.data }) };
+        }
         return { statusCode: 200, headers, body: JSON.stringify({ success: true, contact }) };
       }
 
