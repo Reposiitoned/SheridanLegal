@@ -16,15 +16,16 @@ exports.handler = async function(event) {
     const store = getStore({ name: 'ar-contacts', consistency: 'strong' });
 
     if (event.httpMethod === 'GET') {
-      // Return all contact logs
-      const { blobs } = await store.list();
+      const listResult = await store.list();
+      const blobs = listResult && listResult.blobs ? listResult.blobs : [];
       const contacts = [];
       for (const blob of blobs) {
-        const data = await store.get(blob.key, { type: 'json' });
-        if (data) contacts.push(data);
+        try {
+          const data = await store.get(blob.key, { type: 'json' });
+          if (data) contacts.push(data);
+        } catch(e) { /* skip malformed entry */ }
       }
-      // Sort by date descending
-      contacts.sort((a, b) => new Date(b.date) - new Date(a.date));
+      contacts.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
       return { statusCode: 200, headers, body: JSON.stringify(contacts) };
     }
 
@@ -40,6 +41,7 @@ exports.handler = async function(event) {
           method: body.method,
           outcome: body.outcome,
           promiseDate: body.promiseDate || null,
+          followUpDate: body.followUpDate || null,
           note: body.note || '',
           paid: false,
           createdAt: new Date().toISOString()
@@ -70,7 +72,7 @@ exports.handler = async function(event) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: err.message })
+      body: JSON.stringify({ error: err.message, stack: err.stack })
     };
   }
 };

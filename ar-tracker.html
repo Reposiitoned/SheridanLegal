@@ -219,7 +219,8 @@ async function loadContacts() {
     renderAlerts();
     renderToday();
   } catch(e) {
-    document.getElementById('contact-list').innerHTML = '<div class="loading">Unable to load contacts. Please refresh.</div>';
+    const errMsg = e.message || 'Unknown error';
+    document.getElementById('contact-list').innerHTML = `<div class="loading">Load error: ${errMsg} — open DevTools Network tab for details.</div>`;
   }
 }
 
@@ -318,6 +319,7 @@ function renderToday() {
 }
 
 
+function togglePromise() {
   const outcome = document.getElementById('m-outcome').value;
   document.getElementById('promise-field').style.display = outcome === 'Payment promised' ? 'block' : 'none';
 }
