@@ -60,6 +60,8 @@
     .tag-voicemail { background: #f5f0ff; color: #6b46c1; }
     .tag-responded { background: var(--process-bg); color: var(--forest); }
     .tag-no-response { background: var(--red); color: var(--red-text); }
+    .tag-awaiting { background: #f5f0ff; color: #6b46c1; }
+    .tag-followup { background: var(--amber); color: var(--amber-text); }
     .tag-promised { background: var(--amber); color: var(--amber-text); }
     .tag-dispute { background: var(--red); color: var(--red-text); }
     .tag-paid { background: var(--process-bg); color: var(--forest); }
@@ -259,6 +261,7 @@ function renderContacts() {
     const methodClass = { Email: 'tag-email', Phone: 'tag-phone', Voicemail: 'tag-voicemail' }[c.method] || 'tag-email';
     const outcomeClass = {
       'Responded': 'tag-responded', 'No response': 'tag-no-response',
+      'Awaiting response': 'tag-awaiting', 'To be followed up': 'tag-followup',
       'Payment promised': 'tag-promised', 'Dispute raised': 'tag-dispute', 'Paid': 'tag-paid'
     }[c.outcome] || 'tag-no-response';
 
