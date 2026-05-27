@@ -621,7 +621,7 @@
         <div class="script-body" id="script-body"></div>
         <div class="script-tip" id="script-tip"></div>
         <div id="log-actions" style="display:none; margin-top:14px; display:none;">
-          <button onclick="openLogModal()" style="width:100%; padding:10px; background:var(--forest-dk); color:var(--white); border:none; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; margin-bottom:6px;">📋 Log this contact →</button>
+          <button onclick="quickLog()" style="width:100%; padding:10px; background:var(--forest-dk); color:var(--white); border:none; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; margin-bottom:6px;">📋 Log this contact</button>
           <a href="/ar-tracker.html" style="display:block; text-align:center; font-size:12px; color:var(--text-muted); text-decoration:none;">View full AR tracker</a>
         </div>
       </div>
@@ -923,6 +923,35 @@ The script should:
         
       }
     } catch(e) {
+      alert('Could not save. Please try again.');
+    }
+  }
+
+  async function quickLog() {
+    const clientName = document.getElementById('client-name').value.trim();
+    if (!clientName) { alert('Please enter a client name first.'); return; }
+    const btn = document.querySelector('#log-actions button');
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+    const contact = {
+      action: 'save',
+      clientName: clientName,
+      date: new Date().toISOString().split('T')[0],
+      method: mode === 'phone' ? 'Phone' : 'Email',
+      outcome: 'No response',
+      note: 'Logged from Script Generator'
+    };
+    try {
+      const res = await fetch('/.netlify/functions/ar-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contact)
+      });
+      const data = await res.json();
+      if (data.success) window.location.href = 'ar-tracker.html';
+    } catch(e) {
+      btn.textContent = 'Log this contact';
+      btn.disabled = false;
       alert('Could not save. Please try again.');
     }
   }
