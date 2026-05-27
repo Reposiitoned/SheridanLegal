@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Process Builder — Knowledgebase</title>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Knowledgebase — The Knowledge Engine for serious business owners</title>
+<meta name="description" content="Knowledgebase is the Knowledge Engine that turns expert advice into Definitive Solutions, measurable KPIs, and a business that runs without depending on any single person.">
 <style>
   :root {
     --forest: #2d5a27;
     --forest-dk: #1a3d16;
     --forest-lt: #d4e8d1;
+    --forest-mid: #3d7a35;
     --gold: #c8a84b;
     --gold-lt: #f5edcc;
     --bg: #f0f5ef;
@@ -17,808 +18,612 @@
     --text: #1a2018;
     --muted: #5a6e57;
     --border: #d0dece;
-    --red: #c0392b;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
+    font-family: Georgia, serif;
+    background: var(--white);
     color: var(--text);
-    font-size: 15px;
-    line-height: 1.65;
+    font-size: 16px;
+    line-height: 1.7;
   }
 
-  /* SCREEN ONLY */
-  @media screen {
-    .page-wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-  }
-
-  /* PRINT */
-  @media print {
-    body { background: white; font-size: 12px; }
-    .page-wrap { padding: 0; }
-    .no-print { display: none !important; }
-    .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
-    .print-btn { display: none; }
-    h1 { font-size: 22px !important; }
-    .section-title { font-size: 14px !important; }
-  }
-
-  /* HEADER */
-  .doc-header {
-    background: var(--forest-dk);
-    padding: 48px 40px 40px;
-    border-radius: 12px;
-    margin-bottom: 32px;
-  }
-  .doc-header-top {
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-    gap: 16px;
   }
-  .doc-logo {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 18px;
-    color: white;
-  }
-  .doc-logo span { color: var(--gold); }
-  .doc-badge {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .nav-logo {
+    font-size: 16px;
     color: var(--forest-dk);
-    background: var(--gold);
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration: none;
   }
-  .doc-header h1 {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 32px;
-    font-weight: 400;
+  .nav-logo span { color: var(--gold); }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-link { font-size: 14px; color: var(--muted); text-decoration: none; }
+  .nav-link:hover { color: var(--forest); }
+  .btn-nav {
+    background: var(--forest);
+    color: white;
+    font-size: 14px;
+    font-family: Georgia, serif;
+    padding: 8px 20px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-nav:hover { background: var(--forest-mid); }
+
+  /* HERO */
+  .hero {
+    background: var(--forest-dk);
+    padding: 72px 24px 64px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 4.5vw, 48px);
+    font-weight: normal;
     color: white;
     line-height: 1.2;
-    margin-bottom: 12px;
+    max-width: 680px;
+    margin: 0 auto 20px;
     letter-spacing: -0.02em;
   }
-  .doc-header h1 em { color: var(--gold); font-style: italic; }
-  .doc-header p {
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.62);
+    max-width: 520px;
+    margin: 0 auto 40px;
+    line-height: 1.65;
+  }
+  .hero-paths {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--forest-dk);
     font-size: 15px;
-    color: rgba(255,255,255,0.6);
-    max-width: 580px;
-    line-height: 1.7;
-    margin-bottom: 24px;
-  }
-  .doc-instructions {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
+    font-family: Georgia, serif;
+    padding: 13px 32px;
     border-radius: 8px;
-    padding: 16px 20px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-    line-height: 1.7;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.01em;
   }
-  .doc-instructions strong { color: var(--gold); }
+  .btn-primary:hover { background: #d4b250; }
+  .btn-secondary {
+    background: transparent;
+    color: white;
+    font-size: 15px;
+    font-family: Georgia, serif;
+    padding: 13px 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
+  .hero-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 16px;
+    letter-spacing: 0.03em;
+  }
 
-  /* CARDS */
-  .card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px 32px;
-    margin-bottom: 24px;
+  /* STAGE STRIP */
+  .stage-bar {
+    background: var(--forest-dk);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 20px 16px 16px;
   }
+  .stage-bar-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 14px;
+  }
+  .stage-strip {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .stage-card {
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px 18px 12px;
+    min-width: 116px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: block;
+  }
+  .stage-card:hover:not(.coming) {
+    background: white;
+    border-color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+  .stage-card:hover:not(.coming) .stage-num { color: var(--gold); }
+  .stage-card:hover:not(.coming) .stage-name { color: var(--forest-dk); }
+  .stage-card:hover:not(.coming) .stage-avail { color: var(--forest) !important; }
+  .stage-card.coming { opacity: 0.45; cursor: default; }
+  .stage-icon { font-size: 20px; margin-bottom: 5px; display: block; }
+  .stage-num {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2px;
+  }
+  .stage-name { font-size: 14px; color: white; }
+  .stage-avail { font-size: 11px; margin-top: 4px; color: rgba(255,255,255,0.35); }
+  .stage-avail.now { color: var(--gold) !important; }
+
+  /* BODY */
+  .section { padding: 72px 24px; }
+  .section-inner { max-width: 860px; margin: 0 auto; }
+  .section-alt { background: var(--bg); }
+
   .section-eyebrow {
     font-size: 11px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--gold);
-    margin-bottom: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
+    margin-bottom: 12px;
   }
   .section-title {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: normal;
     color: var(--forest-dk);
-    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+    line-height: 1.25;
   }
-  .section-desc {
-    font-size: 13px;
+  .section-body {
+    font-size: 17px;
     color: var(--muted);
-    margin-bottom: 24px;
-    line-height: 1.6;
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 36px;
   }
 
-  /* FORM ELEMENTS */
-  .field { margin-bottom: 20px; }
-  .field:last-child { margin-bottom: 0; }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
-  label {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--forest-dk);
-    margin-bottom: 6px;
+  /* WHAT YOU GET */
+  .engine-story {
+    max-width: 640px;
+    margin-bottom: 36px;
   }
-  label .req { color: var(--gold); margin-left: 2px; }
-  label .hint {
-    font-weight: 400;
+  .engine-story p {
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 20px;
+  }
+  .engine-story p:last-child { margin-bottom: 0; }
+  .engine-tools-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--muted);
-    font-size: 12px;
-    margin-left: 4px;
+    margin-bottom: 14px;
+    margin-top: 36px;
   }
-  input[type="text"],
-  input[type="email"],
-  select,
-  textarea {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1.5px solid var(--border);
+  .engine-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .engine-tag {
+    background: var(--white);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
+    padding: 8px 16px;
     font-size: 14px;
     color: var(--text);
+  }
+
+  /* WHAT YOU GET OLD GRID - kept for reference */
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .price-card {
     background: var(--white);
-    transition: border-color 0.15s;
-    outline: none;
-  }
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--forest);
-    box-shadow: 0 0 0 3px rgba(45,90,39,0.08);
-  }
-  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
-  textarea.tall { min-height: 120px; }
-  textarea.short { min-height: 56px; }
-
-  /* POLICY RULES */
-  .policy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media (max-width: 600px) { .policy-grid { grid-template-columns: 1fr; } }
-  .policy-col-label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .policy-col-label.always { background: var(--forest-lt); color: var(--forest-dk); }
-  .policy-col-label.never { background: #fdecea; color: var(--red); }
-  .policy-rule {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .policy-rule-num {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
-    min-width: 18px;
-    padding-top: 11px;
-  }
-  .policy-rule input {
-    flex: 1;
-  }
-
-  /* STEPS */
-  .step-block {
     border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 16px;
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: box-shadow 0.2s;
   }
-  .step-header {
+  .price-card:hover { box-shadow: 0 4px 16px rgba(45,90,39,0.1); }
+  .price-card.featured {
+    border-color: var(--forest);
+    border-width: 2px;
+  }
+  .price-card.coming-card { opacity: 0.6; }
+  .price-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .price-stage {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .price-name {
+    font-size: 18px;
+    color: var(--forest-dk);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .price-amount {
+    font-size: 32px;
+    color: var(--forest);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .price-period { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .price-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 18px; }
+  .price-coming {
+    font-size: 12px;
+    color: var(--muted);
     background: var(--bg);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    display: inline-block;
   }
-  .step-number {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
+  .btn-price {
+    display: block;
     background: var(--forest);
     color: white;
     font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .step-name-input {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
+    font-family: Georgia, serif;
+    padding: 9px 16px;
+    border-radius: 7px;
+    text-decoration: none;
+    text-align: center;
     border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  .btn-price:hover { background: var(--forest-mid); }
+  .btn-price.outline {
     background: transparent;
-    outline: none;
-    color: var(--forest-dk);
-    font-family: 'DM Sans', sans-serif;
-    padding: 0;
+    color: var(--forest);
+    border: 1px solid var(--forest);
   }
-  .step-name-input::placeholder { color: var(--muted); font-weight: 400; }
-  .step-body { padding: 16px; }
-  .step-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  @media (max-width: 600px) { .step-row { grid-template-columns: 1fr; } }
-  .step-field label { font-size: 12px; margin-bottom: 4px; }
-  .step-field input, .step-field select { font-size: 13px; padding: 8px 12px; }
-  .step-field textarea { font-size: 13px; min-height: 64px; }
+  .btn-price.outline:hover { background: var(--forest-lt); }
 
-  /* MONDAY MORNING TEST */
-  .test-block {
-    background: linear-gradient(135deg, var(--forest-dk) 0%, var(--forest) 100%);
-    border-radius: 12px;
-    padding: 32px;
-    margin-bottom: 24px;
-  }
-  .test-block .section-eyebrow { color: var(--gold); }
-  .test-block .section-title { color: white; }
-  .test-block .section-desc { color: rgba(255,255,255,0.65); }
-  .test-block label { color: rgba(255,255,255,0.8); }
-  .test-block textarea {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.2);
-    color: white;
-  }
-  .test-block textarea::placeholder { color: rgba(255,255,255,0.35); }
-  .test-block textarea:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(200,168,75,0.15);
-  }
-
-  /* RETURN INSTRUCTIONS */
-  .return-block {
-    background: var(--gold-lt);
-    border: 1px solid rgba(200,168,75,0.4);
-    border-radius: 12px;
-    padding: 28px 32px;
-    margin-bottom: 24px;
-  }
-  .return-block .section-title { color: var(--forest-dk); }
-  .return-steps { list-style: none; margin-top: 16px; }
-  .return-steps li {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(200,168,75,0.3);
-    font-size: 14px;
-    color: var(--forest-dk);
-  }
-  .return-steps li:last-child { border-bottom: none; }
-  .return-num {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--gold);
-    color: var(--forest-dk);
-    font-size: 12px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  /* PRINT BUTTON */
-  .print-bar {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 28px;
+  /* EXIT BANNER */
+  .exit-banner {
+    background: var(--forest-dk);
+    border-radius: 14px;
+    padding: 32px 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .exit-banner-left { flex: 1; min-width: 240px; }
+  .exit-banner-eyebrow { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .exit-banner-title { font-size: 20px; color: white; margin-bottom: 6px; line-height: 1.3; }
+  .exit-banner-body { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 420px; }
+  .btn-exit {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 14px;
+    font-family: Georgia, serif;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn-exit:hover { background: #d4b250; }
+
+  /* HOW IT WORKS */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; }
+  .step { text-align: center; }
+  .step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--forest-lt);
+    color: var(--forest);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    font-family: Georgia, serif;
+  }
+  .step h3 { font-size: 16px; font-weight: normal; color: var(--text); margin-bottom: 6px; }
+  .step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ROY STRIP */
+  .roy-strip {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 24px;
+  }
+  .roy-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 32px;
     flex-wrap: wrap;
   }
-  .print-bar p { font-size: 13px; color: var(--muted); }
-  .print-bar strong { color: var(--text); display: block; margin-bottom: 2px; }
-  .btn-print {
+  .roy-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
     background: var(--forest);
     color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s;
-    white-space: nowrap;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: Georgia, serif;
   }
-  .btn-print:hover { background: var(--forest-dk); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--forest);
-    border: 1.5px solid var(--forest);
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
+  .roy-text { flex: 1; min-width: 200px; }
+  .roy-name { font-size: 15px; color: var(--text); margin-bottom: 4px; }
+  .roy-bio { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .roy-books { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .book-tag {
+    font-size: 12px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    color: var(--text);
   }
-  .btn-secondary:hover { background: var(--forest-lt); }
-  .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
 
-  /* DIVIDER */
-  .divider { height: 1px; background: var(--border); margin: 8px 0 28px; }
+  /* BOTTOM CTA */
+  .bottom-cta {
+    background: var(--forest-dk);
+    padding: 72px 24px;
+    text-align: center;
+  }
+  .bottom-cta h2 {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: normal;
+    color: white;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .bottom-cta p { font-size: 17px; color: rgba(255,255,255,0.55); margin-bottom: 36px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .bottom-paths { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
   /* FOOTER */
-  .doc-footer {
-    text-align: center;
-    font-size: 12px;
-    color: var(--muted);
-    padding: 24px 0 8px;
-    font-family: 'Libre Baskerville', serif;
+  footer {
+    background: var(--forest-dk);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
   }
-  .doc-footer strong { color: var(--forest); }
-  .doc-footer span { color: var(--gold); }
+  .footer-logo { font-size: 14px; color: rgba(255,255,255,0.5); }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; }
+  .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+  @media (max-width: 600px) {
+    .nav { padding: 0 16px; }
+    .section { padding: 48px 20px; }
+    .exit-banner { padding: 24px 20px; }
+    .pricing-grid { grid-template-columns: 1fr 1fr; }
+    .roy-inner { flex-direction: column; text-align: center; }
+    .roy-books { justify-content: center; }
+    footer { flex-direction: column; text-align: center; }
+  }
 </style>
 </head>
 <body>
-<div class="page-wrap">
 
-  <!-- HEADER -->
-  <div class="doc-header">
-    <div class="doc-header-top">
-      <div class="doc-logo">Knowledgebase<span>.business</span></div>
-      <span class="doc-badge">Process Builder</span>
-    </div>
-    <h1>Document your process. <em>We'll make it Definitive.</em></h1>
-    <p>Use this form to capture a process that currently lives in someone's head. Fill it in at your own pace, print or save as a PDF, and email it to us. We'll review it, enrich it, and build it into a <em>Definitive Solution</em> your whole team can run.</p>
-    <div class="doc-instructions">
-      <strong>How to use this form:</strong> Work through each section in order. Don't worry about perfect wording — write it the way you'd explain it to a new team member. The more honest and specific you are, the better the final solution will be. When you're done, print this page (Ctrl+P / Cmd+P) and email it to <strong>hello@knowledgebase.business</strong>
-    </div>
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">Knowledgebase<span>.business</span></a>
+  <div class="nav-right">
+    <a href="/scale-layer-sales.html" class="nav-link">Programs</a>
+    <a href="/dashboard.html" class="nav-link">Dashboard</a>
+    <a href="/login.html" class="nav-link">Log in</a>
+    <a href="/scale-layer-sales.html" class="btn-nav">Get started</a>
   </div>
+</nav>
 
-  <!-- PRINT BAR -->
-  <div class="print-bar no-print">
-    <div>
-      <strong>Ready to send?</strong>
-      <p>Print this form or save as PDF, then email it to hello@knowledgebase.business</p>
-    </div>
-    <div class="btn-group">
-      <button class="btn-secondary" onclick="window.print()">Print / Save as PDF</button>
-      <a href="mailto:hello@knowledgebase.business?subject=Process Builder submission" class="btn-print">Email to Knowledgebase →</a>
-    </div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">The Knowledge Engine</div>
+  <h1>Good advice is worthless if it doesn't improve how your business <em>actually runs.</em></h1>
+  <p class="hero-sub" style="max-width:640px; font-size:18px; line-height:1.8; color:rgba(255,255,255,0.72); margin-bottom:16px; text-wrap:balance;">The problem is never the advice. It's timely, valuable, and paid for. The change was needed yesterday. You nod and say yes in the moment. The gap is what happens afterwards. The advice has nowhere to go. No system to live in. No team to run it.</p>
+  <p class="hero-sub" style="max-width:640px; font-size:18px; line-height:1.8; color:rgba(255,255,255,0.72); margin-bottom:32px; text-wrap:balance;">Good advice falls silent, wasted.</p>
+  <p style="max-width:640px; font-size:18px; line-height:1.8; color:rgba(255,255,255,0.72); font-family:Georgia,serif; margin:0 auto 36px; font-weight:normal; text-wrap:balance;"><em style="font-style:normal; color:var(--gold);">Knowledgebase is the answer</em> — turning advice into documented systems, measurable KPIs, and smart tools. Building a business that doesn't depend on any single person. Including, and most importantly, you, the owner.</p>
+  <div class="hero-paths">
+    <a href="/scale-layer-sales.html" class="btn-primary">See the programs →</a>
+    <a href="mailto:hello@knowledgebase.business?subject=I'd like to know more about Knowledgebase" class="btn-secondary">Talk to us</a>
   </div>
-
-  <!-- SECTION 1: BUSINESS DETAILS -->
-  <div class="card">
-    <div class="section-eyebrow">Section 1</div>
-    <div class="section-title">Your business</div>
-    <div class="section-desc">Tell us who you are and what your business does. This helps us tailor the solution to your industry and context.</div>
-    <div class="field-row">
-      <div class="field">
-        <label>Business name <span class="req">*</span></label>
-        <input type="text" placeholder="e.g. Sheridan Legal">
-      </div>
-      <div class="field">
-        <label>Industry <span class="req">*</span></label>
-        <select>
-          <option value="">Select industry…</option>
-          <option>Legal / Law firm</option>
-          <option>Trades / Construction</option>
-          <option>Professional services</option>
-          <option>Healthcare / Allied health</option>
-          <option>Accounting / Financial services</option>
-          <option>Retail</option>
-          <option>Hospitality</option>
-          <option>Technology</option>
-          <option>Other</option>
-        </select>
-      </div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label>Your name <span class="req">*</span></label>
-        <input type="text" placeholder="e.g. Sarah Sheridan">
-      </div>
-      <div class="field">
-        <label>Your email <span class="req">*</span></label>
-        <input type="email" placeholder="e.g. sarah@sheridanlegal.com.au">
-      </div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label>Approximate team size</label>
-        <select>
-          <option value="">Select…</option>
-          <option>1–5 people</option>
-          <option>6–15 people</option>
-          <option>16–30 people</option>
-          <option>30+ people</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Annual revenue (approximate)</label>
-        <select>
-          <option value="">Select…</option>
-          <option>Under $500k</option>
-          <option>$500k–$1M</option>
-          <option>$1M–$2M</option>
-          <option>$2M–$5M</option>
-          <option>Over $5M</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTION 2: THE PROCESS -->
-  <div class="card">
-    <div class="section-eyebrow">Section 2</div>
-    <div class="section-title">The process</div>
-    <div class="section-desc">Tell us which process you want to document and why it matters to your business.</div>
-    <div class="field">
-      <label>Process name <span class="req">*</span> <span class="hint">— what do you call this in your business?</span></label>
-      <input type="text" placeholder="e.g. New client onboarding, Morning van loading, Invoice and collections">
-    </div>
-    <div class="field">
-      <label>What does this process achieve? <span class="req">*</span></label>
-      <textarea placeholder="e.g. Every new client is set up correctly in our system, welcomed properly, and knows what to expect from us. No client should fall through the cracks after saying yes."></textarea>
-    </div>
-    <div class="field">
-      <label>Who currently runs this process? <span class="req">*</span></label>
-      <input type="text" placeholder="e.g. Reception manager, Senior technician, Office manager — or just 'me'">
-    </div>
-    <div class="field">
-      <label>How often does this process run?</label>
-      <select>
-        <option value="">Select…</option>
-        <option>Multiple times per day</option>
-        <option>Once a day</option>
-        <option>Several times a week</option>
-        <option>Weekly</option>
-        <option>Monthly</option>
-        <option>As needed</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Why is this process a problem right now?</label>
-      <textarea placeholder="e.g. It only works when Sarah is here. New staff make mistakes. We've had complaints. It takes too long. Different people do it differently every time."></textarea>
-    </div>
-  </div>
-
-  <!-- SECTION 3: POLICY -->
-  <div class="card">
-    <div class="section-eyebrow">Section 3 — Policy</div>
-    <div class="section-title">The non-negotiable rules</div>
-    <div class="section-desc">Every process has rules that must never be broken — and things that must always happen without exception. Write 3–5 of each. These become the ALWAYS/NEVER rules that sit above the process.</div>
-    <div class="policy-grid">
-      <div>
-        <div class="policy-col-label always">✓ Always</div>
-        <div class="policy-rule"><span class="policy-rule-num">1</span><input type="text" placeholder="e.g. Always confirm in writing before starting work"></div>
-        <div class="policy-rule"><span class="policy-rule-num">2</span><input type="text" placeholder="e.g. Always verify the client's identity before sharing documents"></div>
-        <div class="policy-rule"><span class="policy-rule-num">3</span><input type="text" placeholder="e.g. Always log the outcome in the system same day"></div>
-        <div class="policy-rule"><span class="policy-rule-num">4</span><input type="text" placeholder="Optional"></div>
-        <div class="policy-rule"><span class="policy-rule-num">5</span><input type="text" placeholder="Optional"></div>
-      </div>
-      <div>
-        <div class="policy-col-label never">✕ Never</div>
-        <div class="policy-rule"><span class="policy-rule-num">1</span><input type="text" placeholder="e.g. Never start work without a signed agreement"></div>
-        <div class="policy-rule"><span class="policy-rule-num">2</span><input type="text" placeholder="e.g. Never give advice before checking the file"></div>
-        <div class="policy-rule"><span class="policy-rule-num">3</span><input type="text" placeholder="e.g. Never promise a timeframe you can't control"></div>
-        <div class="policy-rule"><span class="policy-rule-num">4</span><input type="text" placeholder="Optional"></div>
-        <div class="policy-rule"><span class="policy-rule-num">5</span><input type="text" placeholder="Optional"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTION 4: PROCESS STEPS -->
-  <div class="card">
-    <div class="section-eyebrow">Section 4 — Process</div>
-    <div class="section-title">The steps in sequence</div>
-    <div class="section-desc">List each step in the order it happens. Give each step a name, who does it, roughly how long it takes, and what they actually do. Be specific — imagine you're explaining it to someone starting on Monday.</div>
-
-    <div id="steps-container">
-    <!-- Step 1 -->
-    <div class="step-block">
-      <div class="step-header">
-        <div class="step-number">1</div>
-        <input class="step-name-input" type="text" placeholder="Step name — e.g. Receive the client enquiry">
-      </div>
-      <div class="step-body">
-        <div class="step-row">
-          <div class="step-field">
-            <label>Who does this step?</label>
-            <input type="text" placeholder="e.g. Reception manager">
-          </div>
-          <div class="step-field">
-            <label>How long does it take?</label>
-            <input type="text" placeholder="e.g. 5 minutes">
-          </div>
-        </div>
-        <div class="step-field">
-          <label>What happens in this step? <span class="hint">— be specific</span></label>
-          <textarea class="short" placeholder="e.g. When a new enquiry arrives by phone or email, reception logs it in [system], notes the enquiry type, and confirms a callback time within 2 hours."></textarea>
-        </div>
-        <div class="step-row">
-          <div class="step-field">
-            <label>What tools or systems are used?</label>
-            <input type="text" placeholder="e.g. Xero, phone system, email">
-          </div>
-          <div class="step-field">
-            <label>What can go wrong here?</label>
-            <input type="text" placeholder="e.g. Enquiry not logged, callback missed">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 2 -->
-    <div class="step-block">
-      <div class="step-header">
-        <div class="step-number">2</div>
-        <input class="step-name-input" type="text" placeholder="Step name">
-      </div>
-      <div class="step-body">
-        <div class="step-row">
-          <div class="step-field"><label>Who does this step?</label><input type="text" placeholder="Role or name"></div>
-          <div class="step-field"><label>How long does it take?</label><input type="text" placeholder="e.g. 10 minutes"></div>
-        </div>
-        <div class="step-field"><label>What happens in this step?</label><textarea class="short" placeholder="Describe exactly what happens…"></textarea></div>
-        <div class="step-row">
-          <div class="step-field"><label>Tools or systems used?</label><input type="text" placeholder=""></div>
-          <div class="step-field"><label>What can go wrong?</label><input type="text" placeholder=""></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="step-block">
-      <div class="step-header">
-        <div class="step-number">3</div>
-        <input class="step-name-input" type="text" placeholder="Step name">
-      </div>
-      <div class="step-body">
-        <div class="step-row">
-          <div class="step-field"><label>Who does this step?</label><input type="text" placeholder="Role or name"></div>
-          <div class="step-field"><label>How long does it take?</label><input type="text" placeholder="e.g. 15 minutes"></div>
-        </div>
-        <div class="step-field"><label>What happens in this step?</label><textarea class="short" placeholder="Describe exactly what happens…"></textarea></div>
-        <div class="step-row">
-          <div class="step-field"><label>Tools or systems used?</label><input type="text" placeholder=""></div>
-          <div class="step-field"><label>What can go wrong?</label><input type="text" placeholder=""></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 4 -->
-    <div class="step-block">
-      <div class="step-header">
-        <div class="step-number">4</div>
-        <input class="step-name-input" type="text" placeholder="Step name">
-      </div>
-      <div class="step-body">
-        <div class="step-row">
-          <div class="step-field"><label>Who does this step?</label><input type="text" placeholder="Role or name"></div>
-          <div class="step-field"><label>How long does it take?</label><input type="text" placeholder=""></div>
-        </div>
-        <div class="step-field"><label>What happens in this step?</label><textarea class="short" placeholder="Describe exactly what happens…"></textarea></div>
-        <div class="step-row">
-          <div class="step-field"><label>Tools or systems used?</label><input type="text" placeholder=""></div>
-          <div class="step-field"><label>What can go wrong?</label><input type="text" placeholder=""></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 5 -->
-    <div class="step-block">
-      <div class="step-header">
-        <div class="step-number">5</div>
-        <input class="step-name-input" type="text" placeholder="Step name">
-      </div>
-      <div class="step-body">
-        <div class="step-row">
-          <div class="step-field"><label>Who does this step?</label><input type="text" placeholder="Role or name"></div>
-          <div class="step-field"><label>How long does it take?</label><input type="text" placeholder=""></div>
-        </div>
-        <div class="step-field"><label>What happens in this step?</label><textarea class="short" placeholder="Describe exactly what happens…"></textarea></div>
-        <div class="step-row">
-          <div class="step-field"><label>Tools or systems used?</label><input type="text" placeholder=""></div>
-          <div class="step-field"><label>What can go wrong?</label><input type="text" placeholder=""></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 6 -->
-    <div class="step-block">
-      <div class="step-header">
-        <div class="step-number">6</div>
-        <input class="step-name-input" type="text" placeholder="Step name (if needed)">
-      </div>
-      <div class="step-body">
-        <div class="step-row">
-          <div class="step-field"><label>Who does this step?</label><input type="text" placeholder="Role or name"></div>
-          <div class="step-field"><label>How long does it take?</label><input type="text" placeholder=""></div>
-        </div>
-        <div class="step-field"><label>What happens in this step?</label><textarea class="short" placeholder="Describe exactly what happens…"></textarea></div>
-        <div class="step-row">
-          <div class="step-field"><label>Tools or systems used?</label><input type="text" placeholder=""></div>
-          <div class="step-field"><label>What can go wrong?</label><input type="text" placeholder=""></div>
-        </div>
-      </div>
-    </div>
-
-    </div><!-- end steps-container -->
-
-    <div style="display:flex; align-items:center; gap:12px; margin-top:16px; flex-wrap:wrap;">
-      <button class="no-print" onclick="addStep()" style="background:var(--forest); color:white; border:none; padding:10px 20px; border-radius:8px; font-size:14px; font-family:'DM Sans',sans-serif; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:8px;">
-        <span style="font-size:18px; line-height:1;">+</span> Add another step
-      </button>
-      <button class="no-print" onclick="removeLastStep()" style="background:transparent; color:var(--muted); border:1.5px solid var(--border); padding:10px 20px; border-radius:8px; font-size:14px; font-family:'DM Sans',sans-serif; cursor:pointer;">
-        Remove last step
-      </button>
-      <span style="font-size:12px; color:var(--muted);" id="step-count">6 steps</span>
-    </div>
-    <div style="margin-top:12px; padding:12px 16px; background:var(--bg); border-radius:8px; font-size:13px; color:var(--muted);">
-      Most processes fit in 4–8 steps. If you need more than 10, consider whether this is actually two separate processes.
-    </div>
-  </div>
-
-  <!-- SECTION 5: ADDITIONAL CONTEXT -->
-  <div class="card">
-    <div class="section-eyebrow">Section 5 — Procedure notes</div>
-    <div class="section-title">Things the steps don't capture</div>
-    <div class="section-desc">Some of the most important knowledge sits between the steps. Use this section to capture anything that experienced people know but a new person wouldn't.</div>
-    <div class="field">
-      <label>What does the person running this need to know that isn't obvious from the steps?</label>
-      <textarea class="tall" placeholder="e.g. Clients who come through the website are usually more price-sensitive than referrals — adjust the tone of the initial call accordingly. Never rush the intake call even if the queue is long. A 10-minute call done properly saves 30 minutes of rework later."></textarea>
-    </div>
-    <div class="field">
-      <label>Are there any common mistakes or shortcuts that cause problems?</label>
-      <textarea placeholder="e.g. People skip the system log if they're busy. This means the next person has no context. It always causes problems."></textarea>
-    </div>
-    <div class="field">
-      <label>Are there any exceptions or variations to the standard process?</label>
-      <textarea placeholder="e.g. For VIP clients, the partner does the intake call personally. For legal aid matters, the fee structure conversation is handled differently — see the legal aid protocol."></textarea>
-    </div>
-  </div>
-
-  <!-- SECTION 6: MONDAY MORNING TEST -->
-  <div class="test-block">
-    <div class="section-eyebrow">Section 6 — The Monday morning test</div>
-    <div class="section-title" style="color:white; margin-bottom:8px;">If the person who runs this left today...</div>
-    <div class="section-desc">...could someone new pick it up on Monday without asking anyone for help? This is the standard every Knowledgebase Definitive Solution is built to. Your answers here tell us what's still missing.</div>
-    <div class="field">
-      <label>What would the new person absolutely need to know that isn't written anywhere?</label>
-      <textarea class="tall" placeholder="e.g. They'd need to know that the booking system and the billing system don't talk to each other — you have to update both manually. They'd also need the client portal login which is stored in LastPass under 'Client Portal Admin'. And they'd need to know that Mrs Chen always calls before 9am and expects a personal call back, not an email."></textarea>
-    </div>
-    <div class="field">
-      <label>What would most likely go wrong in the first week?</label>
-      <textarea placeholder="e.g. They'd probably forget to send the welcome pack on the same day as the intake call. It seems obvious to us but nobody has written it down."></textarea>
-    </div>
-    <div class="field">
-      <label>On a scale of 1–10, how confident are you that someone new could run this from your documentation alone?<span class="hint"> (1 = not at all, 10 = completely)</span></label>
-      <select style="max-width:200px;">
-        <option value="">Select…</option>
-        <option>1 — It would fall apart</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5 — Partial success</option>
-        <option>6</option>
-        <option>7</option>
-        <option>8</option>
-        <option>9</option>
-        <option>10 — Completely confident</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- RETURN INSTRUCTIONS -->
-  <div class="return-block">
-    <div class="section-eyebrow">What happens next</div>
-    <div class="section-title">Send this to us and we'll take it from here</div>
-    <ul class="return-steps">
-      <li>
-        <div class="return-num">1</div>
-        Print this page (Ctrl+P / Cmd+P) and save as PDF — or print physically and scan.
-      </li>
-      <li>
-        <div class="return-num">2</div>
-        Email to <strong>hello@knowledgebase.business</strong> with the subject line: <em>Process Builder — [Your Business Name] — [Process Name]</em>
-      </li>
-      <li>
-        <div class="return-num">3</div>
-        We'll review your submission within 3 business days and come back with questions or a draft solution.
-      </li>
-      <li>
-        <div class="return-num">4</div>
-        Once approved, your process becomes a <em>Definitive Solution</em> inside your Knowledgebase account — built to the seven-layer standard and ready for your whole team to run.
-      </li>
-    </ul>
-  </div>
-
-  <!-- BOTTOM PRINT BAR -->
-  <div class="print-bar no-print">
-    <div>
-      <strong>Finished? Send it through.</strong>
-      <p>Print or save as PDF, then email to hello@knowledgebase.business</p>
-    </div>
-    <div class="btn-group">
-      <button class="btn-secondary" onclick="window.print()">Print / Save as PDF</button>
-      <a href="mailto:hello@knowledgebase.business?subject=Process Builder submission" class="btn-print">Email to Knowledgebase →</a>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="doc-footer">
-    <strong>Knowledgebase</strong><span>.business</span> &nbsp;·&nbsp; Process Builder &nbsp;·&nbsp; <em>Your process, made Definitive.</em>
-  </div>
-
 </div>
 
+<!-- WHAT YOU GET -->
+<div class="section section-alt">
+  <div class="section-inner">
+    <div class="section-eyebrow">The Knowledge Engine</div>
+    <div class="section-title">The system your business is missing — and your team can't build alone</div>
+    <div class="engine-story">
+      <p>Building systems, processes, and tools from scratch while running a business is nearly impossible. The urgency of daily tasks always wins over the important work. And most teams, even when they try, build mediocre processes that suit them, not always the business. In a rush, they forget what matters most. Others have no clue what to do. The business relies on that person. This never ends well.</p>
+      <p>When your processes, frameworks, and decisions are documented and accessible, your team stops asking and starts doing — better, quicker, and smarter. That's the momentum you need to build the business you desire.</p>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-inner">
+    <div class="section-eyebrow">How it works</div>
+    <div class="section-title">Built around where your business is right now</div>
+    <div class="section-body">Find the program that matches where your business is right now. Use what's relevant. Move when you're ready.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Find your program</h3>
+        <p>Choose the program that matches where your business is right now — not where you want to be. The right starting point changes everything.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Access <em>Definitive Solutions</em></h3>
+        <p>Every program includes the Knowledge Engine foundation plus <em>Definitive Solutions</em> built to the Knowledgebase seven-layer standard — systems your team can run without inventing anything.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Move when you're ready</h3>
+        <p>Upgrade when your business is ready for the next program. Each one builds on the last — and you never lose access to what you already have.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section section-alt">
+  <div class="section-inner">
+    <div class="section-eyebrow">Pricing</div>
+    <div class="section-title">Four programs. One Knowledge Engine. One subscription.</div>
+    <div class="section-body">Every business owner wants the same thing — growth, profit, and a business that doesn't depend on them for everything. Whether you know what needs to change or you're still working it out — the gap is always in the doing. Knowledgebase closes that gap — giving you the systems, frameworks and tools to turn what you know into how your business actually runs. Starting from $625 per month, it's the highest return investment you'll make this year.</div>
+
+    <div class="pricing-grid">
+      <div class="price-card featured">
+        <span class="price-icon">📘</span>
+        <div class="price-name">Build</div>
+        <div class="price-amount">$625</div>
+        <div class="price-period">per month</div>
+        <div class="price-desc">Your business is running, but it's consuming you. Every decision, every problem, every question comes straight back. Build gives you the systems, the strategy and the tools to change that — so the business grows without you being the bottleneck for everything that matters.</div>
+        <a href="/signup.html?plan=build" class="btn-price">Get started</a>
+      </div>
+
+      <div class="price-card">
+        <span class="price-icon">🔝</span>
+        <div class="price-name">Ceiling</div>
+        <div class="price-amount">$833</div>
+        <div class="price-period">per month</div>
+        <div class="price-desc">You're working hard but not moving forward. It might even feel backwards. The business runs, but something is blocking you, and you can't quite see what it is. Ceiling is the diagnostic program that finds what's actually holding you back — and gives you the tools and frameworks to break through it.</div>
+        <a href="/signup.html?plan=ceiling" class="btn-price">Get started</a>
+      </div>
+
+      <div class="price-card coming-card">
+        <span class="price-icon">📈</span>
+        <div class="price-name">Scale</div>
+        <div class="price-amount">$833</div>
+        <div class="price-period">per month</div>
+        <div class="price-desc">You know exactly where you want to go. You have the team, the clients, and the ambition. What you need now are the <em>Definitive Solutions</em> and structure to get there without everything falling over. Scale gives you the Knowledge Engine blueprint to grow further and faster than you could alone.</div>
+        <span class="price-coming">Coming soon</span>
+      </div>
+    </div>
+
+    <div class="exit-banner" style="flex-direction:column; align-items:stretch;">
+      <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:center; justify-content:space-between;">
+        <div class="exit-banner-left">
+          <div class="exit-banner-eyebrow">Exit</div>
+          <div class="exit-banner-title">Thinking of selling? Most owners aren't as ready as they think.</div>
+          <div class="exit-banner-body">You've decided to sell. It's time. Now you want the best possible outcome. Most business owners leave money on the table because they weren't prepared. Exit gets your business ready to hand over — closing the gaps buyers find, building the value they pay for, and making sure you sell well.</div>
+        </div>
+        <a href="mailto:hello@knowledgebase.business?subject=Exit program enquiry&body=I'm interested in the Exit program and would like to have a conversation with Roy." class="btn-exit">Talk to us about Exit →</a>
+      </div>
+      <div style="text-align:center; margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1); font-size:12px; color:rgba(255,255,255,0.35); letter-spacing:0.03em;">Monthly subscription · 14-day money-back guarantee · Cancel anytime</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT STRIP -->
+<div class="roy-strip">
+  <div class="section-inner" style="max-width:860px;margin:0 auto;">
+    <div class="section-eyebrow">About</div>
+    <div style="max-width:640px;">
+      <p style="font-size:17px;color:var(--text);line-height:1.75;margin-bottom:18px;">Knowledgebase founder Roy West has over 20 years coaching experience and grew a start-up into a $10 million business. He and his team of business experts are not consultants who visit once a year. We are embedded in the problems, the decisions, and the daily reality of running every business we work with. Making the real change that matters.</p>
+      <a href="/about.html" style="display:inline-block; margin-top:8px; font-size:15px; color:var(--forest); text-decoration:none; border-bottom:1px solid var(--forest); padding-bottom:2px; font-family:Georgia,serif;">Learn more about Roy and the team →</a>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <h2>Start where you are.</h2>
+  <p>The right program is the one that matches your business right now — not where you think you should be. Every <em>Definitive Solution</em> inside is ready to implement today.</p>
+  <div class="bottom-paths">
+    <a href="/scale-layer-sales.html" class="btn-primary">See the programs →</a>
+    <a href="mailto:hello@knowledgebase.business" class="btn-secondary">Talk to us</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Knowledgebase<span>.business</span> &nbsp;·&nbsp; Built by Roy West</div>
+  <div class="footer-links">
+    <a href="/scale-layer-sales.html">Programs</a>
+    <a href="/login.html">Log in</a>
+    <a href="mailto:hello@knowledgebase.business">hello@knowledgebase.business</a>
+  </div>
+</footer>
+
+<script src="https://static.memberstack.com/scripts/v1/memberstack.js" data-memberstack-key="pk_781f69891fdb2812d4b0"></script>
 <script>
-let stepCount = 6;
-
-function stepHTML(num) {
-  return `
-  <div class="step-block">
-    <div class="step-header">
-      <div class="step-number">${num}</div>
-      <input class="step-name-input" type="text" placeholder="Step name">
-    </div>
-    <div class="step-body">
-      <div class="step-row">
-        <div class="step-field"><label>Who does this step?</label><input type="text" placeholder="Role or name"></div>
-        <div class="step-field"><label>How long does it take?</label><input type="text" placeholder="e.g. 10 minutes"></div>
-      </div>
-      <div class="step-field"><label>What happens in this step?</label><textarea class="short" placeholder="Describe exactly what happens…"></textarea></div>
-      <div class="step-row">
-        <div class="step-field"><label>Tools or systems used?</label><input type="text" placeholder=""></div>
-        <div class="step-field"><label>What can go wrong?</label><input type="text" placeholder=""></div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function addStep() {
-  stepCount++;
-  const container = document.getElementById('steps-container');
-  const div = document.createElement('div');
-  div.innerHTML = stepHTML(stepCount).trim();
-  container.appendChild(div.firstChild);
-  document.getElementById('step-count').textContent = stepCount + ' steps';
-}
-
-function removeLastStep() {
-  if (stepCount <= 1) return;
-  const container = document.getElementById('steps-container');
-  const steps = container.querySelectorAll('.step-block');
-  if (steps.length > 1) {
-    steps[steps.length - 1].remove();
-    stepCount--;
-    document.getElementById('step-count').textContent = stepCount + ' steps';
+var ci = setInterval(function() {
+  if (window.$memberstackDom) {
+    clearInterval(ci);
+    window.$memberstackDom.getCurrentMember().then(function(r) {
+      if (r.data) {
+        document.querySelector('.btn-nav').textContent = 'Dashboard →';
+        document.querySelector('.btn-nav').href = '/dashboard.html';
+        document.querySelectorAll('.nav-link').forEach(function(l) {
+          if (l.textContent === 'Log in') l.style.display = 'none';
+        });
+      }
+    });
   }
-}
+}, 100);
 </script>
 </body>
 </html>
-
