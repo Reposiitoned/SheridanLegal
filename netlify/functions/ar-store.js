@@ -1,4 +1,36 @@
-const { getStore } = require('@netlify/blobs');
+const https = require('https');
+
+const JSONBIN_BASE = 'api.jsonbin.io';
+const API_KEY = process.env.JSONBIN_API_KEY;
+const BIN_ID = process.env.JSONBIN_BIN_ID;
+
+function makeRequest(method, path, data) {
+  return new Promise((resolve, reject) => {
+    const payload = data ? JSON.stringify(data) : null;
+    const options = {
+      hostname: JSONBIN_BASE,
+      path,
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': API_KEY,
+        'X-Bin-Versioning': 'false'
+      }
+    };
+    if (payload) options.headers['Content-Length'] = Buffer.byteLength(payload);
+    const req = https.request(options, (res) => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => {
+        try { resolve(JSON.parse(body)); }
+        catch(e) { resolve(body); }
+      });
+    });
+    req.on('error', reject);
+    if (payload) req.write(payload);
+    req.end();
+  });
+}
 
 exports.handler = async function(event) {
   const headers = {
@@ -13,24 +45,10 @@ exports.handler = async function(event) {
   }
 
   try {
-    const store = getStore({ name: 'ar-contacts', consistency: 'strong' });
-
-    // All contacts stored as a single blob under key 'all'
-    async function getAll() {
-      try {
-        const data = await store.get('all', { type: 'json' });
-        return Array.isArray(data) ? data : [];
-      } catch(e) {
-        return [];
-      }
-    }
-
-    async function saveAll(contacts) {
-      await store.setJSON('all', contacts);
-    }
-
     if (event.httpMethod === 'GET') {
-      const contacts = await getAll();
+      const result = await makeRequest('GET', `/v3/b/${BIN_ID}/latest`, null);
+      const contacts = Array.isArray(result.record) ? result.record : 
+                       (result.record && Array.isArray(result.record.contacts) ? result.record.contacts : []);
       contacts.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
       return { statusCode: 200, headers, body: JSON.stringify(contacts) };
     }
@@ -38,11 +56,15 @@ exports.handler = async function(event) {
     if (event.httpMethod === 'POST') {
       const body = JSON.parse(event.body);
       const action = body.action;
-      const contacts = await getAll();
+
+      // Load current contacts
+      const current = await makeRequest('GET', `/v3/b/${BIN_ID}/latest`, null);
+      let contacts = Array.isArray(current.record) ? current.record :
+                     (current.record && Array.isArray(current.record.contacts) ? current.record.contacts : []);
 
       if (action === 'save') {
         const contact = {
-          id: `contact_${Date.now()}`,
+          id: `c_${Date.now()}`,
           date: body.date || new Date().toISOString().split('T')[0],
           clientName: body.clientName,
           method: body.method,
@@ -54,7 +76,7 @@ exports.handler = async function(event) {
           createdAt: new Date().toISOString()
         };
         contacts.push(contact);
-        await saveAll(contacts);
+        await makeRequest('PUT', `/v3/b/${BIN_ID}`, contacts);
         return { statusCode: 200, headers, body: JSON.stringify({ success: true, contact }) };
       }
 
@@ -63,14 +85,14 @@ exports.handler = async function(event) {
         if (idx !== -1) {
           contacts[idx].paid = true;
           contacts[idx].paidAt = new Date().toISOString();
-          await saveAll(contacts);
+          await makeRequest('PUT', `/v3/b/${BIN_ID}`, contacts);
         }
         return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
       }
 
       if (action === 'delete') {
-        const updated = contacts.filter(c => c.id !== body.id);
-        await saveAll(updated);
+        contacts = contacts.filter(c => c.id !== body.id);
+        await makeRequest('PUT', `/v3/b/${BIN_ID}`, contacts);
         return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
       }
     }
