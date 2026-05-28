@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facilitator Dashboard — Accountability Programs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+    --red-lt: #fdf0ee;
+    --red: #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* LOGIN SCREEN */
+  .login-screen {
+    min-height: 100vh;
+    background: var(--forest-dk);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .login-box {
+    background: white;
+    border-radius: 12px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+  .login-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: var(--forest-dk);
+    margin-bottom: 8px;
+  }
+  .login-logo span { color: var(--gold); }
+  .login-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .login-box h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--forest-dk);
+    margin-bottom: 24px;
+  }
+  .login-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    margin-bottom: 14px;
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+  .login-input:focus { outline: none; border-color: var(--forest); }
+  .login-btn {
+    width: 100%;
+    background: var(--forest);
+    color: white;
+    border: none;
+    padding: 13px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .login-btn:hover { background: var(--forest-dk); }
+  .login-error { font-size: 13px; color: var(--red); margin-top: 10px; display: none; }
+
+  /* MAIN DASHBOARD */
+  .dashboard { display: none; }
+
+  /* HEADER */
+  .header {
+    background: var(--forest-dk);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-brand { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: rgba(255,255,255,0.6); }
+  .header-brand span { color: var(--gold); }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .logout-btn { font-size: 12px; color: rgba(255,255,255,0.4); background: none; border: none; cursor: pointer; padding: 4px 8px; }
+  .logout-btn:hover { color: white; }
+
+  /* PROGRAM TABS */
+  .program-tabs {
+    background: var(--forest);
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .program-tab {
+    padding: 14px 24px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .program-tab:hover { color: rgba(255,255,255,0.8); }
+  .program-tab.active { color: white; border-bottom-color: var(--gold); }
+  .program-tab .tab-count {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 11px;
+    margin-left: 6px;
+  }
+  .program-tab.active .tab-count { background: var(--gold); color: var(--forest-dk); }
+
+  /* MAIN */
+  .main { max-width: 1000px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--forest-dk);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* MEMBER GRID */
+  .member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+  }
+
+  /* MEMBER CARD */
+  .member-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .member-card-header {
+    background: var(--forest-dk);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .member-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: white;
+    font-weight: 400;
+  }
+  .member-session-count {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 2px 10px;
+  }
+  .member-card-body { padding: 16px 20px; }
+
+  /* LOG ENTRIES */
+  .log-entry {
+    border-bottom: 1px solid var(--bg);
+    padding: 12px 0;
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-date {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .log-win {
+    background: var(--forest-lt);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--forest-dk);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .log-struggle {
+    background: var(--gold-lt);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .log-icon { flex-shrink: 0; font-size: 14px; }
+  .log-empty { font-size: 13px; color: var(--muted); font-style: italic; padding: 12px 0; }
+
+  /* COMMITS SECTION */
+  .commits-toggle {
+    font-size: 12px;
+    color: var(--forest);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .commits-list { display: none; margin-top: 8px; }
+  .commits-list.open { display: block; }
+  .commit-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .commit-item:last-child { border-bottom: none; }
+  .commit-status {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .cs-done { background: var(--forest-lt); color: var(--forest-dk); }
+  .cs-partial { background: var(--gold-lt); color: var(--forest-dk); }
+  .cs-missed { background: var(--red-lt); color: var(--red); }
+  .cs-none { background: var(--bg); color: var(--muted); }
+
+  /* OVERALL BADGE */
+  .overall-badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-left: 8px;
+    font-family: 'DM Mono', monospace;
+  }
+  .ob-high { background: var(--forest-lt); color: var(--forest-dk); }
+  .ob-mid { background: var(--gold-lt); color: var(--forest-dk); }
+  .ob-low { background: var(--red-lt); color: var(--red); }
+
+  /* LOADING */
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .no-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .no-data h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--forest-dk); margin-bottom: 8px; font-weight: 400; }
+  .no-data p { font-size: 14px; }
+
+  /* REFRESH */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .toolbar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--forest-dk);
+    font-weight: 400;
+  }
+  .refresh-btn {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .refresh-btn:hover { border-color: var(--forest); color: var(--forest); }
+
+  @media (max-width: 700px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .member-grid { grid-template-columns: 1fr; }
+    .header, .program-tabs, .main { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Knowledgebase<span>.business</span></div>
+    <div class="login-label">Facilitator Access</div>
+    <h2>Enter your access code</h2>
+    <input type="password" class="login-input" id="password-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') checkPassword()">
+    <button class="login-btn" onclick="checkPassword()">Access Dashboard</button>
+    <div class="login-error" id="login-error">Incorrect access code. Try again.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+
+  <div class="header">
+    <div class="header-brand">Knowledgebase<span>.business</span></div>
+    <div class="header-right">
+      <div class="header-label">Facilitator Dashboard</div>
+      <button class="logout-btn" onclick="logout()">Log out</button>
+    </div>
+  </div>
+
+  <div class="program-tabs">
+    <button class="program-tab active" onclick="selectProgram('foundation', this)">Foundation <span class="tab-count" id="count-foundation">0</span></button>
+    <button class="program-tab" onclick="selectProgram('breakthrough', this)">Breakthrough <span class="tab-count" id="count-breakthrough">0</span></button>
+    <button class="program-tab" onclick="selectProgram('barefoot', this)">Barefoot Boardroom <span class="tab-count" id="count-barefoot">0</span></button>
+    <button class="program-tab" onclick="selectProgram('topfloor', this)">Top Floor <span class="tab-count" id="count-topfloor">0</span></button>
+  </div>
+
+  <div class="main">
+
+    <div class="toolbar">
+      <div class="toolbar-title" id="program-title">Foundation</div>
+      <button class="refresh-btn" onclick="loadProgram()">↻ Refresh</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-members">—</div>
+        <div class="stat-label">Members</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-sessions">—</div>
+        <div class="stat-label">Sessions logged</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-wins">—</div>
+        <div class="stat-label">Wins shared</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-struggles">—</div>
+        <div class="stat-label">Struggles shared</div>
+      </div>
+    </div>
+
+    <!-- MEMBER GRID -->
+    <div id="member-grid-container">
+      <div class="loading">Loading logs...</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // CHANGE THIS to your actual facilitator password
+  const FACILITATOR_PASSWORD = 'yehd78sk22aapemd';
+  const API = '/.netlify/functions/recap-store';
+
+  let currentProgram = 'foundation';
+  let allData = {};
+
+  const programNames = {
+    foundation: 'Foundation',
+    breakthrough: 'Breakthrough',
+    barefoot: 'Barefoot Boardroom',
+    topfloor: 'Top Floor'
+  };
+
+  function checkPassword() {
+    const pw = document.getElementById('password-input').value;
+    if (pw === FACILITATOR_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      sessionStorage.setItem('kb-facilitator', 'true');
+      loadAllCounts();
+      loadProgram();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem('kb-facilitator');
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+
+  // Auto-login if session active
+  if (sessionStorage.getItem('kb-facilitator')) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadAllCounts();
+    loadProgram();
+  }
+
+  async function loadAllCounts() {
+    for (const prog of ['foundation','breakthrough','barefoot','topfloor']) {
+      try {
+        const res = await fetch(`${API}?program=${prog}`);
+        const data = await res.json();
+        const members = groupByMember(data.entries || []);
+        document.getElementById('count-' + prog).textContent = Object.keys(members).length;
+      } catch(e) {}
+    }
+  }
+
+  async function loadProgram() {
+    document.getElementById('program-title').textContent = programNames[currentProgram];
+    document.getElementById('member-grid-container').innerHTML = '<div class="loading">Loading logs...</div>';
+
+    try {
+      const res = await fetch(`${API}?program=${currentProgram}`);
+      const data = await res.json();
+      const entries = data.entries || [];
+      renderDashboard(entries);
+    } catch(e) {
+      document.getElementById('member-grid-container').innerHTML = '<div class="no-data"><h3>Could not load data</h3><p>Check your network connection or try refreshing.</p></div>';
+    }
+  }
+
+  function groupByMember(entries) {
+    const grouped = {};
+    entries.forEach(entry => {
+      const key = entry.memberName;
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(entry);
+    });
+    return grouped;
+  }
+
+  function renderDashboard(entries) {
+    const grouped = groupByMember(entries);
+    const memberNames = Object.keys(grouped);
+
+    // Stats
+    let totalWins = 0, totalStruggles = 0;
+    entries.forEach(e => {
+      if (e.win) totalWins++;
+      if (e.struggle) totalStruggles++;
+    });
+    document.getElementById('stat-members').textContent = memberNames.length;
+    document.getElementById('stat-sessions').textContent = entries.length;
+    document.getElementById('stat-wins').textContent = totalWins;
+    document.getElementById('stat-struggles').textContent = totalStruggles;
+
+    if (memberNames.length === 0) {
+      document.getElementById('member-grid-container').innerHTML = '<div class="no-data"><h3>No sessions logged yet</h3><p>Members will appear here once they complete their first Recap.</p></div>';
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'member-grid';
+
+    memberNames.forEach(name => {
+      const sessions = grouped[name].sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+      const card = buildMemberCard(name, sessions);
+      grid.appendChild(card);
+    });
+
+    document.getElementById('member-grid-container').innerHTML = '';
+    document.getElementById('member-grid-container').appendChild(grid);
+  }
+
+  function buildMemberCard(name, sessions) {
+    const card = document.createElement('div');
+    card.className = 'member-card';
+
+    card.innerHTML = `
+      <div class="member-card-header">
+        <div class="member-card-name">${name}</div>
+        <div class="member-session-count">${sessions.length} session${sessions.length !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="member-card-body" id="body-${name.replace(/\s+/g,'-')}"></div>
+    `;
+
+    const body = card.querySelector('.member-card-body');
+
+    sessions.forEach((session, idx) => {
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+
+      const d = new Date(session.savedAt);
+      const dateStr = d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      const overall = session.recapData?.overall;
+      const overallBadge = overall
+        ? `<span class="overall-badge ${overall >= 4 ? 'ob-high' : overall >= 3 ? 'ob-mid' : 'ob-low'}">${overall}/5</span>`
+        : '';
+
+      entry.innerHTML = `<div class="log-date">Session — ${dateStr} ${overallBadge}</div>`;
+
+      if (session.win) {
+        entry.innerHTML += `<div class="log-win"><span class="log-icon">🏆</span><span>${session.win}</span></div>`;
+      }
+      if (session.struggle) {
+        entry.innerHTML += `<div class="log-struggle"><span class="log-icon">⚡</span><span>${session.struggle}</span></div>`;
+      }
+      if (!session.win && !session.struggle) {
+        entry.innerHTML += `<div class="log-empty">No win or struggle recorded for this session.</div>`;
+      }
+
+      // Commits toggle
+      if (session.commits && Object.keys(session.commits).length > 0) {
+        const toggleId = `commits-${name.replace(/\s+/g,'-')}-${idx}`;
+        entry.innerHTML += `<button class="commits-toggle" onclick="toggleCommits('${toggleId}')">▸ Show commitments</button>`;
+        
+        let commitsHtml = `<div class="commits-list" id="${toggleId}">`;
+        ['c1','c2','c3','c4'].forEach(c => {
+          const what = session.commits[c]?.what;
+          if (!what) return;
+          const recap = session.recapData;
+          const rKey = c.replace('c','r');
+          const status = recap?.[rKey]?.status;
+          const statusHtml = status
+            ? `<span class="commit-status cs-${status}">${status === 'done' ? '✓' : status === 'partial' ? '~' : '✗'}</span>`
+            : `<span class="commit-status cs-none">—</span>`;
+          commitsHtml += `<div class="commit-item">${statusHtml}<span>${what}</span></div>`;
+        });
+        commitsHtml += '</div>';
+        entry.innerHTML += commitsHtml;
+      }
+
+      body.appendChild(entry);
+    });
+
+    return card;
+  }
+
+  function toggleCommits(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('open');
+    const btn = el.previousElementSibling;
+    if (btn) btn.textContent = el.classList.contains('open') ? '▾ Hide commitments' : '▸ Show commitments';
+  }
+
+  function selectProgram(program, btn) {
+    currentProgram = program;
+    document.querySelectorAll('.program-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    loadProgram();
+  }
+</script>
+
+</body>
+</html>

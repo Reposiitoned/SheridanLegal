@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accountability Recap — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+    --red: #c0392b;
+    --red-lt: #fdf0ee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--forest-dk);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+  }
+  .header-brand span { color: var(--gold); }
+  .header-title {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* STAGE BAR */
+  .stage-bar {
+    background: var(--forest);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .stage-info { display: flex; align-items: center; gap: 16px; }
+  .stage-badge {
+    background: var(--gold);
+    color: var(--forest-dk);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .stage-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: white;
+  }
+  .stage-date {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  .member-name-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .member-label { font-size: 11px; color: rgba(255,255,255,0.4); }
+  .member-name-input {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 14px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    width: 180px;
+  }
+  .member-name-input::placeholder { color: rgba(255,255,255,0.3); }
+  .member-name-input:focus { outline: none; border-color: var(--gold); }
+
+  /* MAIN */
+  .main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* SECTION BLOCK */
+  .recap-section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .section-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-header.recap-header { background: var(--forest-dk); }
+  .section-header.commit-header { background: var(--forest); }
+
+  .section-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-recap { background: rgba(255,255,255,0.1); }
+  .icon-commit { background: var(--gold); }
+
+  .section-heading {
+    flex: 1;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: white;
+    font-weight: 400;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  .section-body { padding: 24px; }
+
+  /* PRIORITY ITEM */
+  .priority-item {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    background: var(--bg);
+    transition: border-color 0.2s;
+  }
+  .priority-item:focus-within { border-color: var(--forest); background: white; }
+  .priority-item.optional {
+    border-style: dashed;
+    opacity: 0.7;
+  }
+  .priority-item.optional:focus-within { opacity: 1; }
+
+  .priority-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .priority-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .num-recap { background: var(--forest-lt); color: var(--forest-dk); }
+  .num-commit { background: var(--gold-lt); color: var(--forest-dk); }
+  .num-optional { background: var(--border); color: var(--muted); }
+
+  .priority-label-text {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  /* STATUS BUTTONS (for recap) */
+  .status-wrap {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .status-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--muted);
+  }
+  .status-btn:hover { border-color: var(--forest); color: var(--forest); }
+  .status-btn.done { background: var(--forest); border-color: var(--forest); color: white; }
+  .status-btn.partial { background: var(--gold); border-color: var(--gold); color: var(--forest-dk); }
+  .status-btn.missed { background: var(--red-lt); border-color: var(--red); color: var(--red); }
+
+  /* INPUTS */
+  .field-label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+    display: block;
+  }
+  textarea, input[type="text"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: white;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--forest);
+  }
+  textarea { min-height: 60px; }
+  .field-row { margin-bottom: 12px; }
+  .field-row:last-child { margin-bottom: 0; }
+
+  /* WIN / STRUGGLE SUMMARY */
+  .wins-struggles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .ws-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .ws-header {
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ws-win .ws-header { background: var(--forest-lt); color: var(--forest-dk); }
+  .ws-struggle .ws-header { background: var(--gold-lt); color: var(--forest-dk); }
+  .ws-body { padding: 10px 14px; background: white; }
+  .ws-body textarea {
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    min-height: 52px;
+    background: transparent;
+  }
+  .ws-body textarea:focus { border: none; outline: none; }
+
+  /* DIVIDER */
+  .form-divider {
+    text-align: center;
+    position: relative;
+    margin: 8px 0 20px;
+  }
+  .form-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+  .form-divider span {
+    position: relative;
+    background: var(--bg);
+    padding: 0 16px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* OVERALL SECTION */
+  .overall-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .overall-label { font-size: 13px; color: var(--forest-dk); font-weight: 500; margin-bottom: 10px; }
+  .overall-scale {
+    display: flex;
+    gap: 8px;
+  }
+  .scale-btn {
+    flex: 1;
+    padding: 10px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: white;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .scale-btn:hover { border-color: var(--forest); }
+  .scale-btn.selected { background: var(--forest); border-color: var(--forest); color: white; }
+  .scale-num { font-size: 18px; font-weight: 600; display: block; }
+  .scale-word { font-size: 10px; color: inherit; opacity: 0.7; display: block; margin-top: 2px; }
+
+  /* OPTIONAL TAG */
+  .optional-tag {
+    font-size: 10px;
+    background: var(--border);
+    color: var(--muted);
+    border-radius: 10px;
+    padding: 2px 8px;
+    margin-left: 8px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ACTIONS */
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--forest);
+    color: white;
+    border: none;
+    padding: 13px 28px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--forest-dk); }
+  .btn-secondary {
+    background: white;
+    color: var(--forest);
+    border: 1.5px solid var(--forest);
+    padding: 12px 28px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: var(--forest-lt); }
+
+  /* SAVED */
+  .saved-notice {
+    display: none;
+    background: var(--forest-lt);
+    border: 1px solid var(--forest);
+    border-radius: 6px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--forest-dk);
+    margin-top: 14px;
+  }
+  .saved-notice.show { display: block; }
+
+  /* HISTORY PANEL */
+  .history-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .history-header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .history-header-title { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .history-toggle { font-size: 12px; color: var(--forest); }
+  .history-body { padding: 20px 24px; display: none; }
+  .history-body.open { display: block; }
+  .history-empty { font-size: 13px; color: var(--muted); font-style: italic; }
+  .history-entry {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+  .history-entry:last-child { border-bottom: none; }
+  .history-date { font-size: 11px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .history-commit {
+    font-size: 13px;
+    color: var(--text);
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .history-status {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .hs-done { background: var(--forest-lt); color: var(--forest-dk); }
+  .hs-partial { background: var(--gold-lt); color: var(--forest-dk); }
+  .hs-missed { background: var(--red-lt); color: var(--red); }
+
+  @media (max-width: 600px) {
+    .stage-bar { flex-direction: column; align-items: flex-start; }
+    .wins-struggles { grid-template-columns: 1fr; }
+    .overall-scale { flex-wrap: wrap; }
+    .scale-btn { min-width: 60px; }
+    .header { padding: 0 16px; }
+    .main { padding: 20px 14px 60px; }
+  }
+</style>
+<script data-memberstack-app="app_cmphlk3lw009j0try4zumg9ka" src="https://static.memberstack.com/scripts/v2/memberstack.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">Knowledgebase<span>.business</span></div>
+  <div class="header-title">Accountability Recap</div>
+</div>
+
+<div class="stage-bar">
+  <div class="stage-info">
+    <span class="stage-badge" id="program-badge">Foundation</span>
+    <span class="stage-name" id="program-name">Accountability Program</span>
+  </div>
+  <div class="member-name-wrap">
+    <span class="member-label">Your name</span>
+    <input type="text" class="member-name-input" id="member-name" placeholder="Enter your name" oninput="saveDraft()">
+    <span class="stage-date" id="session-date"></span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- PREVIOUS RECAP HISTORY -->
+  <div class="history-panel" id="history-panel">
+    <div class="history-header" onclick="toggleHistory()">
+      <div class="history-header-title">📋 Previous Recap — what you committed to last session</div>
+      <div class="history-toggle" id="history-toggle-text">Show</div>
+    </div>
+    <div class="history-body" id="history-body">
+      <div class="history-empty" id="history-empty">No previous recap found. Complete your first session below.</div>
+      <div id="history-entries"></div>
+    </div>
+  </div>
+
+  <!-- PART 1: RECAP -->
+  <div class="recap-section">
+    <div class="section-header recap-header">
+      <div class="section-icon icon-recap">🔁</div>
+      <div class="section-heading">
+        <div class="section-title">Recap — how did you go?</div>
+        <div class="section-sub">Report back on the commitments you made last session</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <!-- PRIORITY 1 RECAP -->
+      <div class="priority-item" id="recap-1">
+        <div class="priority-top">
+          <div class="priority-num num-recap">1</div>
+          <div class="priority-label-text">Commitment 1</div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What did you commit to?</label>
+          <input type="text" id="r1-commitment" placeholder="What you said you'd do last session..." oninput="saveDraft()">
+        </div>
+        <div class="field-row">
+          <label class="field-label">How did you go?</label>
+          <div class="status-wrap">
+            <button class="status-btn" onclick="setStatus('r1', 'done', this)">✓ Done</button>
+            <button class="status-btn" onclick="setStatus('r1', 'partial', this)">~ Partial</button>
+            <button class="status-btn" onclick="setStatus('r1', 'missed', this)">✗ Not done</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What happened?</label>
+          <textarea id="r1-notes" placeholder="Share what happened — the win, the struggle, or what got in the way..." oninput="saveDraft()"></textarea>
+        </div>
+      </div>
+
+      <!-- PRIORITY 2 RECAP -->
+      <div class="priority-item" id="recap-2">
+        <div class="priority-top">
+          <div class="priority-num num-recap">2</div>
+          <div class="priority-label-text">Commitment 2</div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What did you commit to?</label>
+          <input type="text" id="r2-commitment" placeholder="What you said you'd do last session..." oninput="saveDraft()">
+        </div>
+        <div class="field-row">
+          <label class="field-label">How did you go?</label>
+          <div class="status-wrap">
+            <button class="status-btn" onclick="setStatus('r2', 'done', this)">✓ Done</button>
+            <button class="status-btn" onclick="setStatus('r2', 'partial', this)">~ Partial</button>
+            <button class="status-btn" onclick="setStatus('r2', 'missed', this)">✗ Not done</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What happened?</label>
+          <textarea id="r2-notes" placeholder="Share what happened..." oninput="saveDraft()"></textarea>
+        </div>
+      </div>
+
+      <!-- PRIORITY 3 RECAP -->
+      <div class="priority-item" id="recap-3">
+        <div class="priority-top">
+          <div class="priority-num num-recap">3</div>
+          <div class="priority-label-text">Commitment 3</div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What did you commit to?</label>
+          <input type="text" id="r3-commitment" placeholder="What you said you'd do last session..." oninput="saveDraft()">
+        </div>
+        <div class="field-row">
+          <label class="field-label">How did you go?</label>
+          <div class="status-wrap">
+            <button class="status-btn" onclick="setStatus('r3', 'done', this)">✓ Done</button>
+            <button class="status-btn" onclick="setStatus('r3', 'partial', this)">~ Partial</button>
+            <button class="status-btn" onclick="setStatus('r3', 'missed', this)">✗ Not done</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What happened?</label>
+          <textarea id="r3-notes" placeholder="Share what happened..." oninput="saveDraft()"></textarea>
+        </div>
+      </div>
+
+      <div class="form-divider"><span>Overall</span></div>
+
+      <!-- WINS & STRUGGLES -->
+      <div class="wins-struggles">
+        <div class="ws-box ws-win">
+          <div class="ws-header">🏆 Biggest win this period</div>
+          <div class="ws-body">
+            <textarea id="period-win" placeholder="What are you most proud of..." oninput="saveDraft()"></textarea>
+          </div>
+        </div>
+        <div class="ws-box ws-struggle">
+          <div class="ws-header">⚡ Biggest struggle</div>
+          <div class="ws-body">
+            <textarea id="period-struggle" placeholder="What was hardest, and why..." oninput="saveDraft()"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- OVERALL SCORE -->
+      <div class="overall-box">
+        <div class="overall-label">Overall — how would you rate this period?</div>
+        <div class="overall-scale">
+          <div class="scale-btn" onclick="setOverall(1, this)"><span class="scale-num">1</span><span class="scale-word">Poor</span></div>
+          <div class="scale-btn" onclick="setOverall(2, this)"><span class="scale-num">2</span><span class="scale-word">Weak</span></div>
+          <div class="scale-btn" onclick="setOverall(3, this)"><span class="scale-num">3</span><span class="scale-word">OK</span></div>
+          <div class="scale-btn" onclick="setOverall(4, this)"><span class="scale-num">4</span><span class="scale-word">Good</span></div>
+          <div class="scale-btn" onclick="setOverall(5, this)"><span class="scale-num">5</span><span class="scale-word">Strong</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PART 2: COMMIT -->
+  <div class="recap-section">
+    <div class="section-header commit-header">
+      <div class="section-icon icon-commit">🎯</div>
+      <div class="section-heading">
+        <div class="section-title">Commit — what will you do next?</div>
+        <div class="section-sub">Set your priorities for the next period — say them out loud to the group</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <!-- COMMIT 1 -->
+      <div class="priority-item">
+        <div class="priority-top">
+          <div class="priority-num num-commit">1</div>
+          <div class="priority-label-text">Priority 1</div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What will you do?</label>
+          <input type="text" id="c1-what" placeholder="Be specific — vague priorities don't get done..." oninput="saveDraft()">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Why does this matter right now?</label>
+          <textarea id="c1-why" placeholder="What's at stake if this doesn't happen..." oninput="saveDraft()"></textarea>
+        </div>
+      </div>
+
+      <!-- COMMIT 2 -->
+      <div class="priority-item">
+        <div class="priority-top">
+          <div class="priority-num num-commit">2</div>
+          <div class="priority-label-text">Priority 2</div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What will you do?</label>
+          <input type="text" id="c2-what" placeholder="Be specific..." oninput="saveDraft()">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Why does this matter right now?</label>
+          <textarea id="c2-why" placeholder="What's at stake..." oninput="saveDraft()"></textarea>
+        </div>
+      </div>
+
+      <!-- COMMIT 3 -->
+      <div class="priority-item">
+        <div class="priority-top">
+          <div class="priority-num num-commit">3</div>
+          <div class="priority-label-text">Priority 3</div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What will you do?</label>
+          <input type="text" id="c3-what" placeholder="Be specific..." oninput="saveDraft()">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Why does this matter right now?</label>
+          <textarea id="c3-why" placeholder="What's at stake..." oninput="saveDraft()"></textarea>
+        </div>
+      </div>
+
+      <!-- COMMIT 4 (OPTIONAL) -->
+      <div class="priority-item optional">
+        <div class="priority-top">
+          <div class="priority-num num-optional">4</div>
+          <div class="priority-label-text">Priority 4 <span class="optional-tag">Optional — for overachievers</span></div>
+        </div>
+        <div class="field-row">
+          <label class="field-label">What will you do?</label>
+          <input type="text" id="c4-what" placeholder="Only if you're confident the first three are locked in..." oninput="saveDraft()">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Why does this matter right now?</label>
+          <textarea id="c4-why" placeholder="What's at stake..." oninput="saveDraft()"></textarea>
+        </div>
+      </div>
+
+      <!-- ONE THING -->
+      <div class="overall-box" style="margin-top:4px;">
+        <div class="overall-label">If you only did one thing this period — what would it be?</div>
+        <input type="text" id="one-thing" placeholder="The single most important commitment..." oninput="saveDraft()" style="margin-top:10px;">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <button class="btn-primary" onclick="saveRecap()">Save this Recap</button>
+    <button class="btn-secondary" onclick="window.print()">Print</button>
+    <button class="btn-secondary" onclick="newSession()">Start fresh</button>
+  </div>
+  <div class="saved-notice" id="saved-notice">
+    ✓ Recap saved. Your commitments are locked in. See you next session.
+  </div>
+
+</div>
+
+<script>
+  const statuses = {};
+  let overallScore = null;
+  const API = '/.netlify/functions/recap-store';
+
+  // Set date
+  const now = new Date();
+  document.getElementById('session-date').textContent = now.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Detect program from URL param
+  const params = new URLSearchParams(window.location.search);
+  const program = params.get('program') || 'foundation';
+  const programs = {
+    foundation: { badge: 'Build', name: 'Foundation' },
+    breakthrough: { badge: 'Ceiling', name: 'Breakthrough' },
+    barefoot: { badge: 'Scale', name: 'Barefoot Boardroom' },
+    topfloor: { badge: 'Exit', name: 'Top Floor' }
+  };
+  const p = programs[program] || programs.foundation;
+  document.getElementById('program-badge').textContent = p.badge;
+  document.getElementById('program-name').textContent = p.name;
+
+  function setStatus(id, status, btn) {
+    statuses[id] = status;
+    const wrap = btn.closest('.status-wrap');
+    wrap.querySelectorAll('.status-btn').forEach(b => b.classList.remove('done','partial','missed'));
+    btn.classList.add(status);
+    saveDraft();
+  }
+
+  function setOverall(val, btn) {
+    overallScore = val;
+    document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    saveDraft();
+  }
+
+  function saveDraft() {
+    const data = {
+      memberName: document.getElementById('member-name').value,
+      program,
+      date: now.toISOString(),
+      recap: {
+        r1: { commitment: document.getElementById('r1-commitment').value, status: statuses.r1 || null, notes: document.getElementById('r1-notes').value },
+        r2: { commitment: document.getElementById('r2-commitment').value, status: statuses.r2 || null, notes: document.getElementById('r2-notes').value },
+        r3: { commitment: document.getElementById('r3-commitment').value, status: statuses.r3 || null, notes: document.getElementById('r3-notes').value },
+        win: document.getElementById('period-win').value,
+        struggle: document.getElementById('period-struggle').value,
+        overall: overallScore
+      },
+      commit: {
+        c1: { what: document.getElementById('c1-what').value, why: document.getElementById('c1-why').value },
+        c2: { what: document.getElementById('c2-what').value, why: document.getElementById('c2-why').value },
+        c3: { what: document.getElementById('c3-what').value, why: document.getElementById('c3-why').value },
+        c4: { what: document.getElementById('c4-what').value, why: document.getElementById('c4-why').value },
+        oneThing: document.getElementById('one-thing').value
+      }
+    };
+    localStorage.setItem('kb-recap-draft-' + program, JSON.stringify(data));
+  }
+
+  async function saveRecap() {
+    saveDraft();
+    const memberName = document.getElementById('member-name').value.trim();
+    if (!memberName) {
+      alert('Please enter your name before saving.');
+      document.getElementById('member-name').focus();
+      return;
+    }
+
+    const payload = {
+      memberName,
+      program,
+      sessionDate: now.toISOString(),
+      win: document.getElementById('period-win').value,
+      struggle: document.getElementById('period-struggle').value,
+      commits: {
+        c1: { what: document.getElementById('c1-what').value, why: document.getElementById('c1-why').value },
+        c2: { what: document.getElementById('c2-what').value, why: document.getElementById('c2-why').value },
+        c3: { what: document.getElementById('c3-what').value, why: document.getElementById('c3-why').value },
+        c4: { what: document.getElementById('c4-what').value, why: document.getElementById('c4-why').value }
+      },
+      recapData: {
+        r1: { commitment: document.getElementById('r1-commitment').value, status: statuses.r1 || null, notes: document.getElementById('r1-notes').value },
+        r2: { commitment: document.getElementById('r2-commitment').value, status: statuses.r2 || null, notes: document.getElementById('r2-notes').value },
+        r3: { commitment: document.getElementById('r3-commitment').value, status: statuses.r3 || null, notes: document.getElementById('r3-notes').value },
+        overall: overallScore
+      }
+    };
+
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        // Also save to localStorage for history panel
+        const current = JSON.parse(localStorage.getItem('kb-recap-draft-' + program) || '{}');
+        const history = JSON.parse(localStorage.getItem('kb-recap-history-' + program) || '[]');
+        history.unshift(current);
+        if (history.length > 10) history.pop();
+        localStorage.setItem('kb-recap-history-' + program, JSON.stringify(history));
+        document.getElementById('saved-notice').classList.add('show');
+        loadHistory();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      } else {
+        alert('Could not save. Please check your connection and try again.');
+      }
+    } catch(e) {
+      alert('Could not save. Please check your connection and try again.');
+    }
+  }
+
+  function newSession() {
+    if (!confirm('Start a new session? Your current draft will be cleared.')) return;
+    // Pre-fill recap from last commit
+    const saved = JSON.parse(localStorage.getItem('kb-recap-draft-' + program) || '{}');
+    if (saved.commit) {
+      document.getElementById('r1-commitment').value = saved.commit.c1?.what || '';
+      document.getElementById('r2-commitment').value = saved.commit.c2?.what || '';
+      document.getElementById('r3-commitment').value = saved.commit.c3?.what || '';
+    }
+    // Clear everything else
+    ['r1-notes','r2-notes','r3-notes','period-win','period-struggle','c1-what','c1-why','c2-what','c2-why','c3-what','c3-why','c4-what','c4-why','one-thing'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('done','partial','missed'));
+    document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+    Object.keys(statuses).forEach(k => delete statuses[k]);
+    overallScore = null;
+    document.getElementById('saved-notice').classList.remove('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleHistory() {
+    const body = document.getElementById('history-body');
+    const toggle = document.getElementById('history-toggle-text');
+    body.classList.toggle('open');
+    toggle.textContent = body.classList.contains('open') ? 'Hide' : 'Show';
+  }
+
+  function loadHistory() {
+    const history = JSON.parse(localStorage.getItem('kb-recap-history-' + program) || '[]');
+    const container = document.getElementById('history-entries');
+    const empty = document.getElementById('history-empty');
+    if (history.length === 0) { empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    container.innerHTML = '';
+    const last = history[0];
+    if (!last.commit) return;
+    const d = new Date(last.date);
+    const entry = document.createElement('div');
+    entry.className = 'history-entry';
+    entry.innerHTML = '<div class="history-date">Session — ' + d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }) + '</div>';
+    ['c1','c2','c3','c4'].forEach((c, i) => {
+      const what = last.commit[c]?.what;
+      if (!what) return;
+      const rc = last.recap ? last.recap['r' + (i+1)] : null;
+      const status = rc?.status;
+      const statusHtml = status ? '<span class="history-status hs-' + status + '">' + (status === 'done' ? '✓ Done' : status === 'partial' ? '~ Partial' : '✗ Missed') + '</span>' : '';
+      entry.innerHTML += '<div class="history-commit">' + statusHtml + '<span>' + what + '</span></div>';
+    });
+    container.appendChild(entry);
+  }
+
+  // Load draft on page load
+  window.addEventListener('load', () => {
+    loadHistory();
+    const draft = localStorage.getItem('kb-recap-draft-' + program);
+    if (!draft) return;
+    try {
+      const data = JSON.parse(draft);
+      if (data.memberName) document.getElementById('member-name').value = data.memberName;
+    } catch(e) {}
+  });
+</script>
+</body>
+</html>
