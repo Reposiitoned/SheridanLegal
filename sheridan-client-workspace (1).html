@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Workspace — Sheridan Legal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --forest:#2d5a27;--forest-dk:#1a3d16;--forest-lt:#d4e8d1;
+  --gold:#c8a84b;--gold-lt:#f5edd6;
+  --bg:#f0f5ef;--white:#ffffff;
+  --text:#1c2b1a;--muted:#6b7e69;--border:#dde8db;
+  --tool-bg:#e8f0fb;--tool-text:#1a4a8a;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;}
+
+/* NAV */
+nav{background:var(--forest-dk);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--white);text-decoration:none;letter-spacing:-.02em;}
+.nav-logo span{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-badge{background:var(--tool-bg);color:var(--tool-text);font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;}
+.nav-user{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.7);font-size:12px;}
+.avatar-sm{width:28px;height:28px;border-radius:50%;background:var(--gold-lt);color:#7a5a1a;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;border:2px solid rgba(200,168,75,.4);flex-shrink:0;}
+
+/* ─── LIST VIEW ─── */
+#listView{}
+.list-hero{background:var(--forest);padding:32px 28px 36px;position:relative;overflow:hidden;}
+.list-hero::after{content:'';position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;background:rgba(200,168,75,.07);pointer-events:none;}
+.hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:10px;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:white;line-height:1.1;margin-bottom:4px;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.55);margin-top:6px;}
+.hero-stats{display:flex;gap:32px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);}
+.h-stat-val{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:white;line-height:1;}
+.h-stat-label{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+
+.list-main{padding:28px;max-width:900px;margin:0 auto;}
+.list-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap;}
+.list-heading{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--forest-dk);}
+.filter-btns{display:flex;gap:6px;}
+.fbtn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:white;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:.15s;}
+.fbtn:hover,.fbtn.active{background:var(--forest);border-color:var(--forest);color:white;}
+
+/* CLIENT CARDS GRID */
+.client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.client-card{background:white;border-radius:12px;border:1px solid var(--border);padding:18px 20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.client-card:hover{border-color:var(--forest);box-shadow:0 4px 16px rgba(45,90,39,.1);transform:translateY(-2px);}
+.client-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--border);transition:.2s;}
+.client-card:hover::before,.client-card.has-tasks::before{background:var(--forest);}
+.client-card.overdue::before{background:#ef4444;}
+.overdue-dot{background:#ef4444;color:white;font-size:10px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+.cc-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--forest-dk);margin-bottom:2px;}
+.cc-status{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:20px;background:var(--forest-lt);color:var(--forest);margin-bottom:12px;}
+.cc-metrics{display:flex;gap:16px;margin-bottom:12px;}
+.cc-metric{text-align:left;}
+.cc-metric-val{font-size:18px;font-weight:600;color:var(--text);}
+.cc-metric-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.cc-last{font-size:11px;color:var(--muted);padding-top:10px;border-top:1px solid var(--border);}
+.cc-last span{color:var(--text);font-weight:500;}
+.cc-arrow{position:absolute;bottom:18px;right:18px;color:var(--forest-lt);font-size:18px;transition:.2s;}
+.client-card:hover .cc-arrow{color:var(--forest);}
+
+/* ─── DETAIL VIEW ─── */
+#detailView{display:none;}
+.back-bar{background:var(--forest-dk);padding:10px 28px;display:flex;align-items:center;gap:10px;}
+.back-btn{background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.15s;display:flex;align-items:center;gap:6px;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+.back-context{color:rgba(255,255,255,.35);font-size:12px;}
+
+.hero{background:var(--forest);padding:28px 28px 32px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(200,168,75,.08);pointer-events:none;}
+.hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:10px;}
+.client-name{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:white;line-height:1.1;margin-bottom:4px;}
+.client-meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:8px;}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.6);}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.status-pill{background:rgba(200,168,75,.2);color:var(--gold);font-size:10px;font-weight:600;padding:3px 12px;border-radius:20px;border:1px solid rgba(200,168,75,.3);letter-spacing:.06em;text-transform:uppercase;}
+.detail-stats{display:flex;gap:32px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);}
+.d-stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:white;line-height:1;}
+.d-stat-label{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+
+.team-strip{background:var(--forest-dk);padding:10px 28px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);}
+.team-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-right:4px;}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--gold-lt);color:#7a5a1a;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;border:2px solid rgba(200,168,75,.4);}
+
+.detail-main{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:24px 28px;max-width:1100px;margin:0 auto;}
+@media(max-width:750px){.detail-main{grid-template-columns:1fr;}.client-grid{grid-template-columns:1fr;}.hero-stats,.detail-stats{gap:20px;}}
+
+/* PANELS */
+.panel{background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;}
+.panel-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.panel-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--forest-dk);}
+.panel-count{background:var(--forest-lt);color:var(--forest);font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;}
+.panel-body{padding:16px 20px;}
+
+/* TASKS */
+.task-input-row{display:flex;gap:8px;margin-bottom:16px;}
+.task-input{flex:1;border:1px solid var(--border);border-radius:8px;padding:9px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);transition:.15s;}
+.task-input:focus{outline:none;border-color:var(--forest);background:white;}
+.task-add-btn{background:var(--forest);color:white;border:none;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-weight:500;transition:.15s;}
+.task-add-btn:hover{background:var(--forest-dk);}
+.task-date-input{border:1px solid var(--border);border-radius:8px;padding:9px 10px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--muted);background:var(--bg);cursor:pointer;width:130px;flex-shrink:0;}
+.task-date-input:focus{outline:none;border-color:var(--forest);}
+.due-label{font-size:10px;margin-top:3px;font-weight:500;}
+.due-label.overdue{color:#c0392b;}
+.due-label.today{color:var(--gold);}
+.due-label.upcoming{color:var(--muted);}
+.task-item.overdue{border-color:#fecaca;background:#fffafa;}
+.task-item.overdue-today{border-color:#fde68a;background:#fffdf0;}
+
+.task-list{display:flex;flex-direction:column;gap:8px;}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);transition:.15s;background:white;}
+.task-item:hover{border-color:var(--forest-lt);}
+.task-item.done{opacity:.5;}
+.task-item.done .task-text{text-decoration:line-through;color:var(--muted);}
+.task-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border);cursor:pointer;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.task-check:hover{border-color:var(--forest);}
+.task-check.checked{background:var(--forest);border-color:var(--forest);}
+.task-check.checked::after{content:'✓';font-size:10px;color:white;}
+.task-text{flex:1;font-size:13px;line-height:1.4;}
+.task-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.owner-badge{font-size:10px;font-weight:600;color:#7a5a1a;background:var(--gold-lt);padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.task-delete{background:none;border:none;color:var(--border);cursor:pointer;font-size:16px;padding:0 2px;transition:.15s;line-height:1;}
+.task-delete:hover{color:#c0392b;}
+.empty-state{text-align:center;padding:28px 16px;color:var(--muted);font-size:13px;font-style:italic;}
+
+/* LOG */
+.log-entry-form{background:var(--bg);border-radius:10px;padding:14px;margin-bottom:16px;display:flex;flex-direction:column;gap:10px;}
+.log-type-row{display:flex;gap:6px;flex-wrap:wrap;}
+.type-btn{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:.15s;}
+.type-btn:hover{border-color:var(--forest);color:var(--forest);}
+.type-btn.active{background:var(--forest);border-color:var(--forest);color:white;}
+.log-textarea{border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:white;resize:none;transition:.15s;width:100%;}
+.log-textarea:focus{outline:none;border-color:var(--forest);}
+.log-btn{background:var(--forest);color:white;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif;}
+.log-btn:hover{background:var(--forest-dk);}
+
+.log-list{display:flex;flex-direction:column;}
+.log-entry{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.log-entry:last-child{border-bottom:none;}
+.log-timeline{display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0;}
+.log-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.log-dot.call{background:#3b82f6;}
+.log-dot.meeting{background:var(--gold);}
+.log-dot.email{background:#8b5cf6;}
+.log-dot.note{background:var(--forest);}
+.log-dot.decision{background:#ef4444;}
+.log-line{width:1px;background:var(--border);flex:1;min-height:24px;margin-top:4px;}
+.log-content{flex:1;}
+.log-type-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:5px;}
+.log-type-tag.call{background:#eff6ff;color:#1d4ed8;}
+.log-type-tag.meeting{background:var(--gold-lt);color:#7a5a1a;}
+.log-type-tag.email{background:#f5f3ff;color:#6d28d9;}
+.log-type-tag.note{background:var(--forest-lt);color:var(--forest-dk);}
+.log-type-tag.decision{background:#fef2f2;color:#b91c1c;}
+.log-body{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:5px;}
+.log-footer{display:flex;gap:12px;align-items:center;}
+.log-who{font-size:11px;font-weight:500;color:var(--forest);}
+.log-when{font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <div class="nav-right">
+    <span class="nav-badge">Client Workspace</span>
+    <div class="nav-user">
+      <div class="avatar-sm">DM</div>
+      <span>Deanne Marr</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ LIST VIEW ═══════════════ -->
+<div id="listView">
+
+  <div class="list-hero">
+    <div class="hero-eyebrow">Sheridan Legal · Client Workspace</div>
+    <div class="hero-title">My Clients</div>
+    <div class="hero-sub">Deanne Marr — all active relationships</div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-val" id="ls-total">9</div><div class="h-stat-label">Clients</div></div>
+      <div class="h-stat"><div class="h-stat-val" id="ls-tasks">0</div><div class="h-stat-label">Open tasks</div></div>
+      <div class="h-stat"><div class="h-stat-val" id="ls-logs">0</div><div class="h-stat-label">Log entries</div></div>
+    </div>
+  </div>
+
+  <div class="list-main">
+    <div class="list-toolbar">
+      <div class="list-heading">All clients</div>
+      <div class="filter-btns">
+        <button class="fbtn active" onclick="setFilter('all',this)">All</button>
+        <button class="fbtn" onclick="setFilter('tasks',this)">Has tasks</button>
+        <button class="fbtn" onclick="setFilter('recent',this)">Recently logged</button>
+      </div>
+    </div>
+    <div class="client-grid" id="clientGrid"></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ DETAIL VIEW ═══════════════ -->
+<div id="detailView">
+
+  <div class="back-bar">
+    <button class="back-btn" onclick="showList()">← Back</button>
+    <span class="back-context">Sheridan Legal · My Clients</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-eyebrow">Active Client</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div class="client-name" id="d-name"></div>
+        <div class="client-meta">
+          <div class="meta-item"><div class="meta-dot"></div>Sheridan Legal</div>
+          <div class="meta-item"><div class="meta-dot"></div><span id="d-status-text">Active</span></div>
+        </div>
+      </div>
+      <div class="status-pill">Active</div>
+    </div>
+    <div class="detail-stats">
+      <div class="h-stat"><div class="d-stat-val" id="d-open">0</div><div class="d-stat-label">Open tasks</div></div>
+      <div class="h-stat"><div class="d-stat-val" id="d-done">0</div><div class="d-stat-label">Completed</div></div>
+      <div class="h-stat"><div class="d-stat-val" id="d-log">0</div><div class="d-stat-label">Log entries</div></div>
+    </div>
+  </div>
+
+  <div class="team-strip">
+    <span class="team-label">Relationship owner</span>
+    <div class="avatar">DM</div>
+    <span style="color:rgba(255,255,255,.55);font-size:12px;margin-left:4px;">Deanne Marr</span>
+  </div>
+
+  <div class="detail-main">
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">To-Do</div>
+        <div class="panel-count" id="d-task-count">0 open</div>
+      </div>
+      <div class="panel-body">
+        <div class="task-input-row">
+          <input class="task-input" id="taskInput" placeholder="Add a task for this client…" onkeydown="if(event.key==='Enter')addTask()">
+          <input class="task-date-input" id="taskDate" type="date" title="Next action date">
+          <button class="task-add-btn" onclick="addTask()">Add</button>
+        </div>
+        <div class="task-list" id="taskList"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Interaction Log</div>
+        <div class="panel-count" id="d-log-count">0 entries</div>
+      </div>
+      <div class="panel-body">
+        <div class="log-entry-form">
+          <div class="log-type-row">
+            <button class="type-btn active" data-type="call" onclick="setType(this)">📞 Call</button>
+            <button class="type-btn" data-type="meeting" onclick="setType(this)">🤝 Meeting</button>
+            <button class="type-btn" data-type="email" onclick="setType(this)">✉️ Email</button>
+            <button class="type-btn" data-type="note" onclick="setType(this)">📝 Note</button>
+            <button class="type-btn" data-type="decision" onclick="setType(this)">⚡ Decision</button>
+          </div>
+          <textarea class="log-textarea" id="logInput" rows="2" placeholder="What happened? What was discussed or decided?"></textarea>
+          <div style="display:flex;justify-content:flex-end;">
+            <button class="log-btn" onclick="addLog()">Log it</button>
+          </div>
+        </div>
+        <div class="log-list" id="logList"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── DATA ───
+const CLIENTS = [
+  'Patrick','Michelle','Emma','Kristy','Tara','Tracy','Jill','Lyn','Jewell'
+];
+
+// Storage key prefix
+const KEY = 'sheridan_';
+
+let activeType = 'call';
+let currentClient = null;
+let listFilter = 'all';
+let nextId = parseInt(localStorage.getItem(KEY+'nextId')||'1');
+
+function saveNextId(){ localStorage.setItem(KEY+'nextId', nextId); }
+
+function clientKey(name){ return KEY + name.toLowerCase(); }
+
+function loadClient(name){
+  const raw = localStorage.getItem(clientKey(name));
+  if(raw) return JSON.parse(raw);
+  return { name, tasks:[], logs:[] };
+}
+
+function saveClient(data){
+  localStorage.setItem(clientKey(data.name), JSON.stringify(data));
+}
+
+function allData(){
+  return CLIENTS.map(loadClient);
+}
+
+// ─── LIST VIEW ───
+function setFilter(f, btn){
+  listFilter = f;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderList();
+}
+
+function renderList(){
+  const all = allData();
+  let list = all;
+  if(listFilter==='tasks') list = all.filter(c=>c.tasks.filter(t=>!t.done).length>0);
+  if(listFilter==='recent') list = all.filter(c=>c.logs.length>0).sort((a,b)=>b.logs.length-a.logs.length);
+
+  const totalTasks = all.reduce((s,c)=>s+c.tasks.filter(t=>!t.done).length,0);
+  const totalLogs = all.reduce((s,c)=>s+c.logs.length,0);
+  document.getElementById('ls-tasks').textContent = totalTasks;
+  document.getElementById('ls-logs').textContent = totalLogs;
+
+  const grid = document.getElementById('clientGrid');
+  if(!list.length){
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:40px 20px;">No clients match this filter</div>';
+    return;
+  }
+  grid.innerHTML = list.map(c=>{
+    const open = c.tasks.filter(t=>!t.done).length;
+    const done = c.tasks.filter(t=>t.done).length;
+    const lastLog = c.logs[0];
+    const hasTasks = open > 0;
+    const today = new Date(); today.setHours(0,0,0,0);
+    const hasOverdue = c.tasks.some(t=>!t.done && t.dueDate && new Date(t.dueDate+'T00:00:00') < today);
+    return `
+    <div class="client-card${hasTasks?' has-tasks':''}${hasOverdue?' overdue':''}" onclick="openClient('${c.name}')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div class="cc-name">${c.name}</div>
+        ${hasOverdue?'<div class="overdue-dot" title="Overdue tasks">!</div>':''}
+      </div>
+      <div class="cc-status">Active</div>
+      <div class="cc-metrics">
+        <div class="cc-metric">
+          <div class="cc-metric-val">${open}</div>
+          <div class="cc-metric-label">Open tasks</div>
+        </div>
+        <div class="cc-metric">
+          <div class="cc-metric-val">${done}</div>
+          <div class="cc-metric-label">Completed</div>
+        </div>
+        <div class="cc-metric">
+          <div class="cc-metric-val">${c.logs.length}</div>
+          <div class="cc-metric-label">Log entries</div>
+        </div>
+      </div>
+      <div class="cc-last">
+        ${lastLog
+          ? `Last: <span>${lastLog.type} · ${lastLog.when}</span>`
+          : `<span style="color:var(--muted);font-style:italic;">No interactions logged yet</span>`}
+      </div>
+      <div class="cc-arrow">→</div>
+    </div>`;
+  }).join('');
+}
+
+// ─── DETAIL VIEW ───
+function openClient(name){
+  currentClient = loadClient(name);
+  activeType = 'call';
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.type-btn[data-type="call"]').classList.add('active');
+  document.getElementById('taskInput').value='';
+  document.getElementById('logInput').value='';
+  document.getElementById('listView').style.display='none';
+  document.getElementById('detailView').style.display='block';
+  window.scrollTo(0,0);
+  renderDetail();
+}
+
+function showList(){
+  document.getElementById('detailView').style.display='none';
+  document.getElementById('listView').style.display='block';
+  currentClient = null;
+  window.scrollTo(0,0);
+  renderList();
+}
+
+function renderDetail(){
+  const c = currentClient;
+  const open = c.tasks.filter(t=>!t.done).length;
+  const done = c.tasks.filter(t=>t.done).length;
+  document.getElementById('d-name').textContent = c.name;
+  document.getElementById('d-open').textContent = open;
+  document.getElementById('d-done').textContent = done;
+  document.getElementById('d-log').textContent = c.logs.length;
+  document.getElementById('d-task-count').textContent = open+' open';
+  document.getElementById('d-log-count').textContent = c.logs.length+' entr'+(c.logs.length===1?'y':'ies');
+
+  // Tasks — sorted: overdue → today → upcoming → no date → done
+  const sortedTasks = [...c.tasks].sort((a,b)=>{
+    if(a.done !== b.done) return a.done ? 1 : -1;
+    const score = t => {
+      if(!t.dueDate) return 9999;
+      const today = new Date(); today.setHours(0,0,0,0);
+      const diff = Math.round((new Date(t.dueDate+'T00:00:00') - today)/(1000*60*60*24));
+      return diff < 0 ? diff - 10000 : diff;
+    };
+    return score(a) - score(b);
+  });
+  const tl = document.getElementById('taskList');
+  tl.innerHTML = sortedTasks.length ? sortedTasks.map(t=>`
+    <div class="task-item${t.done?' done':''}${overdueClass(t.dueDate, t.done)}">
+      <div class="task-check${t.done?' checked':''}" onclick="toggleTask(${t.id})"></div>
+      <div style="flex:1;min-width:0;">
+        <div class="task-text">${escHtml(t.text)}</div>
+        ${dueLabelHtml(t.dueDate, t.done)}
+      </div>
+      <div class="task-right">
+        <div class="owner-badge">DM</div>
+        <button class="task-delete" onclick="deleteTask(${t.id})">×</button>
+      </div>
+    </div>`).join('') : `<div class="empty-state">No tasks yet — add one above</div>`;
+
+
+  // Log
+  const ll = document.getElementById('logList');
+  ll.innerHTML = c.logs.length ? c.logs.map((l,i)=>`
+    <div class="log-entry">
+      <div class="log-timeline">
+        <div class="log-dot ${l.type}"></div>
+        ${i<c.logs.length-1?'<div class="log-line"></div>':''}
+      </div>
+      <div class="log-content">
+        <div class="log-type-tag ${l.type}">${l.type}</div>
+        <div class="log-body">${escHtml(l.body)}</div>
+        <div class="log-footer">
+          <span class="log-who">Deanne Marr</span>
+          <span class="log-when">${l.when}</span>
+        </div>
+      </div>
+    </div>`).join('') : `<div class="empty-state">No interactions logged yet</div>`;
+}
+
+// ─── ACTIONS ───
+function setType(btn){
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeType = btn.dataset.type;
+}
+
+function addTask(){
+  const text = document.getElementById('taskInput').value.trim();
+  if(!text||!currentClient) return;
+  const id = nextId++;
+  saveNextId();
+  const dateVal = document.getElementById('taskDate').value; // yyyy-mm-dd or ''
+  currentClient.tasks.unshift({id, text, done:false, dueDate: dateVal});
+  saveClient(currentClient);
+  document.getElementById('taskInput').value='';
+  document.getElementById('taskDate').value='';
+  renderDetail();
+  renderListStats();
+}
+
+function dueLabelHtml(dueDate, done){
+  if(!dueDate || done) return '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const due = new Date(dueDate+'T00:00:00');
+  const diff = Math.round((due-today)/(1000*60*60*24));
+  if(diff < 0) return `<div class="due-label overdue">⚠ Overdue · ${formatDate(dueDate)}</div>`;
+  if(diff === 0) return `<div class="due-label today">● Due today</div>`;
+  if(diff === 1) return `<div class="due-label upcoming">Due tomorrow · ${formatDate(dueDate)}</div>`;
+  return `<div class="due-label upcoming">Due ${formatDate(dueDate)}</div>`;
+}
+
+function formatDate(iso){
+  const d = new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+}
+
+function overdueClass(dueDate, done){
+  if(!dueDate || done) return '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const due = new Date(dueDate+'T00:00:00');
+  const diff = Math.round((due-today)/(1000*60*60*24));
+  if(diff < 0) return ' overdue';
+  if(diff === 0) return ' overdue-today';
+  return '';
+}
+
+function toggleTask(id){
+  if(!currentClient) return;
+  const t = currentClient.tasks.find(t=>t.id===id);
+  if(t) t.done = !t.done;
+  saveClient(currentClient);
+  renderDetail();
+}
+
+function deleteTask(id){
+  if(!currentClient) return;
+  currentClient.tasks = currentClient.tasks.filter(t=>t.id!==id);
+  saveClient(currentClient);
+  renderDetail();
+}
+
+function addLog(){
+  const text = document.getElementById('logInput').value.trim();
+  if(!text||!currentClient) return;
+  const id = nextId++;
+  saveNextId();
+  const now = new Date();
+  const when = now.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
+  currentClient.logs.unshift({id, type:activeType, body:text, when});
+  saveClient(currentClient);
+  document.getElementById('logInput').value='';
+  renderDetail();
+  renderListStats();
+}
+
+function renderListStats(){
+  const all = allData();
+  const totalTasks = all.reduce((s,c)=>s+c.tasks.filter(t=>!t.done).length,0);
+  const totalLogs = all.reduce((s,c)=>s+c.logs.length,0);
+  document.getElementById('ls-tasks').textContent = totalTasks;
+  document.getElementById('ls-logs').textContent = totalLogs;
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── INIT ───
+renderList();
+</script>
+</body>
+</html>
