@@ -449,6 +449,24 @@
         <div class="score-labels"><span>Misaligned</span><span></span><span>Partially aligned</span><span></span><span>Perfectly aligned</span></div>
         <div class="score-desc" id="desc_q5_3">Tap to rate</div>
       </div>
+
+      <div class="question-group">
+        <div class="question-text">Which fear is loudest right now — capacity, credibility, or standard?</div>
+        <div class="question-hint">Capacity: I don't have time or resources. Credibility: what if I back this and it fails publicly. Standard: the idea is perfect in my head and I'm afraid to test it. Rate how much any fear is holding you back from this idea.</div>
+        <div class="score-row" id="scores_q5_4"></div>
+        <div class="score-labels"><span>No fear</span><span></span><span>Some hesitation</span><span></span><span>Fear is loud</span></div>
+        <div class="score-desc" id="desc_q5_4">Tap to rate</div>
+      </div>
+
+      <div class="fear-selector" style="margin-top:-12px;margin-bottom:24px;padding:14px 16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;">Which fear is loudest?</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="score-btn" id="fear-capacity" onclick="selectFear('capacity')" style="width:auto;padding:8px 16px;font-size:13px;">Capacity</button>
+          <button class="score-btn" id="fear-credibility" onclick="selectFear('credibility')" style="width:auto;padding:8px 16px;font-size:13px;">Credibility</button>
+          <button class="score-btn" id="fear-standard" onclick="selectFear('standard')" style="width:auto;padding:8px 16px;font-size:13px;">Standard</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:10px;font-style:italic;" id="fearDesc">The one you are most aware of is usually not the one doing the most work.</div>
+      </div>
     </div>
     <div class="step-nav">
       <button class="btn-back" onclick="goTo(4)">← Back</button>
@@ -511,7 +529,7 @@ const scores = {
   q2: [null, null, null, null],
   q3: [null, null, null, null],
   q4: [null, null, null, null],
-  q5: [null, null, null, null]
+  q5: [null, null, null, null, null]
 };
 
 const testKeys = ['q1','q2','q3','q4','q5'];
@@ -536,7 +554,8 @@ const descriptions = {
   16: ['Very uncertain about this','Some doubt remains','Reasonably confident','Strongly believe in this','Deeply convinced — this is the right thing'],
   17: ['No capacity at all right now','Very limited capacity','Some capacity with trade-offs','Good capacity available','Real capacity — can start now'],
   18: ['Not ready to test — too many unknowns','Uncertain — needs more thinking','Possibly — with the right structure','Yes with some preparation','Absolutely yes — could start within weeks'],
-  19: ['Misaligned with my 3-year direction','Slightly misaligned','Partially aligned','Well aligned','Perfectly aligned — this is exactly where I want to go']
+  19: ['Misaligned with my 3-year direction','Slightly misaligned','Partially aligned','Well aligned','Perfectly aligned — this is exactly where I want to go'],
+  20: ['No fear — I am ready to move','Minor hesitation','Some real fear present','Fear is fairly loud','Fear is the main thing holding me back']
 };
 
 // Labels for each question's buttons
@@ -559,7 +578,8 @@ const btnLabels = {
   16: ['Very uncertain','Some doubt','Reasonably confident','Strongly believe','Deeply convinced'],
   17: ['No capacity','Very limited','Some with trade-offs','Good capacity','Ready to start now'],
   18: ['Not ready','Needs more thought','Possibly','Yes with prep','Absolutely yes'],
-  19: ['Misaligned','Slightly off','Partially aligned','Well aligned','Perfectly aligned']
+  19: ['Misaligned','Slightly off','Partially aligned','Well aligned','Perfectly aligned'],
+  20: ['No fear','Minor hesitation','Some fear','Fear is loud','Fear is dominant']
 };
 
 function buildScoreButtons(groupId, qIndex, testKey, descOffset) {
@@ -917,8 +937,24 @@ const config = [
   ['scores_q2_0','q2',0,4],['scores_q2_1','q2',1,5],['scores_q2_2','q2',2,6],['scores_q2_3','q2',3,7],
   ['scores_q3_0','q3',0,8],['scores_q3_1','q3',1,9],['scores_q3_2','q3',2,10],['scores_q3_3','q3',3,11],
   ['scores_q4_0','q4',0,12],['scores_q4_1','q4',1,13],['scores_q4_2','q4',2,14],['scores_q4_3','q4',3,15],
-  ['scores_q5_0','q5',0,16],['scores_q5_1','q5',1,17],['scores_q5_2','q5',2,18],['scores_q5_3','q5',3,19]
+  ['scores_q5_0','q5',0,16],['scores_q5_1','q5',1,17],['scores_q5_2','q5',2,18],['scores_q5_3','q5',3,19],['scores_q5_4','q5',4,20]
 ];
+// Fear selector
+let selectedFear = null;
+const fearDescriptions = {
+  capacity: 'Capacity — the existing business is consuming everything you have right now. The question is whether to create space or wait until conditions are better.',
+  credibility: 'Credibility — the fear of what it means if this does not work. This fear is about the story that gets told about you, not the financial loss.',
+  standard: 'Standard — the idea is perfect in your head because it has never been tested. Backing it seriously means finding out what it actually is in practice.'
+};
+function selectFear(type) {
+  selectedFear = type;
+  ['capacity','credibility','standard'].forEach(f => {
+    document.getElementById('fear-' + f).classList.remove('sel-high','sel-mid');
+  });
+  document.getElementById('fear-' + type).classList.add('sel-high');
+  document.getElementById('fearDesc').textContent = fearDescriptions[type] || '';
+}
+
 config.forEach(([groupId, testKey, qIndex, descOffset]) => buildScoreButtons(groupId, qIndex, testKey, descOffset));
 renderLog();
 </script>
