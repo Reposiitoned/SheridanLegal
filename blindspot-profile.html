@@ -1,0 +1,2960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blind Spot Profile — Knowledgebase.business</title>
+
+<style>
+  :root {
+    --forest: #2d5a27;
+    --forest-dk: #1a3d16;
+    --forest-lt: #d4e8d1;
+    --gold: #c8a84b;
+    --gold-lt: #f5edcc;
+    --bg: #f0f5ef;
+    --white: #ffffff;
+    --text: #1a2018;
+    --muted: #5a6e57;
+    --border: #d0dece;
+    --radar-size: 280px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--forest-dk);
+    padding: 0 40px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-back {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+  .nav-back:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    background: var(--forest-dk);
+    padding: 60px 40px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 0%, rgba(200,168,75,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 500;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+  .hero-meta {
+    display: inline-flex;
+    gap: 24px;
+    align-items: center;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 40px;
+    padding: 10px 24px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+  .hero-meta span { color: rgba(255,255,255,0.8); }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* INTRO CARD */
+  .intro-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 36px 40px;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+  }
+  .intro-card h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--forest-dk);
+    margin-bottom: 12px;
+  }
+  .intro-card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 10px;
+  }
+  .intro-card p:last-child { margin-bottom: 0; }
+
+  /* ASSESSMENT SECTION */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* PATTERN CARD */
+  .pattern-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .pattern-card:hover { box-shadow: 0 4px 20px rgba(45,90,39,0.08); }
+  .pattern-card.active { border-color: var(--forest); }
+
+  .pattern-header {
+    padding: 20px 24px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .pattern-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--forest-lt);
+    color: var(--forest);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .pattern-info { flex: 1; }
+  .pattern-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--forest-dk);
+    margin-bottom: 4px;
+  }
+  .pattern-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .pattern-score-display {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .score-num {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--forest);
+    line-height: 1;
+  }
+  .score-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .pattern-body {
+    padding: 0 24px 24px 68px;
+    display: none;
+  }
+  .pattern-body.open { display: block; }
+
+  .pattern-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border-radius: 8px;
+    border-left: 3px solid var(--forest-lt);
+  }
+
+  .slider-section {}
+  .slider-question {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .score-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .score-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .score-btn:hover {
+    border-color: var(--forest);
+    color: var(--forest);
+    background: var(--forest-lt);
+  }
+  .score-btn.selected {
+    background: var(--forest);
+    border-color: var(--forest);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(45,90,39,0.3);
+  }
+  .score-btn.selected-high {
+    background: var(--forest-dk);
+    border-color: var(--forest-dk);
+    color: var(--white);
+    box-shadow: 0 2px 8px rgba(26,61,22,0.4);
+  }
+  .score-scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    padding: 0 2px;
+  }
+  .score-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    min-height: 18px;
+    font-style: italic;
+  }
+
+  /* RESULTS SECTION */
+  .results-section {
+    display: none;
+    margin-top: 40px;
+  }
+  .results-section.visible { display: block; }
+
+  .results-card {
+    background: var(--forest-dk);
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .results-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(200,168,75,0.08);
+    pointer-events: none;
+  }
+  .results-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .results-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .results-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 32px;
+  }
+
+  /* RADAR */
+  .radar-wrap {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .radar-container {
+    flex-shrink: 0;
+  }
+  canvas#radarChart {
+    display: block;
+  }
+  .radar-legend {
+    flex: 1;
+    min-width: 200px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+  }
+  .legend-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .legend-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--gold);
+    transition: width 0.8s ease;
+  }
+  .legend-score {
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 13px;
+    width: 20px;
+    text-align: right;
+  }
+
+  /* DOMINANT PATTERNS */
+  .dominant-section {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .dominant-section h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22px;
+    color: var(--forest-dk);
+    margin-bottom: 6px;
+  }
+  .dominant-section p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+  .dominant-tag {
+    display: inline-block;
+    background: var(--forest-lt);
+    color: var(--forest-dk);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 4px 4px 4px 0;
+  }
+  .dominant-tag.primary {
+    background: var(--forest);
+    color: var(--white);
+  }
+
+  /* KB FOCUS */
+  .focus-card {
+    background: var(--gold-lt);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .focus-card h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    color: var(--forest-dk);
+    margin-bottom: 10px;
+  }
+  .focus-card p {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* SAVE BUTTON */
+  .btn-primary {
+    display: inline-block;
+    background: var(--forest);
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 14px 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--forest-dk); transform: translateY(-1px); }
+  .btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--forest);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 14px 32px;
+    border-radius: 8px;
+    border: 2px solid var(--forest);
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    margin-left: 12px;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: var(--forest); color: var(--white); }
+
+  /* SUBMIT BAR */
+  .submit-bar {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .submit-info { font-size: 13px; color: var(--muted); }
+  .submit-info strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+  /* HISTORY */
+  .history-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .history-card h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    color: var(--forest-dk);
+    margin-bottom: 16px;
+  }
+  .history-entry {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bg);
+    font-size: 13px;
+  }
+  .history-entry:last-child { border-bottom: none; }
+  .history-date { color: var(--muted); width: 100px; flex-shrink: 0; }
+  .history-dominant { flex: 1; color: var(--text); font-weight: 500; }
+  .history-shift {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .shift-down { background: var(--forest-lt); color: var(--forest); }
+  .shift-up { background: #fde8e8; color: #b91c1c; }
+  .shift-same { background: var(--bg); color: var(--muted); }
+
+  /* PROGRESS INDICATOR */
+  .progress-bar-wrap {
+    background: var(--border);
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .completion-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .completion-note strong { color: var(--forest); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px 60px; }
+    .main { padding: 32px 16px 60px; }
+    .intro-card, .dominant-section, .history-card { padding: 24px 20px; }
+    .results-card { padding: 28px 20px; }
+    .radar-wrap { flex-direction: column; }
+    .nav { padding: 0 20px; }
+    .pattern-body { padding-left: 24px; }
+  }
+
+  /* ROADMAP */
+  .roadmap-section { margin-top: 32px; }
+  .roadmap-header {
+    background: var(--forest-dk); border-radius: 16px; padding: 36px 40px;
+    margin-bottom: 24px; position: relative; overflow: hidden;
+  }
+  .roadmap-header::before {
+    content: ''; position: absolute; bottom: -50px; right: -50px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(200,168,75,0.1); pointer-events: none;
+  }
+  .roadmap-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+  .roadmap-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; color: var(--white); margin-bottom: 8px; line-height: 1.2; }
+  .roadmap-title em { font-style: italic; color: var(--gold); }
+  .roadmap-opening { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.8; max-width: 640px; }
+
+  .roadmap-stage-badge {
+    display: inline-block; background: rgba(200,168,75,0.2); border: 1px solid var(--gold);
+    color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
+  }
+
+  .roadmap-months { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  @media (max-width: 640px) { .roadmap-months { grid-template-columns: 1fr; } }
+
+  .month-card {
+    background: var(--white); border-radius: 12px; border: 1px solid var(--border);
+    padding: 24px; position: relative; overflow: hidden;
+  }
+  .month-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .month-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+  .month-focus { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; color: var(--forest-dk); margin-bottom: 10px; font-weight: 600; }
+  .month-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+  .roadmap-actions-card {
+    background: var(--white); border-radius: 12px; border: 1px solid var(--border);
+    padding: 28px 32px; margin-bottom: 20px;
+  }
+  .roadmap-actions-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; color: var(--forest-dk); margin-bottom: 18px; }
+  .roadmap-action {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid var(--bg);
+  }
+  .roadmap-action:last-child { border-bottom: none; }
+  .action-number {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--forest);
+    color: var(--white); font-size: 12px; font-weight: 600; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+  }
+  .action-content { flex: 1; }
+  .action-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .action-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .action-week { font-size: 10px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+
+  .warning-card {
+    background: #fff8e7; border: 1px solid #f0c040; border-radius: 12px;
+    padding: 20px 24px; margin-bottom: 20px; display: flex; gap: 14px;
+  }
+  .warning-icon { font-size: 20px; flex-shrink: 0; }
+  .warning-title { font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 4px; }
+  .warning-desc { font-size: 12px; color: #78350f; line-height: 1.7; }
+
+  .success-card {
+    background: var(--forest-lt); border: 1px solid var(--forest); border-radius: 12px;
+    padding: 20px 24px; margin-bottom: 24px; display: flex; gap: 14px;
+  }
+  .success-icon { font-size: 20px; flex-shrink: 0; }
+  .success-title { font-size: 13px; font-weight: 600; color: var(--forest-dk); margin-bottom: 4px; }
+  .success-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+  .stage-selector {
+    background: var(--white); border-radius: 12px; border: 1px solid var(--border);
+    padding: 24px 28px; margin-bottom: 24px;
+  }
+  .stage-selector-label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 0.1em; font-size: 11px; }
+  .stage-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .stage-btn {
+    padding: 10px 24px; border-radius: 8px; border: 2px solid var(--border);
+    background: var(--bg); font-size: 13px; font-weight: 600; color: var(--muted);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .stage-btn:hover { border-color: var(--forest); color: var(--forest); }
+  .stage-btn.active { background: var(--forest); border-color: var(--forest); color: var(--white); }
+  .stage-note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="dashboard.html" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <a href="dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">The Blind Spot Method</div>
+  <div class="hero-title">What pattern is <em>running</em><br>your business?</div>
+  <div class="hero-sub">Rate yourself honestly across all eight patterns. One or two will feel uncomfortably accurate. That discomfort is the pattern recognising itself.</div>
+  <div class="hero-meta">
+    <span>8 patterns</span>
+    <span>·</span>
+    <span>~5 minutes</span>
+    <span>·</span>
+    <span>Fortnightly check-in</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- INTRO -->
+  <div class="intro-card">
+    <h2>Before you score yourself</h2>
+    <p>This is not a personality test. Your score is not who you are — it's a pattern that's running automatically, and it's costing you. The number you score today is your starting point. The shift in that number over time is the evidence your KB system is working.</p>
+    <p>Rate each pattern from 0 to 10. Zero means it never controls your decisions. Ten means it runs the show most of the time. Most people will score 2 or 3 patterns significantly higher than the rest — that's your profile.</p>
+    <p style="color: var(--forest); font-weight: 500;">Be honest. The only person reading this is you.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+  </div>
+  <div class="completion-note" id="completionNote">Rate all 8 patterns to see your profile — <strong id="completedCount">0 of 8</strong> rated</div>
+
+  <!-- SECTION LABEL -->
+  <div class="section-label">Pattern Assessment</div>
+
+  <!-- PATTERNS -->
+  <div id="patternList"></div>
+
+  <!-- SUBMIT -->
+  <div class="submit-bar">
+    <div class="submit-info">
+      <strong>Ready to see your profile?</strong>
+      Rate all 8 patterns above then generate your blind spot radar.
+    </div>
+    <div>
+      <button class="btn-primary" onclick="generateResults()">Generate my profile →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="resultsSection">
+    <div class="results-card">
+      <div class="results-eyebrow">Your Blind Spot Profile</div>
+      <div class="results-title" id="resultsTitle">Your Pattern Profile</div>
+      <div class="results-sub" id="resultsDate"></div>
+      <div class="radar-wrap">
+        <div class="radar-container">
+          <canvas id="radarChart" width="280" height="280"></canvas>
+        </div>
+        <div class="radar-legend" id="radarLegend"></div>
+      </div>
+    </div>
+
+    <div class="dominant-section">
+      <h3 id="dominantTitle">Your dominant patterns</h3>
+      <p id="dominantDesc"></p>
+      <div id="dominantTags"></div>
+    </div>
+
+    <div class="focus-card" id="focusCard">
+      <h3>Your KB focus for the next 90 days</h3>
+      <p id="focusText"></p>
+    </div>
+
+    <div class="history-card" id="historyCard" style="display:none;">
+      <h3>Pattern Shift History</h3>
+      <div id="historyList"></div>
+    </div>
+
+    <!-- ROADMAP -->
+    <div class="roadmap-section" id="roadmapSection">
+
+      <div class="stage-selector">
+        <span class="stage-selector-label">Which KB program are you in?</span>
+        <div class="stage-buttons">
+          <button class="stage-btn active" onclick="setStage('build')" id="stage-build">Build</button>
+          <button class="stage-btn" onclick="setStage('ceiling')" id="stage-ceiling">Ceiling</button>
+          <button class="stage-btn" onclick="setStage('scale')" id="stage-scale">Scale</button>
+          <button class="stage-btn" onclick="setStage('exit')" id="stage-exit">Exit</button>
+        </div>
+        <div class="stage-note" id="stageNote">Build — you're documenting the business and building the systems that let it run without you in everything.</div>
+      </div>
+
+      <div class="roadmap-header">
+        <div class="roadmap-eyebrow">Your 90-Day KB Roadmap</div>
+        <div class="roadmap-stage-badge" id="roadmapStageBadge">Build Program</div>
+        <div class="roadmap-title" id="roadmapTitle">—</div>
+        <div class="roadmap-opening" id="roadmapOpening">—</div>
+      </div>
+
+      <div class="roadmap-months" id="roadmapMonths"></div>
+
+      <div class="roadmap-actions-card">
+        <div class="roadmap-actions-title">Your first 5 actions — in this order, for this reason</div>
+        <div id="roadmapActions"></div>
+      </div>
+
+      <div class="warning-card" id="roadmapWarning">
+        <div class="warning-icon">⚡</div>
+        <div>
+          <div class="warning-title" id="warningTitle">—</div>
+          <div class="warning-desc" id="warningDesc">—</div>
+        </div>
+      </div>
+
+      <div class="success-card" id="roadmapSuccess">
+        <div class="success-icon">✓</div>
+        <div>
+          <div class="success-title" id="successTitle">You'll know it's working when —</div>
+          <div class="success-desc" id="successDesc">—</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 32px;">
+      <button class="btn-primary" onclick="saveProfile()">Save this profile</button>
+      <button class="btn-secondary" onclick="window.location.href='dashboard.html'">Return to dashboard</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+window.onerror = function(msg, src, line, col, err) {
+  document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;background:#fff;"><h2 style="color:red">JS Error</h2><p>' + msg + '</p><p>Line: ' + line + '</p><p>' + (err ? err.stack : '') + '</p></div>';
+  return true;
+};
+const patterns = [
+  {
+    id: 'comfort',
+    name: 'The Comfort Zone Trapper',
+    tagline: 'Familiar patterns, even when they no longer serve you',
+    desc: "The voice that says 'this is how we've always done it.' Subtle resistance to delegating, hesitation before bold moves, rationalisation of staying small. What once kept you safe now keeps you stuck.",
+    question: "In the last two weeks, how often did the pull toward familiar patterns stop you from making a change you knew was needed?",
+    fix: "Your KB program starts with small, documented changes — each one evidence that letting go is safe. Every process handed to the team is a move out of the comfort zone that doesn't trigger the protection response."
+  },
+  {
+    id: 'shiny',
+    name: 'The Shiny Ball Chaser',
+    tagline: 'Brilliant starter. Terrible finisher.',
+    desc: "Every new idea sparkles with promise, pulling focus from current work before it's had time to flourish. Motion mistaken for progress. Excitement disguised as innovation. The graveyard of abandoned game-changers.",
+    question: "In the last two weeks, how often did a new idea pull your attention away from something that wasn't finished yet?",
+    fix: "Your KB program is built around finishing before moving. One Definitive Solution at a time. The knowledge base holds the business still long enough for ideas to actually work."
+  },
+  {
+    id: 'hero',
+    name: 'The Burnt Out Hero',
+    tagline: "You can't say no. Every request becomes your responsibility.",
+    desc: "Client emails at 10pm — you respond. The team needs help — you do it yourself. You work long hours because you've committed to everyone and everything. You call it dedication. The pattern calls it headed for burnout.",
+    question: "In the last two weeks, how often did you say yes to something you should have delegated or declined?",
+    fix: "Your KB program documents the answers before they get asked. Defined processes mean the team has what they need without coming to you. The system says no so you don't have to."
+  },
+  {
+    id: 'visionary',
+    name: 'The Visionary Chaos Creator',
+    tagline: 'You see possibilities others don\'t. But your brilliance creates chaos.',
+    desc: "Transformational ideas — constantly. Your team barely starts Monday's strategy before Wednesday's pivot arrives. Vision without execution infrastructure is expensive daydreaming.",
+    question: "In the last two weeks, how often did a direction change from you create disruption for the team?",
+    fix: "Your KB program gives your vision somewhere to land. Documented processes are the infrastructure that turns a good idea into a repeatable outcome rather than a new source of chaos."
+  },
+  {
+    id: 'lonewolf',
+    name: 'The Lone Wolf Control Freak',
+    tagline: "If you want it done right, do it yourself.",
+    desc: "You micromanage everything. You redo what others produce. Your team has learned to wait — because you'll do it eventually anyway. Your standards aren't the problem. They live in your head — and no one else can access them.",
+    question: "In the last two weeks, how often did you take back work that someone else could have done if they'd had the right information?",
+    fix: "Your KB program makes your standards visible. Documented processes are your standards — written down, consistent, available to everyone. A Definitive Solution is how you delegate without losing quality."
+  },
+  {
+    id: 'scattered',
+    name: 'The Scattered Multitasker',
+    tagline: 'Reactive, never fully present, always busy, rarely effective.',
+    desc: "Email notification. Slack ping. Text message. You respond to every interruption instantly because everything feels urgent. Two hours disappear and zero meaningful work gets done. You don't have too much to do — you have zero protection around your attention.",
+    question: "In the last two weeks, how often did interruptions prevent you from completing a piece of work that actually mattered?",
+    fix: "Your KB program answers the questions before they arrive. Every documented process is a question that never gets asked again. Every tool deployed is an interruption that never happens."
+  },
+  {
+    id: 'perfectionist',
+    name: 'The Perfectionist Procrastinator',
+    tagline: "Not ready yet is fear dressed up as quality control.",
+    desc: "Your projects are forever almost ready. That system has been 90% done for months. You're not procrastinating — you're maintaining standards. Competitors ship imperfect products clients love while your perfect version gathers dust.",
+    question: "In the last two weeks, how often did the need for something to be perfect stop you from shipping, sharing, or delegating it?",
+    fix: "Your KB program gives you a definition of done. A Definitive Solution isn't perfect — it's complete. Seven layers, all present, it runs. Version one ships. Version two improves it. That's the model."
+  },
+  {
+    id: 'executor',
+    name: 'The Disciplined Executor',
+    tagline: 'The plan runs perfectly. The plan is wrong.',
+    desc: "Systematic, strategic, disciplined. You stick to the roadmap when the market shifts. Rigidity costs you agility. Nimbler competitors adapt to today's reality while you're flawlessly executing yesterday's strategy.",
+    question: "In the last two weeks, how often did commitment to the existing plan stop you from adapting to something that had clearly changed?",
+    fix: "Your KB program builds adaptation into the system — not as disruption but as process. The quarterly review isn't about confirming the plan is being followed. It's about asking whether the plan is still right."
+  }
+];
+
+const scores = {};
+let savedHistory = JSON.parse(localStorage.getItem('blindspot_history') || '[]');
+
+// Build pattern cards
+function buildPatterns() {
+  const container = document.getElementById('patternList');
+  patterns.forEach((p, i) => {
+    scores[p.id] = 0;
+    container.innerHTML += `
+      <div class="pattern-card" id="card-${p.id}">
+        <div class="pattern-header" onclick="togglePattern('${p.id}')">
+          <div class="pattern-number">${i + 1}</div>
+          <div class="pattern-info">
+            <div class="pattern-name">${p.name}</div>
+            <div class="pattern-tagline">${p.tagline}</div>
+          </div>
+          <div class="pattern-score-display">
+            <div class="score-num" id="scoreNum-${p.id}">0</div>
+            <div class="score-label">/ 10</div>
+          </div>
+        </div>
+        <div class="pattern-body" id="body-${p.id}">
+          <div class="pattern-desc">${p.desc}</div>
+          <div class="slider-section">
+            <div class="slider-question">${p.question}</div>
+            <div class="score-buttons" id="btns-${p.id}">
+              ${[0,1,2,3,4,5,6,7,8,9,10].map(n => `<button class="score-btn" id="btn-${p.id}-${n}" onclick="updateScore('${p.id}', ${n})">${n}</button>`).join('')}
+            </div>
+            <div class="score-scale-labels">
+              <span>Never</span>
+              <span>Sometimes</span>
+              <span>Always</span>
+            </div>
+            <div class="score-desc" id="sliderVal-${p.id}">Tap a number to rate this pattern</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  // Auto-open first
+  togglePattern(patterns[0].id);
+}
+
+function togglePattern(id) {
+  patterns.forEach(p => {
+    const body = document.getElementById('body-' + p.id);
+    const card = document.getElementById('card-' + p.id);
+    if (p.id === id) {
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      card.classList.toggle('active', !isOpen);
+    } else {
+      body.classList.remove('open');
+      card.classList.remove('active');
+    }
+  });
+}
+
+function updateScore(id, val) {
+  val = parseInt(val);
+  scores[id] = val;
+  document.getElementById('scoreNum-' + id).textContent = val;
+  for (let n = 0; n <= 10; n++) {
+    const btn = document.getElementById('btn-' + id + '-' + n);
+    if (!btn) continue;
+    btn.classList.remove('selected', 'selected-high');
+    if (n === val) btn.classList.add(val >= 7 ? 'selected-high' : 'selected');
+  }
+  const labels = ['Pattern rarely controls decisions','Very occasional influence','Occasional pattern influence','Sometimes takes over','Moderate pattern strength','Pattern often runs decisions','Fairly dominant pattern','Strong pattern influence','Pattern frequently controls you','Very strongly dominant','Pattern runs the show'];
+  document.getElementById('sliderVal-' + id).textContent = val + ' — ' + labels[val];
+  updateProgress();
+}
+
+function updateProgress() {
+  const rated = Object.values(scores).filter(s => s > 0).length;
+  const pct = (rated / 8) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('completedCount').textContent = rated + ' of 8';
+}
+
+function generateResults() {
+  const sorted = patterns.map(p => ({ ...p, score: scores[p.id] }))
+    .sort((a, b) => b.score - a.score);
+
+  const dominant = sorted.filter(p => p.score >= 6);
+  const secondary = sorted.filter(p => p.score >= 3 && p.score < 6);
+  const top = sorted[0];
+
+  // Title
+  const now = new Date();
+  document.getElementById('resultsTitle').textContent = dominant.length > 1
+    ? 'Hybrid Pattern Profile'
+    : (top.score >= 6 ? 'Dominant Pattern Identified' : 'Distributed Pattern Profile');
+  document.getElementById('resultsDate').textContent =
+    now.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Radar
+  drawRadar(sorted);
+
+  // Legend
+  const legend = document.getElementById('radarLegend');
+  legend.innerHTML = sorted.map(p => `
+    <div class="legend-item">
+      <span style="width:130px;flex-shrink:0;font-size:12px;">${p.name.replace('The ', '')}</span>
+      <div class="legend-bar-wrap">
+        <div class="legend-bar" style="width:${p.score * 10}%"></div>
+      </div>
+      <span class="legend-score">${p.score}</span>
+    </div>
+  `).join('');
+
+  // Dominant tags
+  const tagsEl = document.getElementById('dominantTags');
+  tagsEl.innerHTML = dominant.map(p =>
+    `<span class="dominant-tag primary">${p.name}</span>`
+  ).join('') + secondary.map(p =>
+    `<span class="dominant-tag">${p.name}</span>`
+  ).join('');
+
+  // Dominant description
+  if (dominant.length === 0) {
+    document.getElementById('dominantTitle').textContent = 'Distributed profile';
+    document.getElementById('dominantDesc').textContent = "Your patterns are relatively balanced — no single blind spot dominates. This can mean greater flexibility, or it can mean multiple patterns running at low-level simultaneously. Watch the fortnightly check-ins to see which ones surface most consistently.";
+  } else if (dominant.length === 1) {
+    document.getElementById('dominantTitle').textContent = `Primary pattern: ${dominant[0].name}`;
+    document.getElementById('dominantDesc').textContent = `Your profile shows a clear dominant pattern. This is the one running your decisions most automatically. Secondary patterns${secondary.length ? ' — ' + secondary.map(p => p.name).join(', ') + ' —' : ''} add nuance to how the primary pattern expresses itself in your business.`;
+  } else {
+    document.getElementById('dominantTitle').textContent = 'Hybrid profile — ' + dominant.length + ' dominant patterns';
+    document.getElementById('dominantDesc').textContent = `You're running ${dominant.length} strong patterns simultaneously. This is common — and it makes the profile more accurate, not less. The patterns interact with each other in specific ways. Your KB program addresses the combination, not just the individual patterns.`;
+  }
+
+  // Focus text
+  const focusPattern = dominant.length > 0 ? dominant[0] : sorted[0];
+  document.getElementById('focusText').textContent = focusPattern.fix;
+
+  // History
+  const entry = {
+    date: now.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
+    dominant: dominant.length > 0 ? dominant.map(p => p.name).join(' + ') : sorted[0].name,
+    scores: { ...scores },
+    total: Object.values(scores).reduce((a, b) => a + b, 0)
+  };
+
+  if (savedHistory.length > 0) {
+    const prev = savedHistory[savedHistory.length - 1];
+    const prevTotal = prev.total;
+    const currTotal = entry.total;
+    const shift = currTotal - prevTotal;
+    entry.shift = shift;
+
+    const histCard = document.getElementById('historyCard');
+    histCard.style.display = 'block';
+    const histList = document.getElementById('historyList');
+    histList.innerHTML = savedHistory.slice(-5).map(h => {
+      const s = h.shift || 0;
+      const cls = s < 0 ? 'shift-down' : s > 0 ? 'shift-up' : 'shift-same';
+      const label = s < 0 ? `↓ ${Math.abs(s)} shift` : s > 0 ? `↑ ${s} increase` : 'No change';
+      return `<div class="history-entry">
+        <span class="history-date">${h.date}</span>
+        <span class="history-dominant">${h.dominant}</span>
+        <span class="history-shift ${cls}">${label}</span>
+      </div>`;
+    }).join('');
+  }
+
+  generateRoadmap();
+  document.getElementById('resultsSection').classList.add('visible');
+  setTimeout(() => {
+    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// Supabase client
+const SUPABASE_URL = 'https://lbkdcctrmtyrrdaxsgst.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_E_l9Rjk7gRaY5ZjpTlDTnQ_rzzwZwQy';
+const sbClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+async function saveProfile() {
+  const now = new Date();
+  const sorted = patterns.map(p => ({ ...p, score: scores[p.id] })).sort((a, b) => b.score - a.score);
+  const dominant = patterns.filter(p => scores[p.id] >= 6).map(p => p.name).join(' + ') 
+    || sorted[0].name;
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+
+  const entry = {
+    date: now.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
+    dominant,
+    scores: { ...scores },
+    total
+  };
+
+  if (savedHistory.length > 0) {
+    entry.shift = entry.total - savedHistory[savedHistory.length - 1].total;
+  }
+
+  // Save to localStorage (always)
+  savedHistory.push(entry);
+  localStorage.setItem('blindspot_history', JSON.stringify(savedHistory));
+
+  // Save to Supabase (when logged in)
+  if (sbClient) {
+    try {
+      const { data: { user } } = await sbClient.auth.getUser();
+      if (user) {
+        const row = {
+          user_id: user.id,
+          check_in_type: 'manual',
+          score_comfort:      scores['comfort']      || 0,
+          score_shiny:        scores['shiny']        || 0,
+          score_hero:         scores['hero']          || 0,
+          score_visionary:    scores['visionary']    || 0,
+          score_lonewolf:     scores['lonewolf']     || 0,
+          score_scattered:    scores['scattered']    || 0,
+          score_perfectionist:scores['perfectionist']|| 0,
+          score_executor:     scores['executor']     || 0,
+          total_score:        total,
+          dominant_pattern:   dominant,
+          confidence_level:   null,
+          program_stage:      currentStage || 'build'
+        };
+        const { error } = await sbClient.from('blindspot_scores').insert(row);
+        if (error) {
+          console.warn('Supabase save failed:', error.message);
+          alert('Profile saved locally. Sign in to sync across devices.');
+        } else {
+          alert('Profile saved and synced. See you at your next fortnightly check-in.');
+        }
+      } else {
+        alert('Profile saved locally. Sign in to sync your scores across devices.');
+      }
+    } catch (e) {
+      console.warn('Supabase error:', e);
+      alert('Profile saved locally. See you at your next fortnightly check-in.');
+    }
+  } else {
+    alert('Profile saved. See you at your next fortnightly check-in.');
+  }
+}
+
+
+// ─── ROADMAP ────────────────────────────────────────────────────
+let currentStage = 'build';
+
+const stageNotes = {
+  build: "Build — you're documenting the business and building the systems that let it run without you in everything.",
+  ceiling: "Ceiling — you're running but stuck. The focus is identifying and breaking through the specific pattern holding you back.",
+  scale: "Scale — you're growing. The focus is building infrastructure that protects your margin as volume increases.",
+  exit: "Exit — you're preparing to sell. The focus is maximising value and removing owner-dependence before a buyer finds it."
+};
+
+const stageBadges = {
+  build: 'Build Program — $660/month',
+  ceiling: 'Ceiling Program — $770/month',
+  scale: 'Scale Program — $880/month',
+  exit: 'Exit Program'
+};
+
+const roadmapData = {
+"comfort": {
+"build": {
+"title": "Your roadmap: <em>Small steps. Big evidence.</em>",
+"opening": "Your comfort zone pattern means large changes trigger the protection response. KB works with this — not against it. Every process you document is a small, safe move. The evidence accumulates and the pattern loosens before you notice it happening.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document what already works",
+"desc": "Start with your most familiar, stable processes. Build a habit of documentation — not changing anything yet."
+},
+{
+"label": "Month 2",
+"focus": "Hand one process to the team",
+"desc": "Pick the documented process with the lowest risk and let someone else run it. Watch it work without you."
+},
+{
+"label": "Month 3",
+"focus": "Document one uncomfortable area",
+"desc": "The thing you have been avoiding. That is the one that matters most."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Map your three most familiar daily processes",
+"desc": "Not your most important — your most familiar. Speed builds confidence."
+},
+{
+"week": "Week 2",
+"title": "Write the Monday Morning Test for each one",
+"desc": "Could a capable person run these without you? If not, what is missing?"
+},
+{
+"week": "Week 3",
+"title": "Identify the one process you would most resist handing over",
+"desc": "Name it. Do not document it yet — just name it. Naming the resistance is the first move."
+},
+{
+"week": "Week 4–6",
+"title": "Hand your first documented process to a team member",
+"desc": "Brief them using the document. Resist the urge to hover. The document is you."
+},
+{
+"week": "Month 2–3",
+"title": "Document the one you named in week 3",
+"desc": "By now you have evidence the process works without you. Use that evidence."
+}
+],
+"warning": {
+"title": "Watch for this: the not quite ready loop",
+"desc": "Your pattern will find reasons why the document is not complete enough. One more detail. Recognise this as the comfort zone defending itself. Ship the document. Improve it later."
+},
+"success": "A team member runs a process correctly from your documentation without asking a single question. Notice it."
+},
+"ceiling": {
+"title": "Your roadmap: <em>The ceiling is the comfort zone at full strength.</em>",
+"opening": "You have been at this revenue level for a while. The comfort zone pattern is the reason — not market conditions. Breaking through requires documenting the changes you have been resisting, then making them.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Identify what you are protecting",
+"desc": "Name what feels safe about the current level. The ceiling is the comfort zone made visible."
+},
+{
+"label": "Month 2",
+"focus": "Document the change you have been delaying",
+"desc": "There is a decision that would break the ceiling. Document the process that makes it executable."
+},
+{
+"label": "Month 3",
+"focus": "Execute one thing that breaks the familiar pattern",
+"desc": "One pricing change. One new client type. One service you have been ready to launch."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Write down the specific change that would break your ceiling",
+"desc": "Not grow the business — the specific thing. Raise rates 20%. Stop taking small clients. Name it."
+},
+{
+"week": "Week 2",
+"title": "Document the current version of what you would be changing",
+"desc": "Before you change it, document how it works now. This makes the change feel safer."
+},
+{
+"week": "Week 3",
+"title": "Build the process for the new version",
+"desc": "What does the changed thing look like when it runs? Write that process."
+},
+{
+"week": "Week 4–6",
+"title": "Test the new version with one client or one decision",
+"desc": "Not a full rollout. One test. Safe enough to try, real enough to learn from."
+},
+{
+"week": "Month 2–3",
+"title": "Systemise the breakthrough and make it the new normal",
+"desc": "What worked becomes the documented process. The ceiling becomes the floor."
+}
+],
+"warning": {
+"title": "Watch for this: waiting for better conditions",
+"desc": "The comfort zone will tell you the timing is not right. The conditions will never be perfect. The document is what makes the move feel safe enough."
+},
+"success": "You make a decision you have been delaying for 12 months — and the system handles it without chaos."
+},
+"scale": {
+"title": "Your roadmap: <em>The familiar level will resist what scale requires.</em>",
+"opening": "Scaling requires changes that feel unfamiliar at volume. Your comfort zone will resist each one. The KB system makes the unfamiliar documented — and therefore manageable.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document what the business looks like at 2x",
+"desc": "Not what it looks like now — what it needs to look like at your target. This makes the destination feel real."
+},
+{
+"label": "Month 2",
+"focus": "Build the delegation infrastructure",
+"desc": "Every process documented is a change you can make without it feeling like a leap."
+},
+{
+"label": "Month 3",
+"focus": "Test one element of the scaled model",
+"desc": "Evidence that the scaled version works. The comfort zone needs evidence before it allows movement."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Map the three biggest differences between now and 2x",
+"desc": "More team? Different clients? Different structure? Name the changes."
+},
+{
+"week": "Week 2",
+"title": "Document the process that changes most at scale",
+"desc": "The one that currently lives in your head and will not survive volume."
+},
+{
+"week": "Week 3",
+"title": "Write the team brief for the scaled version",
+"desc": "If a new team member started in the scaled business, what would they need to know?"
+},
+{
+"week": "Week 4–6",
+"title": "Pilot one element of the scaled model",
+"desc": "Small, safe, reversible. The evidence from the pilot is what the pattern needs."
+},
+{
+"week": "Month 2–3",
+"title": "Systemise the pilot and expand",
+"desc": "What worked becomes the standard. Expand from evidence, not from hope."
+}
+],
+"warning": {
+"title": "Watch for this: scaling the current model instead of the right model",
+"desc": "The comfort zone will try to scale what already exists. More of the same is not scale — it is volume without infrastructure."
+},
+"success": "The business handles a 20% revenue increase without you being pulled back into the centre of everything."
+},
+"exit": {
+"title": "Your roadmap: <em>The comfort zone built the business. Now document it.</em>",
+"opening": "The comfort zone pattern shaped this business. Now the job is to make all of that visible — so a buyer can see it without needing you to explain it.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document what only you know",
+"desc": "The processes so familiar you have never needed to write them down. These are the most valuable — and the most dangerous in a sale."
+},
+{
+"label": "Month 2",
+"focus": "Remove yourself from the daily operation",
+"desc": "Every process documented removes you from a decision. The business makes most decisions without you."
+},
+{
+"label": "Month 3",
+"focus": "Test the Monday Morning Succession standard",
+"desc": "Could someone run this business on Monday if you were not there? Run the test. Find the gaps."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "List every decision that currently comes to you",
+"desc": "Every single one. This is the map of owner-dependence."
+},
+{
+"week": "Week 2",
+"title": "Document the top 5 most owner-dependent processes",
+"desc": "The ones that would most concern a buyer. Start where value leakage is greatest."
+},
+{
+"week": "Week 3",
+"title": "Write the client relationship transfer plan",
+"desc": "For each key client — what would a new owner need to know?"
+},
+{
+"week": "Week 4–6",
+"title": "Have a team member run the business for one week without your input",
+"desc": "Observe. Do not intervene. Note every point where the system fails."
+},
+{
+"week": "Month 2–3",
+"title": "Fill every gap the test week revealed",
+"desc": "Each gap is a discount a buyer will apply. Close them first."
+}
+],
+"warning": {
+"title": "Watch for this: the I will explain that in the handover assumption",
+"desc": "Buyers do not trust verbal knowledge transfer. They trust documented systems. Write it now — before anyone asks."
+},
+"success": "A team member can answer any question about the business from the KB system without asking you."
+}
+},
+"lonewolf": {
+"build": {
+"title": "Your roadmap: <em>Your standards are the asset. Make them visible.</em>",
+"opening": "You have been doing it yourself because no one else has met your standards. That is not a flaw — it is a documentation gap. KB moves your standards into the system where the whole team can meet them without asking you.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Write down your standards",
+"desc": "What does good look like for the five most important things in this business? Write it in enough detail that someone else could recognise it."
+},
+{
+"label": "Month 2",
+"focus": "Build processes that meet those standards",
+"desc": "Each standard becomes a Definitive Solution. The process is the standards — documented, consistent, available to everyone."
+},
+{
+"label": "Month 3",
+"focus": "Test the team against the documented standards",
+"desc": "Let someone run a process using the document. Refine the document — not the person."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Write your top 5 standards — what good looks like",
+"desc": "Not instructions. Standards. Specific enough that someone else could recognise them."
+},
+{
+"week": "Week 2",
+"title": "Document the process that most often comes back to you",
+"desc": "The one you redo most frequently. The standard is not being met because the process does not contain it yet."
+},
+{
+"week": "Week 3",
+"title": "Give the documented process to one team member to run",
+"desc": "Brief them on the standard. Step back. The document is you."
+},
+{
+"week": "Week 4–6",
+"title": "Review the outcome against your standard — not your involvement",
+"desc": "Did the outcome meet the standard? If yes, the document works. Update the document — do not take the work back."
+},
+{
+"week": "Month 2–3",
+"title": "Document every process you currently do yourself",
+"desc": "Every single one. Each document is a delegation you have been unable to make — now possible."
+}
+],
+"warning": {
+"title": "Watch for this: taking work back because it is faster",
+"desc": "The moment a team member is slower than you, the pattern will tell you to take it back. Resist. Speed comes from repetition."
+},
+"success": "A team member completes work to your standard using your documented process — without you touching it."
+},
+"ceiling": {
+"title": "Your roadmap: <em>The ceiling is the size of one person's capacity.</em>",
+"opening": "Your ceiling is you. Not your capability — your capacity. The ceiling breaks when the team can do what you do, at your standard, without needing you. KB makes that possible.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Quantify how much of the business runs through you",
+"desc": "Every decision that comes to you is a measure of the ceiling. Document the list."
+},
+{
+"label": "Month 2",
+"focus": "Systematically remove yourself from the list",
+"desc": "One process at a time. Document it, delegate it, test it. Each removal adds capacity."
+},
+{
+"label": "Month 3",
+"focus": "Redirect freed capacity toward growth",
+"desc": "The hours you get back go into activities only you can do. That is where the ceiling breaks."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Track every decision and task for one week",
+"desc": "Categorise: only-I-can-do-this vs could-be-documented-and-delegated."
+},
+{
+"week": "Week 2",
+"title": "Document the three highest-volume delegatable items",
+"desc": "Start with volume. High-volume delegation has the biggest immediate impact on capacity."
+},
+{
+"week": "Week 3–4",
+"title": "Delegate all three with documented briefs",
+"desc": "Not verbally. In writing. The document is the instruction."
+},
+{
+"week": "Month 2",
+"title": "Document the three highest-complexity items",
+"desc": "These feel most uncomfortable to delegate. This is where the real capacity lives."
+},
+{
+"week": "Month 3",
+"title": "Use freed hours on revenue-generating activity only",
+"desc": "Measure the result. The ceiling breaks when your hours shift from operational to strategic."
+}
+],
+"warning": {
+"title": "Watch for this: delegating without the document",
+"desc": "Verbal briefings feel like delegation but are not. Without a document, the task comes back when the person has a question."
+},
+"success": "Your weekly operational hours drop 30%. The hours reappear in client-facing or growth activity."
+},
+"scale": {
+"title": "Your roadmap: <em>At scale, one Lone Wolf becomes a culture.</em>",
+"opening": "The biggest risk at scale is cultural. A Lone Wolf leader builds a team that waits for permission. KB distributes your standards so the team can decide without asking.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document your decision framework",
+"desc": "What criteria do you use to make the decisions that come to you? The team needs this framework."
+},
+{
+"label": "Month 2",
+"focus": "Empower the team with the framework",
+"desc": "Give them the documented standards and decision framework. Correct the document, not the person."
+},
+{
+"label": "Month 3",
+"focus": "Measure team confidence and decision quality",
+"desc": "Are they deciding without asking? Are outcomes meeting the standard?"
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Write your decision-making criteria for the top 10 recurring decisions",
+"desc": "What information is needed? What is the threshold? Specific enough for someone else to replicate."
+},
+{
+"week": "Week 2",
+"title": "Document your quality standard for client delivery",
+"desc": "The standard that lives only in your head. Make it available to everyone."
+},
+{
+"week": "Week 3–4",
+"title": "Run a team session on the documented standards",
+"desc": "Walk them through it. Update the document based on their questions."
+},
+{
+"week": "Month 2",
+"title": "Give the team full authority for documented decisions",
+"desc": "No approval required within the documented framework. Track what happens."
+},
+{
+"week": "Month 3",
+"title": "Build a review cycle for standards — not a review of decisions",
+"desc": "Quarterly review of whether standards are still right — not a check on approvals."
+}
+],
+"warning": {
+"title": "Watch for this: reviewing every decision the team makes",
+"desc": "The pattern will want to audit everything. Trust the document. Review outcomes — not decisions."
+},
+"success": "The team makes a significant decision correctly using your documented framework — without bringing it to you."
+},
+"exit": {
+"title": "Your roadmap: <em>A buyer cannot buy what only you know how to do.</em>",
+"opening": "Every process in your head is a discount a buyer will apply. The multiple you receive is directly proportional to how much the business runs without you. KB moves your knowledge into the asset.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document every process you personally own",
+"desc": "Every one. A buyer's due diligence will find every gap — document it before they do."
+},
+{
+"label": "Month 2",
+"focus": "Transfer authority to the team using the documents",
+"desc": "Document first. Transfer second. The document makes the transfer permanent."
+},
+{
+"label": "Month 3",
+"focus": "Prove the business runs without you",
+"desc": "One week. No involvement. Every gap that appears is a documentation task."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "List every process, decision, and relationship only you own",
+"desc": "This is the buyer risk register. Every item is a potential price reduction."
+},
+{
+"week": "Week 2",
+"title": "Prioritise by buyer impact — document highest-impact first",
+"desc": "Client relationships. Revenue processes. Key contacts. These affect the multiple most."
+},
+{
+"week": "Week 3–4",
+"title": "Document and transfer the top 5 highest-impact items",
+"desc": "The team needs to own the process before the sale — not after."
+},
+{
+"week": "Month 2",
+"title": "Remove yourself from all client-facing communications",
+"desc": "The team manages client relationships using documented processes."
+},
+{
+"week": "Month 3",
+"title": "Run the business absence test — one full week",
+"desc": "Document every instance where the business could not function without you."
+}
+],
+"warning": {
+"title": "Watch for this: the handover plan that never gets written",
+"desc": "Buyers do not trust verbal knowledge transfer. They trust documented systems. Write the handover plan now."
+},
+"success": "A buyer's advisor reviews your KB and says this business could run without the owner."
+}
+},
+"perfectionist": {
+"build": {
+"title": "Your roadmap: <em>Done beats perfect. Every time.</em>",
+"opening": "Inside KB there is a definition of done — seven layers, all present, the process runs. Not flawless. Complete. That threshold is achievable and achieving it is the entire point.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Ship one Definitive Solution — imperfect",
+"desc": "Choose the simplest process. Document it to seven layers. Ship it. Resist every urge to refine it further before sharing."
+},
+{
+"label": "Month 2",
+"focus": "Build the improvement rhythm",
+"desc": "KB is designed to be updated. Version two improves version one. The fortnightly review is when improvements happen."
+},
+{
+"label": "Month 3",
+"focus": "Document the process you have been almost ready with longest",
+"desc": "Ship it. Whatever is missing the team will tell you — and that feedback is more useful than another week of solo refinement."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Define done for your first process before you start writing",
+"desc": "Seven layers. All present. Runs without you. Write that at the top before you begin."
+},
+{
+"week": "Week 2",
+"title": "Write the process — stop when all seven layers are present",
+"desc": "Not when it is perfect. When it is complete. The moment you hit seven layers, ship it."
+},
+{
+"week": "Week 3",
+"title": "Give it to the team and ask for one piece of feedback",
+"desc": "One. Not comprehensive review. One thing that would make it clearer."
+},
+{
+"week": "Week 4",
+"title": "Apply the feedback and publish version two",
+"desc": "Two versions in four weeks. That is a documentation rhythm."
+},
+{
+"week": "Month 2–3",
+"title": "Document three more processes using the same rhythm",
+"desc": "Draft, seven layers, ship, one feedback, version two. Repeat."
+}
+],
+"warning": {
+"title": "Watch for this: the one more thing loop",
+"desc": "The moment before you share, the pattern will find one more thing. Recognise this signal — it means you are about to ship. Share the document anyway."
+},
+"success": "You share a document that is not perfect — and the team runs the process correctly from it."
+},
+"ceiling": {
+"title": "Your roadmap: <em>The ceiling is built from unshipped decisions.</em>",
+"opening": "Your ceiling is made of things that are almost ready. The breakthrough happens when you ship one imperfect version and discover that imperfect and working is worth more than perfect and waiting.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Inventory what is almost ready",
+"desc": "List every decision or launch that has been in progress for more than 90 days. This is your ceiling, itemised."
+},
+{
+"label": "Month 2",
+"focus": "Ship the three most valuable items on the list",
+"desc": "Not perfectly. With a defined success criteria. Ship them, measure them, improve them."
+},
+{
+"label": "Month 3",
+"focus": "Build a shipping rhythm — one new thing per fortnight",
+"desc": "The ceiling breaks when shipping becomes normal."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "List everything almost ready for more than 30 days",
+"desc": "Name each one. Estimate revenue or profit impact. Rank by impact."
+},
+{
+"week": "Week 2",
+"title": "Define good enough to ship for your top item",
+"desc": "Not perfect. Good enough. Write the definition before you start refining."
+},
+{
+"week": "Week 3",
+"title": "Ship the minimum viable version to one client or internally",
+"desc": "One. Safe. Real. Collect actual feedback — not imagined objections."
+},
+{
+"week": "Week 4–6",
+"title": "Use the feedback to make version two — then ship that too",
+"desc": "Two versions in six weeks. The ceiling breaks from a rhythm of shipping."
+},
+{
+"week": "Month 2–3",
+"title": "Work through the rest of your almost ready list",
+"desc": "Each one ships. Each one improves. The list gets shorter. The ceiling rises."
+}
+],
+"warning": {
+"title": "Watch for this: using research as a substitute for shipping",
+"desc": "More market research. More analysis. These feel like progress but are often the pattern delaying the moment of truth."
+},
+"success": "Something you have been almost ready with for months ships — and clients respond positively to the imperfect version."
+},
+"scale": {
+"title": "Your roadmap: <em>Perfection does not scale. Systems do.</em>",
+"opening": "At scale, perfectionism becomes a structural bottleneck. Every deliverable requiring your personal sign-off is a constraint on growth. KB distributes your quality standard so the team can meet it without waiting for you.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document your quality standard — not your process for checking it",
+"desc": "What does excellent look like? Write that. The team needs the target, not just the steps."
+},
+{
+"label": "Month 2",
+"focus": "Remove yourself from the quality control chain",
+"desc": "The team checks against the documented standard — not your personal review."
+},
+{
+"label": "Month 3",
+"focus": "Measure quality by outcome, not by involvement",
+"desc": "Client satisfaction. Error rate. Rework rate. These are the quality metrics."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Document your quality standard for your three core deliverables",
+"desc": "Specific. Measurable. Achievable without you."
+},
+{
+"week": "Week 2",
+"title": "Build a team quality checklist from the standard",
+"desc": "A simple document the team uses before anything goes out."
+},
+{
+"week": "Week 3–4",
+"title": "Run the checklist for two weeks without your involvement",
+"desc": "Step back. Review outcomes at the end of two weeks — not during."
+},
+{
+"week": "Month 2",
+"title": "Measure the quality gap and update the checklist",
+"desc": "If something went wrong, the checklist missed it. Update the checklist."
+},
+{
+"week": "Month 3",
+"title": "Scale volume with the quality system running independently",
+"desc": "More clients. More output. Same standard."
+}
+],
+"warning": {
+"title": "Watch for this: adding approval steps instead of improving the system",
+"desc": "When quality misses, improve the document — not the approval chain."
+},
+"success": "Output volume doubles and quality metrics hold."
+},
+"exit": {
+"title": "Your roadmap: <em>The buyer needs a working business, not a perfect one.</em>",
+"opening": "Ship the documentation. It is worth more imperfect and present than perfect and still being written.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Ship documentation for every key process — imperfect",
+"desc": "Documented to seven layers. Running. Not perfect — present."
+},
+{
+"label": "Month 2",
+"focus": "Let the team improve the documentation in practice",
+"desc": "Real use reveals real gaps. Their feedback is more valuable than solo writing."
+},
+{
+"label": "Month 3",
+"focus": "Present the KB system to a trusted advisor as if to a buyer",
+"desc": "Note every question they ask. Those questions are the remaining gaps."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "List every process a buyer due diligence would examine",
+"desc": "Client onboarding. Revenue generation. Delivery. Team. Finance."
+},
+{
+"week": "Week 2",
+"title": "Document every item to seven layers — ship each when complete",
+"desc": "When complete. Not when perfect."
+},
+{
+"week": "Week 3–4",
+"title": "Run a mock due diligence with a trusted advisor",
+"desc": "Give them access. Their questions are your remaining documentation tasks."
+},
+{
+"week": "Month 2",
+"title": "Fill every gap the mock due diligence revealed",
+"desc": "Each gap is a discount. Close them before a real buyer finds them."
+},
+{
+"week": "Month 3",
+"title": "Run a second mock due diligence — measure the improvement",
+"desc": "Fewer questions. Higher confidence."
+}
+],
+"warning": {
+"title": "Watch for this: delaying the sale because the documentation is not ready",
+"desc": "A business 80% documented and running is more valuable than one 100% documented in theory but untested. Ship it."
+},
+"success": "A buyer's advisor reviews your KB and says they have seen enough to proceed with due diligence."
+}
+},
+"shiny": {
+"build": {
+"title": "Your roadmap: <em>Finish before you start anything new.</em>",
+"opening": "Your pattern will generate new ideas throughout this program. Each will feel more important than the current task. KB gives you a simple rule — the new idea goes in the idea log. The current Definitive Solution gets finished first.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Complete one full Definitive Solution — seven layers",
+"desc": "One. Not three started ones. One finished one. Completion is more valuable than beginning."
+},
+{
+"label": "Month 2",
+"focus": "Build the idea log habit",
+"desc": "Every new idea goes in the log — captured, not acted on. Not every idea in the log gets built."
+},
+{
+"label": "Month 3",
+"focus": "Complete three more Definitive Solutions with the same discipline",
+"desc": "Four complete beats twenty started. Every time."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Choose one process and commit to finishing it before anything else",
+"desc": "Write it at the top of your workspace. One process. No pivots until complete."
+},
+{
+"week": "Week 2",
+"title": "Create your idea log — a simple document where new ideas live",
+"desc": "Any time a new idea arrives, it goes here. No action. Just captured."
+},
+{
+"week": "Week 3",
+"title": "Complete the first Definitive Solution and close it",
+"desc": "Seven layers. Done. Mark it complete. Name it as a victory."
+},
+{
+"week": "Week 4",
+"title": "Review your idea log — pick the next one",
+"desc": "Not the most exciting. The most valuable. Begin the second with the same commitment."
+},
+{
+"week": "Month 2–3",
+"title": "Repeat the cycle — one idea log entry, one completion",
+"desc": "The pattern will want to break the cycle. Do not let it."
+}
+],
+"warning": {
+"title": "Watch for this: the pivot mid-document",
+"desc": "Halfway through documenting one process, a better one will seem obvious. Finish the current one. Make a note. The urge will still be there when done — and at that point it is earned."
+},
+"success": "You complete a Definitive Solution without switching to something else mid-way."
+},
+"ceiling": {
+"title": "Your roadmap: <em>The ceiling is made of half-finished things.</em>",
+"opening": "Your ceiling is a completion problem. The initiatives that would break it are already in progress — they have just never been finished. The breakthrough is completing the best one you already have.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Audit every initiative in progress — count the unfinished",
+"desc": "List every project or change that has been started and not completed. This is your ceiling, made visible."
+},
+{
+"label": "Month 2",
+"focus": "Complete the highest-value item on the list",
+"desc": "Not the most exciting. The one with the greatest revenue or profit impact."
+},
+{
+"label": "Month 3",
+"focus": "Establish a completion-before-starting rule",
+"desc": "Nothing new starts until the current thing is done. Make it visible to the team."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "List every in-progress initiative and estimate completion percentage",
+"desc": "Most will be 40-70% done. That graveyard is where ceiling revenue lives."
+},
+{
+"week": "Week 2",
+"title": "Rank by impact — choose the highest-value unfinished item",
+"desc": "Ignore the most exciting. Choose the most valuable."
+},
+{
+"week": "Week 3–4",
+"title": "Complete it — define done, hit the definition, close it",
+"desc": "Do not improve it further. Complete it to your definition and close it."
+},
+{
+"week": "Month 2",
+"title": "Measure the impact of the completion",
+"desc": "What happened when you finished it? That measurement argues for completing the next one."
+},
+{
+"week": "Month 3",
+"title": "Work through the rest of the list in impact order",
+"desc": "Each completion generates evidence. Evidence makes the next completion easier."
+}
+],
+"warning": {
+"title": "Watch for this: a new idea that seems more important than finishing",
+"desc": "It always does. The new idea is not more important. It is just newer. Finish first."
+},
+"success": "You complete something 70% done for 90 days — and it generates revenue. The ceiling cracking from completion."
+},
+"scale": {
+"title": "Your roadmap: <em>Scale requires depth, not breadth.</em>",
+"opening": "Your pattern generates horizontal expansion. Scale requires vertical depth — fewer things, done better, with systems that handle volume. KB forces depth over breadth.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Identify your three highest-value offers — only three",
+"desc": "Not everything you do. Three with the highest margin and growth potential. Only these scale."
+},
+{
+"label": "Month 2",
+"focus": "Build deep Definitive Solutions for each one",
+"desc": "Seven layers. Tested. Running without you. These three become the engine of scale."
+},
+{
+"label": "Month 3",
+"focus": "Say no to everything else",
+"desc": "The pattern will generate new offers. Document them. Scale the three. Nothing else starts."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Rank current offers by margin and growth potential",
+"desc": "Top three are your scaling focus. Everything else is sunsetted or on hold."
+},
+{
+"week": "Week 2",
+"title": "Document your top offer delivery process end-to-end",
+"desc": "From first contact to final delivery. Seven layers. This is the process that scales."
+},
+{
+"week": "Week 3–4",
+"title": "Test with a new team member — can they deliver from the document alone?",
+"desc": "If not, what is missing? Add it."
+},
+{
+"week": "Month 2",
+"title": "Repeat for offers two and three",
+"desc": "Same depth. Same standard. Three fully documented team-runnable offers."
+},
+{
+"week": "Month 3",
+"title": "Scale volume on all three — measure margin protection",
+"desc": "More clients. Same standard. Same margin. That is scale with depth."
+}
+],
+"warning": {
+"title": "Watch for this: a market opportunity that seems too good to miss",
+"desc": "It will appear in month two. Document it. Finish the three first. The opportunity will still be there."
+},
+"success": "Revenue on your top three offers grows 30% without adding a fourth — and without your personal involvement in delivery."
+},
+"exit": {
+"title": "Your roadmap: <em>A buyer buys depth. Not breadth.</em>",
+"opening": "A business with many half-developed offers is harder to sell. Your exit preparation is about reducing complexity, not adding to it.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Simplify the offer set — ruthlessly",
+"desc": "What would a buyer want to continue? Sunset anything that does not add to sale value."
+},
+{
+"label": "Month 2",
+"focus": "Document the remaining offers to sale-ready standard",
+"desc": "Each one fully documented. Each one team-runnable. Revenue history included."
+},
+{
+"label": "Month 3",
+"focus": "Present a simple, clean, documented business",
+"desc": "Three offers. All documented. All running. A buyer can understand it in 30 minutes."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "List every current offer and rate it: keep, sunset, or sell separately",
+"desc": "Every offer that confuses the picture reduces the multiple."
+},
+{
+"week": "Week 2",
+"title": "Begin the sunset process for the ones to remove",
+"desc": "Wind down, transfer, or close. Clean up before the sale process starts."
+},
+{
+"week": "Week 3–4",
+"title": "Document the kept offers to seven layers each",
+"desc": "The documentation is the proof of value."
+},
+{
+"week": "Month 2",
+"title": "Have an advisor review the offer set as if a buyer",
+"desc": "Would they buy this? Their questions are your remaining tasks."
+},
+{
+"week": "Month 3",
+"title": "Run the business on the simplified documented offer set for 90 days",
+"desc": "Prove it works. Prove it earns. Prove it runs without you."
+}
+],
+"warning": {
+"title": "Watch for this: adding a new offer during exit preparation",
+"desc": "A new undocumented offer adds complexity and reduces buyer confidence. Focus on making existing offers excellent."
+},
+"success": "A buyer reviews your offer set and says this is clear and manageable."
+}
+},
+"hero": {
+"build": {
+"title": "Your roadmap: <em>The system says no so you don't have to.</em>",
+"opening": "KB creates the system that handles requests before they reach you. Not because you said no — because the answer was already there.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document every recurring request that comes to you",
+"desc": "Every question the team asks. Every client request that reaches you personally. Each is a documentation task."
+},
+{
+"label": "Month 2",
+"focus": "Build the answers into the KB system",
+"desc": "Each recurring question becomes a process. Each recurring client request becomes a tool."
+},
+{
+"label": "Month 3",
+"focus": "Measure how many requests stopped coming to you",
+"desc": "Track it. Every request the system handles is an interruption that did not happen."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Track every request that reaches you in one week — every single one",
+"desc": "Categorise: should-be-in-the-system vs genuinely-needs-me."
+},
+{
+"week": "Week 2",
+"title": "Document the answers to the top 5 highest-volume requests",
+"desc": "These become your first five Definitive Solutions."
+},
+{
+"week": "Week 3",
+"title": "Publish and redirect the next request to the document",
+"desc": "The answer to that is in [process name]. Every time."
+},
+{
+"week": "Week 4–6",
+"title": "Document the next five highest-volume requests",
+"desc": "Work through the list. Requests reaching you should be measurably declining by week 6."
+},
+{
+"week": "Month 2–3",
+"title": "Document until the system answers more than you do",
+"desc": "When the system handles more requests than you receive, the pattern has been interrupted."
+}
+],
+"warning": {
+"title": "Watch for this: answering a documented question instead of redirecting",
+"desc": "When someone asks something already in the system, redirect — do not answer. Every time you answer instead of redirect, you reinforce the dependency."
+},
+"success": "A team member or client finds the answer in the KB system without contacting you."
+},
+"ceiling": {
+"title": "Your roadmap: <em>You cannot break the ceiling while answering everyone's questions.</em>",
+"opening": "Your strategic capacity is being consumed by operational requests. KB creates infrastructure that frees those hours. The ceiling breaks when your attention shifts from answering to building.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Measure where your time actually goes",
+"desc": "Track every hour for two weeks. What percentage is genuinely strategic? That ratio is your ceiling."
+},
+{
+"label": "Month 2",
+"focus": "Systematically eliminate the operational time consumers",
+"desc": "Each one becomes a documented process. The system answers it. Not you."
+},
+{
+"label": "Month 3",
+"focus": "Redirect freed hours to the activities that break the ceiling",
+"desc": "The ceiling breaks from strategic activity — not from working harder on operations."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Time-track every hour for two weeks",
+"desc": "Categorise: strategic (only I can do this) vs operational (exists because no system handles it)."
+},
+{
+"week": "Week 2",
+"title": "Document the three highest time-consuming operational categories",
+"desc": "These are your first three Definitive Solutions."
+},
+{
+"week": "Week 3–4",
+"title": "Deploy the documents and redirect incoming requests",
+"desc": "Every incoming request in these categories goes to the document."
+},
+{
+"week": "Month 2",
+"title": "Track operational hours weekly — measure the decline",
+"desc": "The number going down is the ceiling rising."
+},
+{
+"week": "Month 3",
+"title": "Commit freed hours to specific strategic activities",
+"desc": "Name them in advance. The ceiling breaks from what you do with the hours."
+}
+],
+"warning": {
+"title": "Watch for this: filling freed hours with more operations",
+"desc": "As requests reduce, the pattern will find new ones. Protect freed hours actively. Name what they are for."
+},
+"success": "Operational hours drop 20% and you use those hours on a growth activity that generates measurable revenue."
+},
+"scale": {
+"title": "Your roadmap: <em>At scale, the Burnt Out Hero becomes the bottleneck for everyone.</em>",
+"opening": "As the business grows, the volume of requests grows with it. Without a system they all still come to you. KB means growth does not increase your personal load.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Build the client-facing system that removes you from delivery",
+"desc": "Documented onboarding. Communication standards. Delivery processes. Consistent without your involvement."
+},
+{
+"label": "Month 2",
+"focus": "Build the team-facing system that removes you from management",
+"desc": "Documented expectations. Quality standards. Escalation paths. The team knows what to do."
+},
+{
+"label": "Month 3",
+"focus": "Scale volume — measure the load on you personally",
+"desc": "Revenue doubles. Does your personal workload double? If not, the system is scaling."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Map every point where a client contacts you personally",
+"desc": "Each one is a system gap. Document the process that should handle it."
+},
+{
+"week": "Week 2",
+"title": "Map every point where a team member escalates to you",
+"desc": "Each escalation is a missing process or missing clarity."
+},
+{
+"week": "Week 3–4",
+"title": "Build documented responses for both maps",
+"desc": "Client contacts get processes. Team escalations get decision frameworks."
+},
+{
+"week": "Month 2",
+"title": "Deploy and measure — how much still reaches you personally?",
+"desc": "Build the system before the growth. Not after."
+},
+{
+"week": "Month 3",
+"title": "Scale revenue and measure personal load — they should decouple",
+"desc": "Revenue up. Personal workload flat or down."
+}
+],
+"warning": {
+"title": "Watch for this: personally handling exceptions instead of systematising them",
+"desc": "When an unusual situation arises, ask: what process would have prevented this? Build that process."
+},
+"success": "Revenue grows 30% and your personal working hours stay flat or decrease."
+},
+"exit": {
+"title": "Your roadmap: <em>A business that needs the hero to run it is worth less.</em>",
+"opening": "KB documents the business so the hero is no longer load-bearing — and the sale multiple reflects that.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Map every client relationship that runs through you personally",
+"desc": "Document each one — history, expectations, preferences, and who will own it post-sale."
+},
+{
+"label": "Month 2",
+"focus": "Transfer the relationships to the team using documented processes",
+"desc": "The team manages clients using documented standards. Prove it works before the sale."
+},
+{
+"label": "Month 3",
+"focus": "Run the business without being the hero for 90 days",
+"desc": "Document what breaks. Fix it."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "List every client who would notice if you left tomorrow",
+"desc": "These are your exit risks. Each needs to be transferred to the system before sale."
+},
+{
+"week": "Week 2",
+"title": "Document the relationship for each client",
+"desc": "History. Preferences. Key contacts. Everything a new owner needs."
+},
+{
+"week": "Week 3–4",
+"title": "Introduce the team member who will manage each relationship post-sale",
+"desc": "Do it while you are still there."
+},
+{
+"week": "Month 2",
+"title": "Step back from day-to-day client contact",
+"desc": "The team manages. You observe. Document every intervention required."
+},
+{
+"week": "Month 3",
+"title": "Run 90 days without hero-mode",
+"desc": "No emergency saves. No personal interventions. The system handles everything."
+}
+],
+"warning": {
+"title": "Watch for this: the client who insists on dealing only with you",
+"desc": "Use the KB client communication process to gradually transfer the relationship before the sale."
+},
+"success": "A client contacts the team instead of you — and the team handles it correctly without escalating."
+}
+},
+"visionary": {
+"build": {
+"title": "Your roadmap: <em>Give your vision somewhere to land.</em>",
+"opening": "Your vision is genuine. The problem is the absence of infrastructure to hold it. KB is that infrastructure. When the vision lands in a Definitive Solution, it becomes a repeatable outcome rather than a new source of chaos.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Translate one vision into one documented process",
+"desc": "Not the next vision — this one, all the way to completion."
+},
+{
+"label": "Month 2",
+"focus": "Test the process — measure the gap between vision and reality",
+"desc": "Update the document, not the vision."
+},
+{
+"label": "Month 3",
+"focus": "Land two more visions in documented processes",
+"desc": "The two with the highest business impact. Everything else goes in the idea log."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Choose one vision — the most valuable right now — and commit",
+"desc": "One vision. One Definitive Solution. No pivots until complete."
+},
+{
+"week": "Week 2",
+"title": "Document the process that delivers the vision",
+"desc": "Not the vision itself — the process that makes it repeatable."
+},
+{
+"week": "Week 3",
+"title": "Test with one team member — observe, do not direct",
+"desc": "Watch where it works and where it does not."
+},
+{
+"week": "Week 4",
+"title": "Update the process based on the test — this is version two",
+"desc": "The vision improved by contact with reality."
+},
+{
+"week": "Month 2–3",
+"title": "Repeat for the next two highest-value visions",
+"desc": "Three visions landed. Three Definitive Solutions running."
+}
+],
+"warning": {
+"title": "Watch for this: the mid-build pivot",
+"desc": "Halfway through documenting one vision, a more important one arrives. The new one goes in the idea log. Finish the current process first."
+},
+"success": "A vision becomes a process the team runs consistently — without you involved in every instance."
+},
+"ceiling": {
+"title": "Your roadmap: <em>The ceiling is a vision execution problem.</em>",
+"opening": "The ceiling breaks when one vision gets executed completely, consistently, and without you in the centre of every instance.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Identify which vision has the highest ceiling-breaking potential",
+"desc": "Not the most exciting. The one that would most directly add revenue if it ran consistently."
+},
+{
+"label": "Month 2",
+"focus": "Build the execution infrastructure for that vision",
+"desc": "Documented process. Trained team. Consistent delivery without the visionary in the room."
+},
+{
+"label": "Month 3",
+"focus": "Scale that vision — measure the ceiling movement",
+"desc": "One vision fully executed at scale breaks more ceiling than ten partially implemented."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Rank current visions by ceiling-breaking potential",
+"desc": "Revenue impact if it ran consistently. Rank them. Choose number one."
+},
+{
+"week": "Week 2",
+"title": "Document the execution process for vision one — end to end",
+"desc": "Every step. Every person. Every decision point."
+},
+{
+"week": "Week 3–4",
+"title": "Train the team — run it three times",
+"desc": "Three consistent executions. Measure each time. Update between runs."
+},
+{
+"week": "Month 2",
+"title": "Hand the process to the team completely",
+"desc": "You observe. The team runs it."
+},
+{
+"week": "Month 3",
+"title": "Scale the volume — measure the ceiling",
+"desc": "More clients. More instances. Same process."
+}
+],
+"warning": {
+"title": "Watch for this: adding new visions before the current one is delivering",
+"desc": "When the first vision is 80% implemented a new one arrives that seems more important. Get to 100% first."
+},
+"success": "A vision generates revenue without you personally involved in every delivery."
+},
+"scale": {
+"title": "Your roadmap: <em>Scale requires the vision to run without the visionary.</em>",
+"opening": "KB builds the infrastructure that carries the vision without you in the room at every stage.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document the vision in enough detail that the team can execute it",
+"desc": "Not inspire them — execute. Execution requires specificity."
+},
+{
+"label": "Month 2",
+"focus": "Test execution without your presence",
+"desc": "Can the team deliver to your standard without you directing?"
+},
+{
+"label": "Month 3",
+"focus": "Scale volume with documented execution",
+"desc": "More clients. Same vision. Same standard. No personal direction from you."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Write what good looks like for your three core visions",
+"desc": "Specific version. What does the team produce? What does the client experience?"
+},
+{
+"week": "Week 2",
+"title": "Document the execution process for your highest-value vision",
+"desc": "Step by step. Decision by decision."
+},
+{
+"week": "Week 3–4",
+"title": "Run the process without your involvement — three times",
+"desc": "You observe the outcomes. You do not direct the execution."
+},
+{
+"week": "Month 2",
+"title": "Update the process based on what you observed",
+"desc": "Where did execution diverge from the vision? That is a document improvement."
+},
+{
+"week": "Month 3",
+"title": "Scale volume and measure vision fidelity",
+"desc": "Is the vision being delivered consistently at higher volume?"
+}
+],
+"warning": {
+"title": "Watch for this: pivoting the vision mid-scale",
+"desc": "When execution does not match the vision perfectly, improve the process — not the vision."
+},
+"success": "Ten clients receive the vision-delivered outcome consistently — without you personally involved in any of the ten."
+},
+"exit": {
+"title": "Your roadmap: <em>A buyer buys the vision if the execution is documented.</em>",
+"opening": "Your vision is what makes this business exciting to a buyer. But a vision without documented execution is a risk, not an asset.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document every process that delivers the core vision",
+"desc": "The delivery processes. Client experience. Quality standard. Every element that makes the vision real."
+},
+{
+"label": "Month 2",
+"focus": "Prove the vision delivers without the visionary",
+"desc": "90 days of consistent documented delivery without your personal involvement."
+},
+{
+"label": "Month 3",
+"focus": "Tell the vision story through the KB system",
+"desc": "A buyer who walks through your KB sees a coherent, documented, vision-driven business."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Write the vision statement that will be in the information memorandum",
+"desc": "What is this business's core vision? Clear, specific, documented."
+},
+{
+"week": "Week 2",
+"title": "Document every process that delivers on that vision",
+"desc": "The buyer needs to see the vision is real — not aspirational."
+},
+{
+"week": "Week 3–4",
+"title": "Run a mock buyer walkthrough using the KB system",
+"desc": "Note every question. Answer it in the system."
+},
+{
+"week": "Month 2",
+"title": "Step back from delivery completely",
+"desc": "The most powerful thing you can show is 90 days of consistent delivery without your involvement."
+},
+{
+"week": "Month 3",
+"title": "Prepare the business-after-me narrative — supported by KB evidence",
+"desc": "The KB system is the evidence it works."
+}
+],
+"warning": {
+"title": "Watch for this: pivoting the business model during exit preparation",
+"desc": "A business in mid-pivot is harder to sell and worth less. Complete the exit with the current vision documented and proven."
+},
+"success": "A buyer says I can see exactly what this business does and I can see it running without you."
+}
+},
+"scattered": {
+"build": {
+"title": "Your roadmap: <em>Every process documented is an interruption that never happens again.</em>",
+"opening": "Your attention is the most valuable resource in this business — and it is currently unprotected. KB eliminates the tax by answering questions before they are asked.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document the answers to your highest-volume interruptions",
+"desc": "Track one week. The top five become your first five Definitive Solutions."
+},
+{
+"label": "Month 2",
+"focus": "Build the habit of redirecting — not answering",
+"desc": "When an interruption arrives for something documented, redirect every time."
+},
+{
+"label": "Month 3",
+"focus": "Protect focused time blocks using the system",
+"desc": "With interruptions reduced, protect two-hour blocks of focused work."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Track every interruption for one week — type, source, resolution",
+"desc": "Log in real time. The log is the documentation backlog."
+},
+{
+"week": "Week 2",
+"title": "Document the answers to your top 5 interruptions",
+"desc": "These become Definitive Solutions. Each is an interruption that ends."
+},
+{
+"week": "Week 3",
+"title": "Redirect the next 10 interruptions to the system",
+"desc": "That is in [process name]. Every time. No exceptions."
+},
+{
+"week": "Week 4–6",
+"title": "Document the next 5 interruptions from your tracking log",
+"desc": "Work through the list. Volume reaching you should be measurably declining."
+},
+{
+"week": "Month 2–3",
+"title": "Block protected focused time as interruptions decline",
+"desc": "Two hours in the morning. Non-negotiable."
+}
+],
+"warning": {
+"title": "Watch for this: answering quickly instead of redirecting",
+"desc": "Each quick answer reinforces the interruption. Redirect instead. Every time. Even when answering would be faster."
+},
+"success": "You complete a two-hour focused work block without a single interruption — because the system handled everything."
+},
+"ceiling": {
+"title": "Your roadmap: <em>The ceiling is an attention problem, not a capability problem.</em>",
+"opening": "The strategic decisions, client relationships, growth activities — these require sustained attention. KB eliminates the noise that prevents that attention from existing.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Measure how much of your time is genuinely strategic",
+"desc": "Track two weeks honestly. Most owners find it is less than 20%."
+},
+{
+"label": "Month 2",
+"focus": "Document and eliminate the noise consuming the other 80%",
+"desc": "Each noise source becomes a documentation task."
+},
+{
+"label": "Month 3",
+"focus": "Use reclaimed attention on the specific activity that breaks the ceiling",
+"desc": "Name it. Block it. Do it."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Time-track two weeks in 30-minute blocks",
+"desc": "Categorise every block: deep work, shallow work, reactive, administrative."
+},
+{
+"week": "Week 2",
+"title": "Identify your three highest-volume shallow work categories",
+"desc": "These are your first documentation priorities."
+},
+{
+"week": "Week 3–4",
+"title": "Document all three and redirect the incoming work",
+"desc": "The system handles it. You do not."
+},
+{
+"week": "Month 2",
+"title": "Block the reclaimed time for ceiling-breaking activity",
+"desc": "Name the activity specifically. Not strategic time — the specific thing."
+},
+{
+"week": "Month 3",
+"title": "Measure the ceiling — is it moving?",
+"desc": "More strategic hours should produce measurable ceiling movement."
+}
+],
+"warning": {
+"title": "Watch for this: using reclaimed time for more reactive work",
+"desc": "Protect the blocks explicitly. Name them. Put them in the calendar."
+},
+"success": "Your strategic hours triple — and one of those hours produces a direct revenue or growth outcome."
+},
+"scale": {
+"title": "Your roadmap: <em>Scale without attention protection is chaos at volume.</em>",
+"opening": "Your pattern means growth will increase the volume of interruptions. KB is the attention protection infrastructure that makes scale manageable.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Build the self-service system before growth arrives",
+"desc": "Every process documented is a question that will not be asked. Build before the volume arrives."
+},
+{
+"label": "Month 2",
+"focus": "Test the system at current volume",
+"desc": "Where does it fail? Fix those gaps before adding volume."
+},
+{
+"label": "Month 3",
+"focus": "Scale volume and measure system performance",
+"desc": "More clients. More team. Same system. Does interruption volume stay flat?"
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Document your 10 highest-volume client-facing processes",
+"desc": "Answer the questions clients will ask at higher volume before the volume arrives."
+},
+{
+"week": "Week 2",
+"title": "Document your 5 highest-volume team-facing processes",
+"desc": "The decisions the team escalates. Answered in the system."
+},
+{
+"week": "Week 3–4",
+"title": "Test at current volume — measure what still reaches you",
+"desc": "Track for two weeks. How much is the system handling?"
+},
+{
+"week": "Month 2",
+"title": "Close every gap that allowed noise through",
+"desc": "Each gap is a documentation task. Close them before scaling."
+},
+{
+"week": "Month 3",
+"title": "Scale volume — measure attention tax",
+"desc": "Revenue grows. Does personal interruption volume grow with it?"
+}
+],
+"warning": {
+"title": "Watch for this: scaling before the system is ready",
+"desc": "Scale before the system is ready and you will be more scattered at higher volume. Build first."
+},
+"success": "Revenue grows 30% and your personal interruption volume stays flat or declines."
+},
+"exit": {
+"title": "Your roadmap: <em>A scattered business is a discounted business.</em>",
+"opening": "KB answers the buyer questions — visibly, specifically, and verifiably. The documentation is the proof of order in what might otherwise appear chaotic.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Create visible order — document every key process",
+"desc": "The KB system needs to show a buyer that the business has a logic."
+},
+{
+"label": "Month 2",
+"focus": "Test the order — run the business from the KB system alone",
+"desc": "Could a capable person run this business using only the KB system?"
+},
+{
+"label": "Month 3",
+"focus": "Present the ordered business to the market",
+"desc": "The KB system is the evidence of order. The sale conversation starts with the system."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Audit the KB system from a buyer perspective",
+"desc": "What questions would a buyer have? Every unanswered question is a documentation task."
+},
+{
+"week": "Week 2",
+"title": "Document the answers to every buyer question systematically",
+"desc": "Work through the list. Each task eliminates a risk."
+},
+{
+"week": "Week 3–4",
+"title": "Have a trusted advisor do a buyer walkthrough",
+"desc": "Note every question. Fill every gap."
+},
+{
+"week": "Month 2",
+"title": "Run one month of operation using only the KB system",
+"desc": "No personal knowledge. Everything from the documented processes."
+},
+{
+"week": "Month 3",
+"title": "Present to a business broker as supporting documentation",
+"desc": "The KB system is part of the information memorandum."
+}
+],
+"warning": {
+"title": "Watch for this: leaving the exit documentation to the last minute",
+"desc": "Start 12-18 months before the target sale date. A rushed KB looks like what it is."
+},
+"success": "A business broker reviews the KB system and says it supports the asking price."
+}
+},
+"executor": {
+"build": {
+"title": "Your roadmap: <em>Build the system that knows when to update itself.</em>",
+"opening": "You are excellent at building and following systems. The risk is documenting the current way and then defending it past its usefulness. KB includes a built-in review cycle. Use it.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document your core processes — thoroughly",
+"desc": "Your pattern is an asset here. Document with precision and completeness."
+},
+{
+"label": "Month 2",
+"focus": "Build the review rhythm into every process",
+"desc": "Every Definitive Solution includes a review date. The review is part of the process."
+},
+{
+"label": "Month 3",
+"focus": "Run the first review cycle — update based on what has changed",
+"desc": "Some processes unchanged. Some needing update. Both outcomes are correct."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Document your three core processes — with full precision",
+"desc": "Your pattern excels here. Write them thoroughly."
+},
+{
+"week": "Week 2",
+"title": "Add a review date and review criteria to each document",
+"desc": "What would trigger an update? Write those criteria in the document."
+},
+{
+"week": "Week 3",
+"title": "Document three more processes — same standard",
+"desc": "Build quickly while the pattern is engaged."
+},
+{
+"week": "Week 4–6",
+"title": "Complete the first full review cycle on your first three processes",
+"desc": "Even if they are only weeks old. The habit of reviewing matters most."
+},
+{
+"week": "Month 2–3",
+"title": "Document the remaining core processes — all with review cycles",
+"desc": "Every process has a review date. That is what makes KB adaptive rather than static."
+}
+],
+"warning": {
+"title": "Watch for this: using the documented process as a reason not to adapt",
+"desc": "Ask before every execution: is this process still right for this situation? If no, update before executing."
+},
+"success": "You identify that a documented process no longer serves the business — and you update it rather than continue following it."
+},
+"ceiling": {
+"title": "Your roadmap: <em>The ceiling is the edge of yesterday's plan.</em>",
+"opening": "The ceiling is strategic. The plan that worked to get you here will not work to get you further. Breaking through requires adapting the strategy — not executing the current one harder.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Review the current strategy against the current market",
+"desc": "Not against the plan. Against what is actually true now. What has changed?"
+},
+{
+"label": "Month 2",
+"focus": "Adapt the strategy — document the new direction",
+"desc": "The adaptation is the plan being updated with current information."
+},
+{
+"label": "Month 3",
+"focus": "Execute the updated strategy — measure against the ceiling",
+"desc": "Adapted strategy, precisely executed. That is where your pattern is most powerful."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Audit the current plan against current market reality",
+"desc": "What was true when the plan was written that is no longer true?"
+},
+{
+"week": "Week 2",
+"title": "Identify the three biggest strategic gaps between plan and reality",
+"desc": "These are the ceiling-builders."
+},
+{
+"week": "Week 3–4",
+"title": "Write the updated strategy with full documentation",
+"desc": "Your pattern is excellent at this. Write the new direction with rigour."
+},
+{
+"week": "Month 2",
+"title": "Communicate the update to the team with precision",
+"desc": "What specifically is changing, why, and what it means for each person."
+},
+{
+"week": "Month 3",
+"title": "Execute the updated strategy — measure weekly",
+"desc": "Your execution discipline applied to the right strategy breaks the ceiling."
+}
+],
+"warning": {
+"title": "Watch for this: executing the wrong plan perfectly",
+"desc": "Review first. Update second. Execute third."
+},
+"success": "You make a significant strategic change — documented, communicated, executed — and the ceiling begins to move."
+},
+"scale": {
+"title": "Your roadmap: <em>Scale requires the system to evolve as it grows.</em>",
+"opening": "The risk at scale is building a perfect system for the current size and then defending it as the business outgrows it. KB review cycles ensure the system evolves with you.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Document current systems with scale in mind",
+"desc": "Write every process for where the business is going — not just where it is."
+},
+{
+"label": "Month 2",
+"focus": "Build a strategic review rhythm for scale decisions",
+"desc": "Monthly: what has changed? Quarterly: is the strategy still right? These are documented processes."
+},
+{
+"label": "Month 3",
+"focus": "Scale volume and test the system adaptability",
+"desc": "As volume grows, do the systems adapt or resist?"
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Audit every current process for scale assumptions",
+"desc": "Which break at 1.5x volume? At 2x? Redesign those now."
+},
+{
+"week": "Week 2",
+"title": "Redesign the high-risk processes for the scaled version",
+"desc": "Write the process that works at target revenue."
+},
+{
+"week": "Week 3–4",
+"title": "Build a monthly scale review into the KB rhythm",
+"desc": "What changed this month that the system needs to reflect?"
+},
+{
+"week": "Month 2",
+"title": "Test the redesigned processes at current volume",
+"desc": "Do they work better? Are they ready for volume?"
+},
+{
+"week": "Month 3",
+"title": "Scale volume — use the review rhythm to adapt in real time",
+"desc": "Growth reveals gaps. The review rhythm surfaces them."
+}
+],
+"warning": {
+"title": "Watch for this: scaling the current system instead of the right system",
+"desc": "Design for where you are going, not where you are."
+},
+"success": "Revenue grows 50% and the system adapts smoothly — processes updated, team informed, no operational breakdown."
+},
+"exit": {
+"title": "Your roadmap: <em>A documented, disciplined business commands the highest multiple.</em>",
+"opening": "Your pattern is an exit asset. The risk is that the system reflects a business model the market has moved past. Make sure the KB system is current before the sale.",
+"months": [
+{
+"label": "Month 1",
+"focus": "Audit the KB system for currency and completeness",
+"desc": "Are all processes current? Do they reflect how the business actually runs today?"
+},
+{
+"label": "Month 2",
+"focus": "Validate the system against buyer expectations",
+"desc": "Does the KB system prove the business performs without the seller?"
+},
+{
+"label": "Month 3",
+"focus": "Present the system as the sale primary evidence of value",
+"desc": "The KB system is the information memorandum most powerful supporting document."
+}
+],
+"actions": [
+{
+"week": "Week 1",
+"title": "Audit every process for currency",
+"desc": "When was it last updated? Does it reflect actual current practice?"
+},
+{
+"week": "Week 2",
+"title": "Update every process that has drifted",
+"desc": "The discipline to keep documentation current is rare. In due diligence, it is invaluable."
+},
+{
+"week": "Week 3–4",
+"title": "Run a buyer-perspective audit — what does the system prove?",
+"desc": "Does it prove the business runs without the owner? That quality is consistent?"
+},
+{
+"week": "Month 2",
+"title": "Fill every gap the audit revealed",
+"desc": "Every gap is a buyer question with no documented answer."
+},
+{
+"week": "Month 3",
+"title": "Present to your business broker as the primary sale asset",
+"desc": "The KB system supports the asking price. Make sure your broker knows how to present it."
+}
+],
+"warning": {
+"title": "Watch for this: a system that is impressive but no longer current",
+"desc": "Due diligence will find gaps between documentation and current practice. Keep the system current."
+},
+"success": "A buyer's due diligence team completes their review without a single this does not match actual practice finding."
+}
+}
+};
+
+function setStage(stage) {
+  currentStage = stage;
+  document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('stage-' + stage).classList.add('active');
+  document.getElementById('stageNote').textContent = stageNotes[stage];
+  if (document.getElementById('resultsSection').classList.contains('visible')) {
+    generateRoadmap();
+  }
+}
+
+function generateRoadmap() {
+  const sorted = patterns.map(p => ({ ...p, score: scores[p.id] })).sort((a, b) => b.score - a.score);
+  const dominant = sorted.find(p => p.score >= 6) || sorted[0];
+  const data = roadmapData[dominant.id]?.[currentStage];
+  if (!data) return;
+
+  document.getElementById('roadmapStageBadge').textContent = stageBadges[currentStage];
+  document.getElementById('roadmapTitle').innerHTML = data.title;
+  document.getElementById('roadmapOpening').textContent = data.opening;
+
+  document.getElementById('roadmapMonths').innerHTML = data.months.map(m => `
+    <div class="month-card">
+      <div class="month-label">${m.label}</div>
+      <div class="month-focus">${m.focus}</div>
+      <div class="month-desc">${m.desc}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('roadmapActions').innerHTML = data.actions.map((a, i) => `
+    <div class="roadmap-action">
+      <div class="action-number">${i + 1}</div>
+      <div class="action-content">
+        <div class="action-week">${a.week}</div>
+        <div class="action-title">${a.title}</div>
+        <div class="action-desc">${a.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('warningTitle').textContent = data.warning.title;
+  document.getElementById('warningDesc').textContent = data.warning.desc;
+  document.getElementById('successDesc').textContent = data.success;
+}
+// ─── END ROADMAP ────────────────────────────────────────────────
+
+// RADAR CHART
+function drawRadar(sorted) {
+  const canvas = document.getElementById('radarChart');
+  const ctx = canvas.getContext('2d');
+  const cx = 140, cy = 140, r = 110;
+  const n = 8;
+  ctx.clearRect(0, 0, 280, 280);
+
+  // Grid rings
+  [2, 4, 6, 8, 10].forEach(ring => {
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+      const x = cx + (r * ring / 10) * Math.cos(angle);
+      const y = cy + (r * ring / 10) * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // Axes
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Data polygon
+  ctx.beginPath();
+  sorted.forEach((p, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const val = p.score / 10;
+    const x = cx + r * val * Math.cos(angle);
+    const y = cy + r * val * Math.sin(angle);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(200,168,75,0.25)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(200,168,75,0.8)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Dots
+  sorted.forEach((p, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const val = p.score / 10;
+    const x = cx + r * val * Math.cos(angle);
+    const y = cy + r * val * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#c8a84b';
+    ctx.fill();
+  });
+
+  // Labels — short names
+  const shortNames = ['Comfort Zone', 'Shiny Ball', 'Burnt Out Hero', 'Visionary', 'Lone Wolf', 'Scattered', 'Perfectionist', 'Executor'];
+  sorted.forEach((p, i) => {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const labelR = r + 22;
+    const x = cx + labelR * Math.cos(angle);
+    const y = cy + labelR * Math.sin(angle);
+    ctx.font = '9px DM Sans, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(shortNames[i], x, y);
+  });
+}
+
+buildPatterns();
+</script>
+</body>
+</html>

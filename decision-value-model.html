@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Value Model — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:#2d5a27;--forest-dk:#1a3d16;--forest-lt:#d4e8d1;
+    --gold:#c8a84b;--gold-lt:#f5edcc;--bg:#f0f5ef;
+    --white:#ffffff;--text:#1a2018;--muted:#5a6e57;--border:#d0dece;
+    --red:#b91c1c;--red-lt:#fde8e8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;min-height:100vh;}
+  .nav{background:var(--forest-dk);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--white);text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-back{font-size:12px;color:rgba(255,255,255,0.6);text-decoration:none;letter-spacing:.05em;}
+  .nav-back:hover{color:var(--gold);}
+
+  .disclaimer-overlay{position:fixed;inset:0;background:rgba(10,25,10,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);}
+  .disclaimer-box{background:var(--white);border-radius:16px;max-width:620px;width:100%;padding:48px;box-shadow:0 32px 80px rgba(0,0,0,.3);border-top:4px solid var(--gold);}
+  .disclaimer-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+  .disclaimer-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest-dk);margin-bottom:20px;line-height:1.2;}
+  .disclaimer-body{font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:24px;}
+  .disclaimer-body p{margin-bottom:10px;}
+  .disclaimer-checks{margin-bottom:28px;}
+  .disclaimer-check{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg);font-size:13px;color:var(--text);cursor:pointer;}
+  .disclaimer-check:last-child{border-bottom:none;}
+  .disclaimer-check input[type="checkbox"]{margin-top:3px;accent-color:var(--forest);flex-shrink:0;width:16px;height:16px;}
+  .btn-accept{width:100%;background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:16px;font-size:15px;font-weight:500;cursor:pointer;opacity:.4;pointer-events:none;transition:background .2s;}
+  .btn-accept.ready{opacity:1;pointer-events:all;}
+  .btn-accept.ready:hover{background:var(--forest-dk);}
+
+  .hero{background:var(--forest-dk);padding:56px 40px 72px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 40% 0%,rgba(200,168,75,.12) 0%,transparent 65%);pointer-events:none;}
+  .hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,50px);font-weight:500;color:var(--white);line-height:1.15;margin-bottom:16px;}
+  .hero-title em{font-style:italic;color:var(--gold);}
+  .hero-sub{font-size:15px;color:rgba(255,255,255,.6);max-width:560px;margin:0 auto;line-height:1.8;}
+
+  .main{max-width:1000px;margin:0 auto;padding:48px 24px 80px;}
+  .disclaimer-bar{background:var(--gold-lt);border:1px solid var(--gold);border-radius:8px;padding:12px 20px;margin-bottom:32px;font-size:12px;color:var(--text);line-height:1.6;display:flex;gap:12px;align-items:flex-start;}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+
+  .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  @media(max-width:640px){.input-grid{grid-template-columns:1fr;}}
+  .input-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;}
+  .input-card.full{grid-column:1/-1;}
+  .input-card.highlight{border-color:var(--forest);background:var(--forest-lt);}
+  .input-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin-bottom:6px;display:block;}
+  .input-desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+  .input-wrap{position:relative;}
+  .input-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);font-weight:500;}
+  .input-suffix{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);}
+  input[type="number"]{width:100%;padding:12px 14px 12px 32px;border:1px solid var(--border);border-radius:8px;font-size:16px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;}
+  input[type="number"]:focus{border-color:var(--forest);}
+  .range-group{margin-top:8px;}
+  .range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+  input[type="range"]{-webkit-appearance:none;width:100%;height:5px;border-radius:3px;background:var(--forest-lt);outline:none;cursor:pointer;}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--forest);border:3px solid var(--white);box-shadow:0 2px 8px rgba(45,90,39,.3);}
+  .range-val{text-align:center;font-size:13px;color:var(--muted);margin-top:6px;}
+  .range-val strong{color:var(--forest);font-size:15px;}
+
+  /* CONFIDENCE */
+  .confidence-section{background:var(--white);border-radius:12px;border:2px solid var(--forest);padding:28px 32px;margin-bottom:32px;}
+  .confidence-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+  .confidence-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest-dk);}
+  .confidence-subtitle{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.6;}
+  .blindspot-badge{background:var(--forest-lt);border:1px solid var(--forest);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--forest-dk);line-height:1.6;flex-shrink:0;max-width:280px;}
+  .blindspot-badge strong{display:block;color:var(--forest);margin-bottom:2px;}
+  .confidence-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .conf-btn{padding:10px 20px;border-radius:8px;border:2px solid var(--border);background:var(--bg);font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;}
+  .conf-btn:hover{border-color:var(--forest);color:var(--forest);}
+  .conf-btn.active{background:var(--forest);border-color:var(--forest);color:var(--white);}
+  .confidence-note{font-size:12px;color:var(--muted);font-style:italic;line-height:1.6;}
+
+  .calc-wrap{text-align:center;margin-bottom:40px;}
+  .btn-calc{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:16px 48px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-calc:hover{background:var(--forest-dk);transform:translateY(-1px);box-shadow:0 8px 24px rgba(45,90,39,.25);}
+
+  .results{display:none;}
+  .results.visible{display:block;}
+
+  .conf-result-banner{background:var(--forest-lt);border:1px solid var(--forest);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:var(--forest-dk);line-height:1.7;}
+
+  /* HERO STATS */
+  .result-hero{background:var(--forest-dk);border-radius:16px;padding:40px;margin-bottom:20px;position:relative;overflow:hidden;}
+  .result-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(200,168,75,.08);pointer-events:none;}
+  .result-hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  @media(max-width:640px){.result-hero-grid{grid-template-columns:1fr;}}
+  .result-stat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+  .result-stat-value{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:500;line-height:1;margin-bottom:6px;}
+  .result-stat-value.red{color:#fca5a5;}
+  .result-stat-value.gold{color:var(--gold);}
+  .result-stat-value.green{color:#86efac;}
+  .result-stat-sub{font-size:12px;color:rgba(255,255,255,.4);}
+  .result-divider{width:1px;background:rgba(255,255,255,.1);}
+  @media(max-width:640px){.result-divider{display:none;}}
+
+  /* LAYERS */
+  .layers-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  @media(max-width:640px){.layers-grid{grid-template-columns:1fr;}}
+  .layer-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;}
+  .layer-card.accent{border-color:var(--gold);background:var(--gold-lt);}
+  .layer-card.danger{border-color:#fca5a5;background:var(--red-lt);}
+  .layer-number{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+  .layer-number.red{color:var(--red);}
+  .layer-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--forest-dk);margin-bottom:8px;}
+  .layer-amount{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;color:var(--forest);margin-bottom:4px;}
+  .layer-amount.red{color:var(--red);}
+  .layer-desc{font-size:12px;color:var(--muted);line-height:1.7;}
+  .layer-calc{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-style:italic;}
+
+  /* TIMELINE */
+  .timeline-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:28px 32px;margin-bottom:20px;}
+  .timeline-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--forest-dk);margin-bottom:20px;}
+  .timeline-row{display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg);align-items:center;font-size:13px;}
+  .timeline-row:last-child{border-bottom:none;font-weight:600;color:var(--forest);}
+  .timeline-row.header{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding-bottom:8px;border-bottom:2px solid var(--border);}
+  .timeline-row .red{color:var(--red);}
+  .timeline-row .green{color:var(--forest);font-weight:600;}
+
+  /* GAP CARD */
+  .gap-card{background:var(--forest);border-radius:16px;padding:36px 40px;margin-bottom:20px;}
+  .gap-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+  .gap-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:8px;}
+  .gap-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:4px;}
+  .gap-value{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:500;color:var(--gold);line-height:1;}
+  .gap-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:6px;}
+  .gap-note{font-size:13px;color:rgba(255,255,255,.7);max-width:300px;line-height:1.7;}
+
+  /* ROI */
+  .roi-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+  .roi-stat{text-align:center;}
+  .roi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+  .roi-value{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--forest);font-weight:500;}
+  .roi-divider{width:1px;height:60px;background:var(--border);}
+  .roi-text{flex:1;min-width:200px;font-size:13px;color:var(--muted);line-height:1.8;}
+  .roi-text strong{color:var(--text);}
+
+  .final-disclaimer{background:var(--red-lt);border:1px solid #fca5a5;border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+  .final-disclaimer h4{font-size:13px;font-weight:600;color:var(--red);margin-bottom:10px;}
+  .final-disclaimer p{font-size:12px;color:#7f1d1d;line-height:1.8;margin-bottom:6px;}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn-primary{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:14px 32px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-primary:hover{background:var(--forest-dk);}
+  .btn-secondary{background:transparent;color:var(--forest);border:2px solid var(--forest);border-radius:8px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-secondary:hover{background:var(--forest);color:var(--white);}
+  .illustrative-badge{display:inline-block;background:var(--gold-lt);color:var(--forest-dk);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--gold);margin-left:8px;vertical-align:middle;}
+
+  @media(max-width:600px){.nav{padding:0 20px;}.hero{padding:40px 20px 60px;}.main{padding:32px 16px 60px;}.gap-card{padding:28px 20px;}.roi-card{flex-direction:column;}}
+</style>
+</head>
+<body>
+
+<div class="disclaimer-overlay" id="disclaimerOverlay">
+  <div class="disclaimer-box">
+    <div class="disclaimer-eyebrow">Before you begin</div>
+    <div class="disclaimer-title">Important — please read before using this tool</div>
+    <div class="disclaimer-body">
+      <p>This tool produces <strong>illustrative estimates</strong> to help you think through the financial cost of your current approach to decision-making versus a structured process.</p>
+      <p>All figures are based on your inputs and honest estimates. They are <strong>not</strong> financial advice or a guarantee of any outcome. Results depend on your specific business circumstances and execution.</p>
+    </div>
+    <div class="disclaimer-checks" id="checkboxes">
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand all figures are illustrative estimates based on my own inputs</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand this does not constitute financial advice</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I will seek independent professional advice before making business decisions</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand Knowledgebase.business accepts no liability for decisions made using this tool</label>
+    </div>
+    <button class="btn-accept" id="acceptBtn" onclick="acceptDisclaimer()">I understand — show me the model</button>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="dashboard.html" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <a href="dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">The Courage to Decide — Decision Value Model</div>
+  <div class="hero-title">What has your current approach<br>to decisions <em>actually cost you?</em></div>
+  <div class="hero-sub">Most owners have never added it up. Enter your honest estimates across three years — the number is usually uncomfortable enough to justify a better process immediately.</div>
+</div>
+
+<div class="main">
+
+  <div class="disclaimer-bar">
+    <div>⚠️</div>
+    <div><strong>Illustrative estimates only.</strong> All figures are based on your inputs and personal estimates. Not financial advice. The value of this model is in the thinking it prompts — not the precision of the numbers.</div>
+  </div>
+
+  <!-- LAYER 1 — BAD DECISIONS -->
+  <div class="section-label">Layer 1 — The cost of decisions made badly (last 3 years)</div>
+  <div class="input-grid">
+    <div class="input-card">
+      <label class="input-label">Significant decisions made in the last 3 years</label>
+      <div class="input-desc">Hires, product launches, pricing changes, supplier decisions, structural changes — anything that materially affected the business</div>
+      <div class="input-wrap">
+        <span class="input-prefix" style="font-size:13px;">🔢</span>
+        <input type="number" id="totalDecisions" value="12" min="1" step="1" style="padding-left:36px;">
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Percentage that did not go to plan</label>
+      <div class="input-desc">Be honest — not catastrophic failures, just decisions that cost more, took longer, or produced a worse outcome than intended</div>
+      <div class="range-group">
+        <div class="range-labels"><span>10%</span><span>25%</span><span>40%</span><span>55%</span><span>70%</span></div>
+        <input type="range" id="badPct" min="10" max="70" step="5" value="30" oninput="updateRange('badPct','badPctVal','Decisions off-plan','%')">
+        <div class="range-val" id="badPctVal">Decisions off-plan: <strong>30%</strong></div>
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Average direct cost per poor decision</label>
+      <div class="input-desc">Include: direct financial loss, time cost (your rate × hours lost), team disruption, recovery cost, and opportunity cost of the wrong direction</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="avgCostBad" value="25000" min="0" step="1000"></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Your estimated hourly rate</label>
+      <div class="input-desc">Used to calculate time wasted on decisions that went wrong and had to be revisited or reversed</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="hourlyRate" value="250" min="0" step="25"><span class="input-suffix">/ hr</span></div>
+    </div>
+  </div>
+
+  <!-- LAYER 2 — DELAYED DECISIONS -->
+  <div class="section-label">Layer 2 — The cost of decisions avoided or delayed (last 3 years)</div>
+  <div class="input-grid">
+    <div class="input-card">
+      <label class="input-label">Decisions you have been sitting on for more than 30 days</label>
+      <div class="input-desc">The underperforming team member. The pricing change. The process that needs building. The supplier relationship that should have ended. Count them honestly.</div>
+      <div class="input-wrap">
+        <span class="input-prefix" style="font-size:13px;">🔢</span>
+        <input type="number" id="delayedDecisions" value="5" min="0" step="1" style="padding-left:36px;">
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Average monthly cost of each delayed decision</label>
+      <div class="input-desc">Lost revenue, ongoing inefficiency, team uncertainty, your mental energy spent circling the same issue</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="monthlyCostDelay" value="3000" min="0" step="500"><span class="input-suffix">/ mo</span></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Average months each decision has been delayed</label>
+      <div class="input-desc">Think about the decisions you know you should have made — how long have they been sitting?</div>
+      <div class="range-group">
+        <div class="range-labels"><span>1mo</span><span>3mo</span><span>6mo</span><span>9mo</span><span>12mo</span></div>
+        <input type="range" id="avgDelayMonths" min="1" max="12" step="1" value="5" oninput="updateRange('avgDelayMonths','avgDelayVal','Average delay',' months')">
+        <div class="range-val" id="avgDelayVal">Average delay: <strong>5 months</strong></div>
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Hours spent per week circling unresolved decisions</label>
+      <div class="input-desc">Late-night reasoning, recurring conversations, rethinking the same issue. It has a cost.</div>
+      <div class="range-group">
+        <div class="range-labels"><span>1hr</span><span>3hr</span><span>5hr</span><span>7hr</span><span>10hr</span></div>
+        <input type="range" id="circlingHours" min="1" max="10" step="1" value="3" oninput="updateRange('circlingHours','circlingVal','Circling hours',' hrs/week')">
+        <div class="range-val" id="circlingVal">Circling hours: <strong>3 hrs/week</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 3 — OPPORTUNITY COST -->
+  <div class="section-label">Layer 3 — The opportunity cost of wrong direction</div>
+  <div class="input-grid">
+    <div class="input-card">
+      <label class="input-label">Decisions committed to that went in the wrong direction</label>
+      <div class="input-desc">Not just decisions that underperformed — decisions where you committed fully to the wrong path and had to reverse course</div>
+      <div class="input-wrap">
+        <span class="input-prefix" style="font-size:13px;">🔢</span>
+        <input type="number" id="wrongDir" value="2" min="0" step="1" style="padding-left:36px;">
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Average cost of each wrong-direction commitment</label>
+      <div class="input-desc">Team time, financial investment, recovery cost, and revenue not generated while heading the wrong way</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="wrongDirCost" value="45000" min="0" step="5000"></div>
+    </div>
+  </div>
+
+  <!-- LAYER 4 — CONFIDENCE PREMIUM -->
+  <div class="section-label">Layer 4 — The confidence premium</div>
+  <div class="input-grid">
+    <div class="input-card full">
+      <label class="input-label">Annual revenue</label>
+      <div class="input-desc">Owners who decide well and quickly move faster. A structured process adds an estimated 10–15% execution speed on growth decisions. What would 10% faster execution on your growth decisions be worth annually?</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="annualRevenue" value="800000" min="0" step="10000"></div>
+    </div>
+  </div>
+
+  <!-- CONFIDENCE TOGGLE -->
+  <div class="confidence-section">
+    <div class="confidence-header">
+      <div>
+        <div class="confidence-title">Your confidence level</div>
+        <div class="confidence-subtitle">How accurately do you think your estimates reflect the true cost of your past decisions?</div>
+      </div>
+      <div class="blindspot-badge" id="blindspotBadge">
+        <strong>🎯 Blind Spot pre-set</strong>
+        <span id="blindspotBadgeText">Complete your Blind Spot profile to get a personalised confidence level based on your dominant pattern.</span>
+      </div>
+    </div>
+    <div class="confidence-buttons">
+      <button class="conf-btn" onclick="setConfidence(30)" id="conf30">30%</button>
+      <button class="conf-btn" onclick="setConfidence(40)" id="conf40">40%</button>
+      <button class="conf-btn active" onclick="setConfidence(50)" id="conf50">50%</button>
+      <button class="conf-btn" onclick="setConfidence(60)" id="conf60">60%</button>
+      <button class="conf-btn" onclick="setConfidence(70)" id="conf70">70%</button>
+      <button class="conf-btn" onclick="setConfidence(80)" id="conf80">80%</button>
+    </div>
+    <div class="confidence-note" id="confidenceNote">At <span style="color:var(--forest);font-weight:600;">50%</span> confidence — a balanced position. Even a conservative estimate of past decision costs typically produces a number that justifies a structured process immediately.</div>
+  </div>
+
+  <div class="calc-wrap">
+    <button class="btn-calc" onclick="calculate()">Calculate my decision cost →</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+
+    <div class="section-label">Your illustrative decision cost model <span class="illustrative-badge">Estimates only</span></div>
+    <div class="conf-result-banner" id="confBanner"></div>
+
+    <!-- HERO STATS -->
+    <div class="result-hero">
+      <div class="result-hero-grid">
+        <div>
+          <div class="result-stat-label">Total 3-year decision cost</div>
+          <div class="result-stat-value red" id="r-total3yr">—</div>
+          <div class="result-stat-sub" id="r-confLabel">at your confidence level</div>
+        </div>
+        <div class="result-divider"></div>
+        <div>
+          <div class="result-stat-label">Annual decision cost</div>
+          <div class="result-stat-value gold" id="r-annual">—</div>
+          <div class="result-stat-sub">what poor decisions cost per year</div>
+        </div>
+        <div class="result-divider"></div>
+        <div>
+          <div class="result-stat-label">Hours lost to poor decisions</div>
+          <div class="result-stat-value green" id="r-hours">—</div>
+          <div class="result-stat-sub">over 3 years — at your rate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOUR LAYERS -->
+    <div class="layers-grid">
+      <div class="layer-card danger">
+        <div class="layer-number red">Layer 1</div>
+        <div class="layer-title">Decisions made badly</div>
+        <div class="layer-amount red" id="r-layer1">—</div>
+        <div class="layer-desc">The direct and indirect cost of significant decisions that did not go to plan — over 3 years, at your confidence level.</div>
+        <div class="layer-calc" id="r-layer1calc">—</div>
+      </div>
+      <div class="layer-card danger">
+        <div class="layer-number red">Layer 2</div>
+        <div class="layer-title">Decisions avoided or delayed</div>
+        <div class="layer-amount red" id="r-layer2">—</div>
+        <div class="layer-desc">The ongoing cost of decisions sitting unresolved — monthly cost × delay × number of decisions — plus the value of your time circling the same issues.</div>
+        <div class="layer-calc" id="r-layer2calc">—</div>
+      </div>
+      <div class="layer-card danger">
+        <div class="layer-number red">Layer 3</div>
+        <div class="layer-title">Wrong-direction commitments</div>
+        <div class="layer-amount red" id="r-layer3">—</div>
+        <div class="layer-desc">The cost of committing fully to the wrong path — team time, financial investment, recovery cost, and revenue not generated while heading the wrong way.</div>
+        <div class="layer-calc" id="r-layer3calc">—</div>
+      </div>
+      <div class="layer-card accent">
+        <div class="layer-number">Layer 4</div>
+        <div class="layer-title">The confidence premium</div>
+        <div class="layer-amount" id="r-layer4">—</div>
+        <div class="layer-desc">The value of deciding well and quickly. A structured process adds an estimated 10% execution speed on growth decisions — compounded over 3 years.</div>
+        <div class="layer-calc" id="r-layer4calc">—</div>
+      </div>
+    </div>
+
+    <!-- YEAR BY YEAR -->
+    <div class="timeline-card">
+      <h3>3-year decision cost — year by year <span class="illustrative-badge">Illustrative</span></h3>
+      <div class="timeline-row header">
+        <span>Year</span>
+        <span>Bad decisions</span>
+        <span>Delayed decisions</span>
+        <span>Cumulative total</span>
+      </div>
+      <div id="timelineRows"></div>
+    </div>
+
+    <!-- GAP CARD -->
+    <div class="gap-card">
+      <div class="gap-inner">
+        <div>
+          <div class="gap-label">The question this model answers</div>
+          <div class="gap-title">What has not having a decision<br>process cost your business?</div>
+          <div class="gap-value" id="r-gapLarge">—</div>
+          <div class="gap-sub" id="r-gapSub">illustrative 3-year total — at your confidence level</div>
+        </div>
+        <div class="gap-note">This isn't about blame — it's about clarity. Every business owner makes decisions without a structured process until they find one they trust. The Courage to Decide framework changes that from this decision forward.</div>
+      </div>
+    </div>
+
+    <!-- ROI -->
+    <div class="roi-card">
+      <div class="roi-stat">
+        <div class="roi-label">Program cost (12 months)</div>
+        <div class="roi-value" id="r-programCost">—</div>
+      </div>
+      <div class="roi-divider"></div>
+      <div class="roi-stat">
+        <div class="roi-label">Annual decision cost avoided</div>
+        <div class="roi-value" id="r-avoided">—</div>
+      </div>
+      <div class="roi-divider"></div>
+      <div class="roi-text">
+        <strong>The Courage to Decide framework pays for itself</strong> when it prevents decisions that cost more than the program. Based on your numbers, the illustrative annual decision cost is <span id="r-roiAnnual">—</span> — a return of <span id="r-roiMultiple">—</span> on the program investment at your confidence level.
+      </div>
+    </div>
+
+    <div class="final-disclaimer">
+      <h4>Important — Illustrative estimates only</h4>
+      <p>All figures in this model are illustrative estimates based entirely on your own inputs. The accuracy of the model depends entirely on the honesty of your estimates. Decision costs are notoriously difficult to quantify — the value of this tool is in the thinking it prompts, not the precision of the numbers.</p>
+      <p>This model does not constitute financial, accounting, or legal advice. Knowledgebase.business Pty Ltd accepts no liability for decisions made in reliance on the outputs of this model.</p>
+      <p><em>[Disclaimer language subject to legal review — for internal use only until approved]</em></p>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="window.print()">Save as PDF</button>
+      <button class="btn-secondary" onclick="resetModel()">Adjust inputs</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let confidenceLevel = 50;
+
+const blindspotNotes = {
+  high: { range: '30–40%', reason: 'Your Blind Spot pattern score is high — you may be underestimating the cost of decisions shaped by your dominant pattern. A conservative confidence level is honest here.' },
+  medium: { range: '50–60%', reason: 'Your Blind Spot score is moderate — your estimates are likely reasonably accurate. A mid-range confidence level reflects realistic self-assessment.' },
+  low: { range: '60–70%', reason: 'Your Blind Spot score is low — you have strong self-awareness. A higher confidence level in your estimates is warranted.' }
+};
+
+function loadBlindspot() {
+  try {
+    const h = JSON.parse(localStorage.getItem('blindspot_history') || '[]');
+    if (!h.length) return;
+    const avg = (h[h.length-1].total || 0) / 8;
+    let level, conf;
+    if (avg >= 6) { level = 'high'; conf = 30; }
+    else if (avg >= 3) { level = 'medium'; conf = 50; }
+    else { level = 'low'; conf = 65; }
+    const n = blindspotNotes[level];
+    document.getElementById('blindspotBadgeText').innerHTML = `Pattern score suggests <strong>${n.range}% confidence</strong>. ${n.reason}`;
+    setConfidence(conf);
+  } catch(e) {}
+}
+
+function setConfidence(pct) {
+  confidenceLevel = pct;
+  document.querySelectorAll('.conf-btn').forEach(b => b.classList.remove('active'));
+  const b = document.getElementById('conf' + pct); if (b) b.classList.add('active');
+  const notes = {
+    30: 'Conservative. Even at this level the number is typically significant enough to justify a structured process.',
+    40: 'Realistic for most owners who are being honest but not harsh on themselves.',
+    50: 'Balanced — half the estimated cost reflects what you can confidently stand behind.',
+    60: 'Confident — you have good visibility of where decisions have cost you.',
+    70: 'High conviction — you have clear examples and can recall the specific costs.',
+    80: 'Very high conviction — you have documented evidence of decision costs in your business.'
+  };
+  document.getElementById('confidenceNote').innerHTML = `At <span style="color:var(--forest);font-weight:600;">${pct}%</span> confidence — ${notes[pct] || ''}`;
+}
+
+function checkAll() {
+  const boxes = document.querySelectorAll('#checkboxes input');
+  document.getElementById('acceptBtn').classList.toggle('ready', Array.from(boxes).every(x => x.checked));
+}
+function acceptDisclaimer() { document.getElementById('disclaimerOverlay').style.display = 'none'; }
+function updateRange(id, valId, label, suffix) {
+  document.getElementById(valId).innerHTML = `${label}: <strong>${document.getElementById(id).value}${suffix}</strong>`;
+}
+function fmt(n) { return '$' + Math.round(n).toLocaleString('en-AU'); }
+
+function calculate() {
+  const conf = confidenceLevel / 100;
+
+  // Inputs
+  const totalDec = parseInt(document.getElementById('totalDecisions').value) || 0;
+  const badPct = parseFloat(document.getElementById('badPct').value) / 100;
+  const avgCostBad = parseFloat(document.getElementById('avgCostBad').value) || 0;
+  const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+  const delayedDec = parseInt(document.getElementById('delayedDecisions').value) || 0;
+  const monthlyCost = parseFloat(document.getElementById('monthlyCostDelay').value) || 0;
+  const avgDelayMo = parseInt(document.getElementById('avgDelayMonths').value) || 0;
+  const circlingHrs = parseFloat(document.getElementById('circlingHours').value) || 0;
+  const wrongDir = parseInt(document.getElementById('wrongDir').value) || 0;
+  const wrongDirCost = parseFloat(document.getElementById('wrongDirCost').value) || 0;
+  const revenue = parseFloat(document.getElementById('annualRevenue').value) || 0;
+
+  // Layer 1 — bad decisions
+  const badDecisions = Math.round(totalDec * badPct);
+  const layer1Raw = badDecisions * avgCostBad;
+  const layer1 = layer1Raw * conf;
+
+  // Layer 2 — delayed decisions
+  const delayCost = delayedDec * monthlyCost * avgDelayMo;
+  const circlingCost = circlingHrs * 52 * 3 * hourlyRate; // weekly hrs × 52 weeks × 3 years
+  const layer2Raw = delayCost + circlingCost;
+  const layer2 = layer2Raw * conf;
+
+  // Layer 3 — wrong direction
+  const layer3Raw = wrongDir * wrongDirCost;
+  const layer3 = layer3Raw * conf;
+
+  // Layer 4 — confidence premium (10% faster execution × 3 years)
+  const layer4Raw = revenue * 0.10 * 3;
+  const layer4 = layer4Raw * conf;
+
+  // Totals
+  const total3yr = layer1 + layer2 + layer3 + layer4;
+  const annualCost = (layer1 + layer2 + layer3) / 3;
+  const totalHours = (circlingHrs * 52 * 3) + (badDecisions * 20); // estimated 20hrs per bad decision
+  const hoursCost = totalHours * hourlyRate * conf;
+
+  // Program cost
+  const programCost = 770 * 12; // Ceiling tier
+  const roi = annualCost / programCost;
+
+  // Hero
+  document.getElementById('r-total3yr').textContent = fmt(total3yr);
+  document.getElementById('r-confLabel').textContent = `at ${confidenceLevel}% confidence — 3 year total`;
+  document.getElementById('r-annual').textContent = fmt(annualCost);
+  document.getElementById('r-hours').textContent = Math.round(totalHours).toLocaleString() + ' hrs';
+
+  // Layers
+  document.getElementById('r-layer1').textContent = fmt(layer1);
+  document.getElementById('r-layer1calc').textContent = `${badDecisions} poor decisions × ${fmt(avgCostBad)} avg cost × ${confidenceLevel}% — illustrative`;
+  document.getElementById('r-layer2').textContent = fmt(layer2);
+  document.getElementById('r-layer2calc').textContent = `${fmt(delayCost)} delay cost + ${fmt(circlingCost)} time circling × ${confidenceLevel}% — illustrative`;
+  document.getElementById('r-layer3').textContent = fmt(layer3);
+  document.getElementById('r-layer3calc').textContent = `${wrongDir} wrong-direction commitments × ${fmt(wrongDirCost)} × ${confidenceLevel}% — illustrative`;
+  document.getElementById('r-layer4').textContent = fmt(layer4);
+  document.getElementById('r-layer4calc').textContent = `${fmt(revenue)} × 10% execution gain × 3 years × ${confidenceLevel}% — illustrative`;
+
+  // Year by year
+  const annualBad = layer1 / 3;
+  const annualDelay = layer2 / 3;
+  let cumulative = 0;
+  let rows = '';
+  for (let y = 1; y <= 3; y++) {
+    cumulative += annualBad + annualDelay;
+    rows += `<div class="timeline-row">
+      <span>Year ${y}</span>
+      <span class="red">${fmt(annualBad)}</span>
+      <span class="red">${fmt(annualDelay)}</span>
+      <span class="red">${fmt(cumulative)}</span>
+    </div>`;
+  }
+  rows += `<div class="timeline-row">
+    <span>3-year total</span>
+    <span class="green">${fmt(layer1)}</span>
+    <span class="green">${fmt(layer2)}</span>
+    <span class="green">${fmt(total3yr)}</span>
+  </div>`;
+  document.getElementById('timelineRows').innerHTML = rows;
+
+  // Gap
+  document.getElementById('r-gapLarge').textContent = fmt(total3yr);
+  document.getElementById('r-gapSub').textContent = `illustrative 3-year total — at ${confidenceLevel}% confidence`;
+
+  // ROI
+  document.getElementById('r-programCost').textContent = fmt(programCost);
+  document.getElementById('r-avoided').textContent = fmt(annualCost);
+  document.getElementById('r-roiAnnual').textContent = fmt(annualCost);
+  document.getElementById('r-roiMultiple').textContent = roi.toFixed(1) + '×';
+
+  document.getElementById('results').classList.add('visible');
+  document.getElementById('confBanner').innerHTML = `<strong>Showing results at ${confidenceLevel}% confidence.</strong> These figures represent ${confidenceLevel}% of your estimated decision costs — a realistic rather than worst-case view. Adjust the confidence level and recalculate to explore different scenarios.`;
+
+  setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function resetModel() {
+  document.getElementById('results').classList.remove('visible');
+  window.scrollTo({ top: 400, behavior: 'smooth' });
+}
+
+loadBlindspot();
+setConfidence(50);
+</script>
+</body>
+</html>

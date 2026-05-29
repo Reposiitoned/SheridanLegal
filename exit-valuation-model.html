@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exit Valuation Model — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:#2d5a27;--forest-dk:#1a3d16;--forest-lt:#d4e8d1;
+    --gold:#c8a84b;--gold-lt:#f5edcc;--bg:#f0f5ef;
+    --white:#ffffff;--text:#1a2018;--muted:#5a6e57;--border:#d0dece;
+    --red:#b91c1c;--red-lt:#fde8e8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;min-height:100vh;}
+  .nav{background:var(--forest-dk);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--white);text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-back{font-size:12px;color:rgba(255,255,255,0.6);text-decoration:none;letter-spacing:.05em;}
+  .nav-back:hover{color:var(--gold);}
+
+  .disclaimer-overlay{position:fixed;inset:0;background:rgba(10,25,10,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);}
+  .disclaimer-box{background:var(--white);border-radius:16px;max-width:620px;width:100%;padding:48px;box-shadow:0 32px 80px rgba(0,0,0,.3);border-top:4px solid var(--gold);}
+  .disclaimer-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+  .disclaimer-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest-dk);margin-bottom:20px;line-height:1.2;}
+  .disclaimer-body{font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:24px;}
+  .disclaimer-body p{margin-bottom:10px;}
+  .disclaimer-checks{margin-bottom:28px;}
+  .disclaimer-check{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg);font-size:13px;color:var(--text);cursor:pointer;}
+  .disclaimer-check:last-child{border-bottom:none;}
+  .disclaimer-check input[type="checkbox"]{margin-top:3px;accent-color:var(--forest);flex-shrink:0;width:16px;height:16px;}
+  .btn-accept{width:100%;background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:16px;font-size:15px;font-weight:500;cursor:pointer;opacity:.4;pointer-events:none;transition:background .2s;}
+  .btn-accept.ready{opacity:1;pointer-events:all;}
+  .btn-accept.ready:hover{background:var(--forest-dk);}
+
+  .hero{background:var(--forest-dk);padding:56px 40px 72px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 0%,rgba(200,168,75,.12) 0%,transparent 65%);pointer-events:none;}
+  .hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,50px);font-weight:500;color:var(--white);line-height:1.15;margin-bottom:16px;}
+  .hero-title em{font-style:italic;color:var(--gold);}
+  .hero-sub{font-size:15px;color:rgba(255,255,255,.6);max-width:540px;margin:0 auto;line-height:1.8;}
+
+  .main{max-width:1000px;margin:0 auto;padding:48px 24px 80px;}
+  .disclaimer-bar{background:var(--gold-lt);border:1px solid var(--gold);border-radius:8px;padding:12px 20px;margin-bottom:32px;font-size:12px;color:var(--text);line-height:1.6;display:flex;gap:12px;align-items:flex-start;}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+
+  .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+  @media(max-width:640px){.input-grid{grid-template-columns:1fr;}}
+  .input-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;}
+  .input-card.full{grid-column:1/-1;}
+  .input-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin-bottom:6px;display:block;}
+  .input-desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+  .input-wrap{position:relative;}
+  .input-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);font-weight:500;}
+  .input-suffix{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);}
+  input[type="number"],select{width:100%;padding:12px 14px 12px 32px;border:1px solid var(--border);border-radius:8px;font-size:16px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;}
+  input[type="number"]:focus,select:focus{border-color:var(--forest);}
+  select{padding-left:14px;}
+  .range-group{margin-top:8px;}
+  .range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+  input[type="range"]{-webkit-appearance:none;width:100%;height:5px;border-radius:3px;background:var(--forest-lt);outline:none;cursor:pointer;}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--forest);border:3px solid var(--white);box-shadow:0 2px 8px rgba(45,90,39,.3);}
+  .range-val{text-align:center;font-size:13px;color:var(--muted);margin-top:6px;}
+  .range-val strong{color:var(--forest);font-size:15px;}
+
+  /* CONFIDENCE TOGGLE */
+  .confidence-section{background:var(--white);border-radius:12px;border:2px solid var(--forest);padding:28px 32px;margin-bottom:32px;}
+  .confidence-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+  .confidence-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest-dk);}
+  .confidence-subtitle{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.6;}
+  .blindspot-badge{background:var(--forest-lt);border:1px solid var(--forest);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--forest-dk);line-height:1.6;flex-shrink:0;max-width:280px;}
+  .blindspot-badge strong{display:block;color:var(--forest);margin-bottom:2px;}
+  .confidence-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .conf-btn{padding:10px 20px;border-radius:8px;border:2px solid var(--border);background:var(--bg);font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;}
+  .conf-btn:hover{border-color:var(--forest);color:var(--forest);}
+  .conf-btn.active{background:var(--forest);border-color:var(--forest);color:var(--white);}
+  .confidence-note{font-size:12px;color:var(--muted);font-style:italic;line-height:1.6;}
+  .confidence-note span{color:var(--forest);font-weight:600;}
+
+  .calc-wrap{text-align:center;margin-bottom:40px;}
+  .btn-calc{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:16px 48px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-calc:hover{background:var(--forest-dk);transform:translateY(-1px);box-shadow:0 8px 24px rgba(45,90,39,.25);}
+
+  .results{display:none;}
+  .results.visible{display:block;}
+
+  .result-hero{background:var(--forest-dk);border-radius:16px;padding:40px;margin-bottom:20px;position:relative;overflow:hidden;}
+  .result-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(200,168,75,.1);pointer-events:none;}
+  .result-hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;}
+  @media(max-width:640px){.result-hero-grid{grid-template-columns:1fr;}}
+  .result-stat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+  .result-stat-value{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:500;color:var(--white);line-height:1;margin-bottom:6px;}
+  .result-stat-value.gold{color:var(--gold);}
+  .result-stat-value.highlight{color:#86efac;}
+  .result-stat-sub{font-size:12px;color:rgba(255,255,255,.45);}
+  .result-divider{width:1px;background:rgba(255,255,255,.1);}
+  @media(max-width:640px){.result-divider{display:none;}}
+
+  .layers-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  @media(max-width:640px){.layers-grid{grid-template-columns:1fr;}}
+  .layer-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;}
+  .layer-card.accent{border-color:var(--gold);background:var(--gold-lt);}
+  .layer-number{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+  .layer-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--forest-dk);margin-bottom:8px;}
+  .layer-amount{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;color:var(--forest);margin-bottom:4px;}
+  .layer-desc{font-size:12px;color:var(--muted);line-height:1.7;}
+  .layer-calc{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-style:italic;}
+
+  .gap-card{background:var(--forest);border-radius:16px;padding:36px 40px;margin-bottom:20px;}
+  .gap-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+  .gap-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:8px;}
+  .gap-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:4px;}
+  .gap-value{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:500;color:var(--gold);line-height:1;}
+  .gap-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:6px;}
+  .gap-note{font-size:13px;color:rgba(255,255,255,.7);max-width:300px;line-height:1.7;}
+
+  .roi-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+  .roi-stat{text-align:center;}
+  .roi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+  .roi-value{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--forest);font-weight:500;}
+  .roi-divider{width:1px;height:60px;background:var(--border);}
+  .roi-text{flex:1;min-width:200px;font-size:13px;color:var(--muted);line-height:1.8;}
+  .roi-text strong{color:var(--text);}
+
+  /* CONFIDENCE RESULT BANNER */
+  .conf-result-banner{background:var(--forest-lt);border:1px solid var(--forest);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:var(--forest-dk);line-height:1.7;}
+  .conf-result-banner strong{color:var(--forest);}
+
+  .final-disclaimer{background:var(--red-lt);border:1px solid #fca5a5;border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+  .final-disclaimer h4{font-size:13px;font-weight:600;color:var(--red);margin-bottom:10px;}
+  .final-disclaimer p{font-size:12px;color:#7f1d1d;line-height:1.8;margin-bottom:6px;}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn-primary{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:14px 32px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-primary:hover{background:var(--forest-dk);}
+  .btn-secondary{background:transparent;color:var(--forest);border:2px solid var(--forest);border-radius:8px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-secondary:hover{background:var(--forest);color:var(--white);}
+  .illustrative-badge{display:inline-block;background:var(--gold-lt);color:var(--forest-dk);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--gold);margin-left:8px;vertical-align:middle;}
+</style>
+</head>
+<body>
+
+<div class="disclaimer-overlay" id="disclaimerOverlay">
+  <div class="disclaimer-box">
+    <div class="disclaimer-eyebrow">Before you begin</div>
+    <div class="disclaimer-title">Important — please read before using this tool</div>
+    <div class="disclaimer-body">
+      <p>This tool produces <strong>illustrative estimates</strong> to help you think through the potential value of preparing your business for sale.</p>
+      <p>It is <strong>not</strong> a formal business valuation, financial advice, legal advice, or a guarantee of any outcome. Actual results will vary based on market conditions, buyer appetite, your specific business, and many factors outside this model.</p>
+    </div>
+    <div class="disclaimer-checks" id="checkboxes">
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand this tool produces illustrative estimates only, not a formal valuation</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand the figures shown do not constitute financial or legal advice</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I will seek independent professional advice before making any business decisions</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand Knowledgebase.business accepts no liability for decisions made based on this tool</label>
+    </div>
+    <button class="btn-accept" id="acceptBtn" onclick="acceptDisclaimer()">I understand — show me the model</button>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="dashboard.html" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <a href="dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Exit Program — Valuation Model</div>
+  <div class="hero-title">What is your business <em>actually</em> worth?<br>And what could it be worth?</div>
+  <div class="hero-sub">Enter your numbers, set your confidence level, and see the realistic gap between your current valuation and what a documented, systematised business commands at sale.</div>
+</div>
+
+<div class="main">
+
+  <div class="disclaimer-bar">
+    <div>⚠️</div>
+    <div><strong>Illustrative estimates only.</strong> All figures are based on your inputs and indicative market ranges. Not financial advice. Seek independent professional advice before making business decisions.</div>
+  </div>
+
+  <div class="section-label">Your business — current position</div>
+  <div class="input-grid">
+    <div class="input-card">
+      <label class="input-label">Annual Revenue</label>
+      <div class="input-desc">Your total annual revenue (last 12 months)</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="revenue" value="800000" min="0" step="10000"></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Net Profit (EBITDA)</label>
+      <div class="input-desc">Earnings before interest, tax, depreciation and amortisation</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="ebitda" value="200000" min="0" step="5000"></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Current Multiple</label>
+      <div class="input-desc">Typical range for undocumented, owner-dependent businesses: 1.5× – 2.5×</div>
+      <div class="range-group">
+        <div class="range-labels"><span>1×</span><span>2×</span><span>3×</span><span>4×</span><span>5×</span></div>
+        <input type="range" id="currentMultiple" min="1" max="5" step="0.5" value="2" oninput="updateRangeVal('currentMultiple','currentMultipleVal','Current multiple','×')">
+        <div class="range-val" id="currentMultipleVal">Current multiple: <strong>2×</strong></div>
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Exit-Ready Multiple</label>
+      <div class="input-desc">Documented, systematised businesses typically achieve 3× – 5×</div>
+      <div class="range-group">
+        <div class="range-labels"><span>1×</span><span>2×</span><span>3×</span><span>4×</span><span>5×</span></div>
+        <input type="range" id="exitMultiple" min="1" max="5" step="0.5" value="3.5" oninput="updateRangeVal('exitMultiple','exitMultipleVal','Exit-ready multiple','×')">
+        <div class="range-val" id="exitMultipleVal">Exit-ready multiple: <strong>3.5×</strong></div>
+      </div>
+    </div>
+    <div class="input-card full">
+      <label class="input-label">Team positions documentation removes for a new owner</label>
+      <div class="input-desc">Roles that become redundant when knowledge moves from people's heads into the system</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="teamSaving" value="75000" min="0" step="5000"><span class="input-suffix">/ year</span></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Productivity improvement estimate</label>
+      <div class="input-desc">Estimated annual profit improvement from documented processes</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="productivityGain" value="40000" min="0" step="5000"></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Program timeline</label>
+      <div class="range-group">
+        <div class="range-labels"><span>6mo</span><span>12mo</span><span>18mo</span><span>24mo</span></div>
+        <input type="range" id="timeline" min="6" max="24" step="6" value="12" oninput="updateRangeVal('timeline','timelineVal','Timeline',' months')">
+        <div class="range-val" id="timelineVal">Timeline: <strong>12 months</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIDENCE TOGGLE -->
+  <div class="confidence-section">
+    <div class="confidence-header">
+      <div>
+        <div class="confidence-title">Your confidence level</div>
+        <div class="confidence-subtitle">How much of the identified improvement do you realistically believe you can achieve?</div>
+      </div>
+      <div class="blindspot-badge" id="blindspotBadge">
+        <strong>🎯 Blind Spot pre-set</strong>
+        <span id="blindspotBadgeText">Complete your Blind Spot profile to get a personalised confidence level based on your dominant pattern score.</span>
+      </div>
+    </div>
+    <div class="confidence-buttons">
+      <button class="conf-btn" onclick="setConfidence(30)" id="conf30">30%</button>
+      <button class="conf-btn" onclick="setConfidence(40)" id="conf40">40%</button>
+      <button class="conf-btn active" onclick="setConfidence(50)" id="conf50">50%</button>
+      <button class="conf-btn" onclick="setConfidence(60)" id="conf60">60%</button>
+      <button class="conf-btn" onclick="setConfidence(70)" id="conf70">70%</button>
+      <button class="conf-btn" onclick="setConfidence(80)" id="conf80">80%</button>
+    </div>
+    <div class="confidence-note" id="confidenceNote">
+      At <span id="confPct">50%</span> confidence — a realistic middle position for most owners. <span id="confContext">Adjust up or down based on your honest assessment of what you'll actually action.</span>
+    </div>
+  </div>
+
+  <div class="calc-wrap">
+    <button class="btn-calc" onclick="calculate()">Calculate my valuation gap →</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="section-label">Your illustrative valuation model <span class="illustrative-badge">Estimates only</span></div>
+
+    <div class="conf-result-banner" id="confResultBanner"></div>
+
+    <div class="result-hero">
+      <div class="result-hero-grid">
+        <div>
+          <div class="result-stat-label">Current estimated value</div>
+          <div class="result-stat-value gold" id="r-currentVal">—</div>
+          <div class="result-stat-sub" id="r-currentCalc">—</div>
+        </div>
+        <div class="result-divider"></div>
+        <div>
+          <div class="result-stat-label">Exit-ready estimated value</div>
+          <div class="result-stat-value highlight" id="r-exitVal">—</div>
+          <div class="result-stat-sub">at your confidence level</div>
+        </div>
+        <div class="result-divider"></div>
+        <div>
+          <div class="result-stat-label">Realistic value gap</div>
+          <div class="result-stat-value" id="r-gap">—</div>
+          <div class="result-stat-sub">left on the table</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layers-grid">
+      <div class="layer-card">
+        <div class="layer-number">Layer 1</div>
+        <div class="layer-title">Multiple uplift</div>
+        <div class="layer-amount" id="r-multipleUplift">—</div>
+        <div class="layer-desc">The value gain from moving to an exit-ready multiple — adjusted to your confidence level.</div>
+        <div class="layer-calc" id="r-multipleCalc">—</div>
+      </div>
+      <div class="layer-card">
+        <div class="layer-number">Layer 2</div>
+        <div class="layer-title">Team redundancy value</div>
+        <div class="layer-amount" id="r-teamVal">—</div>
+        <div class="layer-desc">Team savings capitalised at the exit multiple — at your confidence level.</div>
+        <div class="layer-calc" id="r-teamCalc">—</div>
+      </div>
+      <div class="layer-card">
+        <div class="layer-number">Layer 3</div>
+        <div class="layer-title">Productivity improvement</div>
+        <div class="layer-amount" id="r-prodVal">—</div>
+        <div class="layer-desc">Profit improvement capitalised at the exit multiple — at your confidence level.</div>
+        <div class="layer-calc" id="r-prodCalc">—</div>
+      </div>
+      <div class="layer-card accent">
+        <div class="layer-number">Total uplift</div>
+        <div class="layer-title">Combined value improvement</div>
+        <div class="layer-amount" id="r-totalUplift">—</div>
+        <div class="layer-desc">The realistic total improvement across all three layers at your chosen confidence level.</div>
+        <div class="layer-calc" id="r-timeline">—</div>
+      </div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-inner">
+        <div>
+          <div class="gap-label">What you're leaving on the table</div>
+          <div class="gap-title">Realistic value gap at <span id="r-confPctLabel">50%</span> confidence</div>
+          <div class="gap-value" id="r-gapLarge">—</div>
+          <div class="gap-sub">illustrative — based on your inputs and confidence level</div>
+        </div>
+        <div class="gap-note">This is the conservative case — not the best case. At <span id="r-confNote">50%</span> confidence, you're accounting for the reality that change takes time and not everything goes to plan. The gap is still significant.</div>
+      </div>
+    </div>
+
+    <div class="roi-card">
+      <div class="roi-stat">
+        <div class="roi-label">Program cost</div>
+        <div class="roi-value" id="r-programCost">—</div>
+      </div>
+      <div class="roi-divider"></div>
+      <div class="roi-stat">
+        <div class="roi-label">Illustrative return</div>
+        <div class="roi-value" id="r-roi">—</div>
+      </div>
+      <div class="roi-divider"></div>
+      <div class="roi-text">
+        <strong>At your confidence level,</strong> this model illustrates a return of <span id="r-roiText">—</span> on the program investment. Even at 30% confidence, the gap significantly exceeds the cost of closing it.
+      </div>
+    </div>
+
+    <div class="final-disclaimer">
+      <h4>Important — Illustrative estimates only</h4>
+      <p>All figures are illustrative estimates based on your inputs, indicative market ranges, and your chosen confidence level. They do not constitute a formal business valuation, financial advice, accounting advice, or legal advice.</p>
+      <p>Business sale multiples vary significantly by industry, market conditions, buyer type, and individual business characteristics. Knowledgebase.business Pty Ltd accepts no liability for decisions made in reliance on the outputs of this model.</p>
+      <p><em>[Disclaimer language subject to legal review — for internal use only until approved]</em></p>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="window.print()">Save as PDF</button>
+      <button class="btn-secondary" onclick="resetModel()">Adjust inputs</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let confidenceLevel = 50;
+
+const blindspotNotes = {
+  high: { range: '30–40%', reason: 'Your Blind Spot pattern score is high — the pattern is running strongly. Change is real but takes time. A conservative confidence level is honest and still compelling.' },
+  medium: { range: '50–60%', reason: 'Your Blind Spot pattern score is moderate — you already have some awareness of the pattern. A mid-range confidence level reflects realistic progress.' },
+  low: { range: '60–70%', reason: 'Your Blind Spot pattern score is low — the pattern is already loosening. A higher confidence level reflects how much easier change becomes when awareness is already present.' }
+};
+
+function loadBlindspotProfile() {
+  try {
+    const history = JSON.parse(localStorage.getItem('blindspot_history') || '[]');
+    if (history.length === 0) return;
+    const latest = history[history.length - 1];
+    const total = latest.total || 0;
+    const avgScore = total / 8;
+
+    let level, defaultConf;
+    if (avgScore >= 6) { level = 'high'; defaultConf = 30; }
+    else if (avgScore >= 3) { level = 'medium'; defaultConf = 50; }
+    else { level = 'low'; defaultConf = 65; }
+
+    const note = blindspotNotes[level];
+    document.getElementById('blindspotBadgeText').innerHTML =
+      `Pattern score suggests <strong>${note.range}% confidence</strong>. ${note.reason}`;
+
+    setConfidence(defaultConf);
+  } catch(e) {}
+}
+
+function setConfidence(pct) {
+  confidenceLevel = pct;
+  document.querySelectorAll('.conf-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('conf' + pct);
+  if (btn) btn.classList.add('active');
+
+  const notes = {
+    30: 'A conservative and credible position. Most owners who apply themselves consistently achieve at least this. The numbers still work significantly in your favour.',
+    40: 'A realistic position for most owners. Accounts for the reality that some improvements take longer than expected.',
+    50: 'A balanced position — half of what\'s identified gets delivered. Still a compelling case for the program investment.',
+    60: 'A confident position. Achievable for owners who commit to the program and act on the quarterly review findings.',
+    70: 'A strong position. Realistic for owners who have already identified their blind spot and are actively working on it.',
+    80: 'A high-conviction position. Achievable for owners whose blind spot pattern is already shifting and whose team is engaged.'
+  };
+  document.getElementById('confPct').textContent = pct + '%';
+  document.getElementById('confidenceNote').innerHTML = `At <span style="color:var(--forest);font-weight:600;">${pct}%</span> confidence — ${notes[pct] || ''}`;
+}
+
+function checkAll() {
+  const boxes = document.querySelectorAll('#checkboxes input[type="checkbox"]');
+  document.getElementById('acceptBtn').classList.toggle('ready', Array.from(boxes).every(b => b.checked));
+}
+function acceptDisclaimer() { document.getElementById('disclaimerOverlay').style.display = 'none'; }
+function updateRangeVal(id, valId, label, suffix) {
+  document.getElementById(valId).innerHTML = `${label}: <strong>${document.getElementById(id).value}${suffix}</strong>`;
+}
+function fmt(n) { return '$' + Math.round(n).toLocaleString('en-AU'); }
+
+function calculate() {
+  const ebitda = parseFloat(document.getElementById('ebitda').value) || 0;
+  const currentMult = parseFloat(document.getElementById('currentMultiple').value);
+  const exitMult = parseFloat(document.getElementById('exitMultiple').value);
+  const teamSaving = parseFloat(document.getElementById('teamSaving').value) || 0;
+  const prodGain = parseFloat(document.getElementById('productivityGain').value) || 0;
+  const months = parseInt(document.getElementById('timeline').value);
+  const conf = confidenceLevel / 100;
+
+  const currentVal = ebitda * currentMult;
+  const multipleUplift = (ebitda * exitMult - currentVal) * conf;
+  const teamCapitalised = teamSaving * exitMult * conf;
+  const prodCapitalised = prodGain * exitMult * conf;
+  const totalUplift = multipleUplift + teamCapitalised + prodCapitalised;
+  const exitVal = currentVal + totalUplift;
+  const programCost = 880 * months;
+  const roi = totalUplift / programCost;
+
+  document.getElementById('confResultBanner').innerHTML =
+    `<strong>Showing results at ${confidenceLevel}% confidence.</strong> These figures represent ${confidenceLevel}% of the maximum identified improvement — a realistic rather than optimistic view. Toggle the confidence level above and recalculate to see different scenarios.`;
+  document.getElementById('r-confPctLabel').textContent = confidenceLevel + '%';
+  document.getElementById('r-confNote').textContent = confidenceLevel + '%';
+
+  document.getElementById('r-currentVal').textContent = fmt(currentVal);
+  document.getElementById('r-currentCalc').textContent = `${fmt(ebitda)} EBITDA × ${currentMult}×`;
+  document.getElementById('r-exitVal').textContent = fmt(exitVal);
+  document.getElementById('r-gap').textContent = fmt(totalUplift);
+
+  document.getElementById('r-multipleUplift').textContent = fmt(multipleUplift);
+  document.getElementById('r-multipleCalc').textContent = `Full uplift × ${confidenceLevel}% confidence — illustrative`;
+  document.getElementById('r-teamVal').textContent = fmt(teamCapitalised);
+  document.getElementById('r-teamCalc').textContent = `${fmt(teamSaving)}/yr × ${exitMult}× × ${confidenceLevel}% — illustrative`;
+  document.getElementById('r-prodVal').textContent = fmt(prodCapitalised);
+  document.getElementById('r-prodCalc').textContent = `${fmt(prodGain)}/yr × ${exitMult}× × ${confidenceLevel}% — illustrative`;
+  document.getElementById('r-totalUplift').textContent = fmt(totalUplift);
+  document.getElementById('r-timeline').textContent = `Over ${months} month program at ${confidenceLevel}% confidence`;
+
+  document.getElementById('r-gapLarge').textContent = fmt(totalUplift);
+  document.getElementById('r-programCost').textContent = fmt(programCost);
+  document.getElementById('r-roi').textContent = roi.toFixed(1) + '×';
+  document.getElementById('r-roiText').textContent = roi.toFixed(1) + '× — at ' + confidenceLevel + '% confidence';
+
+  document.getElementById('results').classList.add('visible');
+  setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function resetModel() {
+  document.getElementById('results').classList.remove('visible');
+  window.scrollTo({ top: 400, behavior: 'smooth' });
+}
+
+loadBlindspotProfile();
+setConfidence(50);
+</script>
+</body>
+</html>

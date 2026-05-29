@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Tool — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #2d5a27; --forest-dk: #1a3d16; --forest-lt: #d4e8d1;
+    --gold: #c8a84b; --gold-lt: #f5edcc; --bg: #f0f5ef;
+    --white: #fff; --text: #1a2018; --muted: #5a6e57; --border: #d0dece;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.7; min-height: 100vh; }
+
+  .nav { background: var(--forest-dk); padding: 0 40px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--gold); }
+  .nav-back { font-size: 12px; color: rgba(255,255,255,0.6); text-decoration: none; letter-spacing: 0.05em; }
+  .nav-back:hover { color: var(--gold); }
+
+  .hero { background: var(--forest-dk); padding: 56px 40px 72px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 0%, rgba(200,168,75,0.12) 0%, transparent 65%); pointer-events: none; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 5vw, 52px); font-weight: 500; color: var(--white); line-height: 1.15; margin-bottom: 16px; }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-sub { font-size: 15px; color: rgba(255,255,255,0.6); max-width: 540px; margin: 0 auto; line-height: 1.8; }
+
+  .main { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* PROGRESS STEPS */
+  .progress-track { display: flex; align-items: center; margin-bottom: 40px; }
+  .step-pip { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--muted); flex-shrink: 0; transition: all 0.3s; cursor: pointer; }
+  .step-pip.active { background: var(--forest); border-color: var(--forest); color: var(--white); }
+  .step-pip.done { background: var(--forest-lt); border-color: var(--forest); color: var(--forest); }
+  .step-connector { flex: 1; height: 2px; background: var(--border); transition: background 0.3s; }
+  .step-connector.done { background: var(--forest); }
+
+  /* STEP PANELS */
+  .step-panel { display: none; }
+  .step-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .step-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 36px 40px; margin-bottom: 20px; }
+  .step-number { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+  .step-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--forest-dk); margin-bottom: 8px; font-weight: 500; }
+  .step-tagline { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.7; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+
+  .field-label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 6px; display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
+  .field-hint { font-size: 12px; color: var(--muted); margin-bottom: 10px; line-height: 1.6; font-style: italic; }
+  textarea, input[type="text"] {
+    width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text);
+    background: var(--bg); outline: none; transition: border-color 0.2s;
+    resize: vertical; line-height: 1.6;
+  }
+  textarea:focus, input[type="text"]:focus { border-color: var(--forest); background: var(--white); }
+  .field-group { margin-bottom: 24px; }
+
+  /* RADIO BUTTONS */
+  .radio-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .radio-opt { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.15s; background: var(--bg); }
+  .radio-opt:hover { border-color: var(--forest); background: var(--forest-lt); }
+  .radio-opt.selected { border-color: var(--forest); background: var(--forest-lt); }
+  .radio-opt input { display: none; }
+  .radio-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .radio-opt.selected .radio-dot { border-color: var(--forest); background: var(--forest); }
+  .radio-opt.selected .radio-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--white); }
+  .radio-text strong { font-size: 14px; color: var(--text); display: block; margin-bottom: 2px; }
+  .radio-text span { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* INSIGHT BOXES */
+  .insight { background: var(--gold-lt); border: 1px solid var(--gold); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
+  .insight-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+  .insight p { font-size: 13px; color: var(--text); line-height: 1.7; }
+
+  .warning { background: #fff8e7; border: 1px solid #f0c040; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
+  .warning-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; color: #92400e; text-transform: uppercase; margin-bottom: 6px; }
+  .warning p { font-size: 13px; color: #78350f; line-height: 1.7; }
+
+  /* BIAS CHECKLIST */
+  .bias-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  @media (max-width: 600px) { .bias-grid { grid-template-columns: 1fr; } }
+  .bias-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; transition: all 0.15s; }
+  .bias-item:hover { border-color: var(--forest); }
+  .bias-item.checked { border-color: var(--forest); background: var(--forest-lt); }
+  .bias-item input { display: none; }
+  .bias-box { width: 16px; height: 16px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .bias-item.checked .bias-box { background: var(--forest); border-color: var(--forest); }
+  .bias-item.checked .bias-box::after { content: '✓'; font-size: 10px; color: var(--white); font-weight: 700; }
+  .bias-text strong { font-size: 13px; color: var(--text); display: block; }
+  .bias-text span { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  /* ALTERNATIVES TABLE */
+  .alt-row { display: grid; grid-template-columns: 1fr 80px 80px; gap: 10px; margin-bottom: 10px; align-items: start; }
+  .alt-row.header { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .alt-row input, .alt-row select { padding: 10px 12px; font-size: 13px; }
+  .add-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--forest); font-weight: 500; cursor: pointer; padding: 8px 0; background: none; border: none; }
+  .add-btn:hover { color: var(--forest-dk); }
+
+  /* NAVIGATION BUTTONS */
+  .step-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; }
+  .btn-next { background: var(--forest); color: var(--white); border: none; border-radius: 8px; padding: 14px 32px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .btn-next:hover { background: var(--forest-dk); transform: translateY(-1px); }
+  .btn-back { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .btn-back:hover { border-color: var(--forest); color: var(--forest); }
+
+  /* SUMMARY */
+  .summary-section { margin-bottom: 28px; }
+  .summary-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+  .summary-content { background: var(--bg); border-radius: 8px; padding: 16px 20px; font-size: 14px; color: var(--text); line-height: 1.7; border: 1px solid var(--border); white-space: pre-wrap; }
+  .summary-content.highlight { background: var(--forest-lt); border-color: var(--forest); font-weight: 500; }
+
+  .score-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .score-bar-label { font-size: 13px; color: var(--text); width: 160px; flex-shrink: 0; }
+  .score-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .score-bar-fill { height: 100%; background: var(--forest); border-radius: 4px; transition: width 0.6s ease; }
+  .score-bar-val { font-size: 12px; font-weight: 600; color: var(--forest); width: 28px; text-align: right; }
+
+  .decision-verdict { background: var(--forest-dk); border-radius: 12px; padding: 28px 32px; margin-bottom: 24px; }
+  .verdict-label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+  .verdict-text { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+  .verdict-sub { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+
+  .print-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 10px 20px; font-size: 13px; cursor: pointer; }
+  .print-btn:hover { border-color: var(--forest); color: var(--forest); }
+
+  @media (max-width: 600px) {
+    .nav { padding: 0 20px; }
+    .hero { padding: 40px 20px 60px; }
+    .main { padding: 32px 16px 60px; }
+    .step-card { padding: 24px 20px; }
+    .alt-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="dashboard.html" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <a href="dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">The Courage to Decide — Roy West</div>
+  <div class="hero-title">The 5-Step Business<br><em>Decision Process</em></div>
+  <div class="hero-sub">A structured process for the decisions that truly matter. Work through all five steps to arrive at a choice you can commit to and defend.</div>
+</div>
+
+<div class="main">
+
+  <!-- PROGRESS -->
+  <div class="progress-track">
+    <div class="step-pip active" id="pip1" onclick="goTo(1)">1</div>
+    <div class="step-connector" id="con1"></div>
+    <div class="step-pip" id="pip2" onclick="goTo(2)">2</div>
+    <div class="step-connector" id="con2"></div>
+    <div class="step-pip" id="pip3" onclick="goTo(3)">3</div>
+    <div class="step-connector" id="con3"></div>
+    <div class="step-pip" id="pip4" onclick="goTo(4)">4</div>
+    <div class="step-connector" id="con4"></div>
+    <div class="step-pip" id="pip5" onclick="goTo(5)">5</div>
+  </div>
+
+  <!-- STEP 1: QUESTION -->
+  <div class="step-panel active" id="step1">
+    <div class="step-card">
+      <div class="step-number">Step 1 of 5</div>
+      <div class="step-title">Question</div>
+      <div class="step-tagline">Every decision starts with a question, a problem, a need, an idea, or a goal. Define the issue effectively before anything else — if you misidentify it, you'll solve the wrong problem.</div>
+
+      <div class="insight">
+        <div class="insight-label">The Courage to Decide</div>
+        <p>"Albert Einstein believed the quality of your solution is directly proportional to your ability to identify the problem you want to solve."</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Problem statement</label>
+        <div class="field-hint">What's happening now, and why is it a problem? Keep it to one or two sentences.</div>
+        <textarea id="q_problem" rows="3" placeholder="e.g. Our client onboarding process is inconsistent, causing delays and frustrating new clients..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Future vision</label>
+        <div class="field-hint">How will the business or situation look once you've made your decision?</div>
+        <textarea id="q_vision" rows="3" placeholder="e.g. Every new client receives a consistent, documented onboarding experience within 48 hours..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">The decision bridge</label>
+        <div class="field-hint">What decision can you make to bridge the gap between the problem now and the future vision?</div>
+        <textarea id="q_bridge" rows="2" placeholder="e.g. Build and implement a documented client onboarding process that the team runs without me..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Decision type</label>
+        <div class="field-hint">How urgent and significant is this decision?</div>
+        <div class="radio-group">
+          <label class="radio-opt" onclick="selectRadio(this, 'q_type')">
+            <input type="radio" name="q_type" value="routine">
+            <div class="radio-dot"></div>
+            <div class="radio-text">
+              <strong>Routine decision</strong>
+              <span>Part of normal operations — important but not business-defining</span>
+            </div>
+          </label>
+          <label class="radio-opt" onclick="selectRadio(this, 'q_type')">
+            <input type="radio" name="q_type" value="significant">
+            <div class="radio-dot"></div>
+            <div class="radio-text">
+              <strong>Significant decision</strong>
+              <span>Will meaningfully change how the business operates — requires careful thought</span>
+            </div>
+          </label>
+          <label class="radio-opt" onclick="selectRadio(this, 'q_type')">
+            <input type="radio" name="q_type" value="critical">
+            <div class="radio-dot"></div>
+            <div class="radio-text">
+              <strong>Critical decision</strong>
+              <span>High stakes — financial, structural, or people-related — consequences are significant either way</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <div></div>
+      <button class="btn-next" onclick="goTo(2)">Challenge everything →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: CHALLENGE -->
+  <div class="step-panel" id="step2">
+    <div class="step-card">
+      <div class="step-number">Step 2 of 5</div>
+      <div class="step-title">Challenge</div>
+      <div class="step-tagline">Challenge everything — especially yourself and the information you rely on. Your reality is a mesh of intuition, assumptions, and biases. Each powerfully influences your actions without you noticing.</div>
+
+      <div class="warning">
+        <div class="warning-label">Watch for this</div>
+        <p>"Assumptions held without being disproved can morph into facts and transform into beliefs. Beliefs, beneficial or harmful, steer the decisions that we make." — The Courage to Decide</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What assumptions are you making?</label>
+        <div class="field-hint">List the assumptions underpinning this decision. For each one, ask: what if this is wrong?</div>
+        <textarea id="c_assumptions" rows="4" placeholder="e.g. I'm assuming the team has capacity to run a new process. I'm assuming clients want a faster onboarding..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What information are you relying on?</label>
+        <div class="field-hint">Is it current? Is it from a trusted source? How confident are you in it?</div>
+        <textarea id="c_information" rows="3" placeholder="e.g. Last quarter's client feedback survey, team capacity report from six months ago..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Check your biases</label>
+        <div class="field-hint">Tick any cognitive biases that may be influencing this decision.</div>
+        <div class="bias-grid">
+          <label class="bias-item" onclick="toggleBias(this)">
+            <input type="checkbox">
+            <div class="bias-box"></div>
+            <div class="bias-text">
+              <strong>Confirmation bias</strong>
+              <span>Seeking information that confirms what I already believe</span>
+            </div>
+          </label>
+          <label class="bias-item" onclick="toggleBias(this)">
+            <input type="checkbox">
+            <div class="bias-box"></div>
+            <div class="bias-text">
+              <strong>Sunk cost fallacy</strong>
+              <span>Continuing because of how much I've already invested</span>
+            </div>
+          </label>
+          <label class="bias-item" onclick="toggleBias(this)">
+            <input type="checkbox">
+            <div class="bias-box"></div>
+            <div class="bias-text">
+              <strong>Risk aversion</strong>
+              <span>Choosing a safer option even when it won't produce the best outcome</span>
+            </div>
+          </label>
+          <label class="bias-item" onclick="toggleBias(this)">
+            <input type="checkbox">
+            <div class="bias-box"></div>
+            <div class="bias-text">
+              <strong>Escalating commitment</strong>
+              <span>Doubling down because I've publicly committed — saving face</span>
+            </div>
+          </label>
+          <label class="bias-item" onclick="toggleBias(this)">
+            <input type="checkbox">
+            <div class="bias-box"></div>
+            <div class="bias-text">
+              <strong>"We always do it this way"</strong>
+              <span>Defaulting to the familiar rather than questioning if it still works</span>
+            </div>
+          </label>
+          <label class="bias-item" onclick="toggleBias(this)">
+            <input type="checkbox">
+            <div class="bias-box"></div>
+            <div class="bias-text">
+              <strong>Gut over evidence</strong>
+              <span>Relying on intuition when the situation calls for data and reasoning</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">What would an independent observer say?</label>
+        <div class="field-hint">Someone who has no emotional investment in the outcome — what would they challenge you on?</div>
+        <textarea id="c_observer" rows="3" placeholder="e.g. They might question whether I've actually spoken to the clients affected, or whether the team agrees the current process is a problem..."></textarea>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(1)">← Back</button>
+      <button class="btn-next" onclick="goTo(3)">Identify alternatives →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: IDENTIFY -->
+  <div class="step-panel" id="step3">
+    <div class="step-card">
+      <div class="step-number">Step 3 of 5</div>
+      <div class="step-title">Identify</div>
+      <div class="step-tagline">Identify your alternatives, risks, and consequences. You always have a choice — without choice, there is no decision. Every option carries inherent risk. Activity and inactivity both have consequences.</div>
+
+      <div class="insight">
+        <div class="insight-label">The Courage to Decide</div>
+        <p>"You can pivot or pause, but don't panic. Being clear about what you want determines the success or not of your business."</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Your alternatives</label>
+        <div class="field-hint">List at least three options — including doing nothing. Rate the risk (Low / Med / High) and potential outcome for each.</div>
+        <div class="alt-row header">
+          <span>Alternative</span>
+          <span>Risk</span>
+          <span>Outcome</span>
+        </div>
+        <div id="altRows">
+          <div class="alt-row">
+            <input type="text" placeholder="Option A — e.g. Build a documented onboarding process">
+            <select><option>Low</option><option selected>Med</option><option>High</option></select>
+            <select><option>Strong</option><option selected>Moderate</option><option>Weak</option></select>
+          </div>
+          <div class="alt-row">
+            <input type="text" placeholder="Option B — e.g. Hire someone to run onboarding">
+            <select><option>Low</option><option selected>Med</option><option>High</option></select>
+            <select><option>Strong</option><option selected>Moderate</option><option>Weak</option></select>
+          </div>
+          <div class="alt-row">
+            <input type="text" placeholder="Option C — Do nothing (always consider this)">
+            <select><option>Low</option><option selected>Med</option><option>High</option></select>
+            <select><option>Strong</option><option>Moderate</option><option selected>Weak</option></select>
+          </div>
+        </div>
+        <button class="add-btn" onclick="addAltRow()">+ Add another option</button>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Risk assessment</label>
+        <div class="field-hint">For your preferred option — is the risk worth the reward?</div>
+        <textarea id="i_risk" rows="3" placeholder="e.g. The risk of building the process is low — mainly time investment. The risk of doing nothing is high — continued client frustration and potential loss..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Consequences of each path</label>
+        <div class="field-hint">What happens if you act? What happens if you don't?</div>
+        <textarea id="i_consequences" rows="3" placeholder="e.g. If we build the process: consistent onboarding, team can run it, clients satisfied. If we don't: ongoing complaints, my involvement required every time..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Your preferred option</label>
+        <div class="field-hint">Based on alternatives, risk and consequences — which option do you lean toward and why?</div>
+        <textarea id="i_preferred" rows="2" placeholder="e.g. Option A — build the documented process. Best outcome-to-risk ratio and solves the problem permanently..."></textarea>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(2)">← Back</button>
+      <button class="btn-next" onclick="goTo(4)">Own your choice →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: OWN -->
+  <div class="step-panel" id="step4">
+    <div class="step-card">
+      <div class="step-number">Step 4 of 5</div>
+      <div class="step-title">Own</div>
+      <div class="step-tagline">Take responsibility for your choice. Communicate it. Act on it. The decision is yours — own it before, during, and after. A decision not communicated is a decision not made.</div>
+
+      <div class="warning">
+        <div class="warning-label">Before you commit</div>
+        <p>Does this decision fit your goals, your business, and your personal life? Does it align with your highest values, passions, and priorities? Is the risk worth the reward?</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">My decision is</label>
+        <div class="field-hint">State it clearly. One sentence. No hedging.</div>
+        <textarea id="o_decision" rows="2" placeholder="e.g. We will build and implement a documented client onboarding process by the end of next month..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Who needs to know?</label>
+        <div class="field-hint">Who is affected by this decision and needs to be communicated to?</div>
+        <textarea id="o_communicate" rows="2" placeholder="e.g. The operations team, the client-facing team, and our three most active clients..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">First three actions</label>
+        <div class="field-hint">What are the first three specific steps you will take to implement this decision?</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <input type="text" id="o_action1" placeholder="Action 1 — e.g. Brief the team on the decision this week">
+          <input type="text" id="o_action2" placeholder="Action 2 — e.g. Document the current onboarding process by Friday">
+          <input type="text" id="o_action3" placeholder="Action 3 — e.g. Test the new process with the next new client">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Implementation date</label>
+        <div class="field-hint">When will this decision be fully implemented?</div>
+        <input type="text" id="o_date" placeholder="e.g. 30 June 2026">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">How committed are you?</label>
+        <div class="radio-group">
+          <label class="radio-opt" onclick="selectRadio(this, 'o_commit')">
+            <input type="radio" name="o_commit" value="full">
+            <div class="radio-dot"></div>
+            <div class="radio-text">
+              <strong>Fully committed</strong>
+              <span>I am backing this decision completely — whatever it takes</span>
+            </div>
+          </label>
+          <label class="radio-opt" onclick="selectRadio(this, 'o_commit')">
+            <input type="radio" name="o_commit" value="conditional">
+            <div class="radio-dot"></div>
+            <div class="radio-text">
+              <strong>Committed with conditions</strong>
+              <span>I will commit if one or two things are confirmed first</span>
+            </div>
+          </label>
+          <label class="radio-opt" onclick="selectRadio(this, 'o_commit')">
+            <input type="radio" name="o_commit" value="uncertain">
+            <div class="radio-dot"></div>
+            <div class="radio-text">
+              <strong>Still uncertain</strong>
+              <span>I need to go back and work through steps 2 or 3 again</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(3)">← Back</button>
+      <button class="btn-next" onclick="goTo(5)">Set up the review →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: REVIEW -->
+  <div class="step-panel" id="step5">
+    <div class="step-card">
+      <div class="step-number">Step 5 of 5</div>
+      <div class="step-title">Review</div>
+      <div class="step-tagline">Create a continuous feedback loop to monitor performance. Rarely is the post-decision world without pitfalls. Learn how to pivot, pause — but don't panic.</div>
+
+      <div class="insight">
+        <div class="insight-label">The Courage to Decide</div>
+        <p>"Making better decisions will positively change your business and your life. Pivot or pause, but don't panic."</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">How will you measure success?</label>
+        <div class="field-hint">What specific, observable evidence will tell you this decision is working?</div>
+        <textarea id="r_measure" rows="3" placeholder="e.g. All new clients onboarded within 48 hours. Zero onboarding complaints in 60 days. Team runs the process without escalating to me..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Review checkpoints</label>
+        <div class="field-hint">When will you formally review whether this decision is working?</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <input type="text" id="r_check1" placeholder="30-day checkpoint — e.g. Review first three onboardings against the new process">
+          <input type="text" id="r_check2" placeholder="60-day checkpoint — e.g. Survey clients on their onboarding experience">
+          <input type="text" id="r_check3" placeholder="90-day checkpoint — e.g. Full review — is this the right solution or do we pivot?">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Pivot trigger</label>
+        <div class="field-hint">What specific result would tell you the decision needs to change? Name it now — before you're emotionally invested in the outcome.</div>
+        <textarea id="r_pivot" rows="2" placeholder="e.g. If client complaints increase or the team is still escalating to me after 60 days, we revisit the approach..."></textarea>
+      </div>
+    </div>
+
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(4)">← Back</button>
+      <button class="btn-next" onclick="generateSummary()">Generate my decision summary →</button>
+    </div>
+
+    <!-- SUMMARY -->
+    <div id="summarySection" style="display:none; margin-top: 32px;">
+
+      <div class="decision-verdict" id="verdictCard"></div>
+
+      <div style="background: var(--white); border-radius: 16px; border: 1px solid var(--border); padding: 36px 40px; margin-bottom: 20px;">
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--forest-dk); margin-bottom:24px;">Your Decision Summary</h3>
+
+        <div class="summary-section">
+          <div class="summary-label">The Decision</div>
+          <div class="summary-content highlight" id="sum_decision"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">The Problem</div>
+          <div class="summary-content" id="sum_problem"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">The Vision</div>
+          <div class="summary-content" id="sum_vision"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">Key Assumptions Identified</div>
+          <div class="summary-content" id="sum_assumptions"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">Preferred Option & Rationale</div>
+          <div class="summary-content" id="sum_preferred"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">First Three Actions</div>
+          <div class="summary-content" id="sum_actions"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">Implementation Date</div>
+          <div class="summary-content" id="sum_date"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">Success Measures</div>
+          <div class="summary-content" id="sum_measure"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">Pivot Trigger</div>
+          <div class="summary-content" id="sum_pivot"></div>
+        </div>
+        <div class="summary-section">
+          <div class="summary-label">Commitment Level</div>
+          <div class="summary-content" id="sum_commit"></div>
+        </div>
+
+        <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn-next" onclick="window.print()">Save as PDF</button>
+          <button class="print-btn" onclick="resetTool()">Start a new decision</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 5;
+
+function goTo(step) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('pip' + currentStep).classList.remove('active');
+
+  if (step > currentStep) {
+    for (let i = currentStep; i < step; i++) {
+      document.getElementById('pip' + i).classList.add('done');
+      if (i < 5) document.getElementById('con' + i).classList.add('done');
+    }
+  }
+
+  currentStep = step;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('pip' + currentStep).classList.add('active');
+  document.getElementById('pip' + currentStep).classList.remove('done');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectRadio(el, name) {
+  document.querySelectorAll(`[name="${name}"]`).forEach(r => {
+    r.closest('.radio-opt').classList.remove('selected');
+  });
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+}
+
+function toggleBias(el) {
+  el.classList.toggle('checked');
+  el.querySelector('input').checked = el.classList.contains('checked');
+}
+
+function addAltRow() {
+  const row = document.createElement('div');
+  row.className = 'alt-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Option — describe this alternative">
+    <select><option>Low</option><option selected>Med</option><option>High</option></select>
+    <select><option>Strong</option><option selected>Moderate</option><option>Weak</option></select>
+  `;
+  document.getElementById('altRows').appendChild(row);
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function getRadio(name) {
+  const el = document.querySelector(`[name="${name}"]:checked`);
+  return el ? el.value : '';
+}
+
+function getCheckedBiases() {
+  const items = document.querySelectorAll('.bias-item.checked .bias-text strong');
+  return Array.from(items).map(i => i.textContent).join(', ') || 'None identified';
+}
+
+function generateSummary() {
+  const commit = getRadio('o_commit');
+  const decType = getRadio('q_type');
+
+  const commitLabels = { full: 'Fully committed', conditional: 'Committed with conditions', uncertain: 'Still uncertain — return to steps 2 or 3' };
+  const typeLabels = { routine: 'Routine', significant: 'Significant', critical: 'Critical' };
+
+  document.getElementById('sum_decision').textContent = val('o_decision') || 'Not completed';
+  document.getElementById('sum_problem').textContent = val('q_problem') || 'Not completed';
+  document.getElementById('sum_vision').textContent = val('q_vision') || 'Not completed';
+  document.getElementById('sum_assumptions').textContent = val('c_assumptions') || 'Not completed';
+  document.getElementById('sum_preferred').textContent = val('i_preferred') || 'Not completed';
+  document.getElementById('sum_actions').textContent = [val('o_action1'), val('o_action2'), val('o_action3')].filter(Boolean).map((a,i) => `${i+1}. ${a}`).join('\n') || 'Not completed';
+  document.getElementById('sum_date').textContent = val('o_date') || 'Not specified';
+  document.getElementById('sum_measure').textContent = val('r_measure') || 'Not completed';
+  document.getElementById('sum_pivot').textContent = val('r_pivot') || 'Not completed';
+  document.getElementById('sum_commit').textContent = commitLabels[commit] || 'Not selected';
+
+  // Verdict
+  let verdictText, verdictSub;
+  if (commit === 'full') {
+    verdictText = 'Decision ready to implement.';
+    verdictSub = 'You have worked through all five steps and committed fully. Communicate the decision, take the first action, and set your review checkpoints.';
+  } else if (commit === 'conditional') {
+    verdictText = 'Decision ready — with conditions to confirm.';
+    verdictSub = 'Identify and confirm the conditions before communicating. Once confirmed, move to implementation.';
+  } else {
+    verdictText = 'Return to Step 2 or 3 before deciding.';
+    verdictSub = 'Uncertainty at this stage means the challenge or identify steps need more work. That\'s not failure — that\'s the process working.';
+  }
+
+  document.getElementById('verdictCard').innerHTML = `
+    <div class="verdict-label">${typeLabels[decType] || 'Business'} decision — The Courage to Decide framework</div>
+    <div class="verdict-text">${verdictText}</div>
+    <div class="verdict-sub">${verdictSub}</div>
+  `;
+
+  document.getElementById('summarySection').style.display = 'block';
+  setTimeout(() => document.getElementById('summarySection').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function resetTool() {
+  document.querySelectorAll('textarea, input[type="text"]').forEach(el => el.value = '');
+  document.querySelectorAll('.radio-opt').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.bias-item').forEach(el => el.classList.remove('checked'));
+  document.getElementById('summarySection').style.display = 'none';
+  document.querySelectorAll('.step-pip').forEach(p => p.classList.remove('done', 'active'));
+  document.querySelectorAll('.step-connector').forEach(c => c.classList.remove('done'));
+  goTo(1);
+}
+</script>
+</body>
+</html>

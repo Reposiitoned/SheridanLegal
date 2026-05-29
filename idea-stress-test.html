@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idea Stress Test — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:#2d5a27;--forest-dk:#1a3d16;--forest-lt:#d4e8d1;
+    --gold:#c8a84b;--gold-lt:#f5edcc;--bg:#f0f5ef;
+    --white:#fff;--text:#1a2018;--muted:#5a6e57;--border:#d0dece;
+    --red:#b91c1c;--red-lt:#fde8e8;--amber:#d97706;--amber-lt:#fef3c7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;min-height:100vh;}
+
+  .nav{background:var(--forest-dk);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--white);text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-back{font-size:12px;color:rgba(255,255,255,0.6);text-decoration:none;letter-spacing:.05em;}
+  .nav-back:hover{color:var(--gold);}
+
+  .hero{background:var(--forest-dk);padding:56px 40px 72px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(200,168,75,.14) 0%,transparent 65%);pointer-events:none;}
+  .hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,52px);font-weight:500;color:var(--white);line-height:1.15;margin-bottom:16px;}
+  .hero-title em{font-style:italic;color:var(--gold);}
+  .hero-sub{font-size:15px;color:rgba(255,255,255,.6);max-width:560px;margin:0 auto;line-height:1.8;}
+
+  .main{max-width:860px;margin:0 auto;padding:48px 24px 80px;}
+
+  /* PROGRESS */
+  .progress-track{display:flex;align-items:center;margin-bottom:40px;}
+  .step-pip{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--muted);flex-shrink:0;transition:all .3s;cursor:pointer;}
+  .step-pip.active{background:var(--forest);border-color:var(--forest);color:var(--white);}
+  .step-pip.done{background:var(--forest-lt);border-color:var(--forest);color:var(--forest);}
+  .step-pip .pip-label{display:none;}
+  .step-connector{flex:1;height:2px;background:var(--border);transition:background .3s;}
+  .step-connector.done{background:var(--forest);}
+
+  /* STEP LABELS */
+  .step-labels{display:flex;justify-content:space-between;margin-top:-28px;margin-bottom:32px;padding:0 4px;}
+  .step-label-item{font-size:10px;color:var(--muted);text-align:center;width:60px;flex-shrink:0;letter-spacing:.02em;}
+  .step-label-item.active{color:var(--forest);font-weight:600;}
+
+  /* PANELS */
+  .step-panel{display:none;}
+  .step-panel.active{display:block;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .step-card{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:36px 40px;margin-bottom:20px;}
+  .step-number{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+  .step-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest-dk);margin-bottom:8px;font-weight:500;}
+  .step-tagline{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;padding-bottom:20px;border-bottom:1px solid var(--border);}
+
+  /* IDEA NAME */
+  .idea-input{width:100%;padding:16px 20px;border:2px solid var(--border);border-radius:10px;font-size:18px;font-family:'Cormorant Garamond',serif;color:var(--forest-dk);background:var(--bg);outline:none;transition:border-color .2s;}
+  .idea-input:focus{border-color:var(--forest);background:var(--white);}
+  .idea-display{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--forest-dk);font-style:italic;padding:12px 16px;background:var(--forest-lt);border-radius:8px;margin-bottom:20px;display:none;}
+
+  /* SCORE BUTTONS */
+  .question-group{margin-bottom:28px;}
+  .question-text{font-size:14px;font-weight:500;color:var(--text);margin-bottom:8px;line-height:1.6;}
+  .question-hint{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5;font-style:italic;}
+  .score-row{display:flex;gap:6px;width:100%;}
+  .score-btn{width:44px;height:44px;border-radius:8px;border:2px solid var(--border);background:var(--bg);font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .score-btn:hover{border-color:var(--forest);color:var(--forest);background:var(--forest-lt);}
+  .score-btn.sel-low{background:#fde8e8;border-color:#fca5a5;color:var(--red);}
+  .score-btn.sel-mid{background:var(--amber-lt);border-color:#fcd34d;color:var(--amber);}
+  .score-btn.sel-high{background:var(--forest);border-color:var(--forest);color:var(--white);}
+  .score-labels{display:none;}
+  .score-desc{font-size:12px;color:var(--muted);margin-top:8px;min-height:16px;font-style:italic;}
+
+  /* BLIND SPOT ALERT */
+  .blindspot-alert{background:var(--gold-lt);border:1px solid var(--gold);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:var(--text);line-height:1.7;display:none;}
+  .blindspot-alert strong{color:var(--forest-dk);}
+
+  /* NAV BUTTONS */
+  .step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;}
+  .btn-next{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:14px 32px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-next:hover{background:var(--forest-dk);transform:translateY(-1px);}
+  .btn-back{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:8px;padding:12px 24px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-back:hover{border-color:var(--forest);color:var(--forest);}
+
+  /* VERDICT */
+  .verdict-pursue{background:var(--forest-dk);border-radius:20px;padding:48px 48px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden;}
+  .verdict-pursue::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:rgba(200,168,75,.1);pointer-events:none;}
+  .verdict-bench{background:var(--amber);border-radius:20px;padding:48px 48px;text-align:center;margin-bottom:24px;}
+  .verdict-forget{background:var(--red);border-radius:20px;padding:48px 48px;text-align:center;margin-bottom:24px;}
+
+  .verdict-icon{font-size:48px;margin-bottom:16px;}
+  .verdict-label{font-size:11px;font-weight:600;letter-spacing:.15em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:12px;}
+  .verdict-title{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:500;color:var(--white);margin-bottom:12px;line-height:1.1;}
+  .verdict-subtitle{font-size:16px;color:rgba(255,255,255,.75);line-height:1.7;max-width:480px;margin:0 auto 24px;}
+
+  /* SCORE BARS */
+  .score-summary{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:32px 36px;margin-bottom:20px;}
+  .score-summary h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest-dk);margin-bottom:20px;}
+  .score-bar-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .score-bar-label{font-size:13px;color:var(--text);width:140px;flex-shrink:0;}
+  .score-bar-track{flex:1;height:10px;background:var(--bg);border-radius:5px;overflow:hidden;border:1px solid var(--border);}
+  .score-bar-fill{height:100%;border-radius:5px;transition:width .8s ease;}
+  .fill-low{background:#fca5a5;}
+  .fill-mid{background:#fcd34d;}
+  .fill-high{background:var(--forest);}
+  .score-bar-num{font-size:12px;font-weight:600;width:36px;text-align:right;}
+
+  /* INSIGHT CARDS */
+  .insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  @media(max-width:580px){.insight-grid{grid-template-columns:1fr;}}
+  .insight-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:22px;}
+  .insight-card.strong{border-color:var(--forest);background:var(--forest-lt);}
+  .insight-card.weak{border-color:#fca5a5;background:var(--red-lt);}
+  .insight-card.amber{border-color:#fcd34d;background:var(--amber-lt);}
+  .insight-icon{font-size:20px;margin-bottom:8px;}
+  .insight-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+  .insight-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+  /* BENCH CONDITIONS */
+  .bench-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:28px 32px;margin-bottom:20px;}
+  .bench-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--forest-dk);margin-bottom:16px;}
+  .bench-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg);font-size:13px;color:var(--text);}
+  .bench-item:last-child{border-bottom:none;}
+  .bench-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+
+  /* NEXT STEP */
+  .next-step-card{background:var(--forest);border-radius:12px;padding:28px 32px;margin-bottom:24px;}
+  .next-step-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+  .next-step-text{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--white);line-height:1.5;}
+
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+  .btn-primary{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:14px 32px;font-size:14px;font-weight:500;cursor:pointer;}
+  .btn-primary:hover{background:var(--forest-dk);}
+  .btn-ghost{background:rgba(255,255,255,.15);color:var(--white);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:12px 24px;font-size:14px;font-weight:500;cursor:pointer;}
+  .btn-ghost:hover{background:rgba(255,255,255,.25);}
+  .btn-secondary{background:transparent;color:var(--forest);border:2px solid var(--forest);border-radius:8px;padding:12px 24px;font-size:14px;font-weight:500;cursor:pointer;}
+  .btn-secondary:hover{background:var(--forest);color:var(--white);}
+
+  /* IDEA LOG */
+  .log-section{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:32px 36px;margin-top:48px;}
+  .log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+  .log-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--forest-dk);}
+  .log-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;font-style:italic;}
+  .log-entry{border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:12px;transition:box-shadow .2s;position:relative;}
+  .log-entry:hover{box-shadow:0 4px 16px rgba(45,90,39,.08);}
+  .log-entry.pursue{border-left:4px solid var(--forest);}
+  .log-entry.bench{border-left:4px solid var(--amber);}
+  .log-entry.forget{border-left:4px solid var(--red);}
+  .log-entry-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+  .log-entry-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--forest-dk);font-weight:500;}
+  .log-entry-date{font-size:11px;color:var(--muted);flex-shrink:0;margin-top:4px;}
+  .log-verdict-badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:8px;}
+  .badge-pursue{background:var(--forest-lt);color:var(--forest);}
+  .badge-bench{background:var(--amber-lt);color:var(--amber);}
+  .badge-forget{background:var(--red-lt);color:var(--red);}
+  .log-entry-scores{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .log-score-pill{font-size:11px;padding:3px 10px;border-radius:12px;background:var(--bg);border:1px solid var(--border);color:var(--muted);}
+  .log-entry-delete{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--border);cursor:pointer;font-size:16px;line-height:1;padding:2px 6px;border-radius:4px;}
+  .log-entry-delete:hover{color:var(--red);background:var(--red-lt);}
+  .log-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+  .log-stat{text-align:center;padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border);}
+  .log-stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest);font-weight:500;}
+  .log-stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+  .log-pattern{background:var(--gold-lt);border:1px solid var(--gold);border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--text);line-height:1.7;display:none;}
+  .log-pattern strong{color:var(--forest-dk);}
+  .btn-save-idea{background:var(--gold);color:var(--forest-dk);border:none;border-radius:8px;padding:12px 24px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+  .btn-save-idea:hover{background:#d4b455;transform:translateY(-1px);}
+
+  @media(max-width:600px){
+    .log-stats{grid-template-columns:1fr 1fr;}
+    .log-section{padding:24px 20px;}
+  }
+
+  @media(max-width:600px){
+    .nav{padding:0 20px;}
+    .hero{padding:40px 20px 60px;}
+    .main{padding:32px 16px 60px;}
+    .step-card{padding:24px 20px;}
+    .verdict-pursue,.verdict-bench,.verdict-forget{padding:36px 24px;}
+    .score-summary{padding:24px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="dashboard.html" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <a href="dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">I Have an Idea — Stress Test</div>
+  <div class="hero-title">Should you <em>pursue it,</em><br>bench it, or forget it?</div>
+  <div class="hero-sub">Five honest tests before you commit your energy, time, and money. This tool tells you whether your idea deserves a full decision process — or whether it's time to let it go.</div>
+</div>
+
+<div class="main">
+
+  <!-- PROGRESS -->
+  <div class="progress-track">
+    <div class="step-pip active" id="pip1" onclick="goTo(1)">1</div>
+    <div class="step-connector" id="con1"></div>
+    <div class="step-pip" id="pip2" onclick="goTo(2)">2</div>
+    <div class="step-connector" id="con2"></div>
+    <div class="step-pip" id="pip3" onclick="goTo(3)">3</div>
+    <div class="step-connector" id="con3"></div>
+    <div class="step-pip" id="pip4" onclick="goTo(4)">4</div>
+    <div class="step-connector" id="con4"></div>
+    <div class="step-pip" id="pip5" onclick="goTo(5)">5</div>
+  </div>
+  <div class="step-labels">
+    <div class="step-label-item active" id="lbl1">The Idea</div>
+    <div class="step-label-item" id="lbl2">Defining The Problem</div>
+    <div class="step-label-item" id="lbl3">The Fit</div>
+    <div class="step-label-item" id="lbl4">The Market</div>
+    <div class="step-label-item" id="lbl5">The Owner</div>
+  </div>
+
+  <!-- STEP 1: THE IDEA -->
+  <div class="step-panel active" id="step1">
+    <div class="step-card">
+      <div class="step-number">Test 1 of 5</div>
+      <div class="step-title">The Idea</div>
+      <div class="step-tagline">Name it, describe it, and rate its clarity. An idea that cannot be described clearly in two sentences is not ready to be tested — it is still forming. That is fine. But be honest about where it actually is.</div>
+
+      <div class="question-group" style="margin-bottom:20px;">
+        <label class="question-text" style="font-weight:600;font-size:16px;">Name your idea</label>
+        <div class="question-hint">Give it a working title — even a rough one. Naming it makes it real.</div>
+        <input class="idea-input" id="ideaName" type="text" placeholder="e.g. A monthly retainer service for trade businesses...">
+      </div>
+
+      <div class="question-group" style="margin-bottom:20px;">
+        <label class="question-text" style="font-weight:600;">Describe it in two sentences</label>
+        <div class="question-hint">What is it? Who is it for? What does it deliver?</div>
+        <textarea id="ideaDesc" style="width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);outline:none;resize:vertical;line-height:1.6;height:80px;" placeholder="e.g. A documented monthly maintenance and safety compliance service for trade businesses with 5-20 staff. It removes the owner from the process by creating a systemised team-run program..."></textarea>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">How long have you been carrying this idea?</div>
+        <div class="question-hint">An idea that has been present for months or years without dying is telling you something.</div>
+        <div class="score-row" id="scores_q1_0"></div>
+        <div class="score-labels"><span>Days</span><span>Weeks</span><span>Months</span><span>Over a year</span><span>Years</span></div>
+        <div class="score-desc" id="desc_q1_0">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">How clearly can you describe what it is and what it does?</div>
+        <div class="question-hint">Not the potential — the actual thing. What does it deliver and to whom?</div>
+        <div class="score-row" id="scores_q1_1"></div>
+        <div class="score-labels"><span>Still forming</span><span></span><span>Reasonably clear</span><span></span><span>Crystal clear</span></div>
+        <div class="score-desc" id="desc_q1_1">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">How excited are you about this idea right now — honestly?</div>
+        <div class="question-hint">Not how excited you were when it first arrived. Right now, today.</div>
+        <div class="score-row" id="scores_q1_2"></div>
+        <div class="score-labels"><span>Lukewarm</span><span></span><span>Genuinely interested</span><span></span><span>Highly energised</span></div>
+        <div class="score-desc" id="desc_q1_2">Tap to rate</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <div></div>
+      <button class="btn-next" onclick="goTo(2)">Test the idea →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: THE PROBLEM -->
+  <div class="step-panel" id="step2">
+    <div class="step-card">
+      <div class="step-number">Test 2 of 5</div>
+      <div class="step-title">Defining The Problem</div>
+      <div class="step-tagline">Every idea worth pursuing solves a real problem or captures a real opportunity. Not a problem you imagined — a problem someone is actively experiencing right now and would pay to have solved.</div>
+
+      <div class="idea-display" id="ideaDisplay2"></div>
+
+      <div class="question-group">
+        <div class="question-text">How real and significant is the problem this idea solves?</div>
+        <div class="question-hint">Is this a genuine pain — something people lose sleep over, pay to fix, or complain about regularly? Or is it a nice-to-have?</div>
+        <div class="score-row" id="scores_q2_0"></div>
+        <div class="score-labels"><span>Nice to have</span><span></span><span>Real but minor</span><span></span><span>Significant pain</span></div>
+        <div class="score-desc" id="desc_q2_0">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Have you personally witnessed or experienced this problem in your clients or market?</div>
+        <div class="question-hint">Evidence beats assumption. Direct observation beats secondhand reports.</div>
+        <div class="score-row" id="scores_q2_1"></div>
+        <div class="score-labels"><span>Assumed</span><span></span><span>Heard about it</span><span></span><span>Seen it directly</span></div>
+        <div class="score-desc" id="desc_q2_1">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Does this idea solve a problem — or create a new possibility?</div>
+        <div class="question-hint">Both are valid. But be clear which one this is. Opportunities need different validation to problems.</div>
+        <div class="score-row" id="scores_q2_2"></div>
+        <div class="score-labels"><span>Opportunity</span><span></span><span>Both</span><span></span><span>Clear problem</span></div>
+        <div class="score-desc" id="desc_q2_2">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Is someone already solving this problem — and if so, how well?</div>
+        <div class="question-hint">Existing competition proves the market exists. No competition might mean no market. Bad existing solutions mean opportunity.</div>
+        <div class="score-row" id="scores_q2_3"></div>
+        <div class="score-labels"><span>No competition</span><span></span><span>Competitors exist</span><span></span><span>Poorly solved</span></div>
+        <div class="score-desc" id="desc_q2_3">Tap to rate</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(1)">← Back</button>
+      <button class="btn-next" onclick="goTo(3)">Test the fit →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: THE FIT -->
+  <div class="step-panel" id="step3">
+    <div class="step-card">
+      <div class="step-number">Test 3 of 5</div>
+      <div class="step-title">The Fit</div>
+      <div class="step-tagline">The best idea for your business is one that fits — your existing clients, your capabilities, your resources, and your direction. An idea that requires you to become a completely different business is not a new product line. It is a pivot — and that is a much bigger decision.</div>
+
+      <div class="idea-display" id="ideaDisplay3"></div>
+
+      <div class="question-group">
+        <div class="question-text">How well does this idea fit your existing clients and relationships?</div>
+        <div class="question-hint">Could you take this to clients you already have, or does it require a completely new client base?</div>
+        <div class="score-row" id="scores_q3_0"></div>
+        <div class="score-labels"><span>New clients needed</span><span></span><span>Some overlap</span><span></span><span>Natural fit</span></div>
+        <div class="score-desc" id="desc_q3_0">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">How well does this idea match your current capabilities and expertise?</div>
+        <div class="question-hint">Not what you could learn — what you already have. Ideas that stretch you too far fail not because they are wrong but because you are not equipped yet.</div>
+        <div class="score-row" id="scores_q3_1"></div>
+        <div class="score-labels"><span>Significant gaps</span><span></span><span>Some gaps</span><span></span><span>Strong match</span></div>
+        <div class="score-desc" id="desc_q3_1">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Is this a new product line alongside existing work — or a pivot of the whole business?</div>
+        <div class="question-hint">New product line: lower risk, can be tested while existing business runs. Pivot: higher risk, requires a separate and larger decision process.</div>
+        <div class="score-row" id="scores_q3_2"></div>
+        <div class="score-labels"><span>Full pivot</span><span></span><span>Partial pivot</span><span></span><span>New product line</span></div>
+        <div class="score-desc" id="desc_q3_2">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Does this idea support or distract from your current business direction?</div>
+        <div class="question-hint">An idea that pulls your attention away from what is already working has a hidden cost. An idea that amplifies what is already working is a multiplier.</div>
+        <div class="score-row" id="scores_q3_3"></div>
+        <div class="score-labels"><span>Distraction</span><span></span><span>Neutral</span><span></span><span>Multiplier</span></div>
+        <div class="score-desc" id="desc_q3_3">Tap to rate</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(2)">← Back</button>
+      <button class="btn-next" onclick="goTo(4)">Test the market →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: THE MARKET -->
+  <div class="step-panel" id="step4">
+    <div class="step-card">
+      <div class="step-number">Test 4 of 5</div>
+      <div class="step-title">The Market</div>
+      <div class="step-tagline">A good idea with no market is an expensive hobby. You need to know specifically who would buy this, whether they would pay what it costs to deliver, and how you get to the first three customers.</div>
+
+      <div class="idea-display" id="ideaDisplay4"></div>
+
+      <div class="question-group">
+        <div class="question-text">How specifically can you describe the person who would buy this?</div>
+        <div class="question-hint">"Business owners" is not specific enough. "Trade business owners with 5-20 staff who are struggling with safety compliance" is a market.</div>
+        <div class="score-row" id="scores_q4_0"></div>
+        <div class="score-labels"><span>Vague</span><span></span><span>Reasonably clear</span><span></span><span>Very specific</span></div>
+        <div class="score-desc" id="desc_q4_0">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Would they pay what it costs to deliver this — at a margin worth pursuing?</div>
+        <div class="question-hint">Have you done the numbers? Revenue minus cost of delivery equals margin. Is that margin worth the effort and risk?</div>
+        <div class="score-row" id="scores_q4_1"></div>
+        <div class="score-labels"><span>Unlikely</span><span></span><span>Possibly</span><span></span><span>Confidently yes</span></div>
+        <div class="score-desc" id="desc_q4_1">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">How clear is your path to the first three paying customers?</div>
+        <div class="question-hint">Not a marketing plan. Three actual names or specific types of people you could call next week. If you cannot name them, the market is still theoretical.</div>
+        <div class="score-row" id="scores_q4_2"></div>
+        <div class="score-labels"><span>No idea</span><span></span><span>Some ideas</span><span></span><span>Clear path</span></div>
+        <div class="score-desc" id="desc_q4_2">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">How large is the realistic market for this idea?</div>
+        <div class="question-hint">Not the total addressable market — the realistic slice you could serve with your current resources in the next 12 months.</div>
+        <div class="score-row" id="scores_q4_3"></div>
+        <div class="score-labels"><span>Very small</span><span></span><span>Moderate</span><span></span><span>Significant</span></div>
+        <div class="score-desc" id="desc_q4_3">Tap to rate</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(3)">← Back</button>
+      <button class="btn-next" onclick="goTo(5)">Test yourself →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: THE OWNER -->
+  <div class="step-panel" id="step5">
+    <div class="step-card">
+      <div class="step-number">Test 5 of 5</div>
+      <div class="step-title">The Owner</div>
+      <div class="step-tagline">The hardest test. The idea might be real. The market might exist. But will you back this with everything you have? Your pattern, your belief, your willingness to push through the difficult middle — these determine whether a good idea becomes a working business.</div>
+
+      <div id="blindspotAlert" class="blindspot-alert"></div>
+
+      <div class="idea-display" id="ideaDisplay5"></div>
+
+      <div class="question-group">
+        <div class="question-text">How strongly do you believe this idea is the right thing for your business right now?</div>
+        <div class="question-hint">Not how much you like it — how much you believe in it. There is a difference. Belief drives execution through the difficult middle.</div>
+        <div class="score-row" id="scores_q5_0"></div>
+        <div class="score-labels"><span>Uncertain</span><span></span><span>Reasonably confident</span><span></span><span>Deeply convinced</span></div>
+        <div class="score-desc" id="desc_q5_0">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Do you have the capacity to pursue this alongside your current commitments?</div>
+        <div class="question-hint">Not "could I make time" — do you have time right now without compromising what is already working?</div>
+        <div class="score-row" id="scores_q5_1"></div>
+        <div class="score-labels"><span>No capacity</span><span></span><span>Limited capacity</span><span></span><span>Real capacity</span></div>
+        <div class="score-desc" id="desc_q5_1">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Would you be willing to test a minimum viable version of this within 90 days?</div>
+        <div class="question-hint">Not the full version — a small, real, test. If the answer is no, that tells you something important about your actual level of commitment.</div>
+        <div class="score-row" id="scores_q5_2"></div>
+        <div class="score-labels"><span>Not ready</span><span></span><span>Possibly</span><span></span><span>Yes — absolutely</span></div>
+        <div class="score-desc" id="desc_q5_2">Tap to rate</div>
+      </div>
+
+      <div class="question-group">
+        <div class="question-text">Does pursuing this idea align with where you personally want to take the business in the next 3 years?</div>
+        <div class="question-hint">An idea that is right for the business but wrong for where you want to go will run out of energy. Both have to be true.</div>
+        <div class="score-row" id="scores_q5_3"></div>
+        <div class="score-labels"><span>Misaligned</span><span></span><span>Partially aligned</span><span></span><span>Perfectly aligned</span></div>
+        <div class="score-desc" id="desc_q5_3">Tap to rate</div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goTo(4)">← Back</button>
+      <button class="btn-next" onclick="generateVerdict()">Get my verdict →</button>
+    </div>
+
+    <!-- VERDICT -->
+    <div id="verdictSection" style="display:none;margin-top:32px;">
+
+      <div id="verdictCard"></div>
+
+      <div class="score-summary">
+        <h3>Your stress test scores</h3>
+        <div id="scoreBars"></div>
+      </div>
+
+      <div class="insight-grid" id="insightGrid"></div>
+
+      <div id="benchConditions" style="display:none;">
+        <div class="bench-card">
+          <h3>Conditions to revisit this idea</h3>
+          <div id="benchList"></div>
+        </div>
+      </div>
+
+      <div class="next-step-card" id="nextStepCard">
+        <div class="next-step-label">Your next step</div>
+        <div class="next-step-text" id="nextStepText">—</div>
+      </div>
+
+      <div class="actions" id="verdictActions"></div>
+
+    </div>
+  </div>
+
+  <!-- IDEA LOG -->
+  <div class="log-section" id="ideaLog">
+    <div class="log-header">
+      <div class="log-title">Your Idea Register</div>
+      <button class="btn-save-idea" id="saveIdeaBtn" onclick="saveCurrentIdea()" style="display:none;">Save this idea to register</button>
+    </div>
+    <div class="log-pattern" id="logPattern"></div>
+    <div class="log-stats" id="logStats" style="display:none;">
+      <div class="log-stat"><div class="log-stat-val" id="statTotal">0</div><div class="log-stat-label">Ideas tested</div></div>
+      <div class="log-stat"><div class="log-stat-val" id="statPursue">0</div><div class="log-stat-label">Pursuing</div></div>
+      <div class="log-stat"><div class="log-stat-val" id="statBench">0</div><div class="log-stat-label">Benched</div></div>
+    </div>
+    <div id="logEntries"><div class="log-empty">No ideas tested yet. Your register builds as you use the stress test.</div></div>
+  </div>
+
+</div>
+
+<script>
+let currentStep = 1;
+const ideaName = () => document.getElementById('ideaName').value.trim() || 'Your idea';
+
+// Score storage: [test][question] = value
+const scores = {
+  q1: [null, null, null],
+  q2: [null, null, null, null],
+  q3: [null, null, null, null],
+  q4: [null, null, null, null],
+  q5: [null, null, null, null]
+};
+
+const testKeys = ['q1','q2','q3','q4','q5'];
+const testNames = ['The Idea','Defining The Problem','The Fit','The Market','The Owner'];
+
+const descriptions = {
+  1: ['Days — very new','Weeks — still forming','Months — it keeps returning','Over a year — persistent','Years — it has never gone away'],
+  2: ['Still vague — not ready to test','Starting to take shape','Reasonably clear','Clear and specific','Crystal clear — I could pitch it now'],
+  3: ['Lukewarm right now','Some interest','Genuinely excited','Very energised','Highly energised — ready to move'],
+  4: ['Nice to have — not urgent','Minor irritant','Real but tolerable','Significant — people complain about this','Major pain — people actively seek solutions'],
+  5: ['Assumed — no direct evidence','Heard from others','One or two instances observed','Regularly observed','Seen consistently across multiple clients'],
+  6: ['Pure opportunity — no existing problem','Mostly opportunity','Both in equal measure','Mostly problem-solving','Clear and specific problem to solve'],
+  7: ['No competition — possible red flag','Competitors exist but winning','Crowded market','Poorly served by current solutions','Badly solved — clear gap to fill'],
+  8: ['Needs entirely new clients','Minimal client overlap','Some overlap with current clients','Good overlap — could pitch to existing clients','Natural extension — existing clients would want this'],
+  9: ['Major skill gaps — need to hire or learn','Significant gaps to fill','Some gaps but manageable','Minor gaps — mostly capable','Strong match to current expertise'],
+  10: ['Full business pivot required','Significant partial pivot','Moderate adjustment to current model','Minor adjustment to current model','Clean new product line alongside existing'],
+  11: ['Significant distraction from current work','Some distraction','Neutral — neither helps nor hurts','Supports current direction','Strong multiplier for what already works'],
+  12: ['Very vague — anyone could buy this','Somewhat defined','Reasonably specific','Clear and specific','Very specific — I can name them'],
+  13: ['Unlikely to pay what it costs','Uncertain on price acceptance','Possibly — needs testing','Likely — market evidence exists','Confident — seen people pay for similar'],
+  14: ['No idea how to find first customers','Very unclear path','Some ideas on where to start','Reasonably clear path','Clear path — could call someone this week'],
+  15: ['Very small — limited opportunity','Small but real','Moderate market','Significant market','Large realistic opportunity'],
+  16: ['Very uncertain about this','Some doubt remains','Reasonably confident','Strongly believe in this','Deeply convinced — this is the right thing'],
+  17: ['No capacity at all right now','Very limited capacity','Some capacity with trade-offs','Good capacity available','Real capacity — can start now'],
+  18: ['Not ready to test — too many unknowns','Uncertain — needs more thinking','Possibly — with the right structure','Yes with some preparation','Absolutely yes — could start within weeks'],
+  19: ['Misaligned with my 3-year direction','Slightly misaligned','Partially aligned','Well aligned','Perfectly aligned — this is exactly where I want to go']
+};
+
+// Labels for each question's buttons
+const btnLabels = {
+  1: ['Days','Weeks','Months','Over a year','Years'],
+  2: ['Still forming','Taking shape','Reasonably clear','Clear','Crystal clear'],
+  3: ['Lukewarm','Some interest','Genuinely excited','Very energised','Highly energised'],
+  4: ['Nice to have','Minor irritant','Real but tolerable','Significant pain','Major pain'],
+  5: ['Assumed','Heard about it','Seen it once','Seen regularly','Consistent evidence'],
+  6: ['Opportunity only','Mostly opportunity','Both equally','Mostly problem','Clear problem'],
+  7: ['No competition','Competitors winning','Crowded market','Poorly served','Badly solved gap'],
+  8: ['New clients only','Minimal overlap','Some overlap','Good overlap','Natural extension'],
+  9: ['Major gaps','Significant gaps','Some gaps','Minor gaps','Strong match'],
+  10: ['Full pivot','Large pivot','Moderate change','Minor adjustment','Clean product line'],
+  11: ['Distraction','Some distraction','Neutral','Supports direction','Strong multiplier'],
+  12: ['Very vague','Somewhat defined','Reasonably specific','Clear and specific','Can name them now'],
+  13: ['Unlikely to pay','Uncertain','Possibly','Likely','Confident yes'],
+  14: ['No idea','Very unclear','Some ideas','Reasonably clear','Clear path now'],
+  15: ['Very small','Small but real','Moderate','Significant','Large opportunity'],
+  16: ['Very uncertain','Some doubt','Reasonably confident','Strongly believe','Deeply convinced'],
+  17: ['No capacity','Very limited','Some with trade-offs','Good capacity','Ready to start now'],
+  18: ['Not ready','Needs more thought','Possibly','Yes with prep','Absolutely yes'],
+  19: ['Misaligned','Slightly off','Partially aligned','Well aligned','Perfectly aligned']
+};
+
+function buildScoreButtons(groupId, qIndex, testKey, descOffset) {
+  const container = document.getElementById(groupId);
+  if (!container) return;
+  container.innerHTML = '';
+  const labels = btnLabels[descOffset] || ['1','2','3','4','5'];
+  for (let i = 1; i <= 5; i++) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:52px;';
+    const btn = document.createElement('button');
+    btn.className = 'score-btn';
+    btn.style.cssText = 'width:100%;height:44px;';
+    btn.textContent = i;
+    btn.onclick = () => selectScore(testKey, qIndex, i, groupId, descOffset, btn, wrap);
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:10px;color:var(--muted);text-align:center;line-height:1.3;letter-spacing:0.01em;';
+    lbl.textContent = labels[i-1] || '';
+    wrap.appendChild(btn);
+    wrap.appendChild(lbl);
+    container.appendChild(wrap);
+  }
+}
+
+function selectScore(testKey, qIndex, val, groupId, descOffset, clickedBtn, wrap) {
+  scores[testKey][qIndex] = val;
+  const container = document.getElementById(groupId);
+  container.querySelectorAll('.score-btn').forEach((b, i) => {
+    b.classList.remove('sel-low','sel-mid','sel-high');
+    if (i + 1 === val) {
+      b.classList.add(val <= 2 ? 'sel-low' : val <= 3 ? 'sel-mid' : 'sel-high');
+    }
+  });
+  const descId = groupId.replace('scores_', 'desc_');
+  const descEl = document.getElementById(descId);
+  if (descEl && descriptions[descOffset]) {
+    descEl.textContent = descriptions[descOffset][val - 1] || '';
+  }
+}
+
+function goTo(step) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('pip' + currentStep).classList.remove('active');
+  document.getElementById('lbl' + currentStep).classList.remove('active');
+
+  if (step > currentStep) {
+    for (let i = currentStep; i < step; i++) {
+      document.getElementById('pip' + i).classList.add('done');
+      if (i < 5) document.getElementById('con' + i).classList.add('done');
+    }
+  }
+
+  currentStep = step;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('pip' + currentStep).classList.add('active');
+  document.getElementById('lbl' + currentStep).classList.add('active');
+
+  // Show idea name on subsequent steps
+  ['ideaDisplay2','ideaDisplay3','ideaDisplay4','ideaDisplay5'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const name = ideaName();
+      el.textContent = '"' + name + '"';
+      el.style.display = name ? 'block' : 'none';
+    }
+  });
+
+  // Show blind spot alert on step 5
+  if (step === 5) showBlindspotAlert();
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function showBlindspotAlert() {
+  try {
+    const h = JSON.parse(localStorage.getItem('blindspot_history') || '[]');
+    if (!h.length) return;
+    const latest = h[h.length - 1];
+    const dominant = latest.dominant || '';
+    const alert = document.getElementById('blindspotAlert');
+
+    const messages = {
+      'Shiny Ball': 'Your dominant blind spot is <strong>The Shiny Ball Chaser</strong>. Your pattern generates ideas that feel urgent and important in the moment — but not all of them deserve your energy. Apply a harder filter to yourself on Test 5. The question is not whether you like this idea. It is whether you will still be excited about it in month three.',
+      'Visionary': 'Your dominant blind spot is <strong>The Visionary Chaos Creator</strong>. Your ideas are genuinely good — but you generate them faster than infrastructure can hold them. This test asks whether this specific idea is the right one to pursue right now, not whether it is a good idea in theory.',
+      'Perfectionist': 'Your dominant blind spot is <strong>The Perfectionist Procrastinator</strong>. Your pattern kills good ideas before they are tested by setting an impossibly high bar. Apply a slightly more generous filter on Test 5. The question is not whether this is perfect — it is whether it is worth a 90-day test.',
+      'Comfort Zone': 'Your dominant blind spot is <strong>The Comfort Zone Trapper</strong>. Your pattern resists new directions even when they are clearly right. If this idea has been present for a long time and keeps returning, that is evidence — not uncertainty. Be honest about whether resistance is caution or the pattern.',
+      'Lone Wolf': 'Your dominant blind spot is <strong>The Lone Wolf Control Freak</strong>. Your pattern may be telling you this idea only works if you are at the centre of it. Ask yourself honestly — could this idea be built into a system that runs without you? If the answer is no, that is a fit problem worth addressing before you commit.',
+      'Burnt Out': 'Your dominant blind spot is <strong>The Burnt Out Hero</strong>. Your pattern says yes to things because you feel you should, not because you have the capacity. Be especially honest on the capacity question. An idea pursued without real capacity will exhaust you and may damage what is already working.',
+      'Scattered': 'Your dominant blind spot is <strong>The Scattered Multitasker</strong>. Your pattern means you may be considering this idea while five others are already in progress. Before Test 5 — honestly count how many active ideas or projects are competing for your attention right now.',
+      'Disciplined': 'Your dominant blind spot is <strong>The Disciplined Executor</strong>. Your pattern may resist this idea if it requires changing a plan you have already committed to. Ask yourself honestly — is the resistance coming from good judgement, or from the discomfort of adapting a direction you have already publicly committed to?'
+    };
+
+    let msg = '';
+    for (const [key, val] of Object.entries(messages)) {
+      if (dominant.includes(key)) { msg = val; break; }
+    }
+    if (msg) { alert.innerHTML = '<strong>🎯 Your Blind Spot — Test 5 note:</strong><br>' + msg; alert.style.display = 'block'; }
+  } catch(e) {}
+}
+
+function getTestAvg(testKey) {
+  const vals = scores[testKey].filter(v => v !== null);
+  if (!vals.length) return 0;
+  return vals.reduce((a,b) => a+b, 0) / scores[testKey].length;
+}
+
+function generateVerdict() {
+  const avgs = testKeys.map(k => getTestAvg(k));
+  const overall = avgs.reduce((a,b) => a+b, 0) / 5;
+  const name = ideaName();
+
+  // Blind spot adjustment
+  let threshold = { pursue: 3.5, bench: 2.5 };
+  try {
+    const h = JSON.parse(localStorage.getItem('blindspot_history') || '[]');
+    if (h.length) {
+      const avg = (h[h.length-1].total || 0) / 8;
+      const dom = h[h.length-1].dominant || '';
+      if (dom.includes('Shiny Ball') || dom.includes('Visionary')) {
+        threshold = { pursue: 3.8, bench: 2.8 };
+      } else if (dom.includes('Perfectionist') || dom.includes('Comfort Zone')) {
+        threshold = { pursue: 3.2, bench: 2.2 };
+      }
+    }
+  } catch(e) {}
+
+  let verdict, verdictHtml, nextStep, benchConditions = [];
+
+  if (overall >= threshold.pursue) {
+    verdict = 'pursue';
+    verdictHtml = `
+      <div class="verdict-pursue">
+        <div class="verdict-icon">✓</div>
+        <div class="verdict-label">Stress Test Result</div>
+        <div class="verdict-title">Pursue it.</div>
+        <div class="verdict-subtitle">"${name}" has passed the stress test. It is real, it fits, the market exists, and you believe in it. This idea deserves a full decision process and a 90-day test.</div>
+      </div>`;
+    nextStep = 'Take this idea through The Courage to Decide framework. Define the minimum viable version, name your first three potential customers, and set a 90-day test with a clear success measure. Then back it with your full energy.';
+  } else if (overall >= threshold.bench) {
+    verdict = 'bench';
+    verdictHtml = `
+      <div class="verdict-bench">
+        <div class="verdict-icon">⏸</div>
+        <div class="verdict-label">Stress Test Result</div>
+        <div class="verdict-title">Bench it.</div>
+        <div class="verdict-subtitle">"${name}" has real merit — but the conditions are not right to pursue it fully right now. Park it deliberately with specific triggers for when to revisit.</div>
+      </div>`;
+
+    if (avgs[1] < 3) benchConditions.push('The problem needs more validation — talk to 5 potential clients before revisiting.');
+    if (avgs[2] < 3) benchConditions.push('The fit with your current business needs to improve — either build the capability or wait until the existing business is more stable.');
+    if (avgs[3] < 3) benchConditions.push('The market path needs to be clearer — identify your first three potential customers before committing.');
+    if (avgs[4] < 3) benchConditions.push('Your own capacity or belief needs to be stronger — revisit this when you have cleared current commitments or when the conviction is higher.');
+    if (!benchConditions.length) benchConditions.push('Revisit this idea in 90 days — when one or more of the weaker areas has strengthened.');
+
+    nextStep = 'Log this idea in your idea register with today\'s date, your bench conditions, and a specific 90-day review date. Do not let it sit in your head — put it somewhere with a trigger.';
+  } else {
+    verdict = 'forget';
+    verdictHtml = `
+      <div class="verdict-forget">
+        <div class="verdict-icon">✕</div>
+        <div class="verdict-label">Stress Test Result</div>
+        <div class="verdict-title">Let it go.</div>
+        <div class="verdict-subtitle">"${name}" did not survive honest scrutiny. That is not failure — that is the process working. The energy this idea has been consuming is better directed elsewhere.</div>
+      </div>`;
+    nextStep = 'Close this idea deliberately — not passively. Write down why it did not pass and what you learned. That learning will make your next idea stronger. Then redirect the energy it has been consuming toward what is already working.';
+  }
+
+  document.getElementById('verdictCard').innerHTML = verdictHtml;
+
+  // Score bars
+  const fillClass = (avg) => avg >= 3.5 ? 'fill-high' : avg >= 2.5 ? 'fill-mid' : 'fill-low';
+  document.getElementById('scoreBars').innerHTML = testNames.map((name, i) => `
+    <div class="score-bar-row">
+      <div class="score-bar-label">${name}</div>
+      <div class="score-bar-track"><div class="score-bar-fill ${fillClass(avgs[i])}" style="width:${avgs[i]*20}%"></div></div>
+      <div class="score-bar-num" style="color:${avgs[i]>=3.5?'var(--forest)':avgs[i]>=2.5?'var(--amber)':'var(--red)'}">${avgs[i].toFixed(1)}</div>
+    </div>
+  `).join('');
+
+  // Insights
+  const insights = [];
+  if (avgs[0] >= 3.5) insights.push({cls:'strong',icon:'💡',title:'The idea is clear and persistent',desc:'You have been carrying this for a while and can describe it clearly. That combination is a positive signal.'});
+  else insights.push({cls:'amber',icon:'💭',title:'The idea needs more definition',desc:'Invest time in getting clearer before committing resources. An idea that cannot be described in two sentences is not ready to be tested.'});
+  if (avgs[1] >= 3.5) insights.push({cls:'strong',icon:'🎯',title:'The problem is real and validated',desc:'You have direct evidence of the problem this idea solves. That is the foundation everything else builds on.'});
+  else insights.push({cls:'weak',icon:'⚠️',title:'The problem needs more validation',desc:'Talk to five potential clients about this problem before going further. Their response will tell you more than any analysis.'});
+  if (avgs[2] >= 3.5) insights.push({cls:'strong',icon:'✓',title:'Strong fit with your current business',desc:'This idea extends what you already do well. Lower execution risk and faster time to first revenue.'});
+  else if (avgs[2] >= 2.5) insights.push({cls:'amber',icon:'🔧',title:'Moderate fit — gaps to address',desc:'Some capability or client-base gaps exist. Name them specifically and work out how to close them before committing.'});
+  else insights.push({cls:'weak',icon:'✕',title:'Weak fit — significant gaps',desc:'This idea may require becoming a different business. That is a larger decision than a new product line.'});
+  if (avgs[3] >= 3.5) insights.push({cls:'strong',icon:'📈',title:'Clear market with a path to customers',desc:'You know who would buy this and how to reach them. That clarity is worth more than any market research report.'});
+  else insights.push({cls:'weak',icon:'❓',title:'Market path needs work',desc:'The path to the first three paying customers is unclear. That is the most important thing to fix before committing.'});
+  if (avgs[4] >= 3.5) insights.push({cls:'strong',icon:'🔥',title:'Strong owner belief and alignment',desc:'You believe in this, you have capacity, and it fits where you want to go. That combination drives execution through the difficult middle.'});
+  else if (avgs[4] >= 2.5) insights.push({cls:'amber',icon:'🤔',title:'Some reservations to address',desc:'The belief or capacity is not fully there yet. That is worth sitting with honestly before committing.'});
+  else insights.push({cls:'weak',icon:'⚡',title:'Low belief or capacity right now',desc:'The most important factor in whether an idea succeeds is whether the owner backs it completely. Something here needs to be resolved first.'});
+
+  document.getElementById('insightGrid').innerHTML = insights.map(i => `
+    <div class="insight-card ${i.cls}">
+      <div class="insight-icon">${i.icon}</div>
+      <div class="insight-title">${i.title}</div>
+      <div class="insight-desc">${i.desc}</div>
+    </div>
+  `).join('');
+
+  // Bench conditions
+  if (verdict === 'bench' && benchConditions.length) {
+    document.getElementById('benchConditions').style.display = 'block';
+    document.getElementById('benchList').innerHTML = benchConditions.map(c => `
+      <div class="bench-item"><div class="bench-dot"></div><span>${c}</span></div>
+    `).join('');
+  }
+
+  document.getElementById('nextStepText').textContent = nextStep;
+
+  // Actions
+  const actionsHtml = verdict === 'pursue'
+    ? `<a href="decision-tool.html" class="btn-primary">Take it to The Courage to Decide →</a><button class="btn-secondary" onclick="resetTool()">Test another idea</button>`
+    : `<button class="btn-primary" onclick="window.print()">Save as PDF</button><button class="btn-secondary" onclick="resetTool()">Test another idea</button>`;
+  document.getElementById('verdictActions').innerHTML = actionsHtml;
+
+  // Store for idea log
+  currentVerdict = verdict;
+  currentScores = testKeys.map(k => getTestAvg(k));
+  document.getElementById('saveIdeaBtn').style.display = 'inline-block';
+  document.getElementById('saveIdeaBtn').textContent = 'Save this idea to register';
+  document.getElementById('saveIdeaBtn').style.background = '';
+  document.getElementById('saveIdeaBtn').style.color = '';
+
+  document.getElementById('verdictSection').style.display = 'block';
+  setTimeout(() => document.getElementById('verdictSection').scrollIntoView({behavior:'smooth',block:'start'}), 100);
+}
+
+function resetTool() {
+  testKeys.forEach(k => scores[k].fill(null));
+  document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('sel-low','sel-mid','sel-high'));
+  document.querySelectorAll('.score-desc').forEach(d => d.textContent = 'Tap to rate');
+  document.getElementById('ideaName').value = '';
+  document.getElementById('verdictSection').style.display = 'none';
+  document.getElementById('blindspotAlert').style.display = 'none';
+  document.querySelectorAll('.step-pip').forEach(p => p.classList.remove('done','active'));
+  document.querySelectorAll('.step-connector').forEach(c => c.classList.remove('done'));
+  document.querySelectorAll('.step-label-item').forEach(l => l.classList.remove('active'));
+  currentStep = 1;
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('pip1').classList.add('active');
+  document.getElementById('lbl1').classList.add('active');
+  currentVerdict = null;
+  currentScores = null;
+  document.getElementById('saveIdeaBtn').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── IDEA LOG ────────────────────────────────────────────────
+let ideaLog = JSON.parse(localStorage.getItem('idea_log') || '[]');
+let currentVerdict = null;
+let currentScores = null;
+
+function saveCurrentIdea() {
+  if (!currentVerdict) return;
+  const name = ideaName();
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('en-AU', {day:'numeric',month:'short',year:'numeric'}),
+    name: name,
+    verdict: currentVerdict,
+    scores: currentScores,
+    desc: document.getElementById('ideaDesc').value.trim()
+  };
+  ideaLog.unshift(entry);
+  localStorage.setItem('idea_log', JSON.stringify(ideaLog));
+  renderLog();
+  document.getElementById('saveIdeaBtn').textContent = 'Saved ✓';
+  document.getElementById('saveIdeaBtn').style.background = 'var(--forest)';
+  document.getElementById('saveIdeaBtn').style.color = 'var(--white)';
+  setTimeout(() => {
+    document.getElementById('saveIdeaBtn').textContent = 'Save this idea to register';
+    document.getElementById('saveIdeaBtn').style.background = '';
+    document.getElementById('saveIdeaBtn').style.color = '';
+  }, 2000);
+}
+
+function deleteEntry(id) {
+  ideaLog = ideaLog.filter(e => e.id !== id);
+  localStorage.setItem('idea_log', JSON.stringify(ideaLog));
+  renderLog();
+}
+
+function renderLog() {
+  const container = document.getElementById('logEntries');
+  const statsEl = document.getElementById('logStats');
+
+  if (!ideaLog.length) {
+    container.innerHTML = '<div class="log-empty">No ideas tested yet. Your register builds as you use the stress test.</div>';
+    statsEl.style.display = 'none';
+    return;
+  }
+
+  statsEl.style.display = 'grid';
+  const pursue = ideaLog.filter(e => e.verdict === 'pursue').length;
+  const bench = ideaLog.filter(e => e.verdict === 'bench').length;
+  document.getElementById('statTotal').textContent = ideaLog.length;
+  document.getElementById('statPursue').textContent = pursue;
+  document.getElementById('statBench').textContent = bench;
+
+  const verdictLabels = {pursue:'Pursue it',bench:'Bench it',forget:'Let it go'};
+  const testNames2 = ['Idea','Problem','Fit','Market','Owner'];
+
+  container.innerHTML = ideaLog.map(e => {
+    const pills = e.scores ? testNames2.map((n,i) => {
+      const avg = e.scores[i] ? e.scores[i].toFixed(1) : '—';
+      return `<span class="log-score-pill">${n}: ${avg}</span>`;
+    }).join('') : '';
+
+    return `<div class="log-entry ${e.verdict}">
+      <button class="log-entry-delete" onclick="deleteEntry(${e.id})" title="Remove">✕</button>
+      <div class="log-entry-header">
+        <div class="log-entry-name">${e.name}</div>
+        <div class="log-entry-date">${e.date}</div>
+      </div>
+      <div class="log-verdict-badge badge-${e.verdict}">${verdictLabels[e.verdict]}</div>
+      ${e.desc ? `<div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px;">${e.desc}</div>` : ''}
+      <div class="log-entry-scores">${pills}</div>
+    </div>`;
+  }).join('');
+
+  // Pattern analysis
+  if (ideaLog.length >= 3) {
+    const pursueRate = Math.round((pursue / ideaLog.length) * 100);
+    const patternEl = document.getElementById('logPattern');
+    let patternMsg = '';
+
+    if (pursueRate >= 70) {
+      patternMsg = '<strong>Pattern noticed:</strong> You are pursuing most ideas you test. Consider applying a harder filter — particularly on Tests 4 and 5. High pursuit rates can indicate the Shiny Ball pattern running at a low level.';
+    } else if (pursueRate <= 20) {
+      patternMsg = '<strong>Pattern noticed:</strong> You are letting go of most ideas you test. That may be correct judgement — or it may indicate the Perfectionist pattern applying an unrealistically high bar. Review your Test 5 scores.';
+    } else if (bench / ideaLog.length >= 0.5) {
+      patternMsg = '<strong>Pattern noticed:</strong> Most of your ideas are being benched. Check whether the bench conditions are being revisited — ideas that sit in the bench indefinitely without a trigger are quietly consuming mental energy.';
+    }
+
+    if (patternMsg) {
+      patternEl.innerHTML = patternMsg;
+      patternEl.style.display = 'block';
+    } else {
+      patternEl.style.display = 'none';
+    }
+  }
+
+  // Scroll log into view
+  document.getElementById('ideaLog').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── END IDEA LOG ────────────────────────────────────────────
+
+// Build all score buttons
+const config = [
+  ['scores_q1_0','q1',0,1],['scores_q1_1','q1',1,2],['scores_q1_2','q1',2,3],
+  ['scores_q2_0','q2',0,4],['scores_q2_1','q2',1,5],['scores_q2_2','q2',2,6],['scores_q2_3','q2',3,7],
+  ['scores_q3_0','q3',0,8],['scores_q3_1','q3',1,9],['scores_q3_2','q3',2,10],['scores_q3_3','q3',3,11],
+  ['scores_q4_0','q4',0,12],['scores_q4_1','q4',1,13],['scores_q4_2','q4',2,14],['scores_q4_3','q4',3,15],
+  ['scores_q5_0','q5',0,16],['scores_q5_1','q5',1,17],['scores_q5_2','q5',2,18],['scores_q5_3','q5',3,19]
+];
+config.forEach(([groupId, testKey, qIndex, descOffset]) => buildScoreButtons(groupId, qIndex, testKey, descOffset));
+renderLog();
+</script>
+</body>
+</html>

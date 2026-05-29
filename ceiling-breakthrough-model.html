@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceiling Breakthrough Model — Knowledgebase.business</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--forest:#2d5a27;--forest-dk:#1a3d16;--forest-lt:#d4e8d1;--gold:#c8a84b;--gold-lt:#f5edcc;--bg:#f0f5ef;--white:#ffffff;--text:#1a2018;--muted:#5a6e57;--border:#d0dece;--red:#b91c1c;--red-lt:#fde8e8;--amber:#d97706;--amber-lt:#fef3c7;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;min-height:100vh;}
+  .nav{background:var(--forest-dk);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--white);text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-back{font-size:12px;color:rgba(255,255,255,0.6);text-decoration:none;}
+  .nav-back:hover{color:var(--gold);}
+  .disclaimer-overlay{position:fixed;inset:0;background:rgba(10,25,10,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);}
+  .disclaimer-box{background:var(--white);border-radius:16px;max-width:620px;width:100%;padding:48px;box-shadow:0 32px 80px rgba(0,0,0,.3);border-top:4px solid var(--gold);}
+  .disclaimer-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+  .disclaimer-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--forest-dk);margin-bottom:20px;line-height:1.2;}
+  .disclaimer-body{font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:24px;}
+  .disclaimer-body p{margin-bottom:10px;}
+  .disclaimer-checks{margin-bottom:28px;}
+  .disclaimer-check{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg);font-size:13px;color:var(--text);cursor:pointer;}
+  .disclaimer-check:last-child{border-bottom:none;}
+  .disclaimer-check input[type="checkbox"]{margin-top:3px;accent-color:var(--forest);flex-shrink:0;width:16px;height:16px;}
+  .btn-accept{width:100%;background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:16px;font-size:15px;font-weight:500;cursor:pointer;opacity:.4;pointer-events:none;}
+  .btn-accept.ready{opacity:1;pointer-events:all;}
+  .btn-accept.ready:hover{background:var(--forest-dk);}
+  .hero{background:var(--forest-dk);padding:56px 40px 72px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 0%,rgba(200,168,75,.12) 0%,transparent 65%);pointer-events:none;}
+  .hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,50px);font-weight:500;color:var(--white);line-height:1.15;margin-bottom:16px;}
+  .hero-title em{font-style:italic;color:var(--gold);}
+  .hero-sub{font-size:15px;color:rgba(255,255,255,.6);max-width:540px;margin:0 auto;line-height:1.8;}
+  .main{max-width:1000px;margin:0 auto;padding:48px 24px 80px;}
+  .disclaimer-bar{background:var(--gold-lt);border:1px solid var(--gold);border-radius:8px;padding:12px 20px;margin-bottom:32px;font-size:12px;color:var(--text);line-height:1.6;display:flex;gap:12px;align-items:flex-start;}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+  .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+  @media(max-width:640px){.input-grid{grid-template-columns:1fr;}}
+  .input-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;}
+  .input-card.full{grid-column:1/-1;}
+  .input-label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;margin-bottom:6px;display:block;}
+  .input-desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+  .input-wrap{position:relative;}
+  .input-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);font-weight:500;}
+  input[type="number"],select{width:100%;padding:12px 14px 12px 32px;border:1px solid var(--border);border-radius:8px;font-size:16px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;}
+  input[type="number"]:focus,select:focus{border-color:var(--forest);}
+  select{padding-left:14px;}
+  .range-group{margin-top:8px;}
+  .range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
+  input[type="range"]{-webkit-appearance:none;width:100%;height:5px;border-radius:3px;background:var(--forest-lt);outline:none;cursor:pointer;}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--forest);border:3px solid var(--white);box-shadow:0 2px 8px rgba(45,90,39,.3);}
+  .range-val{text-align:center;font-size:13px;color:var(--muted);margin-top:6px;}
+  .range-val strong{color:var(--forest);font-size:15px;}
+  .confidence-section{background:var(--white);border-radius:12px;border:2px solid var(--forest);padding:28px 32px;margin-bottom:32px;}
+  .confidence-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+  .confidence-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest-dk);}
+  .confidence-subtitle{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.6;}
+  .blindspot-badge{background:var(--forest-lt);border:1px solid var(--forest);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--forest-dk);line-height:1.6;flex-shrink:0;max-width:280px;}
+  .blindspot-badge strong{display:block;color:var(--forest);margin-bottom:2px;}
+  .confidence-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .conf-btn{padding:10px 20px;border-radius:8px;border:2px solid var(--border);background:var(--bg);font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;}
+  .conf-btn:hover{border-color:var(--forest);color:var(--forest);}
+  .conf-btn.active{background:var(--forest);border-color:var(--forest);color:var(--white);}
+  .confidence-note{font-size:12px;color:var(--muted);font-style:italic;line-height:1.6;}
+  .calc-wrap{text-align:center;margin-bottom:40px;}
+  .btn-calc{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:16px 48px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-calc:hover{background:var(--forest-dk);transform:translateY(-1px);}
+  .results{display:none;}
+  .results.visible{display:block;}
+  .conf-result-banner{background:var(--forest-lt);border:1px solid var(--forest);border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:var(--forest-dk);line-height:1.7;}
+  .cost-card{background:var(--forest-dk);border-radius:16px;padding:40px;margin-bottom:20px;position:relative;overflow:hidden;}
+  .cost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  @media(max-width:640px){.cost-grid{grid-template-columns:1fr;}}
+  .cost-stat-label{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+  .cost-stat-value{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:500;line-height:1;margin-bottom:6px;}
+  .cost-stat-value.red{color:#fca5a5;}
+  .cost-stat-value.gold{color:var(--gold);}
+  .cost-stat-value.green{color:#86efac;}
+  .cost-stat-sub{font-size:12px;color:rgba(255,255,255,.4);}
+  .cost-divider{width:1px;background:rgba(255,255,255,.1);}
+  @media(max-width:640px){.cost-divider{display:none;}}
+  .layers-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  @media(max-width:640px){.layers-grid{grid-template-columns:1fr;}}
+  .layer-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;}
+  .layer-card.accent{border-color:var(--gold);background:var(--gold-lt);}
+  .layer-number{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;}
+  .layer-number.red{color:var(--red);}
+  .layer-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--forest-dk);margin-bottom:8px;}
+  .layer-amount{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:500;color:var(--forest);margin-bottom:4px;}
+  .layer-amount.red{color:var(--red);}
+  .layer-desc{font-size:12px;color:var(--muted);line-height:1.7;}
+  .layer-calc{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-style:italic;}
+  .cumulative-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:28px 32px;margin-bottom:20px;}
+  .cumulative-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--forest-dk);margin-bottom:16px;}
+  .cum-table{width:100%;border-collapse:collapse;}
+  .cum-table th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .cum-table td{padding:12px;font-size:14px;border-bottom:1px solid var(--bg);}
+  .cum-table tr:last-child td{border-bottom:none;font-weight:600;color:var(--forest);}
+  .cum-table td.red{color:var(--red);}
+  .breakthrough-card{background:var(--forest);border-radius:16px;padding:36px 40px;margin-bottom:20px;}
+  .breakthrough-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+  .breakthrough-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:8px;}
+  .breakthrough-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:4px;}
+  .breakthrough-value{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:500;color:var(--gold);line-height:1;}
+  .breakthrough-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:6px;}
+  .breakthrough-note{font-size:13px;color:rgba(255,255,255,.7);max-width:300px;line-height:1.7;}
+  .roi-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+  .roi-stat{text-align:center;}
+  .roi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+  .roi-value{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--forest);font-weight:500;}
+  .roi-divider{width:1px;height:60px;background:var(--border);}
+  .roi-text{flex:1;min-width:200px;font-size:13px;color:var(--muted);line-height:1.8;}
+  .roi-text strong{color:var(--text);}
+  .pattern-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:20px;}
+  .final-disclaimer{background:var(--red-lt);border:1px solid #fca5a5;border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+  .final-disclaimer h4{font-size:13px;font-weight:600;color:var(--red);margin-bottom:10px;}
+  .final-disclaimer p{font-size:12px;color:#7f1d1d;line-height:1.8;margin-bottom:6px;}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn-primary{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:14px 32px;font-size:14px;font-weight:500;cursor:pointer;}
+  .btn-primary:hover{background:var(--forest-dk);}
+  .btn-secondary{background:transparent;color:var(--forest);border:2px solid var(--forest);border-radius:8px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;}
+  .btn-secondary:hover{background:var(--forest);color:var(--white);}
+  .illustrative-badge{display:inline-block;background:var(--gold-lt);color:var(--forest-dk);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--gold);margin-left:8px;vertical-align:middle;}
+</style>
+</head>
+<body>
+<div class="disclaimer-overlay" id="disclaimerOverlay">
+  <div class="disclaimer-box">
+    <div class="disclaimer-eyebrow">Before you begin</div>
+    <div class="disclaimer-title">Important — please read before using this tool</div>
+    <div class="disclaimer-body"><p>This tool produces <strong>illustrative estimates</strong> to help you think through the cost of staying at your current ceiling and the potential value of breaking through it.</p><p>It is <strong>not</strong> financial advice or a guarantee of any outcome.</p></div>
+    <div class="disclaimer-checks" id="checkboxes">
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand all figures are illustrative estimates only</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand results will vary based on my specific business</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I will seek independent professional advice before making decisions</label>
+      <label class="disclaimer-check"><input type="checkbox" onchange="checkAll()"> I understand Knowledgebase.business accepts no liability for decisions made using this tool</label>
+    </div>
+    <button class="btn-accept" id="acceptBtn" onclick="acceptDisclaimer()">I understand — show me the model</button>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="dashboard.html" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <a href="dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Ceiling Program — Breakthrough Model</div>
+  <div class="hero-title">What is your ceiling <em>actually</em> costing you?<br>And what is breaking through worth?</div>
+  <div class="hero-sub">Set your confidence level, enter your numbers, and see the realistic cost of staying stuck — and what breaking through is worth at your level of belief.</div>
+</div>
+
+<div class="main">
+  <div class="disclaimer-bar"><div>⚠️</div><div><strong>Illustrative estimates only.</strong> Not financial advice. Seek independent professional advice before making decisions.</div></div>
+
+  <div class="section-label">Your business — current position</div>
+  <div class="input-grid">
+    <div class="input-card">
+      <label class="input-label">Current Annual Revenue</label>
+      <div class="input-desc">Your revenue for the last 12 months</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="revenue" value="750000" min="0" step="10000"></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Net Profit Margin</label>
+      <div class="input-desc">Your current profit as a % of revenue</div>
+      <div class="range-group">
+        <div class="range-labels"><span>5%</span><span>15%</span><span>25%</span><span>35%</span><span>45%</span></div>
+        <input type="range" id="margin" min="5" max="45" step="1" value="20" oninput="updateRangeVal('margin','marginVal','Current margin','%')">
+        <div class="range-val" id="marginVal">Current margin: <strong>20%</strong></div>
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Years at this revenue level</label>
+      <div class="range-group">
+        <div class="range-labels"><span>1yr</span><span>2yr</span><span>3yr</span><span>4yr</span><span>5yr</span></div>
+        <input type="range" id="yearsStuck" min="1" max="5" step="1" value="2" oninput="updateRangeVal('yearsStuck','yearsStuckVal','Stuck for',' years')">
+        <div class="range-val" id="yearsStuckVal">Stuck for: <strong>2 years</strong></div>
+      </div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Primary ceiling pattern</label>
+      <div class="input-desc">What's most likely holding your revenue at this level?</div>
+      <select id="ceilingType">
+        <option value="pricing">Underpricing — charging less than the work is worth</option>
+        <option value="positioning">Positioning — the right clients can't find or choose you</option>
+        <option value="capacity">Capacity — you're the bottleneck</option>
+        <option value="delegation">Delegation — you can't let go</option>
+        <option value="systems">Systems — no infrastructure for more volume</option>
+      </select>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Realistic breakthrough revenue</label>
+      <div class="input-desc">What could revenue be in 12 months if the ceiling was removed?</div>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="targetRevenue" value="1050000" min="0" step="10000"></div>
+    </div>
+    <div class="input-card">
+      <label class="input-label">Estimated margin improvement</label>
+      <div class="range-group">
+        <div class="range-labels"><span>0%</span><span>5%</span><span>10%</span><span>15%</span></div>
+        <input type="range" id="marginImprovement" min="0" max="15" step="1" value="5" oninput="updateRangeVal('marginImprovement','marginImprovementVal','Margin improvement','%')">
+        <div class="range-val" id="marginImprovementVal">Margin improvement: <strong>5%</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIDENCE -->
+  <div class="confidence-section">
+    <div class="confidence-header">
+      <div>
+        <div class="confidence-title">Your confidence level</div>
+        <div class="confidence-subtitle">How much of the breakthrough do you realistically believe you'll achieve?</div>
+      </div>
+      <div class="blindspot-badge" id="blindspotBadge">
+        <strong>🎯 Blind Spot pre-set</strong>
+        <span id="blindspotBadgeText">Complete your Blind Spot profile to get a personalised starting point.</span>
+      </div>
+    </div>
+    <div class="confidence-buttons">
+      <button class="conf-btn" onclick="setConfidence(30)" id="conf30">30%</button>
+      <button class="conf-btn" onclick="setConfidence(40)" id="conf40">40%</button>
+      <button class="conf-btn active" onclick="setConfidence(50)" id="conf50">50%</button>
+      <button class="conf-btn" onclick="setConfidence(60)" id="conf60">60%</button>
+      <button class="conf-btn" onclick="setConfidence(70)" id="conf70">70%</button>
+      <button class="conf-btn" onclick="setConfidence(80)" id="conf80">80%</button>
+    </div>
+    <div class="confidence-note" id="confidenceNote">At <span style="color:var(--forest);font-weight:600;">50%</span> confidence — a balanced position. The numbers still work significantly in your favour.</div>
+  </div>
+
+  <div class="calc-wrap"><button class="btn-calc" onclick="calculate()">Calculate my breakthrough value →</button></div>
+
+  <div class="results" id="results">
+    <div class="section-label">Your illustrative breakthrough model <span class="illustrative-badge">Estimates only</span></div>
+    <div class="conf-result-banner" id="confResultBanner"></div>
+
+    <div class="cost-card">
+      <div class="cost-grid">
+        <div><div class="cost-stat-label">Annual cost of the ceiling</div><div class="cost-stat-value red" id="r-annualCost">—</div><div class="cost-stat-sub">revenue left on the table each year</div></div>
+        <div class="cost-divider"></div>
+        <div><div class="cost-stat-label">Cumulative cost so far</div><div class="cost-stat-value gold" id="r-cumulativeCost">—</div><div class="cost-stat-sub" id="r-yearsLabel">already lost</div></div>
+        <div class="cost-divider"></div>
+        <div><div class="cost-stat-label">Realistic profit gain</div><div class="cost-stat-value green" id="r-profitGain">—</div><div class="cost-stat-sub" id="r-confLabel">at your confidence level</div></div>
+      </div>
+    </div>
+
+    <div class="layers-grid">
+      <div class="layer-card"><div class="layer-number red">The cost</div><div class="layer-title">Revenue lost at ceiling</div><div class="layer-amount red" id="r-revenueLost">—</div><div class="layer-desc">The gap between current and breakthrough revenue — every year you stay stuck.</div><div class="layer-calc" id="r-revenueLostCalc">—</div></div>
+      <div class="layer-card"><div class="layer-number red">The cost</div><div class="layer-title">Profit lost at current margin</div><div class="layer-amount red" id="r-profitLost">—</div><div class="layer-desc">The profit not made on revenue not generated. Compounds every year.</div><div class="layer-calc" id="r-profitLostCalc">—</div></div>
+      <div class="layer-card"><div class="layer-number">The gain</div><div class="layer-title">Realistic breakthrough revenue</div><div class="layer-amount" id="r-breakthroughRev">—</div><div class="layer-desc">Your target revenue adjusted to your confidence level.</div><div class="layer-calc" id="r-breakthroughRevCalc">—</div></div>
+      <div class="layer-card accent"><div class="layer-number">The gain</div><div class="layer-title">Realistic breakthrough profit</div><div class="layer-amount" id="r-breakthroughProfit">—</div><div class="layer-desc">Breakthrough revenue at improved margin — at your confidence level.</div><div class="layer-calc" id="r-breakthroughProfitCalc">—</div></div>
+    </div>
+
+    <div class="cumulative-card">
+      <h3>The cost of staying stuck — year by year <span class="illustrative-badge">Illustrative</span></h3>
+      <table class="cum-table">
+        <thead><tr><th>Year</th><th>Revenue lost</th><th>Cumulative revenue lost</th><th>Profit lost</th><th>Cumulative profit lost</th></tr></thead>
+        <tbody id="cumTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="breakthrough-card">
+      <div class="breakthrough-inner">
+        <div>
+          <div class="breakthrough-label">3-year cost of staying at the ceiling</div>
+          <div class="breakthrough-title">What staying stuck costs over 3 years</div>
+          <div class="breakthrough-value" id="r-threeYearCost">—</div>
+          <div class="breakthrough-sub" id="r-threeYearLabel">illustrative cumulative profit loss</div>
+        </div>
+        <div class="breakthrough-note">The ceiling is not a static problem — it compounds. Every year without breaking through is another year of cost. The Ceiling program removes the specific pattern blocking your growth.</div>
+      </div>
+    </div>
+
+    <div class="roi-card">
+      <div class="roi-stat"><div class="roi-label">Program cost</div><div class="roi-value" id="r-programCost">—</div></div>
+      <div class="roi-divider"></div>
+      <div class="roi-stat"><div class="roi-label">Realistic profit gain</div><div class="roi-value" id="r-profitGainROI">—</div></div>
+      <div class="roi-divider"></div>
+      <div class="roi-text"><strong>At your confidence level,</strong> the first-year profit gain is <span id="r-roiGain">—</span> against a program investment of <span id="r-roiBreakeven">—</span> — a return of <span id="r-roiMultiple">—</span>.</div>
+    </div>
+
+    <div class="pattern-card">
+      <div class="layer-number">Your ceiling pattern</div>
+      <div class="layer-title" id="patternTitle">—</div>
+      <div class="layer-desc" id="patternDesc">—</div>
+    </div>
+
+    <div class="final-disclaimer">
+      <h4>Important — Illustrative estimates only</h4>
+      <p>All figures are illustrative estimates based on your inputs only. They do not constitute financial, accounting, or legal advice. Revenue and profit improvements depend on execution, market conditions, and factors specific to your business.</p>
+      <p>Knowledgebase.business Pty Ltd accepts no liability for decisions made in reliance on the outputs of this model. <em>[Subject to legal review — internal use only]</em></p>
+    </div>
+    <div class="actions">
+      <button class="btn-primary" onclick="window.print()">Save as PDF</button>
+      <button class="btn-secondary" onclick="resetModel()">Adjust inputs</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let confidenceLevel = 50;
+const ceilingPatterns = {
+  pricing:{title:'Underpricing',desc:'You are charging less than your work is worth. KB documents your results and makes your value visible — to yourself and to clients — giving you the evidence base to raise fees with confidence.'},
+  positioning:{title:'Positioning — invisible to the right clients',desc:'The right clients exist but can\'t find or choose you. KB gives you the documented evidence of how you work and what you deliver — the foundation of a positioning that makes you undeniable.'},
+  capacity:{title:'Capacity — you are the bottleneck',desc:'You cannot take more work because you are in everything. Every documented process is capacity you didn\'t have before. KB moves knowledge from your head to the system.'},
+  delegation:{title:'Delegation — you can\'t let go',desc:'Work comes back to you because the standards aren\'t written down anywhere else. KB makes your standards visible — available to the team consistently, without you.'},
+  systems:{title:'Systems — no infrastructure for more volume',desc:'More clients or revenue would break what you\'ve built. KB builds the infrastructure before you need it — so growth doesn\'t create chaos.'}
+};
+const blindspotNotes = {
+  high:{range:'30–40%',reason:'Your Blind Spot pattern score is high — the pattern is running strongly. A conservative confidence level is honest and the numbers still work.'},
+  medium:{range:'50–60%',reason:'Your Blind Spot score is moderate — you have some awareness already. A mid-range confidence level reflects realistic progress.'},
+  low:{range:'60–70%',reason:'Your Blind Spot score is low — the pattern is already loosening. A higher confidence level reflects how much easier change becomes with existing awareness.'}
+};
+function loadBlindspot() {
+  try {
+    const history = JSON.parse(localStorage.getItem('blindspot_history')||'[]');
+    if(!history.length) return;
+    const avg = (history[history.length-1].total||0)/8;
+    let level,conf;
+    if(avg>=6){level='high';conf=30;}
+    else if(avg>=3){level='medium';conf=50;}
+    else{level='low';conf=65;}
+    const n=blindspotNotes[level];
+    document.getElementById('blindspotBadgeText').innerHTML=`Pattern score suggests <strong>${n.range}% confidence</strong>. ${n.reason}`;
+    setConfidence(conf);
+  } catch(e){}
+}
+function setConfidence(pct) {
+  confidenceLevel=pct;
+  document.querySelectorAll('.conf-btn').forEach(b=>b.classList.remove('active'));
+  const b=document.getElementById('conf'+pct); if(b) b.classList.add('active');
+  const notes={30:'Conservative and credible — most owners who commit achieve at least this.',40:'Realistic — accounts for the fact that some improvements take longer.',50:'Balanced — half of what\'s identified gets delivered.',60:'Confident — achievable for owners who act on the quarterly review.',70:'Strong — realistic when your blind spot is already shifting.',80:'High-conviction — achievable when the team is fully engaged.'};
+  document.getElementById('confidenceNote').innerHTML=`At <span style="color:var(--forest);font-weight:600;">${pct}%</span> confidence — ${notes[pct]||''}`;
+}
+function checkAll(){const b=document.querySelectorAll('#checkboxes input');document.getElementById('acceptBtn').classList.toggle('ready',Array.from(b).every(x=>x.checked));}
+function acceptDisclaimer(){document.getElementById('disclaimerOverlay').style.display='none';}
+function updateRangeVal(id,valId,label,suffix){document.getElementById(valId).innerHTML=`${label}: <strong>${document.getElementById(id).value}${suffix}</strong>`;}
+function fmt(n){return'$'+Math.round(n).toLocaleString('en-AU');}
+function calculate(){
+  const revenue=parseFloat(document.getElementById('revenue').value)||0;
+  const margin=parseFloat(document.getElementById('margin').value)/100;
+  const yearsStuck=parseInt(document.getElementById('yearsStuck').value);
+  const target=parseFloat(document.getElementById('targetRevenue').value)||0;
+  const marginImp=parseFloat(document.getElementById('marginImprovement').value)/100;
+  const ctype=document.getElementById('ceilingType').value;
+  const conf=confidenceLevel/100;
+
+  const revLost=target-revenue;
+  const profLost=revLost*margin;
+  const cumCost=profLost*yearsStuck;
+  const newMargin=margin+marginImp;
+  const realisticTarget=revenue+(revLost*conf);
+  const realisticProfit=realisticTarget*newMargin;
+  const currentProfit=revenue*margin;
+  const profitGain=realisticProfit-currentProfit;
+  const programCost=770*12;
+  const roi=profitGain/programCost;
+
+  document.getElementById('confResultBanner').innerHTML=`<strong>Showing results at ${confidenceLevel}% confidence.</strong> The breakthrough figures show ${confidenceLevel}% of the maximum identified improvement — a realistic rather than optimistic view. Toggle confidence above and recalculate to explore scenarios.`;
+  document.getElementById('r-annualCost').textContent=fmt(revLost);
+  document.getElementById('r-cumulativeCost').textContent=fmt(cumCost);
+  document.getElementById('r-yearsLabel').textContent=`lost across ${yearsStuck} year${yearsStuck>1?'s':''} at the ceiling`;
+  document.getElementById('r-profitGain').textContent=fmt(profitGain);
+  document.getElementById('r-confLabel').textContent=`at ${confidenceLevel}% confidence`;
+  document.getElementById('r-revenueLost').textContent=fmt(revLost);
+  document.getElementById('r-revenueLostCalc').textContent=`${fmt(target)} target − ${fmt(revenue)} current — illustrative`;
+  document.getElementById('r-profitLost').textContent=fmt(profLost);
+  document.getElementById('r-profitLostCalc').textContent=`${fmt(revLost)} × ${(margin*100).toFixed(0)}% margin — illustrative`;
+  document.getElementById('r-breakthroughRev').textContent=fmt(realisticTarget);
+  document.getElementById('r-breakthroughRevCalc').textContent=`Full target × ${confidenceLevel}% confidence — illustrative`;
+  document.getElementById('r-breakthroughProfit').textContent=fmt(realisticProfit);
+  document.getElementById('r-breakthroughProfitCalc').textContent=`${fmt(realisticTarget)} × ${(newMargin*100).toFixed(0)}% improved margin — illustrative`;
+
+  let tableHtml='';
+  for(let y=1;y<=5;y++){tableHtml+=`<tr><td>Year ${y}</td><td class="red">${fmt(revLost)}</td><td class="red">${fmt(revLost*y)}</td><td class="red">${fmt(profLost)}</td><td class="red">${fmt(profLost*y)}</td></tr>`;}
+  document.getElementById('cumTableBody').innerHTML=tableHtml;
+  document.getElementById('r-threeYearCost').textContent=fmt(profLost*3);
+  document.getElementById('r-threeYearLabel').textContent=`illustrative — actual revenue gap, not adjusted to confidence level`;
+  document.getElementById('r-programCost').textContent=fmt(programCost);
+  document.getElementById('r-profitGainROI').textContent=fmt(profitGain);
+  document.getElementById('r-roiGain').textContent=fmt(profitGain);
+  document.getElementById('r-roiBreakeven').textContent=fmt(programCost);
+  document.getElementById('r-roiMultiple').textContent=roi.toFixed(1)+'×';
+  const p=ceilingPatterns[ctype];
+  document.getElementById('patternTitle').textContent=p.title;
+  document.getElementById('patternDesc').textContent=p.desc;
+  document.getElementById('results').classList.add('visible');
+  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function resetModel(){document.getElementById('results').classList.remove('visible');window.scrollTo({top:400,behavior:'smooth'});}
+loadBlindspot(); setConfidence(50);
+</script>
+</body>
+</html>

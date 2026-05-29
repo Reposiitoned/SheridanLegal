@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KB Idea Register — Internal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:#2d5a27;--forest-dk:#1a3d16;--forest-lt:#d4e8d1;
+    --gold:#c8a84b;--gold-lt:#f5edcc;--bg:#f0f5ef;
+    --white:#fff;--text:#1a2018;--muted:#5a6e57;--border:#d0dece;
+    --red:#b91c1c;--red-lt:#fde8e8;--amber:#d97706;--amber-lt:#fef3c7;
+    --blue:#1a4a8a;--blue-lt:#e8f0fb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;min-height:100vh;}
+
+  .nav{background:var(--forest-dk);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--white);text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-right{display:flex;align-items:center;gap:16px;}
+  .nav-badge{font-size:11px;background:rgba(200,168,75,.2);color:var(--gold);padding:4px 12px;border-radius:20px;letter-spacing:.06em;font-weight:600;}
+  .nav-back{font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;}
+
+  .hero{background:var(--forest-dk);padding:48px 40px 64px;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(200,168,75,.1) 0%,transparent 60%);pointer-events:none;}
+  .hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;position:relative;z-index:1;}
+  .hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,44px);font-weight:500;color:var(--white);line-height:1.15;}
+  .hero-title em{font-style:italic;color:var(--gold);}
+  .hero-sub{font-size:14px;color:rgba(255,255,255,.55);margin-top:10px;max-width:480px;line-height:1.7;}
+  .hero-stats{display:flex;gap:24px;flex-shrink:0;}
+  .hero-stat{text-align:center;}
+  .hero-stat-val{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--white);font-weight:500;}
+  .hero-stat-label{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;}
+
+  .main{max-width:1100px;margin:0 auto;padding:40px 24px 80px;}
+
+  /* ADD IDEA FORM */
+  .add-card{background:var(--white);border-radius:16px;border:2px solid var(--forest);padding:28px 32px;margin-bottom:32px;}
+  .add-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--forest-dk);margin-bottom:20px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
+  @media(max-width:700px){.form-grid{grid-template-columns:1fr;}}
+  .form-group{display:flex;flex-direction:column;gap:6px;}
+  .form-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+  input[type="text"],textarea,select{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color .2s;}
+  input[type="text"]:focus,textarea:focus,select:focus{border-color:var(--forest);background:var(--white);}
+  textarea{resize:vertical;line-height:1.6;}
+  .form-full{grid-column:1/-1;}
+  .btn-add{background:var(--forest);color:var(--white);border:none;border-radius:8px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;margin-top:4px;}
+  .btn-add:hover{background:var(--forest-dk);}
+
+  /* FILTERS */
+  .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;align-items:center;}
+  .filter-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-right:4px;}
+  .filter-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;}
+  .filter-btn:hover{border-color:var(--forest);color:var(--forest);}
+  .filter-btn.active{background:var(--forest);border-color:var(--forest);color:var(--white);}
+  .filter-sep{width:1px;height:24px;background:var(--border);margin:0 4px;}
+
+  /* KANBAN COLUMNS */
+  .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
+  @media(max-width:900px){.kanban{grid-template-columns:1fr 1fr;}}
+  @media(max-width:500px){.kanban{grid-template-columns:1fr;}}
+
+  .column{background:var(--white);border-radius:12px;border:1px solid var(--border);overflow:hidden;}
+  .col-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;}
+  .col-header.idea{background:#f8faff;border-bottom:3px solid #93c5fd;}
+  .col-header.inprogress{background:var(--amber-lt);border-bottom:3px solid #fcd34d;}
+  .col-header.built{background:var(--forest-lt);border-bottom:3px solid var(--forest);}
+  .col-header.parked{background:var(--bg);border-bottom:3px solid var(--border);}
+  .col-title{font-size:13px;font-weight:600;color:var(--text);}
+  .col-count{font-size:11px;font-weight:600;color:var(--muted);background:rgba(0,0,0,.06);padding:2px 8px;border-radius:10px;}
+  .col-body{padding:12px;min-height:120px;}
+
+  /* IDEA CARDS */
+  .idea-card{background:var(--white);border-radius:10px;border:1px solid var(--border);padding:14px 16px;margin-bottom:10px;transition:box-shadow .2s;position:relative;}
+  .idea-card:hover{box-shadow:0 4px 16px rgba(45,90,39,.08);}
+  .idea-card.priority-now{border-left:3px solid var(--red);}
+  .idea-card.priority-soon{border-left:3px solid var(--amber);}
+  .idea-card.priority-later{border-left:3px solid var(--border);}
+  .idea-card-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:6px;line-height:1.4;padding-right:24px;}
+  .idea-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+  .tag{font-size:10px;font-weight:600;letter-spacing:.05em;padding:3px 8px;border-radius:10px;text-transform:uppercase;}
+  .tag-platform{background:var(--blue-lt);color:var(--blue);}
+  .tag-content{background:var(--gold-lt);color:#92400e;}
+  .tag-commercial{background:var(--forest-lt);color:var(--forest);}
+  .tag-marketing{background:#fce7f3;color:#9d174d;}
+  .tag-tools{background:#f3e8ff;color:#6b21a8;}
+  .tag-now{background:var(--red-lt);color:var(--red);}
+  .tag-soon{background:var(--amber-lt);color:var(--amber);}
+  .tag-later{background:var(--bg);color:var(--muted);}
+  .idea-card-notes{font-size:12px;color:var(--muted);line-height:1.5;margin-top:6px;}
+  .idea-card-date{font-size:10px;color:var(--border);margin-top:8px;}
+  .idea-card-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px;opacity:0;transition:opacity .15s;}
+  .idea-card:hover .idea-card-actions{opacity:1;}
+  .card-action-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:2px 5px;border-radius:4px;color:var(--muted);}
+  .card-action-btn:hover{background:var(--bg);}
+
+  /* STATUS MOVE BUTTONS */
+  .move-btns{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
+  .move-btn{font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .15s;}
+  .move-btn:hover{border-color:var(--forest);color:var(--forest);}
+
+  /* SUMMARY TABLE */
+  .summary-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px 28px;margin-bottom:24px;}
+  .summary-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--forest-dk);margin-bottom:16px;}
+  .cat-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--bg);}
+  .cat-row:last-child{border-bottom:none;}
+  .cat-name{font-size:13px;font-weight:500;color:var(--text);width:120px;flex-shrink:0;}
+  .cat-bar-track{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden;}
+  .cat-bar-fill{height:100%;background:var(--forest);border-radius:4px;transition:width .6s ease;}
+  .cat-count{font-size:12px;font-weight:600;color:var(--forest);width:24px;text-align:right;}
+
+  .empty-col{text-align:center;padding:24px 12px;color:var(--border);font-size:13px;font-style:italic;}
+
+  @media(max-width:600px){
+    .nav{padding:0 16px;}
+    .hero{padding:32px 16px 48px;}
+    .main{padding:24px 16px 60px;}
+    .add-card{padding:20px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="dashboard.html" class="nav-logo">Knowledge<span>base</span>.business</a>
+  <div class="nav-right">
+    <span class="nav-badge">Internal</span>
+    <a href="dashboard.html" class="nav-back">← Dashboard</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">KB Build Team</div>
+      <div class="hero-title">Idea Register &amp;<br><em>Program Enhancements</em></div>
+      <div class="hero-sub">Every idea captured. Nothing lost. Track from idea to built across platform, content, tools, commercial, and marketing.</div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val" id="statTotal">0</div><div class="hero-stat-label">Total ideas</div></div>
+      <div class="hero-stat"><div class="hero-stat-val" id="statNow">0</div><div class="hero-stat-label">Do now</div></div>
+      <div class="hero-stat"><div class="hero-stat-val" id="statBuilt">0</div><div class="hero-stat-label">Built</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ADD IDEA -->
+  <div class="add-card">
+    <div class="add-title">Capture a new idea</div>
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label class="form-label">Idea / Enhancement</label>
+        <input type="text" id="newName" placeholder="Describe the idea clearly in one sentence...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select id="newCategory">
+          <option value="platform">Platform</option>
+          <option value="tools">Tools</option>
+          <option value="content">Content</option>
+          <option value="commercial">Commercial</option>
+          <option value="marketing">Marketing</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Priority</label>
+        <select id="newPriority">
+          <option value="now">Now — do this soon</option>
+          <option value="soon">Soon — next phase</option>
+          <option value="later">Later — good idea, not urgent</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select id="newStatus">
+          <option value="idea">Idea</option>
+          <option value="inprogress">In Progress</option>
+          <option value="built">Built</option>
+          <option value="parked">Parked</option>
+        </select>
+      </div>
+      <div class="form-group form-full">
+        <label class="form-label">Notes — why it matters, what it does</label>
+        <textarea id="newNotes" rows="2" placeholder="Context, commercial value, connection to other pieces..."></textarea>
+      </div>
+    </div>
+    <button class="btn-add" onclick="addIdea()">+ Add to register</button>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <div class="filter-sep"></div>
+    <button class="filter-btn" onclick="setFilter('platform',this)">Platform</button>
+    <button class="filter-btn" onclick="setFilter('tools',this)">Tools</button>
+    <button class="filter-btn" onclick="setFilter('content',this)">Content</button>
+    <button class="filter-btn" onclick="setFilter('commercial',this)">Commercial</button>
+    <button class="filter-btn" onclick="setFilter('marketing',this)">Marketing</button>
+    <div class="filter-sep"></div>
+    <button class="filter-btn" onclick="setFilter('now',this)">🔴 Now</button>
+    <button class="filter-btn" onclick="setFilter('soon',this)">🟡 Soon</button>
+    <button class="filter-btn" onclick="setFilter('later',this)">⚪ Later</button>
+  </div>
+
+  <!-- CATEGORY SUMMARY -->
+  <div class="summary-card" id="summaryCard">
+    <h3>Ideas by category</h3>
+    <div id="catBars"></div>
+  </div>
+
+  <!-- KANBAN -->
+  <div class="kanban">
+    <div class="column">
+      <div class="col-header idea">
+        <span class="col-title">💡 Idea</span>
+        <span class="col-count" id="count-idea">0</span>
+      </div>
+      <div class="col-body" id="col-idea"></div>
+    </div>
+    <div class="column">
+      <div class="col-header inprogress">
+        <span class="col-title">⚙️ In Progress</span>
+        <span class="col-count" id="count-inprogress">0</span>
+      </div>
+      <div class="col-body" id="col-inprogress"></div>
+    </div>
+    <div class="column">
+      <div class="col-header built">
+        <span class="col-title">✓ Built</span>
+        <span class="col-count" id="count-built">0</span>
+      </div>
+      <div class="col-body" id="col-built"></div>
+    </div>
+    <div class="column">
+      <div class="col-header parked">
+        <span class="col-title">⏸ Parked</span>
+        <span class="col-count" id="count-parked">0</span>
+      </div>
+      <div class="col-body" id="col-parked"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let ideas = JSON.parse(localStorage.getItem('kb_ideas') || '[]');
+let activeFilter = 'all';
+
+// Pre-load everything we've already discussed building
+const preloaded = [
+  {id:1,name:'Supabase blindspot_scores table — wire blindspot profile to central DB',category:'platform',priority:'now',status:'idea',notes:'Every fortnightly check-in saves to Supabase so coach and licencee can see pattern shifts across all clients',date:'29 May 2026'},
+  {id:2,name:'Fortnightly pulse check — integrate blind spot scoring section',category:'platform',priority:'now',status:'idea',notes:'8 quick sliders added to existing fortnightly review. Tracks pattern shift over time.',date:'29 May 2026'},
+  {id:3,name:'Quarterly review — blind spot re-score overlay showing shift',category:'platform',priority:'now',status:'idea',notes:'Full radar overlaid on previous quarters. The shift is visible. Coach walks in knowing the pattern.',date:'29 May 2026'},
+  {id:4,name:'Exit video script — retrospective lens version',category:'content',priority:'now',status:'idea',notes:'One video, different framing to Build/Ceiling/Scale. What did the pattern cost the business being sold?',date:'29 May 2026'},
+  {id:5,name:'Book introduction rewrite — I Have an Idea for business owners',category:'content',priority:'now',status:'idea',notes:'Adapted from consulting audience to business owners with new ideas. Entry point to KB ecosystem.',date:'29 May 2026'},
+  {id:6,name:'Founding member pricing page with 6-month countdown',category:'marketing',priority:'now',status:'idea',notes:'July launch. Current pricing for 6 months then 25% increase. Founding members locked in for life.',date:'29 May 2026'},
+  {id:7,name:'Public-facing simplified Exit Valuation Calculator',category:'marketing',priority:'now',status:'idea',notes:'No login required. Email capture at the end. Feeds KB funnel. Simplified 3-input version of the full tool.',date:'29 May 2026'},
+  {id:8,name:'Trademark registration — The Blind Spot Method + Knowledgebase.business',category:'commercial',priority:'now',status:'idea',notes:'IP Australia Class 41 and 42. Roy has legal contacts. Critical protection before public launch.',date:'29 May 2026'},
+  {id:9,name:'HeyGen — record 9 Blind Spot Method videos',category:'content',priority:'now',status:'idea',notes:'Scripts complete. One per blind spot pattern plus program overview. Embed throughout platform.',date:'29 May 2026'},
+  {id:10,name:'HeyGen — record 6 Courage to Decide videos',category:'content',priority:'soon',status:'idea',notes:'Scripts complete. One intro plus one per step. Embed in decision tool.',date:'29 May 2026'},
+  {id:11,name:'Idea Stress Test — standalone commercial product',category:'commercial',priority:'soon',status:'built',notes:'idea-stress-test.html complete with Idea Register. Sell separately $97-$197 as lead gen for curious owners. Companion to I Have an Idea book.',date:'29 May 2026'},
+  {id:12,name:'Scale Growth Infrastructure Model',category:'tools',priority:'soon',status:'built',notes:'scale-growth-model.html — confidence toggle + blind spot pre-set. Shows margin cost of growth without systems.',date:'29 May 2026'},
+  {id:13,name:'Ceiling Breakthrough Model',category:'tools',priority:'soon',status:'built',notes:'ceiling-breakthrough-model.html — 3-year cost of staying stuck. Confidence toggle wired to blind spot.',date:'29 May 2026'},
+  {id:14,name:'Exit Valuation Model',category:'tools',priority:'soon',status:'built',notes:'exit-valuation-model.html — 4-layer valuation gap calculator. Team redundancy capitalised at exit multiple.',date:'29 May 2026'},
+  {id:15,name:'Decision Value Model — 3-year cost of poor decisions',category:'tools',priority:'soon',status:'built',notes:'decision-value-model.html — 4 layers: bad decisions, delayed decisions, wrong direction, confidence premium.',date:'29 May 2026'},
+  {id:16,name:'Idea Stress Test — Supabase backend for idea register',category:'platform',priority:'later',status:'idea',notes:'Move idea register from localStorage to Supabase. Licencee sees all client idea registers.',date:'29 May 2026'},
+  {id:17,name:'Repositioned programs absorbed into KB — Stage 1 and Stage 2',category:'commercial',priority:'later',status:'idea',notes:'All Repositioned programs fold into KB before August. Positioning methodology becomes KB marketing layer.',date:'29 May 2026'},
+  {id:18,name:'Price increase — Build $825 / Ceiling $975 / Scale $1,100',category:'commercial',priority:'later',status:'idea',notes:'January 2027. Founding members locked at current pricing for life.',date:'29 May 2026'},
+  {id:19,name:'Licencee coach dashboard — client blind spot shift view',category:'platform',priority:'later',status:'idea',notes:'Coach sees all clients pattern shifts at a glance. Quarterly overlay across whole client base.',date:'29 May 2026'},
+  {id:20,name:'Growth Circle framework — monthly group coaching structure',category:'content',priority:'later',status:'idea',notes:'Framework, session structure, connector pitches and revenue model already mapped.',date:'29 May 2026'},
+  {id:21,name:'Blindspot profile — HeyGen personalised onboarding videos embedded',category:'platform',priority:'later',status:'idea',notes:'Video plays when dominant pattern identified. Pattern-specific explanation. Warm and personal.',date:'29 May 2026'},
+  {id:22,name:'KB Revenue Model — licencee version',category:'tools',priority:'later',status:'idea',notes:'Client-facing version of the KB revenue model showing licencee earnings at different client volumes.',date:'29 May 2026'},
+  {id:23,name:'Courage to Decide — public lead magnet version',category:'marketing',priority:'later',status:'idea',notes:'Simplified 3-step version. Email capture at end. Feeds into KB ecosystem.',date:'29 May 2026'},
+  {id:24,name:'Supabase migration — region change Mumbai to Sydney',category:'platform',priority:'later',status:'idea',notes:'Performance improvement for Australian users. Change Supabase account email away from businessforlawyers.com.au',date:'29 May 2026'},
+  {id:25,name:'The Courage to Decide — book refinement and flow improvement',category:'content',priority:'later',status:'idea',notes:'Not a rewrite — a refinement. Sharper chapter hooks, stronger transitions, tighter 5-step rhythm, and bridges connecting the methodology explicitly to KB. Post-launch priority once first subscriber cohort is in place. Book becomes primary acquisition tool.',date:'29 May 2026'},
+];
+
+// Load preloaded ideas if register is empty
+if (!ideas.length) {
+  ideas = preloaded;
+  save();
+}
+
+function save() {
+  localStorage.setItem('kb_ideas', JSON.stringify(ideas));
+}
+
+function addIdea() {
+  const name = document.getElementById('newName').value.trim();
+  if (!name) { document.getElementById('newName').focus(); return; }
+  const idea = {
+    id: Date.now(),
+    name,
+    category: document.getElementById('newCategory').value,
+    priority: document.getElementById('newPriority').value,
+    status: document.getElementById('newStatus').value,
+    notes: document.getElementById('newNotes').value.trim(),
+    date: new Date().toLocaleDateString('en-AU', {day:'numeric',month:'short',year:'numeric'})
+  };
+  ideas.unshift(idea);
+  save();
+  render();
+  document.getElementById('newName').value = '';
+  document.getElementById('newNotes').value = '';
+  document.getElementById('newName').focus();
+}
+
+function moveIdea(id, newStatus) {
+  const idea = ideas.find(i => i.id === id);
+  if (idea) { idea.status = newStatus; save(); render(); }
+}
+
+function deleteIdea(id) {
+  if (!confirm('Remove this idea from the register?')) return;
+  ideas = ideas.filter(i => i.id !== id);
+  save();
+  render();
+}
+
+function setFilter(val, btn) {
+  activeFilter = val;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function filtered() {
+  if (activeFilter === 'all') return ideas;
+  return ideas.filter(i => i.category === activeFilter || i.priority === activeFilter);
+}
+
+const catTag = c => `<span class="tag tag-${c}">${c}</span>`;
+const priTag = p => `<span class="tag tag-${p}">${p}</span>`;
+
+const statusLabels = {idea:'Idea',inprogress:'In Progress',built:'Built',parked:'Parked'};
+const nextStatus = {idea:'inprogress',inprogress:'built',built:'parked',parked:'idea'};
+const nextLabel = {idea:'→ Start','inprogress':'→ Mark Built','built':'→ Park','parked':'→ Reactivate'};
+
+function renderCard(idea) {
+  return `<div class="idea-card priority-${idea.priority}" id="card-${idea.id}">
+    <div class="idea-card-actions">
+      <button class="card-action-btn" onclick="deleteIdea(${idea.id})" title="Delete">✕</button>
+    </div>
+    <div class="idea-card-name">${idea.name}</div>
+    <div class="idea-card-meta">
+      ${catTag(idea.category)}
+      ${priTag(idea.priority)}
+    </div>
+    ${idea.notes ? `<div class="idea-card-notes">${idea.notes}</div>` : ''}
+    <div class="idea-card-date">${idea.date}</div>
+    <div class="move-btns">
+      ${Object.keys(statusLabels).filter(s => s !== idea.status).map(s =>
+        `<button class="move-btn" onclick="moveIdea(${idea.id},'${s}')">→ ${statusLabels[s]}</button>`
+      ).join('')}
+    </div>
+  </div>`;
+}
+
+function render() {
+  const list = filtered();
+  const statuses = ['idea','inprogress','built','parked'];
+
+  statuses.forEach(s => {
+    const col = document.getElementById('col-' + s);
+    const items = list.filter(i => i.status === s);
+    document.getElementById('count-' + s).textContent = items.length;
+    col.innerHTML = items.length
+      ? items.map(renderCard).join('')
+      : `<div class="empty-col">No ideas here</div>`;
+  });
+
+  // Stats
+  document.getElementById('statTotal').textContent = ideas.length;
+  document.getElementById('statNow').textContent = ideas.filter(i => i.priority === 'now').length;
+  document.getElementById('statBuilt').textContent = ideas.filter(i => i.status === 'built').length;
+
+  // Category bars
+  const cats = ['platform','tools','content','commercial','marketing'];
+  const max = Math.max(...cats.map(c => ideas.filter(i => i.category === c).length), 1);
+  document.getElementById('catBars').innerHTML = cats.map(c => {
+    const count = ideas.filter(i => i.category === c).length;
+    const pct = Math.round((count / max) * 100);
+    return `<div class="cat-row">
+      <span class="cat-name">${c.charAt(0).toUpperCase()+c.slice(1)}</span>
+      <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${pct}%"></div></div>
+      <span class="cat-count">${count}</span>
+    </div>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>
